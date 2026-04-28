@@ -12,20 +12,38 @@ API Node.js com TypeScript, Express, PostgreSQL (`pg`) e injecao de dependencias
 ## Estrutura
 ```text
 src/
-  app.ts
-  server.ts
-  container.ts
-  config/
-    env.ts
+  index.ts
+  app/
+    create-app.ts
+    index.ts
+    middlewares/
+      scope-per-request/
+    routers/
+      flows-router.ts
+      health-router.ts
+      index.ts
+  container/
+    config/
+      config.ts
+      env.ts
+    create-container/
+    types/
+      container-services.ts
+      repository-services.ts
   db/
     pool.ts
   repositories/
-    userRepository.ts
+    pg-flow-repository.ts
+    types/
+      flow-repository.ts
   services/
-    userService.ts
-  routes/
-    healthRoutes.ts
-    userRoutes.ts
+    flows/
+      flows-services.ts
+      list-flows-service/
+  types/
+    config.ts
+    list-flows.ts
+    user.ts
 ```
 
 ## Como executar
@@ -45,7 +63,4 @@ npm run build
 
 ## Endpoints
 - `GET /api/health`
-- `GET /api/users`
-
-## Observacao de banco
-A rota `GET /api/users` espera uma tabela `users` com colunas: `id`, `name`, `email`.
+- `GET /api/flows`
