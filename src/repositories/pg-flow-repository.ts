@@ -1,6 +1,10 @@
 import { SELECT } from 'pg-chain'
 
-import { IFlowRepository, ListFlowResultData } from './types/flow-repository'
+import {
+  GetPublishedFlowVersionByFlowIdResultData,
+  IFlowRepository,
+  ListFlowResultData
+} from './types/flow-repository'
 import { Database } from '../db/pool'
 
 export type PgFlowRepositoryOptions = {
@@ -14,6 +18,11 @@ type FlowRow = {
   description: string | null
 }
 
+type PublishedFlowVersionByFlowIdRow = {
+  flowVersionId: string
+  flowJson: unknown
+}
+
 function mapRowToFlow (row: FlowRow): ListFlowResultData {
   return {
     id: row.id,
@@ -23,6 +32,14 @@ function mapRowToFlow (row: FlowRow): ListFlowResultData {
   }
 }
 
+function mapRowToPublishedFlowVersionByFlowId (
+  row: PublishedFlowVersionByFlowIdRow
+): GetPublishedFlowVersionByFlowIdResultData {
+  return {
+    flowVersionId: row.flowVersionId,
+    flowJson: row.flowJson
+  }
+}
 export class PgFlowRepository implements IFlowRepository {
   private db: Database
 
@@ -40,5 +57,28 @@ export class PgFlowRepository implements IFlowRepository {
       )
 
     return rows.map(mapRowToFlow)
+  }
+
+  async getPublishedFlowVersionByFlowId (
+    flowId: string
+  ): Promise<GetPublishedFlowVersionByFlowIdResultData | null> {
+    const { rows } = await this.db
+      .query<PublishedFlowVersionByFlowIdRow>(
+        SELECT`flow.published_version_id AS "flowVersionId", flow_version.flow_json AS "flowJson"`
+          .FROM`flow`
+          .LEFT_JOIN`flow_version ON flow_version.id = flow.published_version_id`
+          .WHERE`flow.id = ${flowId}`
+          .AND`flow.status = 'published'`
+          .AND`flow.published_version_id IS NOT NULL`
+          .LIMIT`1`
+      )
+
+    const [row] = rows
+
+    if (!row) {
+      return null
+    }
+
+    return mapRowToPublishedFlowVersionByFlowId(row)
   }
 }

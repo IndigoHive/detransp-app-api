@@ -64,3 +64,5 @@ npm run build
 ## Endpoints
 - `GET /api/health`
 - `GET /api/flows`
+- `GET /api/flows/:flowId/published-flow-version`
+- `GET /api/flows/:flowId/flow-json`
