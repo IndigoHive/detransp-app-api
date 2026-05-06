@@ -11,5 +11,13 @@ export function flowsRouter (): Router {
     res.json(result)
   })
 
+  router.get('/:flowId/published-flow-version', async (req, res) => {
+    const service = req.scope.resolve('getPublishedFlowVersionByFlowIdService')
+
+    const result = await service.run(req.params.flowId)
+
+    res.json(result)
+  })
+
   return router
 }
