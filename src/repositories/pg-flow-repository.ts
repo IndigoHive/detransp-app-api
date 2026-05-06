@@ -1,7 +1,6 @@
 import { SELECT } from 'pg-chain'
 
 import {
-  GetPublishedFlowJsonByFlowIdResultData,
   GetPublishedFlowVersionByFlowIdResultData,
   IFlowRepository,
   ListFlowResultData
@@ -20,12 +19,7 @@ type FlowRow = {
 }
 
 type PublishedFlowVersionByFlowIdRow = {
-  flowId: string
   flowVersionId: string
-}
-
-type PublishedFlowJsonByFlowIdRow = {
-  flowId: string
   flowJson: unknown
 }
 
@@ -42,20 +36,10 @@ function mapRowToPublishedFlowVersionByFlowId (
   row: PublishedFlowVersionByFlowIdRow
 ): GetPublishedFlowVersionByFlowIdResultData {
   return {
-    flowId: row.flowId,
-    flowVersionId: row.flowVersionId
-  }
-}
-
-function mapRowToPublishedFlowJsonByFlowId (
-  row: PublishedFlowJsonByFlowIdRow
-): GetPublishedFlowJsonByFlowIdResultData {
-  return {
-    flowId: row.flowId,
+    flowVersionId: row.flowVersionId,
     flowJson: row.flowJson
   }
 }
-
 export class PgFlowRepository implements IFlowRepository {
   private db: Database
 
@@ -80,11 +64,12 @@ export class PgFlowRepository implements IFlowRepository {
   ): Promise<GetPublishedFlowVersionByFlowIdResultData | null> {
     const { rows } = await this.db
       .query<PublishedFlowVersionByFlowIdRow>(
-        SELECT`id AS "flowId", published_flow_version_id AS "flowVersionId"`
+        SELECT`flow.published_version_id AS "flowVersionId", flow_version.flow_json AS "flowJson"`
           .FROM`flow`
-          .WHERE`id = ${flowId}`
-          .WHERE`status = 'published'`
-          .WHERE`published_flow_version_id IS NOT NULL`
+          .LEFT_JOIN`flow_version ON flow_version.id = flow.published_version_id`
+          .WHERE`flow.id = ${flowId}`
+          .AND`flow.status = 'published'`
+          .AND`flow.published_version_id IS NOT NULL`
           .LIMIT`1`
       )
 
@@ -95,27 +80,5 @@ export class PgFlowRepository implements IFlowRepository {
     }
 
     return mapRowToPublishedFlowVersionByFlowId(row)
-  }
-
-  async getPublishedFlowJsonByFlowId (
-    flowId: string
-  ): Promise<GetPublishedFlowJsonByFlowIdResultData | null> {
-    const { rows } = await this.db.query<PublishedFlowJsonByFlowIdRow>(
-      `SELECT f.id AS "flowId", fv.flow_json AS "flowJson"
-       FROM flow f
-       INNER JOIN flow_version fv ON fv.id = f.published_flow_version_id
-       WHERE f.id = $1
-         AND f.status = 'published'
-       LIMIT 1`,
-      [flowId]
-    )
-
-    const [row] = rows
-
-    if (!row) {
-      return null
-    }
-
-    return mapRowToPublishedFlowJsonByFlowId(row)
   }
 }

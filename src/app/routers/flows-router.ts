@@ -13,7 +13,7 @@ export function flowsRouter (): Router {
     res.json(result)
   })
 
-  router.get('/:flowId/published-flow-version', async (req, res) => {
+  router.get('/:flowId', async (req, res) => {
     const flowId = req.params.flowId
 
     if (!UUID_REGEX.test(flowId)) {
@@ -31,32 +31,6 @@ export function flowsRouter (): Router {
     if (!result.data) {
       res.status(404).json({
         message: 'Published flow version not found for this flow.'
-      })
-
-      return
-    }
-
-    res.json(result)
-  })
-
-  router.get('/:flowId/flow-json', async (req, res) => {
-    const flowId = req.params.flowId
-
-    if (!UUID_REGEX.test(flowId)) {
-      res.status(400).json({
-        message: 'Invalid flowId. Expected a UUID.'
-      })
-
-      return
-    }
-
-    const service = req.scope.resolve('getPublishedFlowJsonByFlowIdService')
-
-    const result = await service.run(flowId)
-
-    if (!result.data) {
-      res.status(404).json({
-        message: 'Published flow JSON not found for this flow.'
       })
 
       return
