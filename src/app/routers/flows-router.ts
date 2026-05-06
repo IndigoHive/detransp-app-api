@@ -1,6 +1,6 @@
 import { Router } from 'express'
 
-const UUID_V4_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
+const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
 
 export function flowsRouter (): Router {
   const router = Router()
@@ -16,7 +16,7 @@ export function flowsRouter (): Router {
   router.get('/:flowId/published-flow-version', async (req, res) => {
     const flowId = req.params.flowId
 
-    if (!UUID_V4_REGEX.test(flowId)) {
+    if (!UUID_REGEX.test(flowId)) {
       res.status(400).json({
         message: 'Invalid flowId. Expected a UUID.'
       })
@@ -42,7 +42,7 @@ export function flowsRouter (): Router {
   router.get('/:flowId/flow-json', async (req, res) => {
     const flowId = req.params.flowId
 
-    if (!UUID_V4_REGEX.test(flowId)) {
+    if (!UUID_REGEX.test(flowId)) {
       res.status(400).json({
         message: 'Invalid flowId. Expected a UUID.'
       })
