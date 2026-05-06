@@ -1,6 +1,7 @@
 import { SELECT } from 'pg-chain'
 
 import {
+  GetPublishedFlowJsonByFlowIdResultData,
   GetPublishedFlowVersionByFlowIdResultData,
   IFlowRepository,
   ListFlowResultData
@@ -23,6 +24,11 @@ type PublishedFlowVersionByFlowIdRow = {
   flowVersionId: string
 }
 
+type PublishedFlowJsonByFlowIdRow = {
+  flowId: string
+  flowJson: unknown
+}
+
 function mapRowToFlow (row: FlowRow): ListFlowResultData {
   return {
     id: row.id,
@@ -38,6 +44,15 @@ function mapRowToPublishedFlowVersionByFlowId (
   return {
     flowId: row.flowId,
     flowVersionId: row.flowVersionId
+  }
+}
+
+function mapRowToPublishedFlowJsonByFlowId (
+  row: PublishedFlowJsonByFlowIdRow
+): GetPublishedFlowJsonByFlowIdResultData {
+  return {
+    flowId: row.flowId,
+    flowJson: row.flowJson
   }
 }
 
@@ -80,5 +95,27 @@ export class PgFlowRepository implements IFlowRepository {
     }
 
     return mapRowToPublishedFlowVersionByFlowId(row)
+  }
+
+  async getPublishedFlowJsonByFlowId (
+    flowId: string
+  ): Promise<GetPublishedFlowJsonByFlowIdResultData | null> {
+    const { rows } = await this.db.query<PublishedFlowJsonByFlowIdRow>(
+      `SELECT f.id AS "flowId", fv.flow_json AS "flowJson"
+       FROM flow f
+       INNER JOIN flow_version fv ON fv.id = f.published_flow_version_id
+       WHERE f.id = $1
+         AND f.status = 'published'
+       LIMIT 1`,
+      [flowId]
+    )
+
+    const [row] = rows
+
+    if (!row) {
+      return null
+    }
+
+    return mapRowToPublishedFlowJsonByFlowId(row)
   }
 }

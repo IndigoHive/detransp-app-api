@@ -19,7 +19,13 @@ export type GetPublishedFlowVersionByFlowIdResultData = {
   flowVersionId: string
 }
 
+export type GetPublishedFlowJsonByFlowIdResultData = {
+  flowId: string
+  flowJson: unknown
+}
+
 export interface IFlowRepository {
   list (): Promise<ListFlowResultData[]>
   getPublishedFlowVersionByFlowId (flowId: string): Promise<GetPublishedFlowVersionByFlowIdResultData | null>
+  getPublishedFlowJsonByFlowId (flowId: string): Promise<GetPublishedFlowJsonByFlowIdResultData | null>
 }
