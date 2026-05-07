@@ -12,7 +12,7 @@ import { RepositoryServices } from '../types/repository-services'
 import { ContainerServices } from '../types/container-services'
 import { Database } from '../../db/pool'
 import { PgFlowRepository } from '../../repositories/pg-flow-repository'
-import { getFlowsRegistrations } from '../../services'
+import { getFlowsRegistrations, getServicesRegistrations } from '../../services'
 import pino from 'pino'
 
 export type CreateContainerOptions = {
@@ -27,6 +27,7 @@ export function createContainer (
   const container = createAwilixContainer<ContainerServices>()
 
   container.register(getFlowsRegistrations())
+  container.register(getServicesRegistrations())
   container.register(getPool(config))
   container.register(getRepositoryRegistrations())
   container.register({
