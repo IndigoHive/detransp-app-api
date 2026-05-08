@@ -8,11 +8,12 @@ type Flow = {
   status: FlowStatus
   authorId: string
   publishedFlowVersionId: string | null
+  iconName: string | null
   createdAt: Date
   updatedAt: Date
 }
 
-export type ListFlowResultData = Pick<Flow, 'id' | 'slug' | 'name' | 'description' >
+export type ListFlowResultData = Pick<Flow, 'id' | 'slug' | 'name' | 'description' | 'iconName'>
 
 export type GetPublishedFlowVersionByFlowIdResultData = {
   flowVersionId: string

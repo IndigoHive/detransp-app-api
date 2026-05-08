@@ -19,7 +19,8 @@ export class ListFlowsService {
         id: flow.id,
         slug: flow.slug,
         name: flow.name,
-        description: flow.description
+        description: flow.description,
+        iconName: flow.iconName
       }))
     }
 
