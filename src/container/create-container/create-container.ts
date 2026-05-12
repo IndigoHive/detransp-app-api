@@ -3,6 +3,7 @@ import {
   type AwilixContainer,
   createContainer as createAwilixContainer,
   asClass,
+  asValue,
   NameAndRegistrationPair
 } from 'awilix'
 import { config as defaultConfig } from '../config'
@@ -12,7 +13,7 @@ import { RepositoryServices } from '../types/repository-services'
 import { ContainerServices } from '../types/container-services'
 import { Database } from '../../db/pool'
 import { PgFlowRepository } from '../../repositories/pg-flow-repository'
-import { getFlowsRegistrations, getServicesRegistrations } from '../../services'
+import { getAuthRegistrations, getFlowsRegistrations, getServicesRegistrations } from '../../services'
 import pino from 'pino'
 
 export type CreateContainerOptions = {
@@ -26,7 +27,11 @@ export function createContainer (
 
   const container = createAwilixContainer<ContainerServices>()
 
+  container.register({
+    config: asValue(config),
+  })
   container.register(getFlowsRegistrations())
+  container.register(getAuthRegistrations())
   container.register(getServicesRegistrations())
   container.register(getPool(config))
   container.register(getRepositoryRegistrations())

@@ -8,6 +8,15 @@ export type Config = {
     environment: ApplicationEnvironment
     port: number
   }
+  idsp: {
+    clientId: string
+    clientSecret?: string
+    authorizeUrl: string
+    tokenUrl: string
+    userInfoUrl: string
+    redirectUri: string
+    scope: string
+  }
   database: {
     connectionString: string
   }
