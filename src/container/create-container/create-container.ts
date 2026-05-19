@@ -15,6 +15,7 @@ import { Database } from '../../db/pool'
 import { PgFlowRepository } from '../../repositories/pg-flow-repository'
 import { getAuthRegistrations, getFlowsRegistrations, getServicesRegistrations } from '../../services'
 import pino from 'pino'
+import { createServiceNowCsmClient } from '../../clients'
 
 export type CreateContainerOptions = {
   config?: Config
@@ -29,6 +30,7 @@ export function createContainer (
 
   container.register({
     config: asValue(config),
+    serviceNowCsmClient: asFunction(({ config }) => createServiceNowCsmClient(config)).singleton(),
   })
   container.register(getFlowsRegistrations())
   container.register(getAuthRegistrations())
