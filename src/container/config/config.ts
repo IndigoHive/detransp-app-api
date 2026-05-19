@@ -17,6 +17,13 @@ export const config: Config = {
   database: {
     connectionString: env.DATABASE_URL!
   },
+  serviceNow: {
+    csm: {
+      baseUrl: env.SERVICENOW_CSM_BASE_URL || '',
+      username: env.SERVICENOW_CSM_USERNAME || '',
+      password: env.SERVICENOW_CSM_PASSWORD || '',
+    }
+  },
   logging: {
     level: env.LOG_LEVEL || DEFAULT_LOG_LEVEL
   }

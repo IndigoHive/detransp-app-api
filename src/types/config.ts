@@ -20,6 +20,13 @@ export type Config = {
   database: {
     connectionString: string
   }
+  serviceNow: {
+    csm: {
+      baseUrl: string
+      username: string
+      password: string
+    }
+  }
   logging: {
     level: string
   }
