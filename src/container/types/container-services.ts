@@ -6,10 +6,12 @@ import type { ServicesServices } from '../../services/services/services-services
 import type { AuthServices } from '../../services/auth/auth-services'
 import type { Config } from '../../types'
 import type { AxiosInstance } from 'axios'
+import type { DetranSpServiceNowLicenciamentoClient } from '../../clients'
 
 export type ContainerServices = RepositoryServices & FlowServices & ServicesServices & AuthServices & {
   config: Config
   pool: Pool
   logger: Logger
   serviceNowCsmClient: AxiosInstance
+  detranSpServiceNowLicenciamentoClient: DetranSpServiceNowLicenciamentoClient
 }
