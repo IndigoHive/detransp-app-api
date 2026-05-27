@@ -28,7 +28,7 @@ export function flowsRouter (): Router {
 
     const result = await service.run(flowId)
 
-    if (!result.data) {
+    if (!result) {
       res.status(404).json({
         message: 'Published flow version not found for this flow.'
       })

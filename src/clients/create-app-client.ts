@@ -18,19 +18,10 @@ export type GovBrUserInfo = {
 }
 
 type ListFlowsApiResponse = {
-  data: Array<{
-    id: string
-    name: string
-    description: string | null
-    iconName: string | null
-  }>
-}
-
-type GetFlowVersionApiResponse = {
-  data: {
-    flowVersionId: string
-    flowJson: unknown
-  } | null
+  id: string
+  name: string
+  description: string
+  iconName?: string
 }
 
 export type AppClient = {
@@ -44,27 +35,14 @@ export function createAppClient (baseURL: string): AppClient {
 
   return {
     async listFlows (): Promise<FlowSummary[]> {
-      const response = await http.get<ListFlowsApiResponse>('/api/flows')
+      const response = await http.get<ListFlowsApiResponse[]>('/api/flows')
 
-      return response.data.data.map((flow) => ({
-        id: flow.id,
-        name: flow.name,
-        description: flow.description ?? '',
-        ...(flow.iconName ? { iconName: flow.iconName } : {})
-      }))
+      return response.data
     },
     async getFlowVersion (flowId: string): Promise<FlowVersionResponse> {
-      const response = await http.get<GetFlowVersionApiResponse>(`/api/flows/${flowId}`)
-      const payload = response.data.data
+      const response = await http.get<FlowVersionResponse>(`/api/flows/${flowId}`)
 
-      if (!payload) {
-        throw new Error('Flow version not found')
-      }
-
-      return {
-        id: payload.flowVersionId,
-        flowJson: payload.flowJson
-      }
+      return response.data
     },
     async getGovBrUserInfo (accessToken: string): Promise<GovBrUserInfo> {
       const response = await http.get<GovBrUserInfo>('/api/auth/govbr/userinfo', {

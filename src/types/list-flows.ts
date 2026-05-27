@@ -1,11 +1,8 @@
-export type ListFlowsResultData = {
+export type FlowSummary = {
   id: string
-  slug: string
   name: string
-  description: string | null
-  iconName: string | null
+  description: string
+  iconName?: string
 }
 
-export type ListFlowsResult = {
-  data: ListFlowsResultData[]
-}
+export type ListFlowsResult = FlowSummary[]

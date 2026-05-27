@@ -14,15 +14,12 @@ export class ListFlowsService {
   async run (): Promise<ListFlowsResult> {
     const flows = await this.flowRepository.list()
 
-    const result: ListFlowsResult = {
-      data: flows.map(flow => ({
+    const result: ListFlowsResult = flows.map(flow => ({
         id: flow.id,
-        slug: flow.slug,
         name: flow.name,
-        description: flow.description,
-        iconName: flow.iconName
+        description: flow.description ?? '',
+        ...(flow.iconName ? { iconName: flow.iconName } : {})
       }))
-    }
 
     return result
   }

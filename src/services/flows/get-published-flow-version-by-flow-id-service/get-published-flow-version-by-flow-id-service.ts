@@ -1,10 +1,9 @@
 import { IFlowRepository } from '../../../repositories/types/flow-repository'
 
 export type GetPublishedFlowVersionByFlowIdResult = {
-  data: {
-    flowVersionId: string
-    flowJson: unknown
-  } | null
+  id: string
+  versionNumber?: number
+  flowJson: unknown
 }
 
 export class GetPublishedFlowVersionByFlowIdService {
@@ -16,11 +15,16 @@ export class GetPublishedFlowVersionByFlowIdService {
     this.flowRepository = options.flowRepository
   }
 
-  async run (flowId: string): Promise<GetPublishedFlowVersionByFlowIdResult> {
+  async run (flowId: string): Promise<GetPublishedFlowVersionByFlowIdResult | null> {
     const publishedFlowJson = await this.flowRepository.getPublishedFlowVersionByFlowId(flowId)
 
+    if (!publishedFlowJson) {
+      return null
+    }
+
     return {
-      data: publishedFlowJson
+      id: publishedFlowJson.flowVersionId,
+      flowJson: publishedFlowJson.flowJson
     }
   }
 }
