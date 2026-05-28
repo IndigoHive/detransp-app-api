@@ -22,6 +22,11 @@ export const config: Config = {
       baseUrl: env.SERVICENOW_CSM_BASE_URL || '',
       username: env.SERVICENOW_CSM_USERNAME || '',
       password: env.SERVICENOW_CSM_PASSWORD || '',
+    },
+    tdv: {
+      baseUrl: env.SERVICENOW_TDV_BASE_URL || '',
+      username: env.SERVICENOW_TDV_USERNAME || '',
+      password: env.SERVICENOW_TDV_PASSWORD || '',
     }
   },
   logging: {

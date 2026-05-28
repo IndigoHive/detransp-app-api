@@ -1,26 +1,38 @@
-import { AxiosInstance } from 'axios'
+import type { ServiceNowCsmClient } from '../../../clients'
 import type {
   SolicitarVistoriaEmTransitoInput,
   SolicitarVistoriaEmTransitoResponse,
-  ServiceNowCsmResponse
 } from './types'
 
+type Dependencies = {
+  serviceNowCsm: ServiceNowCsmClient
+}
+
+type ServiceNowCsmSubmitResult = {
+  result: {
+    number: string
+    [key: string]: unknown
+  }
+}
+
 export class SolicitarVistoriaEmTransitoService {
-  constructor (private readonly serviceNowCsmClient: AxiosInstance) {}
+  private readonly serviceNowCsm: ServiceNowCsmClient
+
+  constructor ({ serviceNowCsm }: Dependencies) {
+    this.serviceNowCsm = serviceNowCsm
+  }
 
   async run (input: SolicitarVistoriaEmTransitoInput): Promise<SolicitarVistoriaEmTransitoResponse> {
     try {
       const payload = this.mapInputToServiceNowPayload(input)
 
-      const response = await this.serviceNowCsmClient.post<ServiceNowCsmResponse>(
-        '/sn_sc/v1/servicecatalog/items/9ffe1f1c874b121422bdc9530cbb3570/submit_producer',
+      const result = await this.serviceNowCsm.submitProducer<ServiceNowCsmSubmitResult>(
+        '9ffe1f1c874b121422bdc9530cbb3570',
         payload
       )
 
-      const { result } = response.data
-
       return {
-        protocol: result.number,
+        protocol: result.result.number,
       }
     } catch (error) {
       return {

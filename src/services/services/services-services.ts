@@ -1,4 +1,4 @@
-import { asClass, asFunction, NameAndRegistrationPair } from 'awilix'
+import { asClass, type NameAndRegistrationPair } from 'awilix'
 import { GetVehiclesService } from './get-vehicles-service'
 import { SolicitarVistoriaEmTransitoService } from './solicitar-vistoria-em-transito'
 
@@ -10,6 +10,6 @@ export type ServicesServices = {
 export function getServicesRegistrations (): Required<NameAndRegistrationPair<ServicesServices>> {
   return {
     getVehiclesService: asClass(GetVehiclesService).scoped(),
-    solicitarVistoriaEmTransitoService: asFunction(({ serviceNowCsmClient }) => new SolicitarVistoriaEmTransitoService(serviceNowCsmClient)).scoped(),
+    solicitarVistoriaEmTransitoService: asClass(SolicitarVistoriaEmTransitoService).scoped(),
   }
 }
