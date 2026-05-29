@@ -2,20 +2,19 @@ import { createHash, randomBytes } from 'node:crypto'
 import type { Config } from '../../../types'
 
 export type GenerateGovBrAuthorizationUrlInput = {
+  redirectUri?: string
   state?: string
   nonce?: string
-  redirectUri?: string
-  scope?: string
   codeVerifier?: string
 }
 
 export type GenerateGovBrAuthorizationUrlResult = {
   authorizationUrl: string
-  state: string
-  nonce: string
   codeVerifier: string
   codeChallenge: string
   codeChallengeMethod: 'S256'
+  state: string
+  nonce: string
   redirectUri: string
   scope: string
   clientId: string
@@ -33,45 +32,43 @@ export class GenerateGovBrAuthorizationUrlService {
   }
 
   run (input: GenerateGovBrAuthorizationUrlInput = {}): GenerateGovBrAuthorizationUrlResult {
-    const clientId = this.config.idsp.clientId
-    const defaultRedirectUri = this.config.idsp.redirectUri
-    const defaultScope = this.config.idsp.scope
-    const authorizeUrl = this.config.idsp.authorizeUrl
+    const { clientId, authorizeUrl, redirectUri, scope } = this.config.idsp
 
     if (!clientId) {
       throw new Error('IDSP clientId is not configured')
     }
 
-    const redirectUri = input.redirectUri || defaultRedirectUri
-
     if (!redirectUri) {
       throw new Error('IDSP redirectUri is not configured')
     }
 
-    const state = input.state || randomString(24)
-    const nonce = input.nonce || randomString(24)
-    const codeVerifier = input.codeVerifier || randomString(64)
-    const scope = input.scope || defaultScope
-    const codeChallenge = createCodeChallenge(codeVerifier)
+    const codeVerifier = input.codeVerifier ?? randomBase64Url(64)
+    const codeChallenge = createHash('sha256').update(codeVerifier).digest('base64url')
+    const state = input.state ?? randomBase64Url(24)
+    const nonce = input.nonce ?? randomBase64Url(24)
 
     const params = new URLSearchParams({
-      response_type: 'code',
       client_id: clientId,
-      redirect_uri: redirectUri,
-      scope,
-      state,
-      nonce,
       code_challenge: codeChallenge,
-      code_challenge_method: 'S256'
+      code_challenge_method: 'S256',
+      nonce,
+      prompt: 'login',
+      redirect_uri: redirectUri,
+      response_type: 'code',
+      scope,
+      state
     })
 
+    const url = new URL(authorizeUrl)
+    url.search = params.toString()
+
     return {
-      authorizationUrl: `${authorizeUrl}?${params.toString()}`,
-      state,
-      nonce,
+      authorizationUrl: url.toString(),
       codeVerifier,
       codeChallenge,
       codeChallengeMethod: 'S256',
+      state,
+      nonce,
       redirectUri,
       scope,
       clientId,
@@ -79,18 +76,8 @@ export class GenerateGovBrAuthorizationUrlService {
   }
 }
 
-function randomString (size: number): string {
-  return toBase64Url(randomBytes(size))
-}
-
-function createCodeChallenge (codeVerifier: string): string {
-  const hash = createHash('sha256').update(codeVerifier).digest()
-
-  return toBase64Url(hash)
-}
-
-function toBase64Url (buffer: Buffer): string {
-  return buffer
+function randomBase64Url (size: number): string {
+  return randomBytes(size)
     .toString('base64')
     .replace(/\+/g, '-')
     .replace(/\//g, '_')

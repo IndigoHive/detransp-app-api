@@ -1,0 +1,12 @@
+import type { DetranSpServiceNowDashboardClient } from '../../../clients'
+import { extractBearerToken, extractCpfFromToken } from '../../../utils/token'
+
+export class GetPontuacaoCnhService {
+  constructor(private dashboardClient: DetranSpServiceNowDashboardClient) {}
+
+  async run(authorizationHeader: string | undefined): Promise<unknown> {
+    const token = extractBearerToken(authorizationHeader)
+    const cpf = extractCpfFromToken(token)
+    return this.dashboardClient.get('pontuacaoCnh', token, cpf)
+  }
+}

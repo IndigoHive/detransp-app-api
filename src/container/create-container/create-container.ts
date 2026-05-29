@@ -13,7 +13,7 @@ import { RepositoryServices } from '../types/repository-services'
 import { ContainerServices } from '../types/container-services'
 import { Database } from '../../db/pool'
 import { PgFlowRepository } from '../../repositories/pg-flow-repository'
-import { getAuthRegistrations, getFlowsRegistrations, getServicesRegistrations } from '../../services'
+import { getAuthRegistrations, getFlowsRegistrations, getServicesRegistrations, getDashboardRegistrations } from '../../services'
 import { getClientRegistrations } from '../../clients'
 import pino from 'pino'
 
@@ -36,6 +36,7 @@ export function createContainer (
   container.register(getFlowsRegistrations())
   container.register(getAuthRegistrations())
   container.register(getServicesRegistrations())
+  container.register(getDashboardRegistrations())
   container.register(getPool(config))
   container.register(getRepositoryRegistrations())
 

@@ -26,6 +26,10 @@ export type Config = {
       username: string
       password: string
     }
+    api: {
+      baseUrl: string,
+      dashboardUrl: string
+    }
     tdv: {
       baseUrl: string
       username: string

@@ -3,12 +3,23 @@ import { Router } from 'express'
 export function authRouter (): Router {
   const router = Router()
 
-  router.post('/govbr/authorization-url', async (req, res) => {
-    const service = req.scope.resolve('generateGovBrAuthorizationUrlService')
+  router.post('/govbr/authorization-url', (req, res) => {
+    try {
+      const service = req.scope.resolve('generateGovBrAuthorizationUrlService')
+      const logger = req.scope.resolve('logger')
 
-    const result = service.run(req.body || {})
+      const result = service.run(req.body || {})
 
-    res.status(200).json(result)
+      logger.info(
+        { clientId: result.clientId, redirectUri: result.redirectUri },
+        '[auth] authorization URL generated',
+      )
+
+      res.status(200).json(result)
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Failed to generate authorization URL'
+      res.status(500).json({ error: message })
+    }
   })
 
   router.post('/govbr/token', async (req, res) => {
@@ -17,30 +28,48 @@ export function authRouter (): Router {
     const redirectUri = asOptionalString(req.body?.redirectUri)
 
     if (!code || !codeVerifier) {
-      res.status(400).json({
-        message: 'Invalid request body. Fields code and codeVerifier are required.'
-      })
-
+      res.status(400).json({ error: 'Fields code and codeVerifier are required.' })
       return
     }
 
-    const service = req.scope.resolve('exchangeGovBrAuthorizationCodeService')
+    try {
+      const service = req.scope.resolve('exchangeGovBrAuthorizationCodeService')
 
-    const payload = {
-      code,
-      codeVerifier,
-      ...(redirectUri ? { redirectUri } : {})
+      const result = await service.run({
+        code,
+        codeVerifier,
+        ...(redirectUri && { redirectUri }),
+      })
+
+      res.status(200).json(result)
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Token exchange failed'
+      res.status(502).json({ error: message })
+    }
+  })
+
+  router.get('/govbr/userinfo', async (req, res) => {
+    const accessToken =
+      getBearerToken(req.headers.authorization) ||
+      asOptionalString(req.query.accessToken)
+
+    if (!accessToken) {
+      res.status(401).json({ error: 'Missing access token. Use Authorization: Bearer <token>.' })
+      return
     }
 
-    const result = await service.run(payload)
-
-    res.status(200).json(result)
+    try {
+      const service = req.scope.resolve('getGovBrUserInfoService')
+      const result = await service.run({ accessToken })
+      res.status(200).json(result)
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Failed to fetch user info'
+      res.status(502).json({ error: message })
+    }
   })
 
   router.get('/dev-callback', (req, res) => {
-    const code = req.query.code
-    const error = req.query.error
-    const errorDescription = req.query.error_description
+    const { code, error, error_description: errorDescription } = req.query
 
     if (error) {
       res.status(400).send(`
@@ -64,26 +93,6 @@ export function authRouter (): Router {
     `)
   })
 
-  router.get('/govbr/userinfo', async (req, res) => {
-    const accessToken =
-      getBearerToken(req.headers.authorization) ||
-      asOptionalString(req.query.accessToken)
-
-    if (!accessToken) {
-      res.status(400).json({
-        message: 'Missing access token. Use Authorization: Bearer <token> or query accessToken.'
-      })
-
-      return
-    }
-
-    const service = req.scope.resolve('getGovBrUserInfoService')
-
-    const result = await service.run({ accessToken })
-
-    res.status(200).json(result)
-  })
-
   return router
 }
 
@@ -96,15 +105,7 @@ function asOptionalString (value: unknown): string | undefined {
 }
 
 function getBearerToken (authorizationHeader: string | undefined): string | undefined {
-  if (!authorizationHeader) {
-    return undefined
-  }
-
+  if (!authorizationHeader) return undefined
   const [scheme, token] = authorizationHeader.split(' ')
-
-  if (scheme?.toLowerCase() !== 'bearer' || !token) {
-    return undefined
-  }
-
-  return token
+  return scheme?.toLowerCase() === 'bearer' && token ? token : undefined
 }
