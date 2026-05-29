@@ -19,26 +19,26 @@ export type DashboardServices = {
 
 export function getDashboardRegistrations(): Required<NameAndRegistrationPair<DashboardServices>> {
   return {
-    getMeusVeiculosService: asFunction(({ serviceNowApiClient, logger, config }) =>
-      new GetMeusVeiculosService(serviceNowApiClient, logger, config),
+    getMeusVeiculosService: asFunction(({ detranSpServiceNowDashboard }) =>
+      new GetMeusVeiculosService(detranSpServiceNowDashboard),
     ).scoped(),
-    getDebitosPendentesService: asFunction(({ serviceNowApiClient, logger, config }) =>
-      new GetDebitosPendentesService(serviceNowApiClient, logger, config),
+    getDebitosPendentesService: asFunction(({ detranSpServiceNowDashboard }) =>
+      new GetDebitosPendentesService(detranSpServiceNowDashboard),
     ).scoped(),
-    getDetalhesPontosCnhService: asFunction(({ serviceNowApiClient, logger, config }) =>
-      new GetDetalhesPontosCnhService(serviceNowApiClient, logger, config),
+    getDetalhesPontosCnhService: asFunction(({ detranSpServiceNowDashboard }) =>
+      new GetDetalhesPontosCnhService(detranSpServiceNowDashboard),
     ).scoped(),
-    getListaMultasService: asFunction(({ serviceNowApiClient, logger, config }) =>
-      new GetListaMultasService(serviceNowApiClient, logger, config),
+    getListaMultasService: asFunction(({ detranSpServiceNowDashboard }) =>
+      new GetListaMultasService(detranSpServiceNowDashboard),
     ).scoped(),
-    getDadosCondutorService: asFunction(({ serviceNowApiClient, logger, config }) =>
-      new GetDadosCondutorService(serviceNowApiClient, logger, config),
+    getDadosCondutorService: asFunction(({ detranSpServiceNowDashboard }) =>
+      new GetDadosCondutorService(detranSpServiceNowDashboard),
     ).scoped(),
-    getPontuacaoCnhService: asFunction(({ serviceNowApiClient, logger, config }) =>
-      new GetPontuacaoCnhService(serviceNowApiClient, logger, config),
+    getPontuacaoCnhService: asFunction(({ detranSpServiceNowDashboard }) =>
+      new GetPontuacaoCnhService(detranSpServiceNowDashboard),
     ).scoped(),
-    getDetalhesMultaService: asFunction(({ serviceNowApiClient, logger, config }) =>
-      new GetDetalhesMultaService(serviceNowApiClient, logger, config),
+    getDetalhesMultaService: asFunction(({ detranSpServiceNowDashboard }) =>
+      new GetDetalhesMultaService(detranSpServiceNowDashboard),
     ).scoped(),
   }
 }
