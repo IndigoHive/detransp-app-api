@@ -28,14 +28,13 @@ export class ExchangeGovBrAuthorizationCodeService {
   }
 
   async run (input: ExchangeGovBrAuthorizationCodeInput): Promise<ExchangeGovBrAuthorizationCodeResult> {
-    const tokenUrl = this.config.idsp.tokenUrl
-    const clientId = this.config.idsp.clientId
-    const clientSecret = this.config.idsp.clientSecret
-    const redirectUri = input.redirectUri || this.config.idsp.redirectUri
+    const { tokenUrl, clientId, clientSecret, redirectUri: defaultRedirectUri } = this.config.idsp
 
     if (!clientId) {
       throw new Error('IDSP clientId is not configured')
     }
+
+    const redirectUri = input.redirectUri ?? defaultRedirectUri
 
     if (!redirectUri) {
       throw new Error('IDSP redirectUri is not configured')
@@ -43,10 +42,10 @@ export class ExchangeGovBrAuthorizationCodeService {
 
     const body = new URLSearchParams({
       grant_type: 'authorization_code',
-      code: input.code,
       client_id: clientId,
-      redirect_uri: redirectUri,
+      code: input.code,
       code_verifier: input.codeVerifier,
+      redirect_uri: redirectUri,
     })
 
     if (clientSecret) {
@@ -55,49 +54,37 @@ export class ExchangeGovBrAuthorizationCodeService {
 
     const response = await fetch(tokenUrl, {
       method: 'POST',
-      headers: {
-        'content-type': 'application/x-www-form-urlencoded'
-      },
+      headers: { 'content-type': 'application/x-www-form-urlencoded' },
       body,
     })
 
     if (!response.ok) {
       const errorBody = await safeReadText(response)
-
-      throw new Error(`GovBR token request failed (${response.status}): ${errorBody}`)
+      throw new Error(`GovBR token exchange failed (${response.status}): ${errorBody}`)
     }
 
     const payload = await response.json() as Record<string, unknown>
 
     const accessToken = asString(payload.access_token)
+
+    if (!accessToken) {
+      throw new Error('GovBR token response is missing access_token')
+    }
+
     const expiresIn = asNumber(payload.expires_in)
     const idToken = asString(payload.id_token)
     const refreshToken = asString(payload.refresh_token)
     const scope = asString(payload.scope)
     const tokenType = asString(payload.token_type)
 
-    if (!accessToken) {
-      throw new Error('GovBR token response does not include access_token')
-    }
-
     return {
       accessToken,
-      ...(expiresIn !== undefined
-        ? { expiresIn }
-        : {}),
-      ...(idToken
-        ? { idToken }
-        : {}),
-      ...(refreshToken
-        ? { refreshToken }
-        : {}),
-      ...(scope
-        ? { scope }
-        : {}),
-      ...(tokenType
-        ? { tokenType }
-        : {}),
-      raw: payload
+      ...(expiresIn !== undefined && { expiresIn }),
+      ...(idToken && { idToken }),
+      ...(refreshToken && { refreshToken }),
+      ...(scope && { scope }),
+      ...(tokenType && { tokenType }),
+      raw: payload,
     }
   }
 }
@@ -106,7 +93,7 @@ async function safeReadText (response: Response): Promise<string> {
   try {
     return await response.text()
   } catch {
-    return 'Unable to read response body'
+    return 'unable to read response body'
   }
 }
 
