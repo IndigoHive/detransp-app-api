@@ -26,6 +26,11 @@ export type Config = {
       username: string
       password: string
     }
+    tdv: {
+      baseUrl: string
+      username: string
+      password: string
+    }
   }
   logging: {
     level: string
