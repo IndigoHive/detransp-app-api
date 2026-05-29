@@ -88,6 +88,11 @@ export const config: Config = {
       baseUrl: env.SERVICENOW_API_BASE_URL || '',
       dashboardUrl
     },
+    tdv: {
+      baseUrl: env.SERVICENOW_TDV_BASE_URL || '',
+      username: env.SERVICENOW_TDV_USERNAME || '',
+      password: env.SERVICENOW_TDV_PASSWORD || '',
+    }
   },
   logging: {
     level: env.LOG_LEVEL || DEFAULT_LOG_LEVEL

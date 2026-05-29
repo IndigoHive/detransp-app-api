@@ -13,9 +13,9 @@ import { RepositoryServices } from '../types/repository-services'
 import { ContainerServices } from '../types/container-services'
 import { Database } from '../../db/pool'
 import { PgFlowRepository } from '../../repositories/pg-flow-repository'
-import { getAuthRegistrations, getDashboardRegistrations, getFlowsRegistrations, getServicesRegistrations } from '../../services'
+import { getAuthRegistrations, getFlowsRegistrations, getServicesRegistrations, getDashboardRegistrations } from '../../services'
+import { getClientRegistrations } from '../../clients'
 import pino from 'pino'
-import { createServiceNowApiClient, createServiceNowCsmClient } from '../../clients'
 
 export type CreateContainerOptions = {
   config?: Config
@@ -30,16 +30,15 @@ export function createContainer (
 
   container.register({
     config: asValue(config),
-    serviceNowCsmClient: asFunction(({ config }) => createServiceNowCsmClient(config)).singleton(),
-    serviceNowApiClient: asFunction(({ config }) => createServiceNowApiClient(config)).singleton(),
+    logger: asFunction(() => pino()).singleton(),
   })
+  container.register(getClientRegistrations())
   container.register(getFlowsRegistrations())
   container.register(getAuthRegistrations())
   container.register(getServicesRegistrations())
   container.register(getDashboardRegistrations())
   container.register(getPool(config))
   container.register(getRepositoryRegistrations())
-  container.register({ logger: asFunction(() => pino()).singleton() })
 
   return container
 }
