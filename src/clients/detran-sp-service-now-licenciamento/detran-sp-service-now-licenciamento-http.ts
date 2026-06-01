@@ -39,7 +39,7 @@ export class DetranSpServiceNowLicenciamentoHttp {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        'User-Agent': 'WhatsApp/appsp/1.0.0'
+        'User-Agent': 'iOS/appsp/1.0.0'
       },
       timeout: MAX_TIMEOUT_MS,
       withCredentials: true
