@@ -2,6 +2,7 @@ import { Router } from 'express'
 import { DetranSpServiceNowLicenciamentoError } from '../../clients/detran-sp-service-now-licenciamento/errors/detran-sp-service-now-licenciamento-error'
 import { normalizeSituacaoLicenciamento } from '../../clients/detran-sp-service-now-licenciamento/types/_common'
 import type { SituacaoLicenciamento } from '../../clients/detran-sp-service-now-licenciamento/types/_common'
+import { extractCpfFromToken } from '../../utils/token'
 import type {
   DebitoData,
   DebitoMultaData,
@@ -28,10 +29,10 @@ export function licenciamentoRouter (): Router {
 
   router.get('/veiculos', async (req, res) => {
     const accessToken = getBearerToken(req.headers.authorization)
-    const userCpf = asNonEmptyString(req.headers['x-cpf-usuario'])
+    const userCpf = accessToken ? asNonEmptyString(extractCpfFromToken(accessToken)) : undefined
 
     if (!accessToken || !userCpf) {
-      res.status(400).json({ message: 'Missing required headers: Authorization and X-CPF-Usuario.' })
+      res.status(401).json({ message: 'Missing or invalid Authorization token.' })
       return
     }
 
@@ -44,12 +45,12 @@ export function licenciamentoRouter (): Router {
   // Must be registered before /:renavam routes to avoid Express matching 'representacao' as a renavam param
   router.post('/veiculos/representacao', async (req, res) => {
     const accessToken = getBearerToken(req.headers.authorization)
-    const userCpf = asNonEmptyString(req.headers['x-cpf-usuario'])
+    const userCpf = accessToken ? asNonEmptyString(extractCpfFromToken(accessToken)) : undefined
     const renavam = asNonEmptyString(req.body?.renavam)
     const placa = asNonEmptyString(req.body?.placa)
 
     if (!accessToken || !userCpf || !renavam || !placa) {
-      res.status(400).json({ message: 'Missing required fields: Authorization, X-CPF-Usuario headers and renavam, placa in body.' })
+      res.status(400).json({ message: 'Missing required fields: Authorization header and renavam, placa in body.' })
       return
     }
 
