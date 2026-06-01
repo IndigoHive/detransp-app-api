@@ -26,7 +26,7 @@ export class DetranSpServiceNowLicenciamentoClient extends DetranSpServiceNowLic
     super({
       baseURL: new URL(
         '/api/x_mdpdd_lic_veic/v1/licenciamento/veiculos',
-        params.config.serviceNow.csm.baseUrl
+        params.config.serviceNow.api.baseUrl
       ).toString(),
       logger: params.logger
     })
