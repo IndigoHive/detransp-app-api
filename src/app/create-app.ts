@@ -1,6 +1,6 @@
 import type { AwilixContainer } from 'awilix'
 import express from 'express'
-import { authRouter, flowsRouter, healthRouter, licenciamentoRouter, servicesRouter } from './routers'
+import { authRouter, dashboardRouter, flowsRouter, healthRouter, licenciamentoRouter, servicesRouter } from './routers'
 import { ContainerServices, createContainer } from '../container'
 import { scopePerRequest } from './middlewares'
 
@@ -23,6 +23,7 @@ export function createApp (options: CreateAppOptions = {}) {
 
   // Authenticated routes
   app.use('/api/auth', authRouter())
+  app.use('/api/dashboard', dashboardRouter())
   app.use('/api/flows', flowsRouter())
   app.use('/api/licenciamento', licenciamentoRouter())
   app.use('/api/services', servicesRouter())

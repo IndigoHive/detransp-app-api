@@ -26,16 +26,3 @@ export type SolicitarVistoriaEmTransitoResponse =
       }
     }
 
-export type ServiceNowCsmResponse = {
-  result: {
-    sys_id: string
-    number: string
-    parent_id: string | null
-    record: string
-    redirect_portal_url: string
-    parent_table: string
-    redirect_url: string
-    table: string
-    redirect_to: string
-  }
-}
