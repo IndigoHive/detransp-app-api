@@ -80,18 +80,16 @@ export class IdpSpGovBrSSOClient {
   }
 
   async generateAccessToken (data: GenerateGovBrAccessTokenCommand): Promise<GenerateGovBrAccessTokenResult> {
-    const { clientId, clientSecret, redirectUri } = this.config.idsp
-
     const body = new URLSearchParams({
       grant_type: 'authorization_code',
       code: data.code,
-      client_id: clientId,
-      redirect_uri: data.redirectUri || redirectUri,
+      client_id: data.clientId,
+      redirect_uri: data.redirectUri || '',
       code_verifier: data.codeVerifier
     })
 
-    if (clientSecret) {
-      body.set('client_secret', clientSecret)
+    if (data.clientSecret) {
+      body.set('client_secret', data.clientSecret)
     }
 
     const response = await this.axios.post<GenerateGovBrAccessTokenResult>(

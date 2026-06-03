@@ -1,7 +1,8 @@
 import { createHash, randomBytes } from 'node:crypto'
-import type { Config } from '../../../types'
+import type { Config, Platform } from '../../../types'
 
 export type GenerateGovBrAuthorizationUrlInput = {
+  platform: Platform
   redirectUri?: string
   state?: string
   nonce?: string
@@ -31,8 +32,11 @@ export class GenerateGovBrAuthorizationUrlService {
     this.config = config
   }
 
-  run (input: GenerateGovBrAuthorizationUrlInput = {}): GenerateGovBrAuthorizationUrlResult {
-    const { clientId, authorizeUrl, redirectUri, scope } = this.config.idsp
+  run (input: GenerateGovBrAuthorizationUrlInput): GenerateGovBrAuthorizationUrlResult {
+    const { authorizeUrl, scope } = this.config.idsp
+    const platformConfig = this.config.idsp[input.platform]
+    const clientId = platformConfig.clientId
+    const redirectUri = input.redirectUri ?? platformConfig.redirectUri
 
     if (!clientId) {
       throw new Error('IDSP clientId is not configured')

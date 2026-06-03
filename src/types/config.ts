@@ -3,19 +3,26 @@ export type ApplicationEnvironment =
   'production' |
   'test'
 
+export type Platform = 'android' | 'ios'
+
+export type IdspPlatformConfig = {
+  clientId: string
+  clientSecret?: string
+  redirectUri: string
+}
+
 export type Config = {
   application: {
     environment: ApplicationEnvironment
     port: number
   }
   idsp: {
-    clientId: string
-    clientSecret?: string
     authorizeUrl: string
     tokenUrl: string
     userInfoUrl: string
-    redirectUri: string
     scope: string
+    android: IdspPlatformConfig
+    ios: IdspPlatformConfig
   }
   database: {
     connectionString: string

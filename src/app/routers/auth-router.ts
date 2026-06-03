@@ -1,17 +1,34 @@
 import { Router } from 'express'
+import type { Platform } from '../../types'
+
+const VALID_PLATFORMS: Platform[] = ['android', 'ios']
+
+function asPlatform (value: unknown): Platform | null {
+  if (typeof value === 'string' && VALID_PLATFORMS.includes(value as Platform)) {
+    return value as Platform
+  }
+  return null
+}
 
 export function authRouter (): Router {
   const router = Router()
 
   router.post('/govbr/authorization-url', (req, res) => {
+    const platform = asPlatform(req.body?.platform)
+
+    if (!platform) {
+      res.status(400).json({ error: 'Field platform is required (android | ios).' })
+      return
+    }
+
     try {
       const service = req.scope.resolve('generateGovBrAuthorizationUrlService')
       const logger = req.scope.resolve('logger')
 
-      const result = service.run(req.body || {})
+      const result = service.run({ ...req.body, platform })
 
       logger.info(
-        { clientId: result.clientId, redirectUri: result.redirectUri },
+        { clientId: result.clientId, platform, redirectUri: result.redirectUri },
         '[auth] authorization URL generated',
       )
 
@@ -23,9 +40,15 @@ export function authRouter (): Router {
   })
 
   router.post('/govbr/token', async (req, res) => {
+    const platform = asPlatform(req.body?.platform)
     const code = asNonEmptyString(req.body?.code)
     const codeVerifier = asNonEmptyString(req.body?.codeVerifier)
     const redirectUri = asOptionalString(req.body?.redirectUri)
+
+    if (!platform) {
+      res.status(400).json({ error: 'Field platform is required (android | ios).' })
+      return
+    }
 
     if (!code || !codeVerifier) {
       res.status(400).json({ error: 'Fields code and codeVerifier are required.' })
@@ -36,6 +59,7 @@ export function authRouter (): Router {
       const service = req.scope.resolve('exchangeGovBrAuthorizationCodeService')
 
       const result = await service.run({
+        platform,
         code,
         codeVerifier,
         ...(redirectUri && { redirectUri }),
