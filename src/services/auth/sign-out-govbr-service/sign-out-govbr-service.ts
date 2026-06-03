@@ -1,6 +1,7 @@
-import type { Config } from '../../../types'
+import type { Config, Platform } from '../../../types'
 
 export type SignOutGovBrInput = {
+  platform: Platform
   refreshToken: string
 }
 
@@ -16,16 +17,17 @@ export class SignOutGovBrService {
   }
 
   async run (input: SignOutGovBrInput): Promise<void> {
-    const { tokenUrl, clientId, clientSecret } = this.config.idsp
+    const { tokenUrl } = this.config.idsp
+    const platformConfig = this.config.idsp[input.platform]
     const logoutUrl = tokenUrl.replace(/\/token$/, '/logout')
 
     const body = new URLSearchParams({
-      client_id: clientId,
+      client_id: platformConfig.clientId,
       refresh_token: input.refreshToken,
     })
 
-    if (clientSecret) {
-      body.set('client_secret', clientSecret)
+    if (platformConfig.clientSecret) {
+      body.set('client_secret', platformConfig.clientSecret)
     }
 
     const response = await fetch(logoutUrl, {

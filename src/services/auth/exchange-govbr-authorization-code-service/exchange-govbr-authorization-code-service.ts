@@ -1,6 +1,8 @@
+import type { Config, Platform } from '../../../types'
 import type { IdpSpGovBrSSOClient } from '../../../clients'
 
 export type ExchangeGovBrAuthorizationCodeInput = {
+  platform: Platform
   code: string
   codeVerifier: string
   redirectUri?: string
@@ -16,21 +18,28 @@ export type ExchangeGovBrAuthorizationCodeResult = {
 }
 
 type Dependencies = {
+  config: Config
   idpSpGovBrSSO: IdpSpGovBrSSOClient
 }
 
 export class ExchangeGovBrAuthorizationCodeService {
+  private readonly config: Config
   private readonly idpSpGovBrSSO: IdpSpGovBrSSOClient
 
-  constructor ({ idpSpGovBrSSO }: Dependencies) {
+  constructor ({ config, idpSpGovBrSSO }: Dependencies) {
+    this.config = config
     this.idpSpGovBrSSO = idpSpGovBrSSO
   }
 
   async run (input: ExchangeGovBrAuthorizationCodeInput): Promise<ExchangeGovBrAuthorizationCodeResult> {
+    const platformConfig = this.config.idsp[input.platform]
+
     const result = await this.idpSpGovBrSSO.generateAccessToken({
       code: input.code,
       codeVerifier: input.codeVerifier,
-      ...(input.redirectUri ? { redirectUri: input.redirectUri } : {})
+      clientId: platformConfig.clientId,
+      redirectUri: input.redirectUri ?? platformConfig.redirectUri,
+      ...(platformConfig.clientSecret ? { clientSecret: platformConfig.clientSecret } : {}),
     })
 
     return {

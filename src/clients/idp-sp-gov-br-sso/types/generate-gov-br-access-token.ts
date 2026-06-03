@@ -1,6 +1,8 @@
 export type GenerateGovBrAccessTokenCommand = {
   code: string
   codeVerifier: string
+  clientId: string
+  clientSecret?: string
   redirectUri?: string
 }
 

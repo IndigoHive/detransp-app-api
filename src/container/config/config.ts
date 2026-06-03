@@ -101,17 +101,23 @@ export const config: Config = {
 
 function getIdspConfig (): Config['idsp'] {
   return {
-    clientId: env.GOVBR_IDSP_CLIENT_ID || '',
-    ...(env.GOVBR_IDSP_CLIENT_SECRET
-      ? { clientSecret: env.GOVBR_IDSP_CLIENT_SECRET }
-      : {}),
-    ...(env.GOVBR_IDSP_AUDIENCE
-      ? { audience: env.GOVBR_IDSP_AUDIENCE }
-      : {}),
     authorizeUrl: env.GOVBR_IDSP_AUTHORIZE_URL || DEFAULT_GOVBR_AUTHORIZE_URL,
     tokenUrl: env.GOVBR_IDSP_TOKEN_URL || DEFAULT_GOVBR_TOKEN_URL,
     userInfoUrl: env.GOVBR_IDSP_USERINFO_URL || DEFAULT_GOVBR_USERINFO_URL,
-    redirectUri: env.GOVBR_IDSP_REDIRECT_URI || '',
     scope: GOVBR_SCOPES.join(' '),
+    android: {
+      clientId: env.GOVBR_IDSP_ANDROID_CLIENT_ID || '',
+      ...(env.GOVBR_IDSP_ANDROID_CLIENT_SECRET
+        ? { clientSecret: env.GOVBR_IDSP_ANDROID_CLIENT_SECRET }
+        : {}),
+      redirectUri: env.GOVBR_IDSP_ANDROID_REDIRECT_URI || '',
+    },
+    ios: {
+      clientId: env.GOVBR_IDSP_IOS_CLIENT_ID || '',
+      ...(env.GOVBR_IDSP_IOS_CLIENT_SECRET
+        ? { clientSecret: env.GOVBR_IDSP_IOS_CLIENT_SECRET }
+        : {}),
+      redirectUri: env.GOVBR_IDSP_IOS_REDIRECT_URI || '',
+    },
   }
 }
