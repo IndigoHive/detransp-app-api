@@ -9,6 +9,7 @@ import type {
   ListaVeiculosVeiculoData,
   VerificaVeiculoData
 } from '../../clients/detran-sp-service-now-licenciamento/types'
+import { extractCpfFromToken } from '../../utils/token'
 
 type VehicleStatus = 'REGULAR' | 'A VENCER' | 'VENCIDO'
 
@@ -28,7 +29,7 @@ export function licenciamentoRouter (): Router {
 
   router.get('/veiculos', async (req, res) => {
     const accessToken = getBearerToken(req.headers.authorization)
-    const userCpf = asNonEmptyString(req.headers['x-cpf-usuario'])
+    const userCpf = asNonEmptyString(req.headers['x-cpf-usuario']) ?? (accessToken ? asNonEmptyString(extractCpfFromToken(accessToken)) : undefined)
 
     if (!accessToken || !userCpf) {
       res.status(400).json({ message: 'Missing required fields: Authorization, X-CPF-Usuario headers.' })
@@ -41,10 +42,9 @@ export function licenciamentoRouter (): Router {
     res.status(200).json({ vehicles })
   })
 
-  // Must be registered before /:renavam routes to avoid Express matching 'representacao' as a renavam param
   router.post('/veiculos/representacao', async (req, res) => {
     const accessToken = getBearerToken(req.headers.authorization)
-    const userCpf = asNonEmptyString(req.headers['x-cpf-usuario'])
+    const userCpf = asNonEmptyString(req.headers['x-cpf-usuario']) ?? (accessToken ? asNonEmptyString(extractCpfFromToken(accessToken)) : undefined)
     const renavam = asNonEmptyString(req.body?.renavam)
     const placa = asNonEmptyString(req.body?.placa)
 
@@ -67,6 +67,10 @@ export function licenciamentoRouter (): Router {
       const debitosResult = await client.listaDebitosVeiculo(auth, renavam)
       const debts: DebitoData[] = debitosResult?.result ?? []
       const totalDebits = debts.reduce((sum, d) => sum + d.valor, 0)
+      const onlyLicensing = debts.length > 0 && debts.every(d => d.tipoServico === 5)
+      const hasPayableDebts = debts.some(d => d.tipoServico === 6 || d.tipoServico === 7)
+      const vehicle = toVehicleItemFromVerifica(data)
+      const isLicensingOverdue = vehicle.status === 'VENCIDO'
       const multaDebts = debts.filter((d): d is DebitoMultaData => d.tipoServico === 7 && 'autoInfracao' in d)
       const multasEntries = await Promise.all(
         multaDebts.map(async (d) => {
@@ -76,8 +80,15 @@ export function licenciamentoRouter (): Router {
       )
 
       res.status(200).json({
-        vehicle: toVehicleItemFromVerifica(data),
-        result: debts,
+        vehicle,
+        vigency: vehicle.status,
+        isBlocked: false,
+        isGnvBlocked: false,
+        hasMultaForaDoSistema: false,
+        onlyLicensing,
+        hasPayableDebts,
+        isLicensingOverdue,
+        debts,
         totalDebits,
         multasDetail: Object.fromEntries(multasEntries)
       })
@@ -88,7 +99,7 @@ export function licenciamentoRouter (): Router {
 
   router.post('/veiculos/:renavam/verificar', async (req, res) => {
     const accessToken = getBearerToken(req.headers.authorization)
-    const userCpf = asNonEmptyString(req.headers['x-cpf-usuario'])
+    const userCpf = asNonEmptyString(req.headers['x-cpf-usuario']) ?? (accessToken ? asNonEmptyString(extractCpfFromToken(accessToken)) : undefined)
     const renavam = asNonEmptyString(req.params.renavam)
     const placa = asNonEmptyString(req.body?.placa)
 
@@ -100,27 +111,26 @@ export function licenciamentoRouter (): Router {
     const client = req.scope.resolve('detranSpServiceNowLicenciamentoClient')
     const auth = { accessToken, userCpf, renavam, placa }
 
-    const [verifySettled, veiculosSettled] = await Promise.allSettled([
-      client.verificaVeiculo(auth, renavam),
-      client.listaVeiculos({ accessToken, userCpf })
-    ])
-
-    const vehicleFromList = veiculosSettled.status === 'fulfilled'
-      ? (veiculosSettled.value?.result ?? []).find((v: ListaVeiculosVeiculoData) => v.codigoRenavamVeiculo === renavam)
-      : undefined
-    const vehicle = vehicleFromList ? toVehicleItemFromLista(vehicleFromList) : undefined
+    let vehicle: VehicleItem | undefined
+    const veiculosResult = await client.listaVeiculos({ accessToken, userCpf })
+    const vehicleFromList = (veiculosResult?.result ?? []).find((v: ListaVeiculosVeiculoData) => v.codigoRenavamVeiculo === renavam)
+    vehicle = vehicleFromList ? toVehicleItemFromLista(vehicleFromList) : undefined
 
     let hasMultaForaDoSistema = false
     let vigency: VehicleStatus = 'VENCIDO'
 
-    if (verifySettled.status === 'rejected') {
-      const err = verifySettled.reason
-      if (!(err instanceof DetranSpServiceNowLicenciamentoError)) throw err
+    try {
+      const verifyResult = await client.verificaVeiculo(auth, renavam)
+      vigency = mapStatus(verifyResult?.result?.situacaoLicenciamento)
+    } catch (err) {
+      if (!(err instanceof DetranSpServiceNowLicenciamentoError)) {
+        throw err
+      }
 
       const isLicensingOverdue = vehicle?.status === 'VENCIDO'
 
       if (err.type === 'VeiculoComPendenciaError') {
-        res.status(200).json({ vehicle, vigency: 'VENCIDO', isBlocked: true, isGnvBlocked: false, hasMultaForaDoSistema: false, onlyLicensing: false, hasPayableDebts: false, isLicensingOverdue, result: [], totalDebits: 0, multasDetail: {} })
+        res.status(200).json({ vehicle, vigency: 'VENCIDO', isBlocked: true, isGnvBlocked: false, hasMultaForaDoSistema: false, onlyLicensing: false, hasPayableDebts: false, isLicensingOverdue, debts: [], totalDebits: 0, multasDetail: {}, showSnackbar: { title: err.message, variant: 'error' } })
         return
       }
       if (err.type === 'VeiculoSemCertificadoGNVVigenteError') {
@@ -135,16 +145,17 @@ export function licenciamentoRouter (): Router {
             return [d.autoInfracao, r?.result ?? []] as [string, ListaMultasData[]]
           })
         )
-        res.status(200).json({ vehicle, vigency: 'VENCIDO', isBlocked: false, isGnvBlocked: true, hasMultaForaDoSistema: false, onlyLicensing: false, hasPayableDebts, isLicensingOverdue, result: debts, totalDebits, multasDetail: Object.fromEntries(multasEntries) })
+        res.status(200).json({ vehicle, vigency: 'VENCIDO', isBlocked: false, isGnvBlocked: true, hasMultaForaDoSistema: false, onlyLicensing: false, hasPayableDebts, isLicensingOverdue, debts, totalDebits, multasDetail: Object.fromEntries(multasEntries), showSnackbar: { title: err.message, variant: 'error' } })
         return
       }
       if (err.type === 'VeiculoComMultaForaDoSistemaError') {
         hasMultaForaDoSistema = true
+      } else if (err.type === 'FalhaNaOperacaoError') {
+        res.status(200).json({ vehicle, vigency: 'VENCIDO', isBlocked: false, isGnvBlocked: false, hasMultaForaDoSistema: false, onlyLicensing: false, hasPayableDebts: false, isLicensingOverdue: vehicle?.status === 'VENCIDO', debts: [], totalDebits: 0, multasDetail: {}, showSnackbar: { title: err.message, variant: 'error' } })
+        return
       } else {
         throw err
       }
-    } else {
-      vigency = mapStatus(verifySettled.value?.result?.situacaoLicenciamento)
     }
 
     const debitosResult = await client.listaDebitosVeiculo(auth, renavam)
@@ -172,7 +183,7 @@ export function licenciamentoRouter (): Router {
       onlyLicensing,
       hasPayableDebts,
       isLicensingOverdue,
-      result: debts,
+      debts,
       totalDebits,
       multasDetail: Object.fromEntries(multasEntries)
     })
@@ -180,7 +191,7 @@ export function licenciamentoRouter (): Router {
 
   router.post('/veiculos/:renavam/qr-code', async (req, res) => {
     const accessToken = getBearerToken(req.headers.authorization)
-    const userCpf = asNonEmptyString(req.headers['x-cpf-usuario'])
+    const userCpf = asNonEmptyString(req.headers['x-cpf-usuario']) ?? (accessToken ? asNonEmptyString(extractCpfFromToken(accessToken)) : undefined)
     const renavam = asNonEmptyString(req.params.renavam)
     const placa = asNonEmptyString(req.body?.placa)
 
@@ -190,17 +201,41 @@ export function licenciamentoRouter (): Router {
     }
 
     const client = req.scope.resolve('detranSpServiceNowLicenciamentoClient')
-    const result = await client.criaQRCode({ accessToken, userCpf, renavam, placa }, renavam)
-    const data = result?.result
+    const auth = { accessToken, userCpf, renavam, placa }
+
+    let qrCodeData
+    try {
+      const result = await client.criaQRCode(auth, renavam)
+      qrCodeData = result?.result
+    } catch (createErr) {
+      if (!(createErr instanceof DetranSpServiceNowLicenciamentoError)) {
+        throw createErr
+      }
+
+    try {
+        const existing = await client.verificaQRCode(auth, renavam)
+        const existingData = existing?.result
+        if (existingData && existingData.estadoQRCode === 1) {
+          qrCodeData = existingData
+        } else {
+          res.status(422).json({ message: createErr.message })
+          return
+        }
+      } catch {
+        res.status(422).json({ message: createErr.message })
+        return
+      }
+    }
+
     res.status(200).json({
-      pixCode: data?.qrCode ?? null,
-      expiresAt: data?.dataExpiracaoQRCode ?? null
+      qrCode: qrCodeData?.qrCode ?? null,
+      expiresAt: qrCodeData?.dataExpiracaoQRCode ?? null
     })
   })
 
   router.get('/veiculos/:renavam/qr-code', async (req, res) => {
     const accessToken = getBearerToken(req.headers.authorization)
-    const userCpf = asNonEmptyString(req.headers['x-cpf-usuario'])
+    const userCpf = asNonEmptyString(req.headers['x-cpf-usuario']) ?? (accessToken ? asNonEmptyString(extractCpfFromToken(accessToken)) : undefined)
     const renavam = asNonEmptyString(req.params.renavam)
     const placa = asNonEmptyString(req.query.placa)
 
@@ -210,18 +245,26 @@ export function licenciamentoRouter (): Router {
     }
 
     const client = req.scope.resolve('detranSpServiceNowLicenciamentoClient')
-    const result = await client.verificaQRCode({ accessToken, userCpf, renavam, placa }, renavam)
-    const data = result?.result
-    res.status(200).json({
-      estado: data?.estadoQRCode ?? null,
-      comprovante: data?.idPagamentoQRCode ?? null,
-      confirmedDate: data?.dataPagamentoQRCode ? formatDateTimeBr(data.dataPagamentoQRCode) : null
-    })
+    try {
+      const result = await client.verificaQRCode({ accessToken, userCpf, renavam, placa }, renavam)
+      const data = result?.result
+      res.status(200).json({
+        estado: data?.estadoQRCode ?? null,
+        comprovante: data?.idPagamentoQRCode ?? null,
+        confirmedDate: data?.dataPagamentoQRCode ? formatDateTimeBr(data.dataPagamentoQRCode) : null
+      })
+    } catch (err) {
+      if (err instanceof DetranSpServiceNowLicenciamentoError) {
+        res.status(422).json({ message: err.message })
+        return
+      }
+      throw err
+    }
   })
 
   router.get('/veiculos/:renavam/crlv-e', async (req, res) => {
     const accessToken = getBearerToken(req.headers.authorization)
-    const userCpf = asNonEmptyString(req.headers['x-cpf-usuario'])
+    const userCpf = asNonEmptyString(req.headers['x-cpf-usuario']) ?? (accessToken ? asNonEmptyString(extractCpfFromToken(accessToken)) : undefined)
     const renavam = asNonEmptyString(req.params.renavam)
     const placa = asNonEmptyString(req.query.placa)
 
@@ -231,8 +274,16 @@ export function licenciamentoRouter (): Router {
     }
 
     const client = req.scope.resolve('detranSpServiceNowLicenciamentoClient')
-    const result = await client.buscaCrlve({ accessToken, userCpf, renavam, placa }, renavam)
-    res.status(200).json({ base64: result?.result?.base64 ?? null })
+    try {
+      const result = await client.buscaCrlve({ accessToken, userCpf, renavam, placa }, renavam)
+      res.status(200).json({ base64: result?.result?.base64 ?? null })
+    } catch (err) {
+      if (err instanceof DetranSpServiceNowLicenciamentoError) {
+        res.status(422).json({ message: err.message })
+        return
+      }
+      throw err
+    }
   })
 
   return router

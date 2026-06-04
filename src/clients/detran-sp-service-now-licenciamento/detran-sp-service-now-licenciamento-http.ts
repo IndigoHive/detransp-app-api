@@ -5,12 +5,6 @@ import { DetranSpServiceNowLicenciamentoError } from './errors/detran-sp-service
 const SERVICE_NAME = 'detran-sp-servicenow-licenciamento'
 const MAX_TIMEOUT_MS = 8000
 
-const ERROR_MESSAGE_TO_DETAIL_MAP: Record<string, string> = {
-  PagamentoPendenteError: 'Pagamento pendente',
-  PagamentoVistoriaPendentesError: 'Vistoria pendente',
-  VistoriaPendenteError: 'Vistoria pendente'
-}
-
 export type DetranSpServiceNowLicenciamentoHttpParams = {
   baseURL: string
   logger: Logger
@@ -72,16 +66,16 @@ export class DetranSpServiceNowLicenciamentoHttp {
         return response
       },
       (error: AxiosError) => {
-        this.logger.debug(
-          { method: error.config?.method, service: SERVICE_NAME, status: error.response?.status, url: error.config?.url },
-          'ServiceNow licenciamento error'
-        )
-
         const data = error.response?.data as { error?: { message?: string; detail?: string } } | undefined
         const message = data?.error?.message
         const detail = data?.error?.detail
-        const userMessage =
-          ERROR_MESSAGE_TO_DETAIL_MAP[message ?? ''] ?? detail ?? 'Tivemos um problema ao processar sua solicitação.'
+
+        this.logger.error(
+          { service: SERVICE_NAME, status: error.response?.status, url: error.config?.url, errorMessage: message, errorDetail: detail },
+          'ServiceNow licenciamento response error'
+        )
+
+        const userMessage = detail ?? 'Tivemos um problema ao processar sua solicitação.'
 
         throw new DetranSpServiceNowLicenciamentoError(message ?? 'UnknownError', userMessage)
       }
