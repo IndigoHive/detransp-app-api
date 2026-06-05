@@ -154,7 +154,8 @@ export function licenciamentoRouter (): Router {
         res.status(200).json({ vehicle, vigency: 'VENCIDO', isBlocked: false, isGnvBlocked: false, hasMultaForaDoSistema: false, onlyLicensing: false, hasPayableDebts: false, isLicensingOverdue: vehicle?.status === 'VENCIDO', debts: [], totalDebits: 0, multasDetail: {}, showSnackbar: { title: err.message, variant: 'error' } })
         return
       } else {
-        throw err
+        res.status(200).json({ vehicle, vigency: 'VENCIDO', isBlocked: false, isGnvBlocked: false, hasMultaForaDoSistema: false, onlyLicensing: false, hasPayableDebts: false, isLicensingOverdue: vehicle?.status === 'VENCIDO', debts: [], totalDebits: 0, multasDetail: {}, showSnackbar: { title: err.message, variant: 'error' } })
+        return
       }
     }
 
