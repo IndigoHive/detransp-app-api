@@ -116,6 +116,12 @@ export const config: Config = {
       password: env.SERVICENOW_TDV_PASSWORD || '',
     }
   },
+  rotaCaixaPostal: {
+    // Defina ROTA_CAIXA_POSTAL_BASE_URL no .env (ex: https://caixapostal.api.rota.sp.gov.br)
+    baseUrl: env.ROTA_CAIXA_POSTAL_BASE_URL || '',
+    // Defina ROTA_CAIXA_POSTAL_APP_TOPIC no .env (ex: detran-sp)
+    appTopic: env.ROTA_CAIXA_POSTAL_APP_TOPIC || '',
+  },
   logging: {
     level: env.LOG_LEVEL || DEFAULT_LOG_LEVEL
   }

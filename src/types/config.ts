@@ -36,6 +36,10 @@ export type Config = {
       password: string
     }
   }
+  rotaCaixaPostal: {
+    baseUrl: string
+    appTopic: string
+  }
   logging: {
     level: string
   }

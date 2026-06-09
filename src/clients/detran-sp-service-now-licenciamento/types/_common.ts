@@ -5,10 +5,12 @@ export type HrefLink = {
 export type SituacaoLicenciamento =
   | 'Atrasado'
   | 'À vencer'
+  | 'A vencer'
   | 'Em dia'
   | 'Pendente'
   | 'Licenciamento em dia'
   | 'Licenciamento a vencer'
+  | 'Licenciamento à vencer'
   | 'Licenciamento atrasado'
   | 'Licenciamento pendente'
 
@@ -18,6 +20,8 @@ const situacaoLicenciamentoMap: Record<SituacaoLicenciamento, SituacaoLicenciame
   Atrasado: 'Atrasado',
   'Em dia': 'Em dia',
   'Licenciamento a vencer': 'À vencer',
+  'Licenciamento à vencer': 'À vencer',
+  'A vencer': 'À vencer',
   'Licenciamento atrasado': 'Atrasado',
   'Licenciamento em dia': 'Em dia',
   'Licenciamento pendente': 'Pendente',
