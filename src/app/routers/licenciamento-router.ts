@@ -92,8 +92,12 @@ export function licenciamentoRouter (): Router {
         totalDebits,
         multasDetail: Object.fromEntries(multasEntries)
       })
-    } catch {
-      res.status(200).json({ vehicle: null, showSnackbar: { title: 'Veículo não encontrado', variant: 'error' } })
+    } catch (err) {
+      if (err instanceof DetranSpServiceNowLicenciamentoError) {
+        res.status(200).json({ vehicle: null, showSnackbar: { title: err.message, variant: 'error' } })
+        return
+      }
+      throw err
     }
   })
 
