@@ -13,7 +13,7 @@ import { RepositoryServices } from '../types/repository-services'
 import { ContainerServices } from '../types/container-services'
 import { Database } from '../../db/pool'
 import { PgFlowRepository } from '../../repositories/pg-flow-repository'
-import { getAuthRegistrations, getFlowsRegistrations, getServicesRegistrations, getDashboardRegistrations, getLicenciamentoRegistrations } from '../../services'
+import { getAuthRegistrations, getFlowsRegistrations, getServicesRegistrations, getDashboardRegistrations, getLicenciamentoRegistrations, getTdvRegistrations } from '../../services'
 import { getClientRegistrations, DetranSpServiceNowLicenciamentoClient, DetranSpServiceNowDebRestrClient } from '../../clients'
 import { RotaCaixaPostalClient } from '../../clients/rota-caixa-postal'
 import pino, { type Logger } from 'pino'
@@ -47,6 +47,7 @@ export function createContainer (
   container.register(getServicesRegistrations())
   container.register(getDashboardRegistrations())
   container.register(getLicenciamentoRegistrations())
+  container.register(getTdvRegistrations())
   container.register(getPool(config))
   container.register(getRepositoryRegistrations())
 
