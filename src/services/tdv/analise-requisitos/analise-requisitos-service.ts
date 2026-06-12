@@ -7,13 +7,16 @@ type Dependencies = {
 }
 
 export type AnaliseRequisitosInput = {
-  renavam: string
-  plate: string
+  selectedVehicle: {
+    plate: string
+    renavam: string
+    [key: string]: unknown
+  }
 }
 
 export type AnaliseRequisitosResult = {
-  possuiRestricao: boolean
-  tdvAberta: boolean
+  hasRestriction: boolean
+  hasActiveTDV: boolean
   codigoTransferencia?: string | undefined
 }
 
@@ -32,7 +35,7 @@ export class AnaliseRequisitosService {
     const tdvs = await this.client.listaTdvs(token, {
       ativa: 'true',
       codigoVendedor: cpf,
-      placaVeiculo: input.plate
+      placaVeiculo: input.selectedVehicle.plate
     })
 
     const activeTdv = tdvs?.result?.find(
@@ -41,15 +44,15 @@ export class AnaliseRequisitosService {
 
     if (activeTdv) {
       return {
-        possuiRestricao: false,
-        tdvAberta: true,
+        hasRestriction: false,
+        hasActiveTDV: true,
         codigoTransferencia: activeTdv.codigoTransferenciaVeiculo
       }
     }
 
     return {
-      possuiRestricao: false,
-      tdvAberta: false
+      hasRestriction: false,
+      hasActiveTDV: false
     }
   }
 }

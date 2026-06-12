@@ -74,9 +74,10 @@ export function tdvRouter (): Router {
   })
 
   // Consulta Débitos - get debts and PIX QR code for payment
-  router.post('/consulta-debitos', async (req, res) => {
+  router.get('/consulta-debitos', async (req, res) => {
     const service = req.scope.resolve('consultaDebitosService')
-    const result = await service.run(req.headers.authorization, req.body)
+    const codigoTransferencia = req.query.codigoTransferencia as string
+    const result = await service.run(req.headers.authorization, { codigoTransferencia })
     res.status(200).json(result)
   })
 

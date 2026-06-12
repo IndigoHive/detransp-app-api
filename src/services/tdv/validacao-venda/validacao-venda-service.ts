@@ -6,15 +6,16 @@ type Dependencies = {
 }
 
 export type ValidacaoVendaInput = {
-  codigoTransferencia: string
-  valorVenda: string
-  km: string
+  placaVeiculo: string
+  renavamVeiculo: string
+  cpfComprador: string
   cepComprador: string
+  valorVenda: string
+  quilometragem: string
 }
 
 export type ValidacaoVendaResult = {
-  valid: boolean
-  cidadeDiferente: boolean
+  cidadesDiferentes: boolean
 }
 
 export class ValidacaoVendaService {
@@ -27,29 +28,30 @@ export class ValidacaoVendaService {
   async run (authorizationHeader: string | undefined, input: ValidacaoVendaInput): Promise<ValidacaoVendaResult> {
     const token = extractBearerToken(authorizationHeader)
 
-    // Fetch transfer details to compare vehicle municipality with buyer municipality
-    const tdv = await this.client.buscaTdv(token, input.codigoTransferencia)
+    // Fetch vehicle data to get municipality and plate type
+    const veiculosResult = await this.client.listaVeiculosProprietario(token)
+    const veiculo = veiculosResult?.result?.find(v => v.placa === input.placaVeiculo)
 
-    if (!tdv?.result) {
-      return { valid: false, cidadeDiferente: false }
+    if (!veiculo) {
+      return { cidadesDiferentes: false }
     }
 
-    const vehicleMunicipio = tdv.result.codigoMunicipioVeiculo
+    // If plate is already Mercosul, no city restriction applies
+    if (veiculo.placaMercosul === 'true') {
+      return { cidadesDiferentes: false }
+    }
+
+    // Check buyer's municipality from CEP
     const enderecoResult = await this.client.buscaEndereco(token, input.cepComprador)
-
     const buyerMunicipio = enderecoResult?.result?.codigoMunicipio?.toString()
+    const vehicleMunicipio = veiculo.codigoMunicipio
 
-    // Check if vehicle needs Mercosul plate (different city + non-Mercosul plate)
-    const cidadeDiferente = !!(
+    const cidadesDiferentes = !!(
       vehicleMunicipio &&
       buyerMunicipio &&
-      vehicleMunicipio !== buyerMunicipio &&
-      tdv.result.placaMercosul === 'false'
+      vehicleMunicipio !== buyerMunicipio
     )
 
-    return {
-      valid: true,
-      cidadeDiferente
-    }
+    return { cidadesDiferentes }
   }
 }

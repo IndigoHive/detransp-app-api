@@ -1,31 +1,25 @@
 import type { DetranSpServiceNowTdvClient } from '../../../clients/detran-sp-service-now/tdv'
 import { CodigoEstadoTDV, CodigoOrigemTDV } from '../../../clients/detran-sp-service-now/tdv/types'
-import { extractBearerToken, extractCpfFromToken } from '../../../utils/token'
+import { extractBearerToken, extractCpfFromToken, extractNameFromToken, extractEmailFromToken } from '../../../utils/token'
 
 type Dependencies = {
   detranSpServiceNowTdv: DetranSpServiceNowTdvClient
 }
 
 export type CriarTdvInput = {
-  renavam: string
-  plate: string
-  nomeVendedor: string
-  emailVendedor: string
+  placaVeiculo: string
+  renavamVeiculo: string
   cpfComprador: string
   nomeComprador: string
   emailComprador: string
   cepComprador: string
-  bairroComprador: string
-  logradouroComprador: string
-  numeroComprador: string
-  complementoComprador: string
   valorVenda: string
-  km: string
+  quilometragem: string
   codigoProvaVidaVendedor: string
 }
 
 export type CriarTdvResult = {
-  codigoTransferencia: string
+  codigo: string
 }
 
 export class CriarTdvService {
@@ -38,13 +32,19 @@ export class CriarTdvService {
   async run (authorizationHeader: string | undefined, input: CriarTdvInput): Promise<CriarTdvResult> {
     const token = extractBearerToken(authorizationHeader)
     const cpfVendedor = extractCpfFromToken(token)
+    const nomeVendedor = extractNameFromToken(token)
+    const emailVendedor = extractEmailFromToken(token)
+
+    // Fetch buyer address details from CEP
+    const enderecoResult = await this.client.buscaEndereco(token, input.cepComprador)
+    const endereco = enderecoResult?.result
 
     // Step 1: Create the TDV (state 1 - VEICULO_SELECIONADO)
     const createResult = await this.client.criaTdv(token, {
-      codigoRenavamVeiculo: input.renavam,
-      placaVeiculo: input.plate,
-      nomeVendedor: input.nomeVendedor,
-      emailVendedor: input.emailVendedor,
+      codigoRenavamVeiculo: input.renavamVeiculo,
+      placaVeiculo: input.placaVeiculo,
+      nomeVendedor,
+      emailVendedor,
       codigoVendedor: cpfVendedor,
       origem: CodigoOrigemTDV.TDV
     })
@@ -61,12 +61,12 @@ export class CriarTdvService {
       nomeComprador: input.nomeComprador,
       emailComprador: input.emailComprador,
       cepComprador: input.cepComprador,
-      bairroComprador: input.bairroComprador,
-      logradouroComprador: input.logradouroComprador,
-      numeroComprador: input.numeroComprador,
-      complementoComprador: input.complementoComprador,
+      bairroComprador: endereco?.bairro ?? '',
+      logradouroComprador: endereco?.logradouro ?? endereco?.endereco ?? '',
+      numeroComprador: '',
+      complementoComprador: endereco?.complemento ?? '',
       valorVendaVeiculo: input.valorVenda,
-      kmVeiculo: input.km,
+      kmVeiculo: input.quilometragem,
       codigoProvaVidaVendedor: input.codigoProvaVidaVendedor,
       tipoProvaVidaVendedor: '2' // LIVENESS
     })
@@ -78,6 +78,6 @@ export class CriarTdvService {
       tipoProvaVidaVendedor: '2' // LIVENESS
     })
 
-    return { codigoTransferencia }
+    return { codigo: codigoTransferencia }
   }
 }

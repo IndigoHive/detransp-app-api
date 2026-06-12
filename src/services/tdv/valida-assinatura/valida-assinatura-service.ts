@@ -1,6 +1,6 @@
 import type { DetranSpServiceNowTdvClient } from '../../../clients/detran-sp-service-now/tdv'
 import { CodigoEstadoTDV } from '../../../clients/detran-sp-service-now/tdv/types'
-import { extractBearerToken } from '../../../utils/token'
+import { extractBearerToken, extractCpfFromToken } from '../../../utils/token'
 
 type Dependencies = {
   detranSpServiceNowTdv: DetranSpServiceNowTdvClient
@@ -8,13 +8,24 @@ type Dependencies = {
 
 export type ValidaAssinaturaInput = {
   codigoTransferencia: string
-  itiCode: string
-  role: 'comprador' | 'vendedor'
 }
 
 export type ValidaAssinaturaResult = {
   valid: boolean
 }
+
+const BUYER_SIGNED_STATES: string[] = [
+  CodigoEstadoTDV.ATPVE_ASSINADA_COMPRADOR,
+  CodigoEstadoTDV.ATPVE_ASSINADA_VENDEDOR_COMUNICACAO_VENDA_GERADA,
+  CodigoEstadoTDV.TAXA_SERVICO_PAGA,
+  CodigoEstadoTDV.TRANSFERENCIA_CONCLUIDA
+]
+
+const SELLER_SIGNED_STATES: string[] = [
+  CodigoEstadoTDV.ATPVE_ASSINADA_VENDEDOR_COMUNICACAO_VENDA_GERADA,
+  CodigoEstadoTDV.TAXA_SERVICO_PAGA,
+  CodigoEstadoTDV.TRANSFERENCIA_CONCLUIDA
+]
 
 export class ValidaAssinaturaService {
   private readonly client: DetranSpServiceNowTdvClient
@@ -25,29 +36,22 @@ export class ValidaAssinaturaService {
 
   async run (authorizationHeader: string | undefined, input: ValidaAssinaturaInput): Promise<ValidaAssinaturaResult> {
     const token = extractBearerToken(authorizationHeader)
+    const cpf = extractCpfFromToken(token)
 
-    if (input.role === 'comprador') {
-      // First confirm autodeclaração (state 4 → 5)
-      await this.client.atualizaTdv(token, input.codigoTransferencia, {
-        estado: CodigoEstadoTDV.AUTODECLARACAO_RESIDENCIA_CONFIRMADA,
-        codigoProvaVidaComprador: '',
-        tipoProvaVidaComprador: '2',
-        confirmacaoAutodeclaracaoResidenciaComprador: 'true'
-      })
+    const tdv = await this.client.buscaTdv(token, input.codigoTransferencia)
+    const estado = tdv?.result?.estado
 
-      // Then sign (state 5 → 6)
-      await this.client.atualizaTdv(token, input.codigoTransferencia, {
-        estado: CodigoEstadoTDV.ATPVE_ASSINADA_COMPRADOR,
-        itiCode: input.itiCode
-      })
-    } else {
-      // Seller sign (state 6 → 7)
-      await this.client.atualizaTdv(token, input.codigoTransferencia, {
-        estado: CodigoEstadoTDV.ATPVE_ASSINADA_VENDEDOR_COMUNICACAO_VENDA_GERADA,
-        itiCode: input.itiCode
-      })
+    if (!estado) {
+      return { valid: false }
     }
 
-    return { valid: true }
+    // Determine role from TDV data
+    const isSeller = tdv.result?.codigoVendedor === cpf
+
+    if (isSeller) {
+      return { valid: SELLER_SIGNED_STATES.includes(estado) }
+    }
+
+    return { valid: BUYER_SIGNED_STATES.includes(estado) }
   }
 }

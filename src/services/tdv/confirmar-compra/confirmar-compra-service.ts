@@ -12,8 +12,21 @@ export type ConfirmarCompraInput = {
 }
 
 export type ConfirmarCompraResult = {
-  success: boolean
-  autodeclaracaoResidencia?: string | undefined
+  nomeComprador: string
+  cpfComprador: string
+  enderecoComprador: string
+  vehicle: {
+    id: string
+    plate: string
+    title: string
+    status: string
+    brandModel: string
+    licensingExpirationDate: string
+    renavam: string
+    lastLicensing: string
+    yearFab: string
+    yearMod: string
+  }
 }
 
 export class ConfirmarCompraService {
@@ -33,12 +46,42 @@ export class ConfirmarCompraService {
       tipoProvaVidaComprador: '2' // LIVENESS
     })
 
-    // Fetch the updated TDV to get autodeclaração
+    // Advance to state 5 (AUTODECLARACAO_RESIDENCIA_CONFIRMADA)
+    // This prepares the TDV for ITI signing (state 5 → 6 by ITI callback)
+    await this.client.atualizaTdv(token, input.codigoTransferencia, {
+      estado: CodigoEstadoTDV.AUTODECLARACAO_RESIDENCIA_CONFIRMADA,
+      codigoProvaVidaComprador: input.codigoProvaVidaComprador,
+      tipoProvaVidaComprador: '2',
+      confirmacaoAutodeclaracaoResidenciaComprador: 'true'
+    })
+
+    // Fetch the updated TDV to get buyer and vehicle data
     const tdv = await this.client.buscaTdv(token, input.codigoTransferencia)
+    const data = tdv?.result
+
+    const enderecoComprador = [
+      data?.logradouroComprador,
+      data?.numeroComprador,
+      data?.bairroComprador,
+      data?.nomeMunicipioComprador ? `${data.nomeMunicipioComprador} - ${data.ufComprador ?? 'SP'}` : undefined
+    ].filter(Boolean).join(', ')
 
     return {
-      success: true,
-      autodeclaracaoResidencia: tdv?.result?.autodeclaracaoResidenciaComprador
+      nomeComprador: data?.nomeComprador ?? '',
+      cpfComprador: data?.codigoComprador ?? '',
+      enderecoComprador,
+      vehicle: {
+        id: '1',
+        plate: data?.placaVeiculo ?? '',
+        title: data?.descricaoMarcaVeiculo ?? '',
+        status: 'REGULAR',
+        brandModel: data?.descricaoMarcaVeiculo ?? '',
+        licensingExpirationDate: '',
+        renavam: data?.codigoRenavamVeiculo ?? '',
+        lastLicensing: '',
+        yearFab: '',
+        yearMod: ''
+      }
     }
   }
 }

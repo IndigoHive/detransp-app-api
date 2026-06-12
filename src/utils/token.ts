@@ -29,3 +29,23 @@ export function extractCpfFromToken(token: string): string {
     return ''
   }
 }
+
+export function extractNameFromToken(token: string): string {
+  try {
+    const payload = token.split('.')[1] ?? ''
+    const decoded = JSON.parse(Buffer.from(payload, 'base64url').toString('utf8')) as Record<string, unknown>
+    return typeof decoded.name === 'string' ? decoded.name : ''
+  } catch {
+    return ''
+  }
+}
+
+export function extractEmailFromToken(token: string): string {
+  try {
+    const payload = token.split('.')[1] ?? ''
+    const decoded = JSON.parse(Buffer.from(payload, 'base64url').toString('utf8')) as Record<string, unknown>
+    return typeof decoded.email === 'string' ? decoded.email : ''
+  } catch {
+    return ''
+  }
+}
