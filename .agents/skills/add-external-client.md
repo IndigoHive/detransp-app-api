@@ -4,28 +4,28 @@ Use this skill when integrating with a new external HTTP API (e.g., a new Detran
 
 ## Where
 
-`src/clients/<client-name>/`
+`src/clients/{client-name}/`
 
 ## Step 1 — Create the HTTP base class
 
 ```typescript
-// src/clients/<client-name>/<client-name>-http.ts
+// src/clients/{client-name}/{client-name}-http.ts
 import axios, { type AxiosInstance } from 'axios'
 import type { Logger } from 'pino'
 
-const SERVICE_NAME = '<ClientName>'
+const SERVICE_NAME = '{ClientName}'
 
-export type <ClientName>HttpParams = {
+export type {ClientName}HttpParams = {
   baseURL: string
   logger: Logger
   // add auth params as needed: auth: { username, password } or apiKey: string
 }
 
-export class <ClientName>Http {
+export class {ClientName}Http {
   protected readonly axios: AxiosInstance
   protected readonly logger: Logger
 
-  constructor(params: <ClientName>HttpParams) {
+  constructor(params: {ClientName}HttpParams) {
     this.logger = params.logger
     this.axios = axios.create({
       baseURL: params.baseURL,
@@ -69,21 +69,21 @@ export class <ClientName>Http {
 ## Step 2 — Create the typed domain client
 
 ```typescript
-// src/clients/<client-name>/<client-name>-client.ts
+// src/clients/{client-name}/{client-name}-client.ts
 import type { Logger } from 'pino'
-import { <ClientName>Http } from './<client-name>-http'
+import { {ClientName}Http } from './{client-name}-http'
 
-export type <ClientName>ClientParams = {
+export type {ClientName}ClientParams = {
   baseURL: string
   logger: Logger
 }
 
-export class <ClientName>Client extends <ClientName>Http {
-  constructor(params: <ClientName>ClientParams) {
+export class {ClientName}Client extends {ClientName}Http {
+  constructor(params: {ClientName}ClientParams) {
     super(params)
   }
 
-  async get<Resource>(token: string, param?: string): Promise<unknown> {
+  async get{Resource}(token: string, param?: string): Promise<unknown> {
     const response = await this.axios.get<unknown>('/api/endpoint', {
       headers: { Authorization: `Bearer ${token}` },
       params: param ? { param } : undefined,
@@ -100,9 +100,9 @@ File: `src/container/create-container/create-container.ts`
 ```typescript
 // In createContainer():
 container.register({
-  <clientName>: asFunction(({ config, logger }) =>
-    new <ClientName>Client({
-      baseURL: config.<clientName>.baseUrl,
+  {clientName}: asFunction(({ config, logger }) =>
+    new {ClientName}Client({
+      baseURL: config.{clientName}.baseUrl,
       logger,
     }),
   ).scoped(),
@@ -114,8 +114,8 @@ container.register({
 File: `src/container/config/` (find the existing config file)
 
 ```typescript
-<clientName>: {
-  baseUrl: process.env.<CLIENT_NAME>_BASE_URL ?? '',
+{clientName}: {
+  baseUrl: process.env.{CLIENT_NAME}_BASE_URL ?? '',
 }
 ```
 
@@ -124,8 +124,14 @@ File: `src/container/config/` (find the existing config file)
 File: `src/container/create-container/create-container.ts` or the `ContainerServices` type definition:
 
 ```typescript
-<clientName>: <ClientName>Client
+{clientName}: {ClientName}Client
 ```
+
+## Testing
+
+- Unit tests for services that use this client should stub the client methods via `vi.fn()`
+- Do not write integration tests that call the real external API in CI
+- Verify the interceptor logs by checking that `logger.debug` is called (spy on it)
 
 ## Rules
 

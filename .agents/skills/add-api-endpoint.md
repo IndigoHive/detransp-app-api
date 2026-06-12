@@ -4,12 +4,12 @@ Use this skill when adding a new HTTP endpoint to the detransp-app-api.
 
 ## Where
 
-`src/app/routers/<domain>-router.ts`
+`src/app/routers/{domain}-router.ts`
 
 ## Step 1 — Add the route to an existing router
 
 ```typescript
-// <domain>-router.ts
+// {domain}-router.ts
 import { Router } from 'express'
 import { isAxiosError } from 'axios'
 import { UnauthorizedError } from '../../utils/token'
@@ -27,12 +27,12 @@ function handleError(res: import('express').Response, error: unknown): void {
   res.status(500).json({ error: message })
 }
 
-export function <domain>Router(): Router {
+export function {domain}Router(): Router {
   const router = Router()
 
-  router.get('/<resource>', async (req, res) => {
+  router.get('/{resource}', async (req, res) => {
     try {
-      const service = req.scope.resolve('<operation><Entity>Service')
+      const service = req.scope.resolve('{operation}{Entity}Service')
       const result = await service.run(req.headers.authorization)
       res.status(200).json(result)
     } catch (error) {
@@ -40,9 +40,9 @@ export function <domain>Router(): Router {
     }
   })
 
-  router.get('/<resource>/:id', async (req, res) => {
+  router.get('/{resource}/:id', async (req, res) => {
     try {
-      const service = req.scope.resolve('<operation><Entity>Service')
+      const service = req.scope.resolve('{operation}{Entity}Service')
       const { id } = req.params
       const result = await service.run(req.headers.authorization, id)
       res.status(200).json(result)
@@ -60,15 +60,21 @@ export function <domain>Router(): Router {
 If this is a brand-new domain, register it in `src/app/create-app.ts`:
 
 ```typescript
-import { <domain>Router } from './routers/<domain>-router'
+import { {domain}Router } from './routers/{domain}-router'
 
 // Inside createApp():
-app.use('/api/<domain>', <domain>Router())
+app.use('/api/{domain}', {domain}Router())
 ```
 
 ## Step 3 — Create the service
 
 Follow the `add-service` skill to implement the service resolved in the route handler.
+
+## Testing
+
+- Add a Supertest integration test for each new endpoint
+- Test: happy path (200), unauthorized (401), upstream service error (propagated status)
+- Reference existing router tests in the codebase for app/container setup
 
 ## Rules
 
