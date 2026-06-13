@@ -1,4 +1,4 @@
-import { Router } from 'express'
+import { Router, type Response } from 'express'
 import { DetranSpServiceNowLicenciamentoError } from '../../clients/detran-sp-service-now-licenciamento/errors/detran-sp-service-now-licenciamento-error'
 import { normalizeSituacaoLicenciamento } from '../../clients/detran-sp-service-now-licenciamento/types/_common'
 import type { SituacaoLicenciamento } from '../../clients/detran-sp-service-now-licenciamento/types/_common'
@@ -22,6 +22,15 @@ type VehicleItem = {
   brandModel: string
   renavam: string
   lastLicensing?: string
+}
+
+function handleError (res: Response, error: unknown): void {
+  if (error instanceof DetranSpServiceNowLicenciamentoError) {
+    res.status(422).json({ message: error.message })
+    return
+  }
+  const message = error instanceof Error ? error.message : 'Internal server error'
+  res.status(500).json({ message })
 }
 
 export function licenciamentoRouter (): Router {
@@ -208,34 +217,38 @@ export function licenciamentoRouter (): Router {
     const client = req.scope.resolve('detranSpServiceNowLicenciamentoClient')
     const auth = { accessToken, userCpf, renavam, placa }
 
-    let qrCodeData
     try {
-      const result = await client.criaQRCode(auth, renavam)
-      qrCodeData = result?.result
-    } catch (createErr) {
-      if (!(createErr instanceof DetranSpServiceNowLicenciamentoError)) {
-        throw createErr
-      }
+      let qrCodeData
+      try {
+        const result = await client.criaQRCode(auth, renavam)
+        qrCodeData = result?.result
+      } catch (createErr) {
+        if (!(createErr instanceof DetranSpServiceNowLicenciamentoError)) {
+          throw createErr
+        }
 
-    try {
-        const existing = await client.verificaQRCode(auth, renavam)
-        const existingData = existing?.result
-        if (existingData && existingData.estadoQRCode === 1) {
-          qrCodeData = existingData
-        } else {
+        try {
+          const existing = await client.verificaQRCode(auth, renavam)
+          const existingData = existing?.result
+          if (existingData && existingData.estadoQRCode === 1) {
+            qrCodeData = existingData
+          } else {
+            res.status(422).json({ message: createErr.message })
+            return
+          }
+        } catch {
           res.status(422).json({ message: createErr.message })
           return
         }
-      } catch {
-        res.status(422).json({ message: createErr.message })
-        return
       }
-    }
 
-    res.status(200).json({
-      qrCode: qrCodeData?.qrCode ?? null,
-      expiresAt: qrCodeData?.dataExpiracaoQRCode ?? null
-    })
+      res.status(200).json({
+        qrCode: qrCodeData?.qrCode ?? null,
+        expiresAt: qrCodeData?.dataExpiracaoQRCode ?? null
+      })
+    } catch (err) {
+      handleError(res, err)
+    }
   })
 
   router.get('/veiculos/:renavam/qr-code', async (req, res) => {
@@ -259,11 +272,7 @@ export function licenciamentoRouter (): Router {
         confirmedDate: data?.dataPagamentoQRCode ? formatDateTimeBr(data.dataPagamentoQRCode) : null
       })
     } catch (err) {
-      if (err instanceof DetranSpServiceNowLicenciamentoError) {
-        res.status(422).json({ message: err.message })
-        return
-      }
-      throw err
+      handleError(res, err)
     }
   })
 
