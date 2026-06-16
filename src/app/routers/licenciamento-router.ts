@@ -97,6 +97,22 @@ export function licenciamentoRouter (): Router {
       const hasPayableDebts = debts.some(d => d.tipoServico === 6 || d.tipoServico === 7)
       const vehicle = toVehicleItemFromVerifica(data)
       const isLicensingOverdue = vehicle.status === 'VENCIDO'
+
+      const hasMultas = debts.some(d => d.tipoServico === 7)
+      let multasDetail: Record<string, ListaMultasData[]> = {}
+      if (hasMultas) {
+        try {
+          const multasResult = await client.listaMultas(auth, renavam)
+          for (const m of multasResult?.result ?? []) {
+            const entry = multasDetail[m.autoInfracao] ?? []
+            entry.push(m)
+            multasDetail[m.autoInfracao] = entry
+          }
+        } catch (err) {
+          if (!(err instanceof DetranSpServiceNowLicenciamentoError)) throw err
+        }
+      }
+
       res.status(200).json({
         vehicle,
         vigency: vehicle.status,
@@ -109,7 +125,7 @@ export function licenciamentoRouter (): Router {
         debts,
         result: debts,
         totalDebits,
-        multasDetail: {}
+        multasDetail
       })
     } catch (err) {
       if (err instanceof DetranSpServiceNowLicenciamentoError) {
