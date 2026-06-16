@@ -177,7 +177,20 @@ export function licenciamentoRouter (): Router {
         const debts: DebitoData[] = debitosResult?.result ?? []
         const totalDebits = debts.reduce((sum, d) => sum + d.valor, 0)
         const hasPayableDebts = debts.some(d => d.tipoServico === 6 || d.tipoServico === 7)
-        res.status(200).json({ vehicle, vigency: 'VENCIDO', isBlocked: false, isGnvBlocked: true, hasMultaForaDoSistema: false, onlyLicensing: false, hasPayableDebts, isLicensingOverdue, debts, result: debts, totalDebits, multasDetail: {}, showSnackbar: { title: err.message, variant: 'error' } })
+        let multasDetail: Record<string, ListaMultasData[]> = {}
+        if (debts.some(d => d.tipoServico === 7)) {
+          try {
+            const multasResult = await client.listaMultas(auth, renavam)
+            for (const m of multasResult?.result ?? []) {
+              const entry = multasDetail[m.autoInfracao] ?? []
+              entry.push(m)
+              multasDetail[m.autoInfracao] = entry
+            }
+          } catch (multasErr) {
+            if (!(multasErr instanceof DetranSpServiceNowLicenciamentoError)) throw multasErr
+          }
+        }
+        res.status(200).json({ vehicle, vigency: 'VENCIDO', isBlocked: false, isGnvBlocked: true, hasMultaForaDoSistema: false, onlyLicensing: false, hasPayableDebts, isLicensingOverdue, debts, result: debts, totalDebits, multasDetail, showSnackbar: { title: err.message, variant: 'error' } })
         return
       }
       if (err.type === 'VeiculoComMultaForaDoSistemaError') {
