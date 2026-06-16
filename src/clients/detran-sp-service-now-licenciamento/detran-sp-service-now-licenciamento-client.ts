@@ -55,18 +55,17 @@ export class DetranSpServiceNowLicenciamentoClient extends DetranSpServiceNowLic
     return (await this.axios.get(`/${renavam}/qr-code`, this.withAuth(auth))).data
   }
 
+  async listaMultas (
+    auth: DetranSpServiceNowClientAuthWithVeiculo,
+    renavam: Renavam
+  ): Promise<ListaMultasResult> {
+    return (await this.axios.get(`/${renavam}/multas`, this.withAuth(auth))).data
+  }
+
   async verificaVeiculo (
     auth: DetranSpServiceNowClientAuthWithVeiculo,
     renavam: Renavam
   ): Promise<VerificaVeiculoResult> {
     return (await this.axios.post(`/${renavam}`, null, this.withAuth(auth))).data
-  }
-
-  async listaMultas (
-    auth: DetranSpServiceNowClientAuthWithVeiculo,
-    renavam: Renavam,
-    numeroInfracao: string
-  ): Promise<ListaMultasResult> {
-    return (await this.axios.get(`/${renavam}/multas/${numeroInfracao}`, this.withAuth(auth))).data
   }
 }

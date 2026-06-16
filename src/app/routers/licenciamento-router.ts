@@ -4,12 +4,29 @@ import { normalizeSituacaoLicenciamento } from '../../clients/detran-sp-service-
 import type { SituacaoLicenciamento } from '../../clients/detran-sp-service-now-licenciamento/types/_common'
 import type {
   DebitoData,
-  DebitoMultaData,
   ListaMultasData,
   ListaVeiculosVeiculoData,
   VerificaVeiculoData
 } from '../../clients/detran-sp-service-now-licenciamento/types'
 import { extractCpfFromToken } from '../../utils/token'
+
+type VehicleAttributes = {
+  chassi?: string | undefined
+  yearFab?: string | undefined
+  yearMod?: string | undefined
+  cor?: string | undefined
+  combustivel?: string | undefined
+  tipo?: string | undefined
+}
+
+type VehicleRestrictions = {
+  bloqueioFurtoRoubo?: string | undefined
+  restricaoTributaria?: string | undefined
+  restricaoAdministrativa?: string | undefined
+  restricaoJudicial?: string | undefined
+  restricaoVeiculoGuinchado?: string | undefined
+  nomeAgente?: string | null | undefined
+}
 
 type VehicleStatus = 'REGULAR' | 'A VENCER' | 'VENCIDO'
 
@@ -80,14 +97,6 @@ export function licenciamentoRouter (): Router {
       const hasPayableDebts = debts.some(d => d.tipoServico === 6 || d.tipoServico === 7)
       const vehicle = toVehicleItemFromVerifica(data)
       const isLicensingOverdue = vehicle.status === 'VENCIDO'
-      const multaDebts = debts.filter((d): d is DebitoMultaData => d.tipoServico === 7 && 'autoInfracao' in d)
-      const multasEntries = await Promise.all(
-        multaDebts.map(async (d) => {
-          const r = await client.listaMultas(auth, renavam, d.autoInfracao)
-          return [d.autoInfracao, r?.result ?? []] as [string, ListaMultasData[]]
-        })
-      )
-
       res.status(200).json({
         vehicle,
         vigency: vehicle.status,
@@ -100,7 +109,7 @@ export function licenciamentoRouter (): Router {
         debts,
         result: debts,
         totalDebits,
-        multasDetail: Object.fromEntries(multasEntries)
+        multasDetail: {}
       })
     } catch (err) {
       if (err instanceof DetranSpServiceNowLicenciamentoError) {
@@ -152,14 +161,7 @@ export function licenciamentoRouter (): Router {
         const debts: DebitoData[] = debitosResult?.result ?? []
         const totalDebits = debts.reduce((sum, d) => sum + d.valor, 0)
         const hasPayableDebts = debts.some(d => d.tipoServico === 6 || d.tipoServico === 7)
-        const multaDebts = debts.filter((d): d is DebitoMultaData => d.tipoServico === 7 && 'autoInfracao' in d)
-        const multasEntries = await Promise.all(
-          multaDebts.map(async (d) => {
-            const r = await client.listaMultas(auth, renavam, d.autoInfracao)
-            return [d.autoInfracao, r?.result ?? []] as [string, ListaMultasData[]]
-          })
-        )
-        res.status(200).json({ vehicle, vigency: 'VENCIDO', isBlocked: false, isGnvBlocked: true, hasMultaForaDoSistema: false, onlyLicensing: false, hasPayableDebts, isLicensingOverdue, debts, result: debts, totalDebits, multasDetail: Object.fromEntries(multasEntries), showSnackbar: { title: err.message, variant: 'error' } })
+        res.status(200).json({ vehicle, vigency: 'VENCIDO', isBlocked: false, isGnvBlocked: true, hasMultaForaDoSistema: false, onlyLicensing: false, hasPayableDebts, isLicensingOverdue, debts, result: debts, totalDebits, multasDetail: {}, showSnackbar: { title: err.message, variant: 'error' } })
         return
       }
       if (err.type === 'VeiculoComMultaForaDoSistemaError') {
@@ -181,13 +183,51 @@ export function licenciamentoRouter (): Router {
     const hasPayableDebts = debts.some(d => d.tipoServico === 6 || d.tipoServico === 7)
     const isLicensingOverdue = hasMultaForaDoSistema ? vehicle?.status === 'VENCIDO' : vigency !== 'REGULAR'
 
-    const multaDebts = debts.filter((d): d is DebitoMultaData => d.tipoServico === 7 && 'autoInfracao' in d)
-    const multasEntries = await Promise.all(
-      multaDebts.map(async (d) => {
-        const result = await client.listaMultas(auth, renavam, d.autoInfracao)
-        return [d.autoInfracao, result?.result ?? []] as [string, ListaMultasData[]]
-      })
-    )
+    let multasDetail: Record<string, ListaMultasData[]> = {}
+    if (hasMultaForaDoSistema) {
+      try {
+        const multasResult = await client.listaMultas(auth, renavam)
+        for (const m of multasResult?.result ?? []) {
+          const entry = multasDetail[m.autoInfracao] ?? []
+          entry.push(m)
+          multasDetail[m.autoInfracao] = entry
+        }
+      } catch (err) {
+        if (!(err instanceof DetranSpServiceNowLicenciamentoError)) throw err
+      }
+    }
+
+    let vehicleAttributes: VehicleAttributes | undefined
+    let restrictions: VehicleRestrictions | undefined
+    try {
+      const debRestrClient = req.scope.resolve('detranSpServiceNowDebRestrClient')
+      const consultaResult = await debRestrClient.consultaVeiculo(auth, renavam)
+      const attrs = consultaResult?.data?.attributes
+      const meta = consultaResult?.data?.meta
+
+      if (attrs) {
+        vehicleAttributes = {
+          chassi: attrs.chassi,
+          yearFab: attrs.anoFabricacao?.toString(),
+          yearMod: attrs.anoModelo?.toString(),
+          cor: attrs.cor?.descricao,
+          combustivel: attrs.combustivel?.descricao,
+          tipo: attrs.tipo?.descricao,
+        }
+      }
+      if (meta) {
+        restrictions = {
+          bloqueioFurtoRoubo: meta.bloqueioFurtoRoubo,
+          restricaoTributaria: meta.restricaoTributaria,
+          restricaoAdministrativa: meta.restricaoAdministrativa,
+          restricaoJudicial: meta.restricaoJudicial,
+          restricaoVeiculoGuinchado: meta.restricaoVeiculoGuinchado,
+          nomeAgente: meta.nomeAgente,
+        }
+      }
+    } catch {
+      // deb-restr is non-fatal: vehicle details still load without extra attributes
+    }
 
     res.status(200).json({
       vehicle,
@@ -201,7 +241,9 @@ export function licenciamentoRouter (): Router {
       debts,
       result: debts,
       totalDebits,
-      multasDetail: Object.fromEntries(multasEntries)
+      multasDetail,
+      vehicleAttributes,
+      restrictions,
     })
   })
 

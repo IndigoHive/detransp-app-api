@@ -5,7 +5,7 @@ import type { FlowServices } from '../../services/flows/flows-services'
 import type { ServicesServices } from '../../services/services/services-services'
 import type { AuthServices } from '../../services/auth/auth-services'
 import type { DashboardServices } from '../../services/dashboard/dashboard-services'
-import type { Clients, DetranSpServiceNowLicenciamentoClient } from '../../clients'
+import type { Clients, DetranSpServiceNowLicenciamentoClient, DetranSpServiceNowDebRestrClient } from '../../clients'
 import type { RotaCaixaPostalClient } from '../../clients/rota-caixa-postal'
 import type { Config } from '../../types'
 
@@ -14,5 +14,6 @@ export type ContainerServices = RepositoryServices & FlowServices & ServicesServ
   pool: Pool
   logger: Logger
   detranSpServiceNowLicenciamentoClient: DetranSpServiceNowLicenciamentoClient
+  detranSpServiceNowDebRestrClient: DetranSpServiceNowDebRestrClient
   rotaCaixaPostalClient: RotaCaixaPostalClient
 }
