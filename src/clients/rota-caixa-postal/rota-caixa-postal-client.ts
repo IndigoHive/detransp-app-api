@@ -9,10 +9,29 @@ export type CaixaPostalClientParams = {
 
 export type CaixaPostalMensagem = {
   id: string
-  assunto: string
-  corpo: string
+  assunto: string | null
+  corpo: string | null
   data: string
   lida: boolean
+}
+
+type RotaCaixaPostalMensagemRaw = {
+  id: string
+  titulo: string | null
+  mensagemCurta: string | null
+  mensagemLonga?: string | null
+  dataEnvio: string
+  status: number
+}
+
+function mapMensagem(raw: RotaCaixaPostalMensagemRaw): CaixaPostalMensagem {
+  return {
+    id: raw.id,
+    assunto: raw.titulo ?? null,
+    corpo: raw.mensagemLonga ?? raw.mensagemCurta ?? null,
+    data: raw.dataEnvio,
+    lida: raw.status === 2,
+  }
 }
 
 export type CaixaPostalBadgeResponse = {
@@ -54,7 +73,6 @@ export class RotaCaixaPostalClient {
     payload: { key: string; tags: string[] },
   ): Promise<void> {
     await this.axios.put('/dispositivos/tags', payload, this.withAuth(accessToken))
-    this.logger.debug({ key: payload.key, tags: payload.tags }, 'Push device tags updated')
   }
 
   async getBadge(accessToken: string): Promise<CaixaPostalBadgeResponse> {
@@ -66,18 +84,18 @@ export class RotaCaixaPostalClient {
   }
 
   async listarMensagens(accessToken: string): Promise<CaixaPostalMensagem[]> {
-    const response = await this.axios.get<CaixaPostalMensagem[]>(
+    const response = await this.axios.get<RotaCaixaPostalMensagemRaw[]>(
       `/mensagens/app/${this.appTopic}`,
       this.withAuth(accessToken),
     )
-    return response.data
+    return response.data.map(mapMensagem)
   }
 
   async getMensagem(accessToken: string, id: string): Promise<CaixaPostalMensagem> {
-    const response = await this.axios.get<CaixaPostalMensagem>(
+    const response = await this.axios.get<RotaCaixaPostalMensagemRaw>(
       `/mensagens/app/${this.appTopic}/id/${id}`,
       this.withAuth(accessToken),
     )
-    return response.data
+    return mapMensagem(response.data)
   }
 }
