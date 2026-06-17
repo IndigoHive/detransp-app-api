@@ -82,6 +82,27 @@ export function licenciamentoRouter (): Router {
     const client = req.scope.resolve('detranSpServiceNowLicenciamentoClient')
     const auth = { accessToken, userCpf, renavam, placa }
 
+    async function resolveVehicle (): Promise<VehicleItem | null> {
+      const rv = auth.renavam
+      const pl = auth.placa
+      try {
+        const debRestrClient = req.scope.resolve('detranSpServiceNowDebRestrClient')
+        const consultaResult = await debRestrClient.consultaVeiculo(auth, rv)
+        const attrs = consultaResult?.data?.attributes
+        return {
+          id: rv,
+          renavam: rv,
+          title: attrs?.marcaModelo?.descricao ?? pl,
+          brandModel: attrs?.marcaModelo?.descricao ?? pl,
+          plate: attrs?.placa ?? pl,
+          status: 'VENCIDO',
+          licensingExpirationDate: ''
+        }
+      } catch {
+        return null
+      }
+    }
+
     try {
       const result = await client.verificaVeiculo(auth, renavam)
       const data = result?.result
@@ -90,13 +111,15 @@ export function licenciamentoRouter (): Router {
         return
       }
 
+      const vehicle = toVehicleItemFromVerifica(data)
+      const vigency = vehicle.status
+      const isLicensingOverdue = vigency !== 'REGULAR'
+
       const debitosResult = await client.listaDebitosVeiculo(auth, renavam)
       const debts: DebitoData[] = debitosResult?.result ?? []
       const totalDebits = debts.reduce((sum, d) => sum + d.valor, 0)
       const onlyLicensing = debts.length > 0 && debts.every(d => d.tipoServico === 5)
       const hasPayableDebts = debts.some(d => d.tipoServico === 6 || d.tipoServico === 7)
-      const vehicle = toVehicleItemFromVerifica(data)
-      const isLicensingOverdue = vehicle.status === 'VENCIDO'
 
       const hasMultas = debts.some(d => d.tipoServico === 7)
       let multasDetail: Record<string, ListaMultasData[]> = {}
@@ -113,9 +136,40 @@ export function licenciamentoRouter (): Router {
         }
       }
 
+      let vehicleAttributes: VehicleAttributes | undefined
+      let restrictions: VehicleRestrictions | undefined
+      try {
+        const debRestrClient = req.scope.resolve('detranSpServiceNowDebRestrClient')
+        const consultaResult = await debRestrClient.consultaVeiculo(auth, renavam)
+        const attrs = consultaResult?.data?.attributes
+        const meta = consultaResult?.data?.meta
+        if (attrs) {
+          vehicleAttributes = {
+            chassi: attrs.chassi,
+            yearFab: attrs.anoFabricacao?.toString(),
+            yearMod: attrs.anoModelo?.toString(),
+            cor: attrs.cor?.descricao,
+            combustivel: attrs.combustivel?.descricao,
+            tipo: attrs.tipo?.descricao,
+          }
+        }
+        if (meta) {
+          restrictions = {
+            bloqueioFurtoRoubo: meta.bloqueioFurtoRoubo,
+            restricaoTributaria: meta.restricaoTributaria,
+            restricaoAdministrativa: meta.restricaoAdministrativa,
+            restricaoJudicial: meta.restricaoJudicial,
+            restricaoVeiculoGuinchado: meta.restricaoVeiculoGuinchado,
+            nomeAgente: meta.nomeAgente,
+          }
+        }
+      } catch {
+        // deb-restr is non-fatal: vehicle details still load without extra attributes
+      }
+
       res.status(200).json({
         vehicle,
-        vigency: vehicle.status,
+        vigency,
         isBlocked: false,
         isGnvBlocked: false,
         hasMultaForaDoSistema: false,
@@ -125,14 +179,83 @@ export function licenciamentoRouter (): Router {
         debts,
         result: debts,
         totalDebits,
-        multasDetail
+        multasDetail,
+        vehicleAttributes,
+        restrictions,
       })
     } catch (err) {
-      if (err instanceof DetranSpServiceNowLicenciamentoError) {
-        res.status(200).json({ vehicle: null })
+      if (!(err instanceof DetranSpServiceNowLicenciamentoError)) throw err
+
+      const isLicensingOverdue = true
+
+      if (err.type === 'VeiculoComPendenciaError') {
+        const vehicle = await resolveVehicle()
+        res.status(200).json({ vehicle, vigency: 'VENCIDO', isBlocked: true, isGnvBlocked: false, hasMultaForaDoSistema: false, onlyLicensing: false, hasPayableDebts: false, isLicensingOverdue, debts: [], result: [], totalDebits: 0, multasDetail: {} })
         return
       }
-      throw err
+
+      if (err.type === 'VeiculoSemCertificadoGNVVigenteError') {
+        const vehicle = await resolveVehicle()
+        try {
+          const debitosResult = await client.listaDebitosVeiculo(auth, renavam)
+          const debts: DebitoData[] = debitosResult?.result ?? []
+          const totalDebits = debts.reduce((sum, d) => sum + d.valor, 0)
+          const hasPayableDebts = debts.some(d => d.tipoServico === 6 || d.tipoServico === 7)
+          let multasDetail: Record<string, ListaMultasData[]> = {}
+          if (debts.some(d => d.tipoServico === 7)) {
+            try {
+              const multasResult = await client.listaMultas(auth, renavam)
+              for (const m of multasResult?.result ?? []) {
+                const entry = multasDetail[m.autoInfracao] ?? []
+                entry.push(m)
+                multasDetail[m.autoInfracao] = entry
+              }
+            } catch (multasErr) {
+              if (!(multasErr instanceof DetranSpServiceNowLicenciamentoError)) throw multasErr
+            }
+          }
+          res.status(200).json({ vehicle, vigency: 'VENCIDO', isBlocked: false, isGnvBlocked: true, hasMultaForaDoSistema: false, onlyLicensing: false, hasPayableDebts, isLicensingOverdue, debts, result: debts, totalDebits, multasDetail })
+        } catch {
+          res.status(200).json({ vehicle, vigency: 'VENCIDO', isBlocked: false, isGnvBlocked: true, hasMultaForaDoSistema: false, onlyLicensing: false, hasPayableDebts: false, isLicensingOverdue, debts: [], result: [], totalDebits: 0, multasDetail: {} })
+        }
+        return
+      }
+
+      if (err.type === 'VeiculoComMultaForaDoSistemaError') {
+        const vehicle = await resolveVehicle()
+        try {
+          const debitosResult = await client.listaDebitosVeiculo(auth, renavam)
+          const debts: DebitoData[] = debitosResult?.result ?? []
+          const totalDebits = debts.reduce((sum, d) => sum + d.valor, 0)
+          const hasPayableDebts = debts.some(d => d.tipoServico === 6 || d.tipoServico === 7)
+          let multasDetail: Record<string, ListaMultasData[]> = {}
+          if (debts.some(d => d.tipoServico === 7)) {
+            try {
+              const multasResult = await client.listaMultas(auth, renavam)
+              for (const m of multasResult?.result ?? []) {
+                const entry = multasDetail[m.autoInfracao] ?? []
+                entry.push(m)
+                multasDetail[m.autoInfracao] = entry
+              }
+            } catch (multasErr) {
+              if (!(multasErr instanceof DetranSpServiceNowLicenciamentoError)) throw multasErr
+            }
+          }
+          res.status(200).json({ vehicle, vigency: 'VENCIDO', isBlocked: false, isGnvBlocked: false, hasMultaForaDoSistema: true, onlyLicensing: false, hasPayableDebts, isLicensingOverdue, debts, result: debts, totalDebits, multasDetail })
+        } catch {
+          res.status(200).json({ vehicle, vigency: 'VENCIDO', isBlocked: false, isGnvBlocked: false, hasMultaForaDoSistema: true, onlyLicensing: false, hasPayableDebts: false, isLicensingOverdue, debts: [], result: [], totalDebits: 0, multasDetail: {} })
+        }
+        return
+      }
+
+      if (err.type === 'FalhaNaOperacaoError') {
+        const vehicle = await resolveVehicle()
+        res.status(200).json({ vehicle, vigency: 'VENCIDO', isBlocked: false, isGnvBlocked: false, hasMultaForaDoSistema: false, onlyLicensing: false, hasPayableDebts: false, isLicensingOverdue, debts: [], result: [], totalDebits: 0, multasDetail: {} })
+        return
+      }
+
+      const vehicle = await resolveVehicle()
+      res.status(200).json({ vehicle, vigency: 'VENCIDO', isBlocked: true, isGnvBlocked: false, hasMultaForaDoSistema: false, onlyLicensing: false, hasPayableDebts: false, isLicensingOverdue, debts: [], result: [], totalDebits: 0, multasDetail: {} })
     }
   })
 

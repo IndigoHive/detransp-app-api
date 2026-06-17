@@ -77,7 +77,7 @@ export class DetranSpServiceNowLicenciamentoHttp {
 
         const userMessage = detail ?? 'Tivemos um problema ao processar sua solicitação.'
 
-        throw new DetranSpServiceNowLicenciamentoError(message ?? 'UnknownError', userMessage)
+        throw new DetranSpServiceNowLicenciamentoError(message ?? 'UnknownError', userMessage, error.response?.data)
       }
     )
   }
