@@ -19,5 +19,34 @@ export function servicesRouter (): Router {
     res.status(200).json(result)
   })
 
+  router.get('/protocols', async (req, res) => {
+    const logger = req.scope.resolve('logger')
+    const service = req.scope.resolve('listServiceCasesService')
+
+    try {
+      const result = await service.run(req.headers.authorization)
+      res.status(200).json(result)
+    } catch (error) {
+      const status = typeof (error as { status?: unknown }).status === 'number'
+        ? (error as { status: number }).status
+        : 500
+
+      logger.error(
+        {
+          err: error,
+          route: '/api/services/protocols',
+          status
+        },
+        'Failed to list service protocols'
+      )
+
+      res.status(status).json({
+        message: status === 500
+          ? 'Erro ao buscar protocolos'
+          : (error as Error).message
+      })
+    }
+  })
+
   return router
 }

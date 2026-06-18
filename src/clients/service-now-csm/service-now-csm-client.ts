@@ -20,7 +20,10 @@ export class ServiceNowCsmClient {
 
     this.axios = axios.create({
       baseURL: baseUrl,
-      auth: { username, password },
+      auth: {
+        username,
+        password
+      },
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json'
@@ -87,5 +90,27 @@ export class ServiceNowCsmClient {
     )
 
     return response.data
+  }
+
+  async getProtocols<T = unknown> (params?: Record<string, string | number | boolean>): Promise<T> {
+    try {
+      const response = await this.axios.get<T>('/api/now/table/x_mdpdd_detran_srv_service_case', {
+        params
+      })
+
+      return response.data
+    } catch (error) {
+      this.logger.error(
+        {
+          err: error,
+          endpoint: '/api/now/table/x_mdpdd_detran_srv_service_case',
+          params,
+          service: SERVICE_NAME
+        },
+        'Failed to fetch protocols from ServiceNow CSM'
+      )
+
+      throw error
+    }
   }
 }
