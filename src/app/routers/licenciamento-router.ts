@@ -9,6 +9,7 @@ import type {
   VerificaVeiculoData
 } from '../../clients/detran-sp-service-now-licenciamento/types'
 import { extractCpfFromToken } from '../../utils/token'
+import { formatCurrency } from '../../utils/currency'
 
 type VehicleAttributes = {
   chassi?: string | undefined
@@ -178,7 +179,7 @@ export function licenciamentoRouter (): Router {
         isLicensingOverdue,
         debts,
         result: debts,
-        totalDebits,
+        totalDebits: formatCurrency(totalDebits),
         multasDetail,
         vehicleAttributes,
         restrictions,
@@ -190,7 +191,7 @@ export function licenciamentoRouter (): Router {
 
       if (err.type === 'VeiculoComPendenciaError') {
         const vehicle = await resolveVehicle()
-        res.status(200).json({ vehicle, vigency: 'VENCIDO', isBlocked: true, isGnvBlocked: false, hasMultaForaDoSistema: false, onlyLicensing: false, hasPayableDebts: false, isLicensingOverdue, debts: [], result: [], totalDebits: 0, multasDetail: {} })
+        res.status(200).json({ vehicle, vigency: 'VENCIDO', isBlocked: true, isGnvBlocked: false, hasMultaForaDoSistema: false, onlyLicensing: false, hasPayableDebts: false, isLicensingOverdue, debts: [], result: [], totalDebits: formatCurrency(0), multasDetail: {} })
         return
       }
 
@@ -216,7 +217,7 @@ export function licenciamentoRouter (): Router {
           }
           res.status(200).json({ vehicle, vigency: 'VENCIDO', isBlocked: false, isGnvBlocked: true, hasMultaForaDoSistema: false, onlyLicensing: false, hasPayableDebts, isLicensingOverdue, debts, result: debts, totalDebits, multasDetail })
         } catch {
-          res.status(200).json({ vehicle, vigency: 'VENCIDO', isBlocked: false, isGnvBlocked: true, hasMultaForaDoSistema: false, onlyLicensing: false, hasPayableDebts: false, isLicensingOverdue, debts: [], result: [], totalDebits: 0, multasDetail: {} })
+          res.status(200).json({ vehicle, vigency: 'VENCIDO', isBlocked: false, isGnvBlocked: true, hasMultaForaDoSistema: false, onlyLicensing: false, hasPayableDebts: false, isLicensingOverdue, debts: [], result: [], totalDebits: formatCurrency(0), multasDetail: {} })
         }
         return
       }
@@ -243,19 +244,19 @@ export function licenciamentoRouter (): Router {
           }
           res.status(200).json({ vehicle, vigency: 'VENCIDO', isBlocked: false, isGnvBlocked: false, hasMultaForaDoSistema: true, onlyLicensing: false, hasPayableDebts, isLicensingOverdue, debts, result: debts, totalDebits, multasDetail })
         } catch {
-          res.status(200).json({ vehicle, vigency: 'VENCIDO', isBlocked: false, isGnvBlocked: false, hasMultaForaDoSistema: true, onlyLicensing: false, hasPayableDebts: false, isLicensingOverdue, debts: [], result: [], totalDebits: 0, multasDetail: {} })
+          res.status(200).json({ vehicle, vigency: 'VENCIDO', isBlocked: false, isGnvBlocked: false, hasMultaForaDoSistema: true, onlyLicensing: false, hasPayableDebts: false, isLicensingOverdue, debts: [], result: [], totalDebits: formatCurrency(0), multasDetail: {} })
         }
         return
       }
 
       if (err.type === 'FalhaNaOperacaoError') {
         const vehicle = await resolveVehicle()
-        res.status(200).json({ vehicle, vigency: 'VENCIDO', isBlocked: false, isGnvBlocked: false, hasMultaForaDoSistema: false, onlyLicensing: false, hasPayableDebts: false, isLicensingOverdue, debts: [], result: [], totalDebits: 0, multasDetail: {} })
+        res.status(200).json({ vehicle, vigency: 'VENCIDO', isBlocked: false, isGnvBlocked: false, hasMultaForaDoSistema: false, onlyLicensing: false, hasPayableDebts: false, isLicensingOverdue, debts: [], result: [], totalDebits: formatCurrency(0), multasDetail: {} })
         return
       }
 
       const vehicle = await resolveVehicle()
-      res.status(200).json({ vehicle, vigency: 'VENCIDO', isBlocked: true, isGnvBlocked: false, hasMultaForaDoSistema: false, onlyLicensing: false, hasPayableDebts: false, isLicensingOverdue, debts: [], result: [], totalDebits: 0, multasDetail: {} })
+      res.status(200).json({ vehicle, vigency: 'VENCIDO', isBlocked: true, isGnvBlocked: false, hasMultaForaDoSistema: false, onlyLicensing: false, hasPayableDebts: false, isLicensingOverdue, debts: [], result: [], totalDebits: formatCurrency(0), multasDetail: {} })
     }
   })
 
@@ -292,7 +293,7 @@ export function licenciamentoRouter (): Router {
       const isLicensingOverdue = vehicle?.status === 'VENCIDO'
 
       if (err.type === 'VeiculoComPendenciaError') {
-        res.status(200).json({ vehicle, vigency: 'VENCIDO', isBlocked: true, isGnvBlocked: false, hasMultaForaDoSistema: false, onlyLicensing: false, hasPayableDebts: false, isLicensingOverdue, debts: [], result: [], totalDebits: 0, multasDetail: {} })
+        res.status(200).json({ vehicle, vigency: 'VENCIDO', isBlocked: true, isGnvBlocked: false, hasMultaForaDoSistema: false, onlyLicensing: false, hasPayableDebts: false, isLicensingOverdue, debts: [], result: [], totalDebits: 0, totalDebitsFormatted: formatCurrency(0), multasDetail: {} })
         return
       }
       if (err.type === 'VeiculoSemCertificadoGNVVigenteError') {
@@ -313,16 +314,16 @@ export function licenciamentoRouter (): Router {
             if (!(multasErr instanceof DetranSpServiceNowLicenciamentoError)) throw multasErr
           }
         }
-        res.status(200).json({ vehicle, vigency: 'VENCIDO', isBlocked: false, isGnvBlocked: true, hasMultaForaDoSistema: false, onlyLicensing: false, hasPayableDebts, isLicensingOverdue, debts, result: debts, totalDebits, multasDetail })
+        res.status(200).json({ vehicle, vigency: 'VENCIDO', isBlocked: false, isGnvBlocked: true, hasMultaForaDoSistema: false, onlyLicensing: false, hasPayableDebts, isLicensingOverdue, debts, result: debts, totalDebits: formatCurrency(totalDebits), multasDetail })
         return
       }
       if (err.type === 'VeiculoComMultaForaDoSistemaError') {
         hasMultaForaDoSistema = true
       } else if (err.type === 'FalhaNaOperacaoError') {
-        res.status(200).json({ vehicle, vigency: 'VENCIDO', isBlocked: false, isGnvBlocked: false, hasMultaForaDoSistema: false, onlyLicensing: false, hasPayableDebts: false, isLicensingOverdue: vehicle?.status === 'VENCIDO', debts: [], result: [], totalDebits: 0, multasDetail: {} })
+        res.status(200).json({ vehicle, vigency: 'VENCIDO', isBlocked: false, isGnvBlocked: false, hasMultaForaDoSistema: false, onlyLicensing: false, hasPayableDebts: false, isLicensingOverdue: vehicle?.status === 'VENCIDO', debts: [], result: [], totalDebits: 0, totalDebitsFormatted: formatCurrency(0), multasDetail: {} })
         return
       } else {
-        res.status(200).json({ vehicle, vigency: 'VENCIDO', isBlocked: true, isGnvBlocked: false, hasMultaForaDoSistema: false, onlyLicensing: false, hasPayableDebts: false, isLicensingOverdue: vehicle?.status === 'VENCIDO', debts: [], result: [], totalDebits: 0, multasDetail: {} })
+        res.status(200).json({ vehicle, vigency: 'VENCIDO', isBlocked: true, isGnvBlocked: false, hasMultaForaDoSistema: false, onlyLicensing: false, hasPayableDebts: false, isLicensingOverdue: vehicle?.status === 'VENCIDO', debts: [], result: [], totalDebits: 0, totalDebitsFormatted: formatCurrency(0), multasDetail: {} })
         return
       }
     }
@@ -392,7 +393,7 @@ export function licenciamentoRouter (): Router {
       isLicensingOverdue,
       debts,
       result: debts,
-      totalDebits,
+      totalDebits: formatCurrency(totalDebits),
       multasDetail,
       vehicleAttributes,
       restrictions,
