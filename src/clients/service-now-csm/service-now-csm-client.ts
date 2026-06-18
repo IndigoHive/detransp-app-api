@@ -113,4 +113,30 @@ export class ServiceNowCsmClient {
       throw error
     }
   }
+
+  async getProtocolDetail<T = unknown> (
+    protocolId: string,
+    params?: Record<string, string | number | boolean>
+  ): Promise<T> {
+    try {
+      const response = await this.axios.get<T>(
+        `/api/now/table/x_mdpdd_detran_srv_service_case/${protocolId}`,
+        { params }
+      )
+
+      return response.data
+    } catch (error) {
+      this.logger.error(
+        {
+          err: error,
+          endpoint: `/api/now/table/x_mdpdd_detran_srv_service_case/${protocolId}`,
+          params,
+          service: SERVICE_NAME
+        },
+        'Failed to fetch protocol detail from ServiceNow CSM'
+      )
+
+      throw error
+    }
+  }
 }
