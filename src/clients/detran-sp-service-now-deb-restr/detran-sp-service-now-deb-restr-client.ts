@@ -27,7 +27,7 @@ export class DetranSpServiceNowDebRestrClient extends DetranSpServiceNowLicencia
     renavam: string
   ): Promise<ConsultaVeiculoResult> {
     return (
-      await this.axios.get(`/${renavam}/placa/${auth.placa}`, this.withAuth(auth))
+      await this.axios.get(`/${renavam}/placa/${auth.placa.toUpperCase()}`, this.withAuth(auth))
     ).data
   }
 }

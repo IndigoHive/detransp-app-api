@@ -94,7 +94,7 @@ export class DetranSpServiceNowLicenciamentoHttp {
         'X-CPF-Usuario': auth.userCpf,
         ...(auth.tokenIntegrity ? { 'X-Integrity-Token': auth.tokenIntegrity } : {}),
         ...(hasVeiculo
-          ? { codigoRenavamVeiculo: auth.renavam, 'X-Placa-Veiculo': auth.placa }
+          ? { codigoRenavamVeiculo: auth.renavam, 'X-Placa-Veiculo': auth.placa.toUpperCase() }
           : {})
       }
     }
