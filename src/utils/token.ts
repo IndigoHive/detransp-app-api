@@ -1,3 +1,5 @@
+import { Unauthorized } from 'http-errors'
+
 export function sanitizeResponseData(data: unknown): unknown {
   if (typeof data === 'string' && /<(!DOCTYPE|html)/i.test(data)) {
     return '[HTML response — likely maintenance or gateway page]'
@@ -5,18 +7,10 @@ export function sanitizeResponseData(data: unknown): unknown {
   return data
 }
 
-export class UnauthorizedError extends Error {
-  readonly status = 401
-  constructor(message = 'Authorization token required') {
-    super(message)
-    this.name = 'UnauthorizedError'
-  }
-}
-
 export function extractBearerToken(authHeader: string | undefined): string {
-  if (!authHeader) throw new UnauthorizedError()
+  if (!authHeader) throw Unauthorized('Token de autorização inválido ou expirado.')
   const token = authHeader.replace(/^Bearer\s+/i, '').trim()
-  if (!token) throw new UnauthorizedError()
+  if (!token) throw Unauthorized('Token de autorização inválido ou expirado.')
   return token
 }
 

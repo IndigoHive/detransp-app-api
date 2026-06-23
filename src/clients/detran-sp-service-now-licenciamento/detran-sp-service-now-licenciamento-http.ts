@@ -1,4 +1,5 @@
 import axios, { type AxiosError, type AxiosInstance, type AxiosRequestConfig } from 'axios'
+import createError from 'http-errors'
 import type { Logger } from 'pino'
 import { DetranSpServiceNowLicenciamentoError } from './errors/detran-sp-service-now-licenciamento-error'
 
@@ -76,8 +77,13 @@ export class DetranSpServiceNowLicenciamentoHttp {
         )
 
         const userMessage = detail ?? 'Tivemos um problema ao processar sua solicitação.'
+        const status = error.response?.status ?? 422
 
-        throw new DetranSpServiceNowLicenciamentoError(message ?? 'UnknownError', userMessage, error.response?.data)
+        throw createError(
+          status,
+          new DetranSpServiceNowLicenciamentoError(message ?? 'UnknownError', userMessage, error.response?.data),
+          { expose: true }
+        )
       }
     )
   }

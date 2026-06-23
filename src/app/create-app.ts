@@ -2,7 +2,7 @@ import type { AwilixContainer } from 'awilix'
 import express from 'express'
 import { authRouter, dashboardRouter, flowsRouter, healthRouter, licenciamentoRouter, notificacoesRouter, servicesRouter, tdvRouter } from './routers'
 import { ContainerServices, createContainer } from '../container'
-import { scopePerRequest } from './middlewares'
+import { fallbackErrorHandler, httpErrorHandler, scopePerRequest } from './middlewares'
 
 export type CreateAppOptions = {
   container?: AwilixContainer<ContainerServices>
@@ -29,6 +29,10 @@ export function createApp (options: CreateAppOptions = {}) {
   app.use('/api/notificacoes', notificacoesRouter())
   app.use('/api/services', servicesRouter())
   app.use('/api/tdv', tdvRouter())
+
+  // Error handlers
+  app.use(httpErrorHandler())
+  app.use(fallbackErrorHandler())
 
   return app
 }
