@@ -54,16 +54,6 @@ export class ListServiceCasesService {
       const sysparmQuery = `opened_by.user_name=${requestedCpf}^ORinternal_user.user_name=${requestedCpf}`
       const sysparmFields = 'sys_id,number,state,active,short_description,opened_at,sys_updated_on,x_mdpdd_detran_csm_reopen_count,contact_type'
 
-      this.logger.info(
-        {
-          cpf: requestedCpf,
-          service: 'list-service-cases',
-          sysparmFields,
-          sysparmLimit: 50
-        },
-        'Preparing ServiceNow protocols list request'
-      )
-
       return await this.serviceNowCsm.getProtocols<ListServiceCasesResult>({
         sysparm_query: sysparmQuery,
         sysparm_fields: sysparmFields,
