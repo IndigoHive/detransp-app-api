@@ -70,7 +70,7 @@ export class VerificaVeiculoLicenciamentoService {
       if (err.type === 'VeiculoComMultaForaDoSistemaError') {
         hasMultaForaDoSistema = true
       } else if (err.type === 'FalhaNaOperacaoError') {
-        return this.buildResult(vehicle, 'VENCIDO', { isBlocked: false, isGnvBlocked: false, hasMultaForaDoSistema: false, isLicensingOverdue })
+        throw err
       } else {
         return this.buildResult(vehicle, 'VENCIDO', { isBlocked: true, isGnvBlocked: false, hasMultaForaDoSistema: false, isLicensingOverdue })
       }
@@ -122,13 +122,23 @@ export class VerificaVeiculoLicenciamentoService {
     onlyLicensing: boolean
     hasPayableDebts: boolean
   }> {
-    const result = await this.licenciamentoClient.listaDebitosVeiculo(auth, auth.renavam)
-    const debts: DebitoData[] = result?.result ?? []
-    return {
-      debts,
-      totalDebits: debts.reduce((sum, d) => sum + d.valor, 0),
-      onlyLicensing: debts.length > 0 && debts.every(d => d.tipoServico === 5),
-      hasPayableDebts: debts.some(d => d.tipoServico === 6 || d.tipoServico === 7),
+    try {
+      const result = await this.licenciamentoClient.listaDebitosVeiculo(auth, auth.renavam)
+      const debts: DebitoData[] = result?.result ?? []
+      return {
+        debts,
+        totalDebits: debts.reduce((sum, d) => sum + d.valor, 0),
+        onlyLicensing: debts.length > 0 && debts.every(d => d.tipoServico === 5),
+        hasPayableDebts: debts.some(d => d.tipoServico === 6 || d.tipoServico === 7),
+      }
+    } catch (err) {
+      if (!(err instanceof DetranSpServiceNowLicenciamentoError)) throw err
+      return {
+        debts: [],
+        totalDebits: 0,
+        onlyLicensing: false,
+        hasPayableDebts: false,
+      }
     }
   }
 
@@ -169,7 +179,8 @@ export class VerificaVeiculoLicenciamentoService {
           nomeAgente: meta.nomeAgente,
         } : undefined,
       }
-    } catch {
+    } catch (err) {
+      if (!(err instanceof DetranSpServiceNowLicenciamentoError)) throw err
       return {}
     }
   }

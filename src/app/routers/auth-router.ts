@@ -1,4 +1,5 @@
 import { Router } from 'express'
+import { BadRequest, Unauthorized } from 'http-errors'
 import type { Platform } from '../../types'
 
 const VALID_PLATFORMS: Platform[] = ['android', 'ios']
@@ -17,26 +18,20 @@ export function authRouter (): Router {
     const platform = asPlatform(req.body?.platform)
 
     if (!platform) {
-      res.status(400).json({ error: 'Field platform is required (android | ios).' })
-      return
+      throw BadRequest('O campo platform é obrigatório (android | ios).')
     }
 
-    try {
-      const service = req.scope.resolve('generateGovBrAuthorizationUrlService')
-      const logger = req.scope.resolve('logger')
+    const service = req.scope.resolve('generateGovBrAuthorizationUrlService')
+    const logger = req.scope.resolve('logger')
 
-      const result = service.run({ ...req.body, platform })
+    const result = service.run({ ...req.body, platform })
 
-      logger.info(
-        { clientId: result.clientId, platform, redirectUri: result.redirectUri },
-        '[auth] authorization URL generated',
-      )
+    logger.info(
+      { clientId: result.clientId, platform, redirectUri: result.redirectUri },
+      '[auth] authorization URL generated',
+    )
 
-      res.status(200).json(result)
-    } catch (error) {
-      const message = error instanceof Error ? error.message : 'Failed to generate authorization URL'
-      res.status(500).json({ error: message })
-    }
+    res.status(200).json(result)
   })
 
   router.post('/govbr/token', async (req, res) => {
@@ -46,30 +41,23 @@ export function authRouter (): Router {
     const redirectUri = asOptionalString(req.body?.redirectUri)
 
     if (!platform) {
-      res.status(400).json({ error: 'Field platform is required (android | ios).' })
-      return
+      throw BadRequest('O campo platform é obrigatório (android | ios).')
     }
 
     if (!code || !codeVerifier) {
-      res.status(400).json({ error: 'Fields code and codeVerifier are required.' })
-      return
+      throw BadRequest('Os campos code e codeVerifier são obrigatórios.')
     }
 
-    try {
-      const service = req.scope.resolve('exchangeGovBrAuthorizationCodeService')
+    const service = req.scope.resolve('exchangeGovBrAuthorizationCodeService')
 
-      const result = await service.run({
-        platform,
-        code,
-        codeVerifier,
-        ...(redirectUri && { redirectUri }),
-      })
+    const result = await service.run({
+      platform,
+      code,
+      codeVerifier,
+      ...(redirectUri && { redirectUri }),
+    })
 
-      res.status(200).json(result)
-    } catch (error) {
-      const message = error instanceof Error ? error.message : 'Token exchange failed'
-      res.status(502).json({ error: message })
-    }
+    res.status(200).json(result)
   })
 
   router.get('/govbr/userinfo', async (req, res) => {
@@ -78,18 +66,12 @@ export function authRouter (): Router {
       asOptionalString(req.query.accessToken)
 
     if (!accessToken) {
-      res.status(401).json({ error: 'Missing access token. Use Authorization: Bearer <token>.' })
-      return
+      throw Unauthorized('Token de acesso ausente. Use Authorization: Bearer <token>.')
     }
 
-    try {
-      const service = req.scope.resolve('getGovBrUserInfoService')
-      const result = await service.run({ accessToken })
-      res.status(200).json(result)
-    } catch (error) {
-      const message = error instanceof Error ? error.message : 'Failed to fetch user info'
-      res.status(502).json({ error: message })
-    }
+    const service = req.scope.resolve('getGovBrUserInfoService')
+    const result = await service.run({ accessToken })
+    res.status(200).json(result)
   })
 
   router.get('/dev-callback', (req, res) => {
