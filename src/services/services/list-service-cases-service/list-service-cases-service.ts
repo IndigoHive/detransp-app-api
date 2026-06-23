@@ -22,7 +22,9 @@ type Dependencies = {
   logger: Logger
 }
 
-const DEFAULT_CPF = '22231049830'
+const EMPTY_PROTOCOLS_RESULT: ListServiceCasesResult = {
+  result: []
+}
 
 export class ListServiceCasesService {
   private readonly serviceNowCsm: ServiceNowCsmClient
@@ -33,14 +35,34 @@ export class ListServiceCasesService {
     this.logger = logger
   }
 
-  async run (authorizationHeader?: string): Promise<ListServiceCasesResult> {
+  async run (authorizationHeader: string | undefined): Promise<ListServiceCasesResult> {
     try {
-      const cpf = authorizationHeader
-        ? extractCpfFromToken(extractBearerToken(authorizationHeader))
-        : DEFAULT_CPF
+      const token = extractBearerToken(authorizationHeader)
+      const requestedCpf = extractCpfFromToken(token)
 
-      const sysparmQuery = `opened_by.user_name=${cpf}^ORinternal_user.user_name=${cpf}`
+      if (!requestedCpf) {
+        this.logger.warn(
+          {
+            service: 'list-service-cases'
+          },
+          'CPF not found in authentication token'
+        )
+
+        return EMPTY_PROTOCOLS_RESULT
+      }
+
+      const sysparmQuery = `opened_by.user_name=${requestedCpf}^ORinternal_user.user_name=${requestedCpf}`
       const sysparmFields = 'sys_id,number,state,active,short_description,opened_at,sys_updated_on,x_mdpdd_detran_csm_reopen_count,contact_type'
+
+      this.logger.info(
+        {
+          cpf: requestedCpf,
+          service: 'list-service-cases',
+          sysparmFields,
+          sysparmLimit: 50
+        },
+        'Preparing ServiceNow protocols list request'
+      )
 
       return await this.serviceNowCsm.getProtocols<ListServiceCasesResult>({
         sysparm_query: sysparmQuery,
@@ -51,7 +73,6 @@ export class ListServiceCasesService {
       this.logger.error(
         {
           err: error,
-          hasAuthorizationHeader: Boolean(authorizationHeader),
           service: 'list-service-cases'
         },
         'Failed preparing or executing protocols listing'
