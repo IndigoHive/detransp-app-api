@@ -22,10 +22,6 @@ type Dependencies = {
   logger: Logger
 }
 
-const EMPTY_PROTOCOLS_RESULT: ListServiceCasesResult = {
-  result: []
-}
-
 export class ListServiceCasesService {
   private readonly serviceNowCsm: ServiceNowCsmClient
   private readonly logger: Logger
@@ -48,7 +44,7 @@ export class ListServiceCasesService {
           'CPF not found in authentication token'
         )
 
-        return EMPTY_PROTOCOLS_RESULT
+        return { result: [] }
       }
 
       const sysparmQuery = `opened_by.user_name=${requestedCpf}^ORinternal_user.user_name=${requestedCpf}`
