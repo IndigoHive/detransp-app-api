@@ -1,4 +1,5 @@
 import axios, { type AxiosInstance, type AxiosRequestConfig } from 'axios'
+import createError from 'http-errors'
 import type { Logger } from 'pino'
 import type { Config } from '../../types'
 import type { GenerateGovBrAccessTokenCommand, GenerateGovBrAccessTokenResult } from './types'
@@ -74,7 +75,11 @@ export class IdpSpGovBrSSOClient {
           'GovBr SSO HTTP error'
         )
 
-        return Promise.reject(error)
+        return Promise.reject(createError(
+          error.response?.status ?? 502,
+          'Não foi possível concluir a autenticação com o Gov.br. Tente novamente.',
+          { expose: true }
+        ))
       }
     )
   }

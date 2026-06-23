@@ -65,7 +65,29 @@ const GOVBR_SCOPES = [
   "api:integrador.vida.update",
   "api:detran-taxas.search",
   "api:vistoria.veiculos.search",
-  "api:integrador.appdetran.attestation"
+  "api:integrador.appdetran.attestation",
+  "api:crv-pecas.search",
+  "api:detran-taxas.upsert",
+  "api:detran.transferencia.search",
+  "api:detran.transferencia.upsert",
+  "api:detran.veiculos.extra.judicial.atualizar.agente.garantia.upsert",
+  "api:detran.veiculos.extra.judicial.cancelar.busca.apreensao.upsert",
+  "api:detran.veiculos.extra.judicial.consulta.tickets.search",
+  "api:detran.veiculos.extra.judicial.informar.fotos.upsert",
+  "api:detran.veiculos.extra.judicial.informar.recolha.patio.registradora.search",
+  "api:detran.veiculos.extra.judicial.informar.recolha.patio.upsert",
+  "api:detran.veiculos.extra.judicial.informar.recolha.registradora.upsert",
+  "api:detran.veiculos.extra.judicial.iniciar.upsert",
+  "api:detran.veiculos.extra.judicial.recebimento.notificacao.upsert",
+  "api:detran.veiculos.extra.judicial.recolha.voluntaria.upsert",
+  "api:detran.veiculos.extra.judicial.registro.search",
+  "api:detran.veiculos.extra.judicial.solicitar.busca.apreensao.upsert",
+  "api:detran.veiculos.extra.judicial.status.registro.search",
+  "api:detran.veiculos.extra.judicial.veiculos.auto.apreensao.patio.detran.search",
+  "api:detran.veiculos.extra.judicial.veiculos.recolhidos.patio.search",
+  "api:integrador.jucesp.oab",
+  "api:sggd.sp.gov.br.cxpostal.admin",
+  "api:sggd.sp.gov.br.cxpostal.user"
 ]
 const dashboardUrl = 'api/x_mdpdd_dashboard/v1/dashboard/'
 
@@ -93,6 +115,12 @@ export const config: Config = {
       username: env.SERVICENOW_TDV_USERNAME || '',
       password: env.SERVICENOW_TDV_PASSWORD || '',
     }
+  },
+  rotaCaixaPostal: {
+    // Defina ROTA_CAIXA_POSTAL_BASE_URL no .env (ex: https://caixapostal.api.rota.sp.gov.br)
+    baseUrl: env.ROTA_CAIXA_POSTAL_BASE_URL || '',
+    // Defina ROTA_CAIXA_POSTAL_APP_TOPIC no .env (ex: detran-sp)
+    appTopic: env.ROTA_CAIXA_POSTAL_APP_TOPIC || '',
   },
   logging: {
     level: env.LOG_LEVEL || DEFAULT_LOG_LEVEL
