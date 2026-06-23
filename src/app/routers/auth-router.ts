@@ -22,14 +22,8 @@ export function authRouter (): Router {
     }
 
     const service = req.scope.resolve('generateGovBrAuthorizationUrlService')
-    const logger = req.scope.resolve('logger')
 
     const result = service.run({ ...req.body, platform })
-
-    logger.info(
-      { clientId: result.clientId, platform, redirectUri: result.redirectUri },
-      '[auth] authorization URL generated',
-    )
 
     res.status(200).json(result)
   })
