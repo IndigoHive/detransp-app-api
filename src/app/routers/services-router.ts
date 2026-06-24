@@ -19,5 +19,23 @@ export function servicesRouter (): Router {
     res.status(200).json(result)
   })
 
+  router.get('/protocols', async (req, res) => {
+    const service = req.scope.resolve('listServiceCasesService')
+
+    const result = await service.run(req.headers.authorization)
+
+    res.status(200).json(result)
+  })
+
+  router.get('/protocols/detail', async (req, res) => {
+    const service = req.scope.resolve('getServiceCaseDetailService')
+
+    const sysId = typeof req.query.sys_id === 'string' ? req.query.sys_id : ''
+
+    const result = await service.run(sysId)
+
+    res.status(200).json(result)
+  })
+
   return router
 }

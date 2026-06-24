@@ -1,0 +1,32 @@
+import type { ServiceNowCsmClient } from '../../../clients'
+
+export type GetServiceCaseDetailResult = {
+  result: Record<string, unknown>
+}
+
+type Dependencies = {
+  serviceNowCsm: ServiceNowCsmClient
+}
+
+export class GetServiceCaseDetailService {
+  private readonly serviceNowCsm: ServiceNowCsmClient
+
+  constructor ({ serviceNowCsm }: Dependencies) {
+    this.serviceNowCsm = serviceNowCsm
+  }
+
+  async run (protocolId: string): Promise<GetServiceCaseDetailResult> {
+    if (!protocolId.trim()) {
+      const error = new Error('sys_id é obrigatório para buscar o detalhe do protocolo')
+      ;(error as Error & { status?: number }).status = 400
+      throw error
+    }
+
+    const sysparmFields = 'sys_id,number,state,active,short_description,opened_at,sys_updated_on,x_mdpdd_detran_csm_reopen_count,contact_type'
+
+    return await this.serviceNowCsm.getProtocolDetail<GetServiceCaseDetailResult>(
+      protocolId,
+      { sysparm_fields: sysparmFields }
+    )
+  }
+}
