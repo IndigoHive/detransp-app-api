@@ -20,62 +20,21 @@ export function servicesRouter (): Router {
   })
 
   router.get('/protocols', async (req, res) => {
-    const logger = req.scope.resolve('logger')
     const service = req.scope.resolve('listServiceCasesService')
 
-    try {
-      const result = await service.run(req.headers.authorization)
-      res.status(200).json(result)
-    } catch (error) {
-      const status = typeof (error as { status?: unknown }).status === 'number'
-        ? (error as { status: number }).status
-        : 500
+    const result = await service.run(req.headers.authorization)
 
-      logger.error(
-        {
-          err: error,
-          route: '/api/services/protocols',
-          status
-        },
-        'Failed to list service protocols'
-      )
-
-      res.status(status).json({
-        message: status === 500
-          ? 'Erro ao buscar protocolos'
-          : (error as Error).message
-      })
-    }
+    res.status(200).json(result)
   })
 
   router.get('/protocols/detail', async (req, res) => {
-    const logger = req.scope.resolve('logger')
     const service = req.scope.resolve('getServiceCaseDetailService')
 
-    try {
-      const sysId = typeof req.query.sys_id === 'string' ? req.query.sys_id : ''
-      const result = await service.run(sysId)
-      res.status(200).json(result)
-    } catch (error) {
-      const status = typeof (error as { status?: unknown }).status === 'number'
-        ? (error as { status: number }).status
-        : 500
+    const sysId = typeof req.query.sys_id === 'string' ? req.query.sys_id : ''
 
-      logger.error(
-        {
-          err: error,
-          route: '/api/services/protocols/detail',
-          status
-        },
-        'Failed to fetch protocol detail'
-      )
+    const result = await service.run(sysId)
 
-      res.status(status).json({
-        message: status === 500
-          ? 'Erro ao buscar detalhe do protocolo'
-          : (error as Error).message
-      })
-    }
+    res.status(200).json(result)
   })
 
   return router

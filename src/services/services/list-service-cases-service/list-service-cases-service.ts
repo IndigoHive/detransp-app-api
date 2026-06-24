@@ -1,5 +1,4 @@
 import type { ServiceNowCsmClient } from '../../../clients'
-import type { Logger } from 'pino'
 import { extractBearerToken, extractCpfFromToken } from '../../../utils/token'
 
 export type ServiceCaseItem = {
@@ -19,52 +18,30 @@ export type ListServiceCasesResult = {
 
 type Dependencies = {
   serviceNowCsm: ServiceNowCsmClient
-  logger: Logger
 }
 
 export class ListServiceCasesService {
   private readonly serviceNowCsm: ServiceNowCsmClient
-  private readonly logger: Logger
 
-  constructor ({ serviceNowCsm, logger }: Dependencies) {
+  constructor ({ serviceNowCsm}: Dependencies) {
     this.serviceNowCsm = serviceNowCsm
-    this.logger = logger
   }
 
   async run (authorizationHeader: string | undefined): Promise<ListServiceCasesResult> {
-    try {
-      const token = extractBearerToken(authorizationHeader)
-      const requestedCpf = extractCpfFromToken(token)
+    const token = extractBearerToken(authorizationHeader)
+    const requestedCpf = extractCpfFromToken(token)
 
-      if (!requestedCpf) {
-        this.logger.warn(
-          {
-            service: 'list-service-cases'
-          },
-          'CPF not found in authentication token'
-        )
-
-        return { result: [] }
-      }
-
-      const sysparmQuery = `opened_by.user_name=${requestedCpf}^ORinternal_user.user_name=${requestedCpf}`
-      const sysparmFields = 'sys_id,number,state,active,short_description,opened_at,sys_updated_on,x_mdpdd_detran_csm_reopen_count,contact_type'
-
-      return await this.serviceNowCsm.getProtocols<ListServiceCasesResult>({
-        sysparm_query: sysparmQuery,
-        sysparm_fields: sysparmFields,
-        sysparm_limit: 50
-      })
-    } catch (error) {
-      this.logger.error(
-        {
-          err: error,
-          service: 'list-service-cases'
-        },
-        'Failed preparing or executing protocols listing'
-      )
-
-      throw error
+    if (!requestedCpf) {
+      return { result: [] }
     }
+
+    const sysparmQuery = `opened_by.user_name=${requestedCpf}^ORinternal_user.user_name=${requestedCpf}`
+    const sysparmFields = 'sys_id,number,state,active,short_description,opened_at,sys_updated_on,x_mdpdd_detran_csm_reopen_count,contact_type'
+
+    return await this.serviceNowCsm.getProtocols<ListServiceCasesResult>({
+      sysparm_query: sysparmQuery,
+      sysparm_fields: sysparmFields,
+      sysparm_limit: 50
+    })
   }
 }
