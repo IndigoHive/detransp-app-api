@@ -53,7 +53,7 @@ export class DetranSpServiceNowLicenciamentoHttp {
         return config
       },
       (error) => {
-        this.logger.error({ error, service: SERVICE_NAME }, 'ServiceNow licenciamento request error')
+        this.logger.error({ err: error?.message, service: SERVICE_NAME }, 'ServiceNow licenciamento request error')
         return Promise.reject(error)
       }
     )
