@@ -1,4 +1,5 @@
 import axios, { type AxiosError, type AxiosInstance } from 'axios'
+import createError from 'http-errors'
 import type { Logger } from 'pino'
 import type { Config } from '../../../types'
 import { sanitizeResponseData } from '../../../utils/token'
@@ -58,7 +59,11 @@ export class DetranSpServiceNowDashboardClient {
           },
           'ServiceNow dashboard error',
         )
-        return Promise.reject(error)
+        const status = error.response?.status ?? 500
+        const message = status === 401
+          ? 'Sessão expirada. Faça login novamente.'
+          : 'Não foi possível carregar os dados do dashboard.'
+        throw createError(status, message, { expose: true })
       },
     )
   }

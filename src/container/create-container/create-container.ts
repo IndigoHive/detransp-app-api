@@ -39,7 +39,7 @@ export function createContainer (
         logger,
       })
     ).scoped(),
-    logger: asFunction(() => pino()).singleton(),
+    logger: asFunction(() => pino({ serializers: { err: pino.stdSerializers.err } })).singleton(),
   })
   container.register(getClientRegistrations())
   container.register(getFlowsRegistrations())
