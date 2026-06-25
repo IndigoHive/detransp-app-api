@@ -15,7 +15,7 @@ export class DetranSpServiceNowDebRestrClient extends DetranSpServiceNowLicencia
   constructor(params: DetranSpServiceNowDebRestrClientParams) {
     super({
       baseURL: new URL(
-        '/api/x_mdpdd_deb_restr/v1/consulta_debitos_restricoes/veiculos',
+        '/api/x_mdpdd_lic_veic/v1/licenciamento/veiculos',
         params.config.serviceNow.api.baseUrl
       ).toString(),
       logger: params.logger,
