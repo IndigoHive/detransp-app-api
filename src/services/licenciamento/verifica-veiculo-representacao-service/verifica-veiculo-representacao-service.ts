@@ -8,7 +8,6 @@ import type {
   VerificacaoVeiculoResult,
 } from '../types'
 import { toVehicleItemFromVerifica } from '../utils'
-import { Logger } from 'pino'
 
 const EMPTY_DEBITS_RESULT = {
   debts: [] as DebitoData[],
@@ -61,6 +60,62 @@ export class VerificaVeiculoRepresentacaoService {
       }
     } catch (err) {
       if (!(err instanceof DetranSpServiceNowLicenciamentoError)) throw err
+
+      if (err.type === 'VeiculoSemCertificadoGNVVigenteError') {
+        const debitosData = await this.fetchDebitos(auth)
+        const multasDetail = debitosData.debts.some(d => d.tipoServico === 7)
+          ? await this.fetchMultas(auth)
+          : {}
+        return {
+          vehicle: {
+            id: auth.renavam,
+            renavam: auth.renavam,
+            plate: auth.placa,
+            title: '',
+            brandModel: '',
+            status: 'VENCIDO',
+            licensingExpirationDate: '',
+          },
+          vigency: 'VENCIDO',
+          isBlocked: false,
+          isGnvBlocked: true,
+          hasMultaForaDoSistema: false,
+          onlyLicensing: false,
+          hasPayableDebts: debitosData.hasPayableDebts,
+          isLicensingOverdue: true,
+          debts: debitosData.debts,
+          result: debitosData.debts,
+          totalDebits: formatCurrency(debitosData.totalDebits),
+          multasDetail,
+        }
+      }
+
+      if (err.type === 'VeiculoComMultaForaDoSistemaError') {
+        const debitosData = await this.fetchDebitos(auth)
+        const multasDetail = await this.fetchMultas(auth)
+        return {
+          vehicle: {
+            id: auth.renavam,
+            renavam: auth.renavam,
+            plate: auth.placa,
+            title: '',
+            brandModel: '',
+            status: 'VENCIDO',
+            licensingExpirationDate: '',
+          },
+          vigency: 'VENCIDO',
+          isBlocked: false,
+          isGnvBlocked: false,
+          hasMultaForaDoSistema: true,
+          onlyLicensing: debitosData.onlyLicensing,
+          hasPayableDebts: debitosData.hasPayableDebts,
+          isLicensingOverdue: true,
+          debts: debitosData.debts,
+          result: debitosData.debts,
+          totalDebits: formatCurrency(debitosData.totalDebits),
+          multasDetail,
+        }
+      }
     }
   }
 
