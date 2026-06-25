@@ -54,6 +54,4 @@ export type VerificacaoVeiculoResult = {
   result: DebitoData[]
   totalDebits: string
   multasDetail: Record<string, ListaMultasData[]>
-  vehicleAttributes?: VehicleAttributes | undefined
-  restrictions?: VehicleRestrictions | undefined
 }

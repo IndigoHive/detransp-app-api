@@ -14,7 +14,7 @@ import { ContainerServices } from '../types/container-services'
 import { Database } from '../../db/pool'
 import { PgFlowRepository } from '../../repositories/pg-flow-repository'
 import { getAuthRegistrations, getFlowsRegistrations, getServicesRegistrations, getDashboardRegistrations, getLicenciamentoRegistrations, getTdvRegistrations } from '../../services'
-import { getClientRegistrations, DetranSpServiceNowLicenciamentoClient, DetranSpServiceNowDebRestrClient } from '../../clients'
+import { getClientRegistrations, DetranSpServiceNowLicenciamentoClient } from '../../clients'
 import { RotaCaixaPostalClient } from '../../clients/rota-caixa-postal'
 import pino, { type Logger } from 'pino'
 export type CreateContainerOptions = {
@@ -31,7 +31,6 @@ export function createContainer (
   container.register({
     config: asValue(config),
     detranSpServiceNowLicenciamentoClient: asClass(DetranSpServiceNowLicenciamentoClient).scoped(),
-    detranSpServiceNowDebRestrClient: asClass(DetranSpServiceNowDebRestrClient).scoped(),
     rotaCaixaPostalClient: asFunction(({ config: cfg, logger }: { config: Config; logger: Logger }) =>
       new RotaCaixaPostalClient({
         baseUrl: cfg.rotaCaixaPostal.baseUrl,

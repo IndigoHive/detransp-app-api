@@ -22,12 +22,12 @@ export function getLicenciamentoRegistrations(): Required<NameAndRegistrationPai
         new ListaVeiculosLicenciamentoService(detranSpServiceNowLicenciamentoClient)
     ).scoped(),
     verificaVeiculoRepresentacaoService: asFunction(
-      ({ detranSpServiceNowLicenciamentoClient, detranSpServiceNowDebRestrClient }) =>
-        new VerificaVeiculoRepresentacaoService(detranSpServiceNowLicenciamentoClient, detranSpServiceNowDebRestrClient)
+      ({ detranSpServiceNowLicenciamentoClient }) =>
+        new VerificaVeiculoRepresentacaoService(detranSpServiceNowLicenciamentoClient)
     ).scoped(),
     verificaVeiculoLicenciamentoService: asFunction(
-      ({ detranSpServiceNowLicenciamentoClient, detranSpServiceNowDebRestrClient }) =>
-        new VerificaVeiculoLicenciamentoService(detranSpServiceNowLicenciamentoClient, detranSpServiceNowDebRestrClient)
+      ({ detranSpServiceNowLicenciamentoClient }) =>
+        new VerificaVeiculoLicenciamentoService(detranSpServiceNowLicenciamentoClient)
     ).scoped(),
     criaQRCodeLicenciamentoService: asFunction(
       ({ detranSpServiceNowLicenciamentoClient }) =>
