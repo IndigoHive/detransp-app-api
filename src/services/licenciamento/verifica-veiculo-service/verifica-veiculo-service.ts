@@ -1,5 +1,4 @@
 import type { DetranSpServiceNowLicenciamentoClient } from '../../../clients/detran-sp-service-now-licenciamento'
-import type { DetranSpServiceNowDebRestrClient } from '../../../clients/detran-sp-service-now-deb-restr'
 import { DetranSpServiceNowLicenciamentoError } from '../../../clients/detran-sp-service-now-licenciamento/errors/detran-sp-service-now-licenciamento-error'
 import type { DebitoData, ListaMultasData, ListaVeiculosVeiculoData } from '../../../clients/detran-sp-service-now-licenciamento/types'
 import { formatCurrency } from '../../../utils/currency'
@@ -15,21 +14,18 @@ import { toVehicleItemFromLista, mapStatus } from '../utils'
 
 export class VerificaVeiculoLicenciamentoService {
   private readonly licenciamentoClient: DetranSpServiceNowLicenciamentoClient
-  private readonly debRestrClient: DetranSpServiceNowDebRestrClient
 
   constructor(
     licenciamentoClient: DetranSpServiceNowLicenciamentoClient,
-    debRestrClient: DetranSpServiceNowDebRestrClient,
   ) {
     this.licenciamentoClient = licenciamentoClient
-    this.debRestrClient = debRestrClient
   }
 
   async run(auth: LicenciamentoVeiculoAuth): Promise<VerificacaoVeiculoResult> {
     const veiculosResult = await this.licenciamentoClient.listaVeiculos(auth)
     const vehicleFromList = (veiculosResult?.result ?? []).find(
       (v: ListaVeiculosVeiculoData) => v.codigoRenavamVeiculo === auth.renavam
-    )
+   )
     const vehicle: VehicleItem | undefined = vehicleFromList ? toVehicleItemFromLista(vehicleFromList) : undefined
 
     let hasMultaForaDoSistema = false
@@ -78,7 +74,6 @@ export class VerificaVeiculoLicenciamentoService {
 
     const debitosData = await this.fetchDebitos(auth)
     const multasDetail = hasMultaForaDoSistema ? await this.fetchMultas(auth) : {}
-    const { vehicleAttributes, restrictions } = await this.fetchDebRestrData(auth)
 
     return {
       vehicle,
@@ -93,8 +88,6 @@ export class VerificaVeiculoLicenciamentoService {
       result: debitosData.debts,
       totalDebits: formatCurrency(debitosData.totalDebits),
       multasDetail,
-      vehicleAttributes,
-      restrictions,
     }
   }
 
@@ -150,35 +143,6 @@ export class VerificaVeiculoLicenciamentoService {
         multasDetail[m.autoInfracao] = [...(multasDetail[m.autoInfracao] ?? []), m]
       }
       return multasDetail
-    } catch (err) {
-      if (!(err instanceof DetranSpServiceNowLicenciamentoError)) throw err
-      return {}
-    }
-  }
-
-  private async fetchDebRestrData(auth: LicenciamentoVeiculoAuth): Promise<{ vehicleAttributes?: VehicleAttributes | undefined; restrictions?: VehicleRestrictions | undefined }> {
-    try {
-      const result = await this.debRestrClient.consultaVeiculo(auth, auth.renavam)
-      const attrs = result?.data?.attributes
-      const meta = result?.data?.meta
-      return {
-        vehicleAttributes: attrs ? {
-          chassi: attrs.chassi,
-          yearFab: attrs.anoFabricacao?.toString(),
-          yearMod: attrs.anoModelo?.toString(),
-          cor: attrs.cor?.descricao,
-          combustivel: attrs.combustivel?.descricao,
-          tipo: attrs.tipo?.descricao,
-        } : undefined,
-        restrictions: meta ? {
-          bloqueioFurtoRoubo: meta.bloqueioFurtoRoubo,
-          restricaoTributaria: meta.restricaoTributaria,
-          restricaoAdministrativa: meta.restricaoAdministrativa,
-          restricaoJudicial: meta.restricaoJudicial,
-          restricaoVeiculoGuinchado: meta.restricaoVeiculoGuinchado,
-          nomeAgente: meta.nomeAgente,
-        } : undefined,
-      }
     } catch (err) {
       if (!(err instanceof DetranSpServiceNowLicenciamentoError)) throw err
       return {}
