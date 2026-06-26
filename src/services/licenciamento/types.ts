@@ -23,24 +23,6 @@ export type VehicleItem = {
   lastLicensing?: string
 }
 
-export type VehicleAttributes = {
-  chassi?: string | undefined
-  yearFab?: string | undefined
-  yearMod?: string | undefined
-  cor?: string | undefined
-  combustivel?: string | undefined
-  tipo?: string | undefined
-}
-
-export type VehicleRestrictions = {
-  bloqueioFurtoRoubo?: string | undefined
-  restricaoTributaria?: string | undefined
-  restricaoAdministrativa?: string | undefined
-  restricaoJudicial?: string | undefined
-  restricaoVeiculoGuinchado?: string | undefined
-  nomeAgente?: string | null | undefined
-}
-
 export type VerificacaoVeiculoResult = {
   vehicle: VehicleItem | null | undefined
   vigency: VehicleStatus

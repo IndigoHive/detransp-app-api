@@ -5,8 +5,6 @@ import { formatCurrency } from '../../../utils/currency'
 import type {
   LicenciamentoVeiculoAuth,
   VehicleItem,
-  VehicleAttributes,
-  VehicleRestrictions,
   VerificacaoVeiculoResult,
   VehicleStatus,
 } from '../types'
