@@ -12,9 +12,10 @@ export class VerificaQRCodeCertidaoService {
     const result = await this.client.verificaQRCodeCertidao(auth, auth.renavam)
     const data = result?.data
     const estadoId = data?.relationships?.estado?.links?.data?.id
+    const estado = estadoId != null ? Number(estadoId) : null
 
     return {
-      estado: estadoId != null ? Number(estadoId) : null,
+      estado: estado != null && Number.isFinite(estado) ? estado : null,
       confirmedDate: data?.attributes?.dataPagamento ?? null,
     }
   }
