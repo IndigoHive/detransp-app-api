@@ -1,3 +1,9 @@
+export type SolicitarVistoriaEmTransitoAnexo = {
+  name: string
+  mimeType: string
+  size: number
+}
+
 export type SolicitarVistoriaEmTransitoInput = {
   nome: string
   cpfOuCnpj: string
@@ -12,6 +18,7 @@ export type SolicitarVistoriaEmTransitoInput = {
   documentoComprovanteRepresentacao?: boolean
   declaracaoLgpd: boolean
   declaracaoRespuestavelSuspensao: boolean
+  anexos?: SolicitarVistoriaEmTransitoAnexo[]
 }
 
 export type SolicitarVistoriaEmTransitoResponse =
