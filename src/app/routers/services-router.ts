@@ -34,14 +34,29 @@ export function servicesRouter (): Router {
   router.post('/solicitar-vistoria-em-transito', upload.any(), async (req, res) => {
     const service = req.scope.resolve('solicitarVistoriaEmTransitoService')
 
-    const input = JSON.parse(req.body.data)
+    let input: Record<string, unknown>
+    const isMultipart = (req.headers['content-type'] ?? '').startsWith('multipart/')
+    if (isMultipart) {
+      if (typeof req.body?.data !== 'string') {
+        res.status(400).json({ error: 'Missing or invalid data field' })
+        return
+      }
+      try {
+        input = JSON.parse(req.body.data)
+      } catch {
+        res.status(400).json({ error: 'Invalid data field' })
+        return
+      }
+    } else {
+      input = req.body
+    }
     const anexos = (req.files as Express.Multer.File[] ?? []).map(file => ({
       name: decodeFileName(file.originalname),
       mimeType: file.mimetype,
       size: file.size,
     }))
 
-    const result = await service.run({ ...input, anexos })
+    const result = await service.run({ ...(input as any), anexos })
 
     res.status(200).json(result)
   })
