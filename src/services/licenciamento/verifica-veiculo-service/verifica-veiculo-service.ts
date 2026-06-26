@@ -63,10 +63,8 @@ export class VerificaVeiculoLicenciamentoService {
 
       if (err.type === 'VeiculoComMultaForaDoSistemaError') {
         hasMultaForaDoSistema = true
-      } else if (err.type === 'FalhaNaOperacaoError') {
-        throw err
       } else {
-        return this.buildResult(vehicle, 'VENCIDO', { isBlocked: true, isGnvBlocked: false, hasMultaForaDoSistema: false, isLicensingOverdue })
+        throw err
       }
     }
 
