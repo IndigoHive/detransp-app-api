@@ -1,4 +1,25 @@
 import { Router } from 'express'
+import multer from 'multer'
+import type { SolicitarVistoriaEmTransitoInput } from '../../services/services/solicitar-vistoria-em-transito'
+
+const upload = multer({ limits: { files: 10, fileSize: 10 * 1024 * 1024 } })
+
+// Duas camadas de corrupção possíveis no nome do arquivo até chegar aqui:
+// 1. O busboy (usado pelo multer) decodifica o header Content-Disposition como latin1 —
+//    nomes enviados em UTF-8 cru (acentos) chegam "mojibake" (ex.: "á" -> "Ã¡").
+// 2. O RN, por sua vez, percent-encoda o nome quando ele tem espaço/acento
+//    (ex.: "Captura%20de%20Tela...") antes de mandar.
+// Corrige as duas e normaliza para NFC (evita "à" como NFD/combining chegar diferente de "à" NFC).
+function decodeFileName (name: string): string {
+  const latin1Repaired = Buffer.from(name, 'latin1').toString('utf8')
+  const candidate = latin1Repaired.includes('�') ? name : latin1Repaired
+
+  try {
+    return decodeURIComponent(candidate).normalize('NFC')
+  } catch {
+    return candidate.normalize('NFC')
+  }
+}
 
 export function servicesRouter (): Router {
   const router = Router()
@@ -11,10 +32,32 @@ export function servicesRouter (): Router {
     res.status(200).json(result)
   })
 
-  router.post('/solicitar-vistoria-em-transito', async (req, res) => {
+  router.post('/solicitar-vistoria-em-transito', upload.any(), async (req, res) => {
     const service = req.scope.resolve('solicitarVistoriaEmTransitoService')
 
-    const result = await service.run(req.body)
+    let input: Omit<SolicitarVistoriaEmTransitoInput, 'anexos'>
+    const isMultipart = (req.headers['content-type'] ?? '').startsWith('multipart/')
+    if (isMultipart) {
+      if (typeof req.body?.data !== 'string') {
+        res.status(400).json({ error: 'Missing or invalid data field' })
+        return
+      }
+      try {
+        input = JSON.parse(req.body.data)
+      } catch {
+        res.status(400).json({ error: 'Invalid data field' })
+        return
+      }
+    } else {
+      input = req.body
+    }
+    const anexos = (req.files as Express.Multer.File[] ?? []).map(file => ({
+      name: decodeFileName(file.originalname),
+      mimeType: file.mimetype,
+      size: file.size,
+    }))
+
+    const result = await service.run({ ...input, anexos })
 
     res.status(200).json(result)
   })
