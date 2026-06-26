@@ -15,7 +15,7 @@ export function debRestrRouter (): Router {
     const renavam = asNonEmptyString(req.params.renavam)
     const placa = asNonEmptyString(req.body?.placa)
     if (!userCpf || !renavam || !placa) {
-      throw BadRequest('Campos obrigatórios ausentes: cabeçalhos Authorization, X-CPF-Usuario e placa no corpo da requisição.')
+      throw BadRequest('Requisição inválida.')
     }
     const service = req.scope.resolve('verificaVeiculoDebRestrService')
     const result = await service.run({ accessToken, userCpf, renavam, placa })
@@ -28,7 +28,7 @@ export function debRestrRouter (): Router {
     const renavam = asNonEmptyString(req.params.renavam)
     const placa = asNonEmptyString(req.body?.placa)
     if (!userCpf || !renavam || !placa) {
-      throw BadRequest('Campos obrigatórios ausentes: cabeçalhos Authorization, X-CPF-Usuario e placa no corpo da requisição.')
+      throw BadRequest('Requisição inválida.')
     }
     const service = req.scope.resolve('consultaTaxaCertidaoService')
     const result = await service.run({ accessToken, userCpf, renavam, placa })
@@ -41,7 +41,7 @@ export function debRestrRouter (): Router {
     const renavam = asNonEmptyString(req.params.renavam)
     const placa = asNonEmptyString(req.body?.placa)
     if (!userCpf || !renavam || !placa) {
-      throw BadRequest('Campos obrigatórios ausentes: cabeçalhos Authorization, X-CPF-Usuario e placa no corpo da requisição.')
+      throw BadRequest('Requisição inválida.')
     }
     const service = req.scope.resolve('criaQRCodeCertidaoService')
     const result = await service.run({ accessToken, userCpf, renavam, placa })
@@ -54,7 +54,7 @@ export function debRestrRouter (): Router {
     const renavam = asNonEmptyString(req.params.renavam)
     const placa = asNonEmptyString(req.query.placa)
     if (!userCpf || !renavam || !placa) {
-      throw BadRequest('Campos obrigatórios ausentes: cabeçalhos Authorization, X-CPF-Usuario e placa na query string.')
+      throw BadRequest('Requisição inválida.')
     }
     const service = req.scope.resolve('verificaQRCodeCertidaoService')
     const result = await service.run({ accessToken, userCpf, renavam, placa })
@@ -67,7 +67,7 @@ export function debRestrRouter (): Router {
     const renavam = asNonEmptyString(req.params.renavam)
     const placa = asNonEmptyString(req.body?.placa)
     if (!userCpf || !renavam || !placa) {
-      throw BadRequest('Campos obrigatórios ausentes: cabeçalhos Authorization, X-CPF-Usuario e placa no corpo da requisição.')
+      throw BadRequest('Requisição inválida.')
     }
     const service = req.scope.resolve('emiteCertidaoService')
     const result = await service.run({ accessToken, userCpf, renavam, placa })
@@ -80,7 +80,7 @@ export function debRestrRouter (): Router {
     const renavam = asNonEmptyString(req.params.renavam)
     const placa = asNonEmptyString(req.query.placa)
     if (!userCpf || !renavam || !placa) {
-      throw BadRequest('Campos obrigatórios ausentes: cabeçalhos Authorization, X-CPF-Usuario e placa na query string.')
+      throw BadRequest('Requisição inválida.')
     }
     const service = req.scope.resolve('buscaDocumentoCertidaoService')
     const result = await service.run({ accessToken, userCpf, renavam, placa })
