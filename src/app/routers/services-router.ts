@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import multer from 'multer'
+import type { SolicitarVistoriaEmTransitoInput } from '../../services/services/solicitar-vistoria-em-transito'
 
 const upload = multer({ limits: { files: 10, fileSize: 10 * 1024 * 1024 } })
 
@@ -34,7 +35,7 @@ export function servicesRouter (): Router {
   router.post('/solicitar-vistoria-em-transito', upload.any(), async (req, res) => {
     const service = req.scope.resolve('solicitarVistoriaEmTransitoService')
 
-    let input: Record<string, unknown>
+    let input: Omit<SolicitarVistoriaEmTransitoInput, 'anexos'>
     const isMultipart = (req.headers['content-type'] ?? '').startsWith('multipart/')
     if (isMultipart) {
       if (typeof req.body?.data !== 'string') {
@@ -56,7 +57,7 @@ export function servicesRouter (): Router {
       size: file.size,
     }))
 
-    const result = await service.run({ ...(input as any), anexos })
+    const result = await service.run({ ...input, anexos })
 
     res.status(200).json(result)
   })
