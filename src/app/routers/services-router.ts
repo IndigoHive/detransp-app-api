@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import multer from 'multer'
 
-const upload = multer()
+const upload = multer({ limits: { files: 10, fileSize: 10 * 1024 * 1024 } })
 
 // Duas camadas de corrupção possíveis no nome do arquivo até chegar aqui:
 // 1. O busboy (usado pelo multer) decodifica o header Content-Disposition como latin1 —
