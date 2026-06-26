@@ -1,5 +1,6 @@
 export * from './auth'
 export * from './dashboard'
+export * from './deb-restr'
 export * from './flows'
 export * from './licenciamento'
 export * from './services'
