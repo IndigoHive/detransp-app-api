@@ -1,4 +1,5 @@
 import type { DetranSpServiceNowTdvClient } from '../../../clients/detran-sp-service-now/tdv'
+import { extractBearerToken, extractCpfFromToken } from '../../../utils/token'
 
 type Dependencies = {
   detranSpServiceNowTdv: DetranSpServiceNowTdvClient
@@ -28,11 +29,15 @@ export class ConsultaDebitosService {
     this.client = detranSpServiceNowTdv
   }
 
-  async run (accessToken: string, input: ConsultaDebitosInput): Promise<ConsultaDebitosResult> {
+  async run (authorizationHeader: string | undefined, input: ConsultaDebitosInput): Promise<ConsultaDebitosResult> {
+    const token = extractBearerToken(authorizationHeader)
+    const cpf = extractCpfFromToken(token)
+    const auth = { token, cpf }
+
     const [tdvResult, debitosResult, pixResult] = await Promise.all([
-      this.client.buscaTdv(accessToken, input.codigoTransferencia),
-      this.client.buscaDebitosTdv(accessToken, input.codigoTransferencia),
-      this.client.buscaPixQrCodeTdv(accessToken, input.codigoTransferencia)
+      this.client.buscaTdv(auth, input.codigoTransferencia),
+      this.client.buscaDebitosTdv(auth, input.codigoTransferencia),
+      this.client.buscaPixQrCodeTdv(auth, input.codigoTransferencia)
     ])
 
     const debitos = debitosResult?.result?.debitos ?? []

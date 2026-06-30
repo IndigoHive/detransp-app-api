@@ -103,9 +103,20 @@ export class RotaVidaClient {
       (response) => response,
       (error: AxiosError) => {
         const meta = this.buildRequestMeta(error.config)
+        const fullUrl = error.config
+          ? `${error.config.baseURL ?? ''}${error.config.url ?? ''}`
+          : 'unknown'
 
         this.logger.error(
-          { ...meta, responseData: error.response?.data, service: SERVICE_NAME, status: error.response?.status },
+          {
+            ...meta,
+            fullUrl,
+            responseData: error.response?.data,
+            service: SERVICE_NAME,
+            status: error.response?.status,
+            errorCode: error.code,
+            errorMessage: error.message,
+          },
           'Rota Vida HTTP error'
         )
 

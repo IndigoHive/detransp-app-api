@@ -1,4 +1,5 @@
 import type { DetranSpServiceNowTdvClient } from '../../../clients/detran-sp-service-now/tdv'
+import { extractBearerToken, extractCpfFromToken } from '../../../utils/token'
 
 type Dependencies = {
   detranSpServiceNowTdv: DetranSpServiceNowTdvClient
@@ -28,8 +29,12 @@ export class ConsultaComprasService {
     this.client = detranSpServiceNowTdv
   }
 
-  async run (accessToken: string, cpf: string): Promise<ConsultaComprasResult> {
-    const result = await this.client.listaTdvs(accessToken, {
+  async run (authorizationHeader: string | undefined): Promise<ConsultaComprasResult> {
+    const token = extractBearerToken(authorizationHeader)
+    const cpf = extractCpfFromToken(token)
+    const auth = { token, cpf }
+
+    const result = await this.client.listaTdvs(auth, {
       ativa: 'true',
       codigoComprador: cpf
     })

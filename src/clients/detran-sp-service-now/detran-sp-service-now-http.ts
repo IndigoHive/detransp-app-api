@@ -7,10 +7,11 @@ const SERVICE_NAME = 'detran-sp-servicenow'
 export type DetranSpServiceNowHttpParams = {
   baseURL: string
   logger: Logger
-  auth: {
-    username: string
-    password: string
-  }
+}
+
+export type DetranSpServiceNowAuth = {
+  token: string
+  cpf: string
 }
 
 export class DetranSpServiceNowHttp {
@@ -22,14 +23,24 @@ export class DetranSpServiceNowHttp {
 
     this.axios = axios.create({
       baseURL: params.baseURL,
-      auth: params.auth,
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json'
       }
     })
 
+
     this.setupInterceptors()
+  }
+
+  protected withAuth (auth: DetranSpServiceNowAuth): AxiosRequestConfig {
+    return {
+      headers: {
+        Authorization: `Bearer ${auth.token}`,
+        'sn-token': auth.token,
+        'X-CPF-Usuario': auth.cpf,
+      }
+    }
   }
 
   private buildRequestMeta (config?: AxiosRequestConfig) {
@@ -71,9 +82,20 @@ export class DetranSpServiceNowHttp {
       (error: AxiosError) => {
         const meta = this.buildRequestMeta(error.config)
         const data = error.response?.data as { error?: { message?: string; detail?: string } } | undefined
+        const fullUrl = error.config
+          ? `${error.config.baseURL ?? ''}${error.config.url ?? ''}`
+          : 'unknown'
 
         this.logger.error(
-          { ...meta, responseData: data, service: SERVICE_NAME, status: error.response?.status },
+          {
+            ...meta,
+            fullUrl,
+            responseData: data,
+            service: SERVICE_NAME,
+            status: error.response?.status,
+            errorCode: error.code,
+            errorMessage: error.message,
+          },
           'ServiceNow HTTP error'
         )
 
