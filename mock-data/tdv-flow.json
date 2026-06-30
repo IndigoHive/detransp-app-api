@@ -496,7 +496,7 @@
                 },
                 {
                   "id": "2",
-                  "icon": "pix",
+                  "icon": "attach-money",
                   "label": "Estou comprando o veículo"
                 }
               ],
@@ -1937,7 +1937,7 @@
             "type": "button",
             "name": null,
             "data": {
-              "icon": "pix",
+              "icon": "attach-money",
               "label": "Pagar com Pix"
             }
           }
@@ -2034,7 +2034,7 @@
             "type": "button",
             "name": null,
             "data": {
-              "icon": "pix",
+              "icon": "attach-money",
               "label": "Pagar com Pix"
             }
           }

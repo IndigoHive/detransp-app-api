@@ -117,13 +117,15 @@ export const config: Config = {
     }
   },
   rotaCaixaPostal: {
-    // Defina ROTA_CAIXA_POSTAL_BASE_URL no .env (ex: https://caixapostal.api.rota.sp.gov.br)
     baseUrl: env.ROTA_CAIXA_POSTAL_BASE_URL || '',
-    // Defina ROTA_CAIXA_POSTAL_APP_TOPIC no .env (ex: detran-sp)
     appTopic: env.ROTA_CAIXA_POSTAL_APP_TOPIC || '',
   },
   security: {
     encryptionKey: env.SESSION_ENCRYPTION_KEY || '',
+  },
+  rotaVida: {
+    vidaBaseUrl: env.ROTA_VIDA_BASE_URL || '',
+    arquivosBaseUrl: env.ROTA_ARQUIVOS_BASE_URL || '',
   },
   logging: {
     level: env.LOG_LEVEL || DEFAULT_LOG_LEVEL

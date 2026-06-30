@@ -50,6 +50,10 @@ export type Config = {
   security: {
     encryptionKey: string
   }
+  rotaVida: {
+    vidaBaseUrl: string
+    arquivosBaseUrl: string
+  }
   logging: {
     level: string
   }

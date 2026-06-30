@@ -83,5 +83,12 @@ export function tdvRouter (): Router {
     res.status(200).json(result)
   })
 
+  // Prova de Vida - biometric facial verification
+  router.post('/prova-vida', async (req, res) => {
+    const service = req.scope.resolve('provaVidaService')
+    const result = await service.run(req.headers.authorization, req.body)
+    res.status(200).json(result)
+  })
+
   return router
 }
