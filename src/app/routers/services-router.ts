@@ -19,6 +19,14 @@ export function servicesRouter (): Router {
     res.status(200).json(result)
   })
 
+  router.post('/validar-curso-teorico-da-cnh-do-brasil-no-detran-sp', async (req, res) => {
+    const service = req.scope.resolve('validarCursoTeoricoDaCNHDoBrasilNoDetranSpService')
+
+    const result = await service.run(req.body)
+
+    res.status(200).json(result)
+  })
+
   router.get('/protocols', async (req, res) => {
     const service = req.scope.resolve('listServiceCasesService')
 

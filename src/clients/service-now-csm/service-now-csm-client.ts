@@ -85,7 +85,7 @@ export class ServiceNowCsmClient {
 
   async submitProducer<T = unknown> (catalogItemId: string, payload: unknown): Promise<T> {
     const response = await this.axios.post<T>(
-      `/sn_sc/v1/servicecatalog/items/${catalogItemId}/submit_producer`,
+      `/api/sn_sc/v1/servicecatalog/items/${catalogItemId}/submit_producer`,
       payload
     )
 
