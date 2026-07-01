@@ -75,7 +75,7 @@ export class ValidarCursoTeoricoDaCNHDoBrasilNoDetranSpService {
         contact_type: 'cidadao',
         requester_proof_of_representation: input.representation ? 'true' : 'false',
         requester_name: input.nome,
-        'IO:b82641dd47f9cf501405ae88036d43d6': "true",
+        'IO:b82641dd47f9cf501405ae88036d43d6': 'true',
         requester: 'true',
         deployed_item: '0a6d000147f53a9006482a54f26d431b',
         cadastro_descadastro: 'Cadastro',
