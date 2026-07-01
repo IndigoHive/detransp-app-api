@@ -1,3 +1,4 @@
+import { randomUUID } from 'crypto'
 import axios, { type AxiosError, type AxiosInstance, type AxiosRequestConfig } from 'axios'
 import createError from 'http-errors'
 import type { Logger } from 'pino'
@@ -7,7 +8,6 @@ const SERVICE_NAME = 'rota-vida'
 export type RotaVidaClientParams = {
   vidaBaseUrl: string
   arquivosBaseUrl: string
-  uploadPathId: string
   logger: Logger
 }
 
@@ -69,11 +69,9 @@ export type MatchBiometriaResult = {
 export class RotaVidaClient {
   private readonly vidaAxios: AxiosInstance
   private readonly arquivosAxios: AxiosInstance
-  private readonly uploadPathId: string
   private readonly logger: Logger
 
-  constructor ({ vidaBaseUrl, arquivosBaseUrl, uploadPathId, logger }: RotaVidaClientParams) {
-    this.uploadPathId = uploadPathId
+  constructor ({ vidaBaseUrl, arquivosBaseUrl, logger }: RotaVidaClientParams) {
     this.logger = logger
 
     this.vidaAxios = axios.create({
@@ -135,7 +133,7 @@ export class RotaVidaClient {
     userAgent: string,
     body: CriarProvaInput
   ): Promise<CriarProvaResult> {
-    const response = await this.vidaAxios.post<CriarProvaResult>('/vida/prova', body, {
+    const response = await this.vidaAxios.post<CriarProvaResult>('/prova/v3', body, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
         'X-User-AppSP': integrityToken,
@@ -148,18 +146,21 @@ export class RotaVidaClient {
   async uploadFoto (
     accessToken: string,
     cpf: string,
+    userAgent: string,
     imageBuffer: Buffer
   ): Promise<UploadFotoResult> {
+    const uploadId = randomUUID()
     const response = await this.arquivosAxios.post<UploadFotoResult>(
-      `/ps/${this.uploadPathId}`,
+      `/ds/${uploadId}`,
       imageBuffer,
       {
         headers: {
           'X-TraceId-SP': '10',
           CPF: cpf,
-          'Content-Type': 'image/jpeg',
+          'Content-Type': 'image/png',
           Accept: 'application/json',
-          Authorization: `Bearer ${accessToken}`
+          Authorization: `Bearer ${accessToken}`,
+          'User-Agent': userAgent
         }
       }
     )
@@ -173,7 +174,7 @@ export class RotaVidaClient {
     idProva: string,
     body: MatchBiometriaInput
   ): Promise<MatchBiometriaResult> {
-    const response = await this.vidaAxios.post<MatchBiometriaResult>('/vida/match/v3', body, {
+    const response = await this.vidaAxios.post<MatchBiometriaResult>('/match/v3', body, {
       headers: {
         idProva,
         Authorization: `Bearer ${accessToken}`,

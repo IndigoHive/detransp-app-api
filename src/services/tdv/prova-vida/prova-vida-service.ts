@@ -30,7 +30,7 @@ export class ProvaVidaService {
     }
 
     const integrityToken = token
-    const userAgent = 'Android/appsp/1.0'
+    const userAgent = 'WhatsApp/appsp/1.0.0'
 
     const prova = await this.client.criarProva(token, integrityToken, userAgent, {
       tipo: 1,
@@ -47,7 +47,7 @@ export class ProvaVidaService {
 
     const imageBuffer = Buffer.from(input.imageBase64, 'base64')
 
-    const upload = await this.client.uploadFoto(token, cpf, imageBuffer)
+    const upload = await this.client.uploadFoto(token, cpf, userAgent, imageBuffer)
 
     const match = await this.client.matchBiometria(token, integrityToken, userAgent, prova.id, {
       biometria: [{
