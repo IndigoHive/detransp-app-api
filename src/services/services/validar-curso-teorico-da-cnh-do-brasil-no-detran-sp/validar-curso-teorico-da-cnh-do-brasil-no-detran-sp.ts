@@ -35,7 +35,7 @@ export class ValidarCursoTeoricoDaCNHDoBrasilNoDetranSpService {
         protocol: result.result.number,
       }
     } catch (error) {
-      console.error('Erro ao enviar payload para o ServiceNow CSM:', error)
+      // Error details are logged by ServiceNowCsmClient interceptors
       return {
         showSnackbar: {
           variant: 'error',
