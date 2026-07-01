@@ -1,4 +1,5 @@
 import axios, { type AxiosInstance, type AxiosRequestConfig } from 'axios'
+import createError from 'http-errors'
 import type { Logger } from 'pino'
 import type { Config } from '../../types'
 
@@ -100,17 +101,11 @@ export class ServiceNowCsmClient {
 
       return response.data
     } catch (error) {
-      this.logger.error(
-        {
-          err: error,
-          endpoint: '/api/now/table/x_mdpdd_detran_srv_service_case',
-          params,
-          service: SERVICE_NAME
-        },
-        'Failed to fetch protocols from ServiceNow CSM'
+      throw createError(
+        (axios.isAxiosError(error) ? error.response?.status : undefined) ?? 500,
+        'Não foi possível completar a operação no ServiceNow CSM.',
+        { expose: true }
       )
-
-      throw error
     }
   }
 
@@ -126,17 +121,11 @@ export class ServiceNowCsmClient {
 
       return response.data
     } catch (error) {
-      this.logger.error(
-        {
-          err: error,
-          endpoint: `/api/now/table/x_mdpdd_detran_srv_service_case/${protocolId}`,
-          params,
-          service: SERVICE_NAME
-        },
-        'Failed to fetch protocol detail from ServiceNow CSM'
+      throw createError(
+        (axios.isAxiosError(error) ? error.response?.status : undefined) ?? 500,
+        'Não foi possível completar a operação no ServiceNow CSM.',
+        { expose: true }
       )
-
-      throw error
     }
   }
 }

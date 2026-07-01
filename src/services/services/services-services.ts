@@ -1,13 +1,12 @@
 import { asClass, type NameAndRegistrationPair } from 'awilix'
 import { GetVehiclesService } from './get-vehicles-service'
-import { SolicitarVistoriaEmTransitoService } from './solicitar-vistoria-em-transito'
+import { SolicitarVistoriaEmTransitoMockService } from './solicitar-vistoria-em-transito'
 import { ListServiceCasesService } from './list-service-cases-service/list-service-cases-service'
 import { GetServiceCaseDetailService } from './get-service-case-detail-service/get-service-case-detail-service'
 import { ValidarCursoTeoricoDaCNHDoBrasilNoDetranSpService } from './validar-curso-teorico-da-cnh-do-brasil-no-detran-sp'
 
 export type ServicesServices = {
   getVehiclesService: GetVehiclesService
-  solicitarVistoriaEmTransitoService: SolicitarVistoriaEmTransitoService
   validarCursoTeoricoDaCNHDoBrasilNoDetranSpService: ValidarCursoTeoricoDaCNHDoBrasilNoDetranSpService
   listServiceCasesService: ListServiceCasesService
   getServiceCaseDetailService: GetServiceCaseDetailService
@@ -16,7 +15,6 @@ export type ServicesServices = {
 export function getServicesRegistrations (): Required<NameAndRegistrationPair<ServicesServices>> {
   return {
     getVehiclesService: asClass(GetVehiclesService).scoped(),
-    solicitarVistoriaEmTransitoService: asClass(SolicitarVistoriaEmTransitoService).scoped(),
     validarCursoTeoricoDaCNHDoBrasilNoDetranSpService: asClass(ValidarCursoTeoricoDaCNHDoBrasilNoDetranSpService).scoped(),
     listServiceCasesService: asClass(ListServiceCasesService).scoped(),
     getServiceCaseDetailService: asClass(GetServiceCaseDetailService).scoped(),

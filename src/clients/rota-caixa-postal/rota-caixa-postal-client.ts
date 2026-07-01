@@ -1,5 +1,8 @@
-import axios, { type AxiosInstance } from 'axios'
+import axios, { type AxiosError, type AxiosInstance, type AxiosRequestConfig } from 'axios'
+import createError from 'http-errors'
 import type { Logger } from 'pino'
+
+const SERVICE_NAME = 'rota-caixa-postal'
 
 export type CaixaPostalClientParams = {
   baseUrl: string
@@ -54,10 +57,42 @@ export class RotaCaixaPostalClient {
         'User-Agent': 'DetranApp/1.0',
       },
     })
+
+    this.setupInterceptors()
   }
 
   private withAuth(accessToken: string) {
     return { headers: { Authorization: `Bearer ${accessToken}` } }
+  }
+
+  private buildRequestMeta(config?: AxiosRequestConfig) {
+    if (!config) return undefined
+
+    return {
+      baseURL: config.baseURL,
+      method: config.method,
+      url: config.url,
+    }
+  }
+
+  private setupInterceptors() {
+    this.axios.interceptors.response.use(
+      (response) => response,
+      (error: AxiosError) => {
+        const meta = this.buildRequestMeta(error.config)
+
+        this.logger.error(
+          { ...meta, responseData: error.response?.data, service: SERVICE_NAME, status: error.response?.status },
+          'Rota Caixa Postal HTTP error',
+        )
+
+        const message = error.response?.status === 401 || error.response?.status === 403
+          ? 'Sessão expirada. Faça login novamente.'
+          : 'Tivemos um problema ao processar sua solicitação.'
+
+        throw createError(error.response?.status ?? 502, message, { expose: true })
+      },
+    )
   }
 
   async registrarDispositivo(
