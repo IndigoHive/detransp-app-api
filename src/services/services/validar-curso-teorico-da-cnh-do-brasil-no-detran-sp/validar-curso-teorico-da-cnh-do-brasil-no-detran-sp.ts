@@ -32,7 +32,7 @@ export class ValidarCursoTeoricoDaCNHDoBrasilNoDetranSpService {
       )
 
       return {
-        protocol: result.result.number ,
+        protocol: result.result.number,
       }
     } catch (error) {
       console.error('Erro ao enviar payload para o ServiceNow CSM:', error)
