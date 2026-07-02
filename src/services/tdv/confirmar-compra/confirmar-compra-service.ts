@@ -1,6 +1,5 @@
 import type { DetranSpServiceNowTdvClient } from '../../../clients/detran-sp-service-now/tdv'
 import { CodigoEstadoTDV } from '../../../clients/detran-sp-service-now/tdv/types'
-import { extractBearerToken } from '../../../utils/token'
 
 type Dependencies = {
   detranSpServiceNowTdv: DetranSpServiceNowTdvClient
@@ -36,27 +35,21 @@ export class ConfirmarCompraService {
     this.client = detranSpServiceNowTdv
   }
 
-  async run (authorizationHeader: string | undefined, input: ConfirmarCompraInput): Promise<ConfirmarCompraResult> {
-    const token = extractBearerToken(authorizationHeader)
-
-    // Advance to state 4 (INTENCAO_COMPRA_CONFIRMADA)
-    await this.client.atualizaTdv(token, input.codigoTransferencia, {
+  async run (accessToken: string, input: ConfirmarCompraInput): Promise<ConfirmarCompraResult> {
+    await this.client.atualizaTdv(accessToken, input.codigoTransferencia, {
       estado: CodigoEstadoTDV.INTENCAO_COMPRA_CONFIRMADA,
       codigoProvaVidaComprador: input.codigoProvaVidaComprador,
-      tipoProvaVidaComprador: '2' // LIVENESS
+      tipoProvaVidaComprador: '2'
     })
 
-    // Advance to state 5 (AUTODECLARACAO_RESIDENCIA_CONFIRMADA)
-    // This prepares the TDV for ITI signing (state 5 → 6 by ITI callback)
-    await this.client.atualizaTdv(token, input.codigoTransferencia, {
+    await this.client.atualizaTdv(accessToken, input.codigoTransferencia, {
       estado: CodigoEstadoTDV.AUTODECLARACAO_RESIDENCIA_CONFIRMADA,
       codigoProvaVidaComprador: input.codigoProvaVidaComprador,
       tipoProvaVidaComprador: '2',
       confirmacaoAutodeclaracaoResidenciaComprador: 'true'
     })
 
-    // Fetch the updated TDV to get buyer and vehicle data
-    const tdv = await this.client.buscaTdv(token, input.codigoTransferencia)
+    const tdv = await this.client.buscaTdv(accessToken, input.codigoTransferencia)
     const data = tdv?.result
 
     const enderecoComprador = [

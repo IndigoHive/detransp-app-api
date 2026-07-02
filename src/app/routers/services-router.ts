@@ -63,9 +63,10 @@ export function servicesRouter (): Router {
   })
 
   router.get('/protocols', async (req, res) => {
+    const { cpf } = req.session!
     const service = req.scope.resolve('listServiceCasesService')
 
-    const result = await service.run(req.headers.authorization)
+    const result = await service.run(cpf)
 
     res.status(200).json(result)
   })

@@ -1,6 +1,5 @@
 import { Router } from 'express'
 import { BadRequest } from 'http-errors'
-import { extractBearerToken, extractCpfFromToken } from '../../utils/token'
 
 function asNonEmptyString (value: unknown): string | undefined {
   return typeof value === 'string' && value.trim() ? value : undefined
@@ -10,8 +9,7 @@ export function debRestrRouter (): Router {
   const router = Router()
 
   router.post('/veiculos/:renavam/verificar', async (req, res) => {
-    const accessToken = extractBearerToken(req.headers.authorization)
-    const userCpf = asNonEmptyString(req.headers['x-cpf-usuario']) ?? extractCpfFromToken(accessToken)
+    const { accessToken, cpf: userCpf } = req.session!
     const renavam = asNonEmptyString(req.params.renavam)
     const placa = asNonEmptyString(req.body?.placa)
     if (!userCpf || !renavam || !placa) {
@@ -23,8 +21,7 @@ export function debRestrRouter (): Router {
   })
 
   router.post('/veiculos/:renavam/certidao/taxa', async (req, res) => {
-    const accessToken = extractBearerToken(req.headers.authorization)
-    const userCpf = asNonEmptyString(req.headers['x-cpf-usuario']) ?? extractCpfFromToken(accessToken)
+    const { accessToken, cpf: userCpf } = req.session!
     const renavam = asNonEmptyString(req.params.renavam)
     const placa = asNonEmptyString(req.body?.placa)
     if (!userCpf || !renavam || !placa) {
@@ -36,8 +33,7 @@ export function debRestrRouter (): Router {
   })
 
   router.post('/veiculos/:renavam/certidao/qr-code', async (req, res) => {
-    const accessToken = extractBearerToken(req.headers.authorization)
-    const userCpf = asNonEmptyString(req.headers['x-cpf-usuario']) ?? extractCpfFromToken(accessToken)
+    const { accessToken, cpf: userCpf } = req.session!
     const renavam = asNonEmptyString(req.params.renavam)
     const placa = asNonEmptyString(req.body?.placa)
     if (!userCpf || !renavam || !placa) {
@@ -49,8 +45,7 @@ export function debRestrRouter (): Router {
   })
 
   router.get('/veiculos/:renavam/certidao/qr-code', async (req, res) => {
-    const accessToken = extractBearerToken(req.headers.authorization)
-    const userCpf = asNonEmptyString(req.headers['x-cpf-usuario']) ?? extractCpfFromToken(accessToken)
+    const { accessToken, cpf: userCpf } = req.session!
     const renavam = asNonEmptyString(req.params.renavam)
     const placa = asNonEmptyString(req.query.placa)
     if (!userCpf || !renavam || !placa) {
@@ -62,8 +57,7 @@ export function debRestrRouter (): Router {
   })
 
   router.post('/veiculos/:renavam/certidao/documento', async (req, res) => {
-    const accessToken = extractBearerToken(req.headers.authorization)
-    const userCpf = asNonEmptyString(req.headers['x-cpf-usuario']) ?? extractCpfFromToken(accessToken)
+    const { accessToken, cpf: userCpf } = req.session!
     const renavam = asNonEmptyString(req.params.renavam)
     const placa = asNonEmptyString(req.body?.placa)
     if (!userCpf || !renavam || !placa) {
@@ -75,8 +69,7 @@ export function debRestrRouter (): Router {
   })
 
   router.get('/veiculos/:renavam/certidao/documento', async (req, res) => {
-    const accessToken = extractBearerToken(req.headers.authorization)
-    const userCpf = asNonEmptyString(req.headers['x-cpf-usuario']) ?? extractCpfFromToken(accessToken)
+    const { accessToken, cpf: userCpf } = req.session!
     const renavam = asNonEmptyString(req.params.renavam)
     const placa = asNonEmptyString(req.query.placa)
     if (!userCpf || !renavam || !placa) {

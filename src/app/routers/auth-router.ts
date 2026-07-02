@@ -1,6 +1,8 @@
 import { Router } from 'express'
 import { BadRequest, Unauthorized } from 'http-errors'
 import type { Platform } from '../../types'
+import { extractCpfFromToken } from '../../utils/token'
+import { sessionAuth } from '../middlewares/session-auth'
 
 const VALID_PLATFORMS: Platform[] = ['android', 'ios']
 
@@ -9,6 +11,14 @@ function asPlatform (value: unknown): Platform | null {
     return value as Platform
   }
   return null
+}
+
+function asNonEmptyString (value: unknown): string | undefined {
+  return typeof value === 'string' && value.trim() ? value : undefined
+}
+
+function asOptionalString (value: unknown): string | undefined {
+  return typeof value === 'string' ? value : undefined
 }
 
 export function authRouter (): Router {
@@ -42,30 +52,55 @@ export function authRouter (): Router {
       throw BadRequest('Os campos code e codeVerifier são obrigatórios.')
     }
 
-    const service = req.scope.resolve('exchangeGovBrAuthorizationCodeService')
+    const exchangeService = req.scope.resolve('exchangeGovBrAuthorizationCodeService')
 
-    const result = await service.run({
+    const tokenResult = await exchangeService.run({
       platform,
       code,
       codeVerifier,
       ...(redirectUri && { redirectUri }),
     })
 
-    res.status(200).json(result)
+    const userInfoService = req.scope.resolve('getGovBrUserInfoService')
+    const { data: userInfo } = await userInfoService.run({ accessToken: tokenResult.accessToken })
+
+    const cpf = extractCpfFromToken(tokenResult.accessToken)
+
+    const createSessionService = req.scope.resolve('createSessionService')
+    const { sessionId } = await createSessionService.run({
+      platform,
+      accessToken: tokenResult.accessToken,
+      refreshToken: tokenResult.refreshToken ?? null,
+      expiresIn: tokenResult.expiresIn ?? 3600,
+      cpf,
+      userInfo,
+    })
+
+    res.status(200).json({ sessionId })
   })
 
-  router.get('/govbr/userinfo', async (req, res) => {
-    const accessToken =
-      getBearerToken(req.headers.authorization) ||
-      asOptionalString(req.query.accessToken)
+  router.get('/govbr/userinfo', sessionAuth(), (req, res) => {
+    if (!req.session) {
+      throw Unauthorized('Sessão não encontrada.')
+    }
+    res.status(200).json({ data: req.session.userInfo })
+  })
 
-    if (!accessToken) {
-      throw Unauthorized('Token de acesso ausente. Use Authorization: Bearer <token>.')
+  router.post('/govbr/logout', sessionAuth(), async (req, res) => {
+    if (!req.session) {
+      throw Unauthorized('Sessão não encontrada.')
     }
 
-    const service = req.scope.resolve('getGovBrUserInfoService')
-    const result = await service.run({ accessToken })
-    res.status(200).json(result)
+    const { id: sessionId, platform, refreshToken } = req.session
+    const service = req.scope.resolve('deleteSessionService')
+
+    await service.run({
+      sessionId,
+      platform: platform as Platform,
+      refreshToken,
+    })
+
+    res.status(204).end()
   })
 
   router.get('/dev-callback', (req, res) => {
@@ -94,18 +129,4 @@ export function authRouter (): Router {
   })
 
   return router
-}
-
-function asNonEmptyString (value: unknown): string | undefined {
-  return typeof value === 'string' && value.trim() ? value : undefined
-}
-
-function asOptionalString (value: unknown): string | undefined {
-  return typeof value === 'string' ? value : undefined
-}
-
-function getBearerToken (authorizationHeader: string | undefined): string | undefined {
-  if (!authorizationHeader) return undefined
-  const [scheme, token] = authorizationHeader.split(' ')
-  return scheme?.toLowerCase() === 'bearer' && token ? token : undefined
 }

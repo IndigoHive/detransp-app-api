@@ -1,5 +1,4 @@
 import type { DetranSpServiceNowTdvClient } from '../../../clients/detran-sp-service-now/tdv'
-import { extractBearerToken } from '../../../utils/token'
 
 type Dependencies = {
   detranSpServiceNowTdv: DetranSpServiceNowTdvClient
@@ -25,24 +24,19 @@ export class ValidacaoVendaService {
     this.client = detranSpServiceNowTdv
   }
 
-  async run (authorizationHeader: string | undefined, input: ValidacaoVendaInput): Promise<ValidacaoVendaResult> {
-    const token = extractBearerToken(authorizationHeader)
-
-    // Fetch vehicle data to get municipality and plate type
-    const veiculosResult = await this.client.listaVeiculosProprietario(token)
+  async run (accessToken: string, input: ValidacaoVendaInput): Promise<ValidacaoVendaResult> {
+    const veiculosResult = await this.client.listaVeiculosProprietario(accessToken)
     const veiculo = veiculosResult?.result?.find(v => v.placa === input.placaVeiculo)
 
     if (!veiculo) {
       return { cidadesDiferentes: false }
     }
 
-    // If plate is already Mercosul, no city restriction applies
     if (veiculo.placaMercosul === 'true') {
       return { cidadesDiferentes: false }
     }
 
-    // Check buyer's municipality from CEP
-    const enderecoResult = await this.client.buscaEndereco(token, input.cepComprador)
+    const enderecoResult = await this.client.buscaEndereco(accessToken, input.cepComprador)
     const buyerMunicipio = enderecoResult?.result?.codigoMunicipio?.toString()
     const vehicleMunicipio = veiculo.codigoMunicipio
 
