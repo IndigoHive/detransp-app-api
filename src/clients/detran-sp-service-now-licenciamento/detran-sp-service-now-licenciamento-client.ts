@@ -7,6 +7,7 @@ import {
 } from './detran-sp-service-now-licenciamento-http'
 import type {
   BuscaCRLVeResult,
+  BuscaVeiculoResult,
   CriaQRCodeResult,
   ListaDebitosVeiculoResult,
   ListaMultasResult,
@@ -60,6 +61,13 @@ export class DetranSpServiceNowLicenciamentoClient extends DetranSpServiceNowLic
     renavam: Renavam
   ): Promise<ListaMultasResult> {
     return (await this.axios.get(`/${renavam}/multas`, this.withAuth(auth))).data
+  }
+
+  async buscaVeiculo (
+    auth: DetranSpServiceNowClientAuthWithVeiculo,
+    renavam: Renavam
+  ): Promise<BuscaVeiculoResult> {
+    return (await this.axios.get(`/${renavam}`, this.withAuth(auth))).data
   }
 
   async verificaVeiculo (

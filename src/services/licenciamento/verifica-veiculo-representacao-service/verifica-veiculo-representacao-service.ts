@@ -1,9 +1,10 @@
 import type { DetranSpServiceNowLicenciamentoClient } from '../../../clients/detran-sp-service-now-licenciamento'
 import { DetranSpServiceNowLicenciamentoError } from '../../../clients/detran-sp-service-now-licenciamento/errors/detran-sp-service-now-licenciamento-error'
-import type { DebitoData, ListaMultasData } from '../../../clients/detran-sp-service-now-licenciamento/types'
+import type { DebitoData } from '../../../clients/detran-sp-service-now-licenciamento/types'
 import { formatCurrency } from '../../../utils/currency'
 import type {
   LicenciamentoVeiculoAuth,
+  MultasDetail,
   VehicleItem,
   VerificacaoVeiculoResult,
 } from '../types'
@@ -14,7 +15,6 @@ const EMPTY_DEBITS_RESULT = {
   totalDebits: 0,
   onlyLicensing: false,
   hasPayableDebts: false,
-  multasDetail: {} as Record<string, ListaMultasData[]>,
 }
 
 export class VerificaVeiculoRepresentacaoService {
@@ -28,21 +28,23 @@ export class VerificaVeiculoRepresentacaoService {
   }
 
   async run(auth: LicenciamentoVeiculoAuth): Promise<VerificacaoVeiculoResult | undefined> {
+    const vehicleBase = await this.fetchVehicleBase(auth)
+
     try {
       const verifyResult = await this.licenciamentoClient.verificaVeiculo(auth, auth.renavam)
       const data = verifyResult?.result
       if (!data) {
-        return this.buildResult(null, 'VENCIDO', { isBlocked: false, isGnvBlocked: false, hasMultaForaDoSistema: false })
+        return this.buildResult(vehicleBase ?? null, 'VENCIDO', { isBlocked: false, isGnvBlocked: false, hasMultaForaDoSistema: false })
       }
 
-      const vehicle = toVehicleItemFromVerifica(data)
+      const vehicle = vehicleBase ?? toVehicleItemFromVerifica(data)
       const vigency = vehicle.status
       const isLicensingOverdue = vigency !== 'REGULAR'
 
       const debitosData = await this.fetchDebitos(auth)
       const multasDetail = debitosData.debts.some(d => d.tipoServico === 7)
         ? await this.fetchMultas(auth)
-        : {}
+        : { items: [], total: formatCurrency(0) }
 
       return {
         vehicle,
@@ -63,11 +65,9 @@ export class VerificaVeiculoRepresentacaoService {
 
       if (err.type === 'VeiculoSemCertificadoGNVVigenteError') {
         const debitosData = await this.fetchDebitos(auth)
-        const multasDetail = debitosData.debts.some(d => d.tipoServico === 7)
-          ? await this.fetchMultas(auth)
-          : {}
+        const multasDetail = await this.fetchMultas(auth)
         return {
-          vehicle: {
+          vehicle: vehicleBase ?? {
             id: auth.renavam,
             renavam: auth.renavam,
             plate: auth.placa,
@@ -94,7 +94,7 @@ export class VerificaVeiculoRepresentacaoService {
         const debitosData = await this.fetchDebitos(auth)
         const multasDetail = await this.fetchMultas(auth)
         return {
-          vehicle: {
+          vehicle: vehicleBase ?? {
             id: auth.renavam,
             renavam: auth.renavam,
             plate: auth.placa,
@@ -119,6 +119,16 @@ export class VerificaVeiculoRepresentacaoService {
     }
   }
 
+  private async fetchVehicleBase(auth: LicenciamentoVeiculoAuth): Promise<VehicleItem | null> {
+    try {
+      const result = await this.licenciamentoClient.buscaVeiculo(auth, auth.renavam)
+      const data = result?.result
+      return data ? toVehicleItemFromVerifica(data) : null
+    } catch {
+      return null
+    }
+  }
+
   private buildResult(
     vehicle: VehicleItem | null,
     vigency: VerificacaoVeiculoResult['vigency'],
@@ -134,7 +144,7 @@ export class VerificaVeiculoRepresentacaoService {
       debts: EMPTY_DEBITS_RESULT.debts,
       result: EMPTY_DEBITS_RESULT.debts,
       totalDebits: formatCurrency(0),
-      multasDetail: {},
+      multasDetail: { items: [], total: formatCurrency(0) },
     }
   }
 
@@ -154,17 +164,17 @@ export class VerificaVeiculoRepresentacaoService {
     }
   }
 
-  private async fetchMultas(auth: LicenciamentoVeiculoAuth): Promise<Record<string, ListaMultasData[]>> {
+  private async fetchMultas(auth: LicenciamentoVeiculoAuth): Promise<MultasDetail> {
     try {
       const result = await this.licenciamentoClient.listaMultas(auth, auth.renavam)
-      const multasDetail: Record<string, ListaMultasData[]> = {}
-      for (const m of result?.result ?? []) {
-        multasDetail[m.autoInfracao] = [...(multasDetail[m.autoInfracao] ?? []), m]
+      const items = result?.result ?? []
+      return {
+        items,
+        total: formatCurrency(items.reduce((sum, m) => sum + (m.valor ?? 0), 0)),
       }
-      return multasDetail
     } catch (err) {
       if (!(err instanceof DetranSpServiceNowLicenciamentoError)) throw err
-      return {}
+      return { items: [], total: formatCurrency(0) }
     }
   }
 }
