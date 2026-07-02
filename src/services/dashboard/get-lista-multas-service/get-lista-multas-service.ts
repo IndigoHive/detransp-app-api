@@ -1,5 +1,4 @@
 import type { DetranSpServiceNowDashboardClient } from '../../../clients'
-import { extractBearerToken, extractCpfFromToken } from '../../../utils/token'
 
 type ServiceNowListaMultasResponse = {
   included: {
@@ -16,10 +15,8 @@ type ServiceNowListaMultasResponse = {
 export class GetListaMultasService {
   constructor(private dashboardClient: DetranSpServiceNowDashboardClient) {}
 
-  async run(authorizationHeader: string | undefined) {
-    const token = extractBearerToken(authorizationHeader)
-    const cpf = extractCpfFromToken(token)
-    const raw = await this.dashboardClient.get<ServiceNowListaMultasResponse>('listaMultas', token, cpf, { cpf, ultimosmeses: true })
+  async run(accessToken: string, cpf: string) {
+    const raw = await this.dashboardClient.get<ServiceNowListaMultasResponse>('listaMultas', accessToken, cpf, { cpf, ultimosmeses: true })
     const multas = (raw.included ?? []).map((item) => ({
       auto: item.id,
       placa: item.attributes.placa,

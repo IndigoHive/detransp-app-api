@@ -1,6 +1,5 @@
 import type { DetranSpServiceNowTdvClient } from '../../../clients/detran-sp-service-now/tdv'
 import { CodigoEstadoTDV } from '../../../clients/detran-sp-service-now/tdv/types'
-import { extractBearerToken, extractCpfFromToken } from '../../../utils/token'
 
 type Dependencies = {
   detranSpServiceNowTdv: DetranSpServiceNowTdvClient
@@ -39,12 +38,8 @@ export class VerificarEstadoTdvService {
     this.client = detranSpServiceNowTdv
   }
 
-  async run (authorizationHeader: string | undefined): Promise<VerificarEstadoTdvResult> {
-    const token = extractBearerToken(authorizationHeader)
-    const cpf = extractCpfFromToken(token)
-
-    // Check if user has active TDVs as seller
-    const tdvsAsVendedor = await this.client.listaTdvs(token, {
+  async run (accessToken: string, cpf: string): Promise<VerificarEstadoTdvResult> {
+    const tdvsAsVendedor = await this.client.listaTdvs(accessToken, {
       ativa: 'true',
       codigoVendedor: cpf
     })
@@ -56,10 +51,9 @@ export class VerificarEstadoTdvService {
     if (activeSeller) {
       const estado = activeSeller.estado
 
-      // Seller needs to sign (buyer already signed)
       if (estado === CodigoEstadoTDV.ATPVE_ASSINADA_COMPRADOR) {
         const codigo = activeSeller.codigoTransferenciaVeiculo ?? ''
-        const tdvDetails = await this.client.buscaTdv(token, codigo)
+        const tdvDetails = await this.client.buscaTdv(accessToken, codigo)
         const data = tdvDetails?.result
 
         return {
@@ -82,8 +76,7 @@ export class VerificarEstadoTdvService {
       }
     }
 
-    // Check if user has active TDVs as buyer
-    const tdvsAsComprador = await this.client.listaTdvs(token, {
+    const tdvsAsComprador = await this.client.listaTdvs(accessToken, {
       ativa: 'true',
       codigoComprador: cpf
     })
@@ -95,7 +88,6 @@ export class VerificarEstadoTdvService {
     if (activeBuyer) {
       const estado = activeBuyer.estado
 
-      // Buyer needs to confirm purchase (ATPV-e created by seller)
       if (estado === CodigoEstadoTDV.ATPVE_CRIADA) {
         return {
           proximaAcao: 'comprador',
@@ -108,13 +100,12 @@ export class VerificarEstadoTdvService {
         }
       }
 
-      // Buyer needs to pay (seller already signed)
       if (
         estado === CodigoEstadoTDV.ATPVE_ASSINADA_VENDEDOR_COMUNICACAO_VENDA_GERADA ||
         estado === CodigoEstadoTDV.TAXA_SERVICO_PAGA
       ) {
         const codigo = activeBuyer.codigoTransferenciaVeiculo ?? ''
-        const tdvDetails = await this.client.buscaTdv(token, codigo)
+        const tdvDetails = await this.client.buscaTdv(accessToken, codigo)
         const data = tdvDetails?.result
 
         return {

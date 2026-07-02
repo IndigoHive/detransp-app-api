@@ -1,5 +1,4 @@
 import type { DetranSpServiceNowDashboardClient } from '../../../clients'
-import { extractBearerToken, extractCpfFromToken } from '../../../utils/token'
 
 type ServiceNowPontuacaoCnhResponse = {
   data: {
@@ -15,10 +14,8 @@ type ServiceNowPontuacaoCnhResponse = {
 export class GetPontuacaoCnhService {
   constructor(private dashboardClient: DetranSpServiceNowDashboardClient) {}
 
-  async run(authorizationHeader: string | undefined) {
-    const token = extractBearerToken(authorizationHeader)
-    const cpf = extractCpfFromToken(token)
-    const raw = await this.dashboardClient.get<ServiceNowPontuacaoCnhResponse>('pontuacaoCnh', token, cpf)
+  async run(accessToken: string, cpf: string) {
+    const raw = await this.dashboardClient.get<ServiceNowPontuacaoCnhResponse>('pontuacaoCnh', accessToken, cpf)
     return {
       data: {
         attributes: {

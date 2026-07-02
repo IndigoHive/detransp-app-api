@@ -1,6 +1,5 @@
 import type { DetranSpServiceNowTdvClient } from '../../../clients/detran-sp-service-now/tdv'
 import { CodigoEstadoTDV } from '../../../clients/detran-sp-service-now/tdv/types'
-import { extractBearerToken, extractCpfFromToken } from '../../../utils/token'
 
 type Dependencies = {
   detranSpServiceNowTdv: DetranSpServiceNowTdvClient
@@ -34,18 +33,14 @@ export class ValidaAssinaturaService {
     this.client = detranSpServiceNowTdv
   }
 
-  async run (authorizationHeader: string | undefined, input: ValidaAssinaturaInput): Promise<ValidaAssinaturaResult> {
-    const token = extractBearerToken(authorizationHeader)
-    const cpf = extractCpfFromToken(token)
-
-    const tdv = await this.client.buscaTdv(token, input.codigoTransferencia)
+  async run (accessToken: string, cpf: string, input: ValidaAssinaturaInput): Promise<ValidaAssinaturaResult> {
+    const tdv = await this.client.buscaTdv(accessToken, input.codigoTransferencia)
     const estado = tdv?.result?.estado
 
     if (!estado) {
       return { valid: false }
     }
 
-    // Determine role from TDV data
     const isSeller = tdv.result?.codigoVendedor === cpf
 
     if (isSeller) {

@@ -47,6 +47,9 @@ export type Config = {
     baseUrl: string
     appTopic: string
   }
+  security: {
+    encryptionKey: string
+  }
   logging: {
     level: string
   }

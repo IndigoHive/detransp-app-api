@@ -7,7 +7,7 @@
     "start": "node dist/index.cjs",
     "typecheck": "tsc --noEmit --project tsconfig.check.json",
     "dev": "dotenv  -e  .env.development.local -e .env.development -- tsx watch src/index.ts | pino-pretty",
-    "dev:mock": "tsx watch src/mock-server.ts",
+"dev:mock": "tsx watch src/mock-server.ts",
     "test": "dotenv -e .env.test -- vitest"
   },
   "private": true,
