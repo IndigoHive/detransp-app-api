@@ -16,3 +16,8 @@ export type VerificaVeiculoResult =
   | { result?: VerificaVeiculoData }
   | null
   | undefined
+
+export type BuscaVeiculoResult =
+  | { result?: VerificaVeiculoData }
+  | null
+  | undefined

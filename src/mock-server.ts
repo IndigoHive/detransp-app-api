@@ -354,7 +354,7 @@ app.post('/api/licenciamento/veiculos/:renavam/verificar', (req, res) => {
       isLicensingOverdue: false,
       debts: [],
       totalDebits: 0,
-      multasDetail: {},
+      multasDetail: { items: [], total: 'R$ 0,00' },
     })
     return
   }
@@ -380,8 +380,8 @@ app.post('/api/licenciamento/veiculos/:renavam/verificar', (req, res) => {
     debts,
     totalDebits,
     multasDetail: isVencido
-      ? { 'ABC1D23': [{ auto: 'SP00012345', descricao: 'Velocidade acima do limite', pontos: 4 }] }
-      : {},
+      ? { items: [{ autoInfracao: 'ABC1D23', nomeOrgao: 'DETRAN', dataInfracao: '2025-01-01', valor: 293.47 }], total: 'R$ 293,47' }
+      : { items: [], total: 'R$ 0,00' },
     vehicleAttributes: {
       chassi: '9BR53ZEC2P' + renavam.slice(0, 6),
       yearFab: vehicle.yearFab,

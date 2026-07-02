@@ -1,5 +1,4 @@
 import type { ServiceNowCsmClient } from '../../../clients'
-import { extractBearerToken, extractCpfFromToken } from '../../../utils/token'
 
 export type ServiceCaseItem = {
   sys_id: string
@@ -27,15 +26,12 @@ export class ListServiceCasesService {
     this.serviceNowCsm = serviceNowCsm
   }
 
-  async run (authorizationHeader: string | undefined): Promise<ListServiceCasesResult> {
-    const token = extractBearerToken(authorizationHeader)
-    const requestedCpf = extractCpfFromToken(token)
-
-    if (!requestedCpf) {
+  async run (cpf: string): Promise<ListServiceCasesResult> {
+    if (!cpf) {
       return { result: [] }
     }
 
-    const sysparmQuery = `opened_by.user_name=${requestedCpf}^ORinternal_user.user_name=${requestedCpf}`
+    const sysparmQuery = `opened_by.user_name=${cpf}^ORinternal_user.user_name=${cpf}`
     const sysparmFields = 'sys_id,number,state,active,short_description,opened_at,sys_updated_on,x_mdpdd_detran_csm_reopen_count,contact_type'
 
     return await this.serviceNowCsm.getProtocols<ListServiceCasesResult>({

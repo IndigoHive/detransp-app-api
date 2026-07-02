@@ -1,89 +1,38 @@
 import { Router } from 'express'
-import multer from 'multer'
 
-const upload = multer({ storage: multer.memoryStorage() })
+// Duas camadas de corrupção possíveis no nome do arquivo até chegar aqui:
+// 1. O busboy (usado pelo multer) decodifica o header Content-Disposition como latin1 —
+//    nomes enviados em UTF-8 cru (acentos) chegam "mojibake" (ex.: "á" -> "Ã¡").
+// 2. O RN, por sua vez, percent-encoda o nome quando ele tem espaço/acento
+//    (ex.: "Captura%20de%20Tela...") antes de mandar.
+// Corrige as duas e normaliza para NFC (evita "à" como NFD/combining chegar diferente de "à" NFC).
+function decodeFileName (name: string): string {
+  const latin1Repaired = Buffer.from(name, 'latin1').toString('utf8')
+  const candidate = latin1Repaired.includes('�') ? name : latin1Repaired
 
-function parseBoolean (value: unknown): boolean {
-  if (typeof value === 'boolean') return value
-  if (typeof value === 'string') {
-    const normalized = value.trim().toLowerCase()
-    return normalized === 'true' || normalized === '1' || normalized === 'yes'
+  try {
+    return decodeURIComponent(candidate).normalize('NFC')
+  } catch {
+    return candidate.normalize('NFC')
   }
-
-  return false
 }
 
 export function servicesRouter (): Router {
   const router = Router()
 
-  router.get('/get-vehicles', async (req, res) => {
-    const service = req.scope.resolve('getVehiclesService')
-
-    const result = await service.run()
-
-    res.status(200).json(result)
-  })
-
-  router.post('/solicitar-vistoria-em-transito', async (req, res) => {
-    const service = req.scope.resolve('solicitarVistoriaEmTransitoService')
+  router.post('/validar-curso-teorico-da-cnh-do-brasil-no-detran-sp', async (req, res) => {
+    const service = req.scope.resolve('validarCursoTeoricoDaCNHDoBrasilNoDetranSpService')
 
     const result = await service.run(req.body)
 
     res.status(200).json(result)
   })
 
-  router.post('/validar-curso-teorico-da-cnh-do-brasil-no-detran-sp', upload.single('attachment'), async (req, res) => {
-    const service = req.scope.resolve('validarCursoTeoricoDaCNHDoBrasilNoDetranSpService')
-
-    const input = {
-      nome: typeof req.body?.nome === 'string' ? req.body.nome : '',
-      cpfOuCnpj: typeof req.body?.cpfOuCnpj === 'string' ? req.body.cpfOuCnpj : '',
-      telefone: typeof req.body?.telefone === 'string' ? req.body.telefone : '',
-      email: typeof req.body?.email === 'string' ? req.body.email : '',
-      municipio: typeof req.body?.municipio === 'string' ? req.body.municipio : '',
-      jaRealizeiEtapaIniciarProcessoPrimeiraHabilitacaoJuntoPortalDetranSP: parseBoolean(req.body?.jaRealizeiEtapaIniciarProcessoPrimeiraHabilitacaoJuntoPortalDetranSP),
-      jaRealizeiExameAptidaoFisicaMentalExameMedicoAvaliacaoPsicologica: parseBoolean(req.body?.jaRealizeiExameAptidaoFisicaMentalExameMedicoAvaliacaoPsicologica),
-      jaConcluiEtapaCursoTeoricoExpedicaoCertificado: parseBoolean(req.body?.jaConcluiEtapaCursoTeoricoExpedicaoCertificado),
-      documentoComprovanteRepresentacao: parseBoolean(req.body?.documentoComprovanteRepresentacao),
-      representation: parseBoolean(req.body?.representation),
-      ...(req.file ? {
-        attachment: {
-          buffer: req.file.buffer,
-          originalName: req.file.originalname,
-          mimetype: req.file.mimetype,
-        },
-      } : {}),
-    }
-
-    const result = await service.run(input)
-
-    res.status(200).json(result)
-  })
-
-  router.post('/protocols/attachment', upload.single('attachment'), async (req, res) => {
-    const service = req.scope.resolve('uploadProtocolAttachmentService')
-
-    const input = {
-      sysId: typeof req.body?.sys_id === 'string' ? req.body.sys_id : '',
-      comment: typeof req.body?.comment === 'string' ? req.body.comment : '',
-      ...(req.file ? {
-        attachment: {
-          buffer: req.file.buffer,
-          originalName: req.file.originalname,
-          mimetype: req.file.mimetype,
-        },
-      } : {}),
-    }
-
-    const result = await service.run(input)
-
-    res.status(200).json(result)
-  })
-
   router.get('/protocols', async (req, res) => {
+    const { cpf } = req.session!
     const service = req.scope.resolve('listServiceCasesService')
 
-    const result = await service.run(req.headers.authorization)
+    const result = await service.run(cpf)
 
     res.status(200).json(result)
   })

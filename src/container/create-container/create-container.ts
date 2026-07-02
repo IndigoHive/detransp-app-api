@@ -13,6 +13,7 @@ import { RepositoryServices } from '../types/repository-services'
 import { ContainerServices } from '../types/container-services'
 import { Database } from '../../db/pool'
 import { PgFlowRepository } from '../../repositories/pg-flow-repository'
+import { PgSessionRepository } from '../../repositories/pg-session-repository'
 import { getAuthRegistrations, getFlowsRegistrations, getServicesRegistrations, getDashboardRegistrations, getLicenciamentoRegistrations, getDebRestrRegistrations, getTdvRegistrations } from '../../services'
 import { getClientRegistrations, DetranSpServiceNowLicenciamentoClient } from '../../clients'
 import { DetranSpServiceNowDebRestrClient } from '../../clients/detran-sp-service-now-deb-restr'
@@ -79,5 +80,6 @@ export function getRepositoryRegistrations (): Required<NameAndRegistrationPair<
   return {
     database: asFunction(({ pool }) => new Database({ pg: pool })).scoped(),
     flowRepository: asClass(PgFlowRepository).scoped(),
+    sessionRepository: asClass(PgSessionRepository).scoped(),
   }
 }

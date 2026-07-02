@@ -1,9 +1,10 @@
 import type { DetranSpServiceNowLicenciamentoClient } from '../../../clients/detran-sp-service-now-licenciamento'
 import { DetranSpServiceNowLicenciamentoError } from '../../../clients/detran-sp-service-now-licenciamento/errors/detran-sp-service-now-licenciamento-error'
-import type { DebitoData, ListaMultasData, ListaVeiculosVeiculoData } from '../../../clients/detran-sp-service-now-licenciamento/types'
+import type { DebitoData, ListaVeiculosVeiculoData } from '../../../clients/detran-sp-service-now-licenciamento/types'
 import { formatCurrency } from '../../../utils/currency'
 import type {
   LicenciamentoVeiculoAuth,
+  MultasDetail,
   VehicleItem,
   VerificacaoVeiculoResult,
   VehicleStatus,
@@ -44,7 +45,7 @@ export class VerificaVeiculoLicenciamentoService {
         const debitosData = await this.fetchDebitos(auth)
         const multasDetail = debitosData.debts.some(d => d.tipoServico === 7)
           ? await this.fetchMultas(auth)
-          : {}
+          : { items: [], total: formatCurrency(0) }
         return {
           vehicle,
           vigency: 'VENCIDO',
@@ -69,7 +70,8 @@ export class VerificaVeiculoLicenciamentoService {
     }
 
     const debitosData = await this.fetchDebitos(auth)
-    const multasDetail = hasMultaForaDoSistema ? await this.fetchMultas(auth) : {}
+    const multasDetail = hasMultaForaDoSistema ? await this.fetchMultas(auth) : { items: [], total: formatCurrency(0) }
+
 
     return {
       vehicle,
@@ -101,7 +103,7 @@ export class VerificaVeiculoLicenciamentoService {
       debts: [],
       result: [],
       totalDebits: formatCurrency(0),
-      multasDetail: {},
+      multasDetail: { items: [], total: formatCurrency(0) },
     }
   }
 
@@ -131,17 +133,18 @@ export class VerificaVeiculoLicenciamentoService {
     }
   }
 
-  private async fetchMultas(auth: LicenciamentoVeiculoAuth): Promise<Record<string, ListaMultasData[]>> {
+  private async fetchMultas(auth: LicenciamentoVeiculoAuth): Promise<MultasDetail> {
     try {
       const result = await this.licenciamentoClient.listaMultas(auth, auth.renavam)
-      const multasDetail: Record<string, ListaMultasData[]> = {}
-      for (const m of result?.result ?? []) {
-        multasDetail[m.autoInfracao] = [...(multasDetail[m.autoInfracao] ?? []), m]
+      const items = result?.result ?? []
+
+      return {
+        items,
+        total: formatCurrency(items.reduce((sum, m) => sum + (m.valor ?? 0), 0)),
       }
-      return multasDetail
     } catch (err) {
       if (!(err instanceof DetranSpServiceNowLicenciamentoError)) throw err
-      return {}
+      return { items: [], total: formatCurrency(0) }
     }
   }
 }

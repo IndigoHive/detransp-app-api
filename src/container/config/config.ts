@@ -122,6 +122,9 @@ export const config: Config = {
     // Defina ROTA_CAIXA_POSTAL_APP_TOPIC no .env (ex: detran-sp)
     appTopic: env.ROTA_CAIXA_POSTAL_APP_TOPIC || '',
   },
+  security: {
+    encryptionKey: env.SESSION_ENCRYPTION_KEY || '',
+  },
   logging: {
     level: env.LOG_LEVEL || DEFAULT_LOG_LEVEL
   }
