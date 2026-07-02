@@ -1,5 +1,10 @@
 import type { DebitoData, ListaMultasData } from '../../clients/detran-sp-service-now-licenciamento/types'
 
+export type MultasDetail = {
+  items: ListaMultasData[]
+  total: string
+}
+
 export type LicenciamentoAuth = {
   accessToken: string
   userCpf: string
@@ -35,5 +40,5 @@ export type VerificacaoVeiculoResult = {
   debts: DebitoData[]
   result: DebitoData[]
   totalDebits: string
-  multasDetail: Record<string, ListaMultasData[]>
+  multasDetail: MultasDetail
 }
