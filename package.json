@@ -13,11 +13,13 @@
   "license": "UNLICENSED",
   "dependencies": {
     "@types/cors": "^2.8.19",
+    "@types/multer": "^2.2.0",
     "awilix": "^13.0.3",
     "axios": "^1.16.1",
     "cors": "^2.8.6",
     "express": "^5.2.1",
     "http-errors": "^2.0.1",
+    "multer": "^2.2.0",
     "pg": "^8.20.0",
     "pg-chain": "^1.1.3",
     "pino": "^10.3.1",
