@@ -60,6 +60,26 @@ export function servicesRouter (): Router {
     res.status(200).json(result)
   })
 
+  router.post('/protocols/attachment', upload.single('attachment'), async (req, res) => {
+    const service = req.scope.resolve('uploadProtocolAttachmentService')
+
+    const input = {
+      sysId: typeof req.body?.sys_id === 'string' ? req.body.sys_id : '',
+      comment: typeof req.body?.comment === 'string' ? req.body.comment : '',
+      ...(req.file ? {
+        attachment: {
+          buffer: req.file.buffer,
+          originalName: req.file.originalname,
+          mimetype: req.file.mimetype,
+        },
+      } : {}),
+    }
+
+    const result = await service.run(input)
+
+    res.status(200).json(result)
+  })
+
   router.get('/protocols', async (req, res) => {
     const service = req.scope.resolve('listServiceCasesService')
 
