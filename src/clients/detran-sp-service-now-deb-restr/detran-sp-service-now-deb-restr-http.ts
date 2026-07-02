@@ -1,12 +1,12 @@
 import axios, { type AxiosError, type AxiosInstance, type AxiosRequestConfig } from 'axios'
 import createError from 'http-errors'
 import type { Logger } from 'pino'
-import { DetranSpServiceNowLicenciamentoError } from './errors/detran-sp-service-now-licenciamento-error'
+import { DetranSpServiceNowDebRestrError } from './errors/detran-sp-service-now-deb-restr-error'
 
-const SERVICE_NAME = 'detran-sp-servicenow-licenciamento'
+const SERVICE_NAME = 'detran-sp-servicenow-deb-restr'
 const MAX_TIMEOUT_MS = 8000
 
-export type DetranSpServiceNowLicenciamentoHttpParams = {
+export type DetranSpServiceNowDebRestrHttpParams = {
   baseURL: string
   logger: Logger
 }
@@ -22,11 +22,11 @@ export type DetranSpServiceNowClientAuthWithVeiculo = DetranSpServiceNowClientAu
   placa: string
 }
 
-export class DetranSpServiceNowLicenciamentoHttp {
+export class DetranSpServiceNowDebRestrHttp {
   protected axios: AxiosInstance
   protected logger: Logger
 
-  constructor (params: DetranSpServiceNowLicenciamentoHttpParams) {
+  constructor (params: DetranSpServiceNowDebRestrHttpParams) {
     this.logger = params.logger
 
     this.axios = axios.create({
@@ -48,12 +48,12 @@ export class DetranSpServiceNowLicenciamentoHttp {
       (config) => {
         this.logger.debug(
           { baseURL: config.baseURL, method: config.method, timeout: config.timeout, url: config.url, service: SERVICE_NAME },
-          'ServiceNow licenciamento request'
+          'ServiceNow deb-restr request'
         )
         return config
       },
       (error) => {
-        this.logger.error({ err: error?.message, service: SERVICE_NAME }, 'ServiceNow licenciamento request error')
+        this.logger.error({ err: error?.message, service: SERVICE_NAME }, 'ServiceNow deb-restr request error')
         return Promise.reject(error)
       }
     )
@@ -62,7 +62,7 @@ export class DetranSpServiceNowLicenciamentoHttp {
       (response) => {
         this.logger.info(
           { method: response.config.method, service: SERVICE_NAME, status: response.status, url: response.config.url },
-          'ServiceNow licenciamento response'
+          'ServiceNow deb-restr response'
         )
         return response
       },
@@ -73,7 +73,7 @@ export class DetranSpServiceNowLicenciamentoHttp {
 
         this.logger.error(
           { service: SERVICE_NAME, status: error.response?.status, url: error.config?.url, errorMessage: message, errorDetail: detail },
-          'ServiceNow licenciamento response error'
+          'ServiceNow deb-restr response error'
         )
 
         const userMessage = detail ?? 'Tivemos um problema ao processar sua solicitação.'
@@ -81,7 +81,7 @@ export class DetranSpServiceNowLicenciamentoHttp {
 
         throw createError(
           status,
-          new DetranSpServiceNowLicenciamentoError(message ?? 'UnknownError', userMessage, error.response?.data),
+          new DetranSpServiceNowDebRestrError(message ?? 'UnknownError', userMessage, error.response?.data),
           { expose: true }
         )
       }

@@ -1,0 +1,4047 @@
+{
+  "screens": [
+    {
+      "id": "s_a95b06ade63c",
+      "name": "Onboarding 1",
+      "content": {
+        "id": "c_4bc9f1c78daa",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_a8ea45a9423b",
+            "type": "image",
+            "name": null,
+            "data": {
+              "asset": {
+                "id": "06843b8f-b846-4838-9049-a8b297339239",
+                "url": "https://detransp-app-editor-assets.s3.amazonaws.com/6ae58b0c-51c3-495a-bbe4-bd484a5b7497.png"
+              }
+            }
+          },
+          {
+            "id": "c_06c9dbe03799",
+            "type": "text_heading",
+            "name": null,
+            "data": {
+              "text": "Atenção às regras\n",
+              "align": "center"
+            }
+          },
+          {
+            "id": "c_7441ea200144",
+            "type": "text_body",
+            "name": null,
+            "data": {
+              "text": "Confirme se você pode transferir seu veículo por aqui\n"
+            }
+          }
+        ]
+      },
+      "footer": {
+        "id": "c_5d17816bd475",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_fd714f3609d1",
+            "type": "button",
+            "name": null,
+            "data": {
+              "label": "Continuar"
+            }
+          }
+        ]
+      },
+      "navbar": {
+        "id": "20d3206d-354b-45eb-b76f-a42e922ee60a",
+        "data": {
+          "steps": 7,
+          "variant": "stepper",
+          "currentStep": 1
+        },
+        "name": null,
+        "type": "nav_bar"
+      },
+      "data": {
+        "position": {
+          "x": -340,
+          "y": 60
+        }
+      }
+    },
+    {
+      "id": "s_bced62eb751b",
+      "name": "Onboarding 2",
+      "content": {
+        "id": "c_f6611a844a94",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_2dee1df71591",
+            "type": "image",
+            "name": null,
+            "data": {
+              "asset": {
+                "id": "52e0f2b0-239b-4600-93b1-33e467594f75",
+                "url": "https://detransp-app-editor-assets.s3.amazonaws.com/701be8fc-8aba-4951-83c4-de616c8748a4.png"
+              }
+            }
+          },
+          {
+            "id": "c_e0ec38e9ce9f",
+            "type": "text_heading",
+            "name": null,
+            "data": {
+              "text": "Sem transferência aberta",
+              "align": "center"
+            }
+          },
+          {
+            "id": "c_855c97f1ff93",
+            "type": "text_body",
+            "name": null,
+            "data": {
+              "text": "Não conseguimos transferir seu veículo se ele estiver com outro processo aberto"
+            }
+          }
+        ]
+      },
+      "footer": {
+        "id": "c_d1ff8b908fe5",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_e821ec3e1383",
+            "type": "button",
+            "name": null,
+            "data": {
+              "label": "Continuar"
+            }
+          }
+        ]
+      },
+      "navbar": {
+        "id": "c8d644f9-9db8-4d3d-8ef4-e9a573aa75c4",
+        "data": {
+          "steps": 7,
+          "variant": "stepper",
+          "currentStep": 2
+        },
+        "name": null,
+        "type": "nav_bar"
+      },
+      "data": {
+        "position": {
+          "x": 200,
+          "y": 60
+        }
+      }
+    },
+    {
+      "id": "s_047f159425d9",
+      "name": "Onboarding 3",
+      "content": {
+        "id": "c_898fa2a66bcb",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_f147e0c5750f",
+            "type": "image",
+            "name": null,
+            "data": {
+              "asset": {
+                "id": "02ae1e09-7095-4147-812a-68ef20deae94",
+                "url": "https://detransp-app-editor-assets.s3.amazonaws.com/52826a15-a1d8-43a7-8963-da86ad6e3623.png"
+              }
+            }
+          },
+          {
+            "id": "c_b8799d287aa7",
+            "type": "text_heading",
+            "name": null,
+            "data": {
+              "text": "Sem CRV em papel\n",
+              "align": "center"
+            }
+          },
+          {
+            "id": "c_fd5a938438ef",
+            "type": "text_body",
+            "name": null,
+            "data": {
+              "text": "O Certificado de Registro de Veículo precisa ser digital\n"
+            }
+          }
+        ]
+      },
+      "footer": {
+        "id": "c_5c32e69af25e",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_ef2408d34320",
+            "type": "button",
+            "name": null,
+            "data": {
+              "label": "Continuar"
+            }
+          }
+        ]
+      },
+      "navbar": {
+        "id": "fdb3b6e5-ee5c-4f5e-abe0-533be8ad8966",
+        "data": {
+          "steps": 7,
+          "variant": "stepper",
+          "currentStep": 3
+        },
+        "name": null,
+        "type": "nav_bar"
+      },
+      "data": {
+        "position": {
+          "x": 700,
+          "y": 60
+        }
+      }
+    },
+    {
+      "id": "s_ef18ee58cdf5",
+      "name": "Onboarding 4",
+      "content": {
+        "id": "c_f064c8955b4a",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_fe68035568bf",
+            "type": "image",
+            "name": null,
+            "data": {
+              "asset": {
+                "id": "56e6bd50-f043-4dff-ba6a-2137636970f4",
+                "url": "https://detransp-app-editor-assets.s3.amazonaws.com/d63b1fc9-6f54-4f5b-abe6-3819c7490854.png"
+              }
+            }
+          },
+          {
+            "id": "c_e8cd6a4449a1",
+            "type": "text_heading",
+            "name": null,
+            "data": {
+              "text": "Sem ATPV-e emitida\n",
+              "align": "center"
+            }
+          },
+          {
+            "id": "c_f354b34339a8",
+            "type": "text_body",
+            "name": null,
+            "data": {
+              "text": "Não podemos fazer o processo por aqui se já tiver a autorização de transferência\n"
+            }
+          }
+        ]
+      },
+      "footer": {
+        "id": "c_96933525a4cb",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_4e38749a7e2f",
+            "type": "button",
+            "name": null,
+            "data": {
+              "label": "Continuar"
+            }
+          }
+        ]
+      },
+      "navbar": {
+        "id": "32d7fa07-2551-4936-a3a4-0cac31db5cee",
+        "data": {
+          "steps": 7,
+          "variant": "stepper",
+          "currentStep": 4
+        },
+        "name": null,
+        "type": "nav_bar"
+      },
+      "data": {
+        "position": {
+          "x": 1220,
+          "y": 60
+        }
+      }
+    },
+    {
+      "id": "s_7fdb8d61c217",
+      "name": "Onboarding 5",
+      "content": {
+        "id": "c_8a09441ad792",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_eca4222dcf82",
+            "type": "image",
+            "name": null,
+            "data": {
+              "asset": {
+                "id": "908a4a54-8e91-4ec4-a2bd-b52fca7a3c59",
+                "url": "https://detransp-app-editor-assets.s3.amazonaws.com/47b12360-953e-44fb-8cce-a52ac65e168f.png"
+              }
+            }
+          },
+          {
+            "id": "c_975dc30457e9",
+            "type": "text_heading",
+            "name": null,
+            "data": {
+              "text": "Com vistoria em dia\n",
+              "align": "center"
+            }
+          },
+          {
+            "id": "c_162372496df5",
+            "type": "text_body",
+            "name": null,
+            "data": {
+              "text": "Esteja com o laudo de vistoria na validade antes de iniciar a transferência"
+            }
+          }
+        ]
+      },
+      "footer": {
+        "id": "c_2290c08dac35",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_2676051eb29d",
+            "type": "button",
+            "name": null,
+            "data": {
+              "label": "Continuar"
+            }
+          }
+        ]
+      },
+      "navbar": {
+        "id": "b893755a-c2ea-45b2-bd09-1bbbb85f3f63",
+        "data": {
+          "steps": 7,
+          "variant": "stepper",
+          "currentStep": 5
+        },
+        "name": null,
+        "type": "nav_bar"
+      },
+      "data": {
+        "position": {
+          "x": 1740,
+          "y": 60
+        }
+      }
+    },
+    {
+      "id": "s_eac3ed5620ab",
+      "name": "Onboarding 6",
+      "content": {
+        "id": "c_a575d5aa2435",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_5d172ddd6daa",
+            "type": "image",
+            "name": null,
+            "data": {
+              "asset": {
+                "id": "aa846217-c3d3-4dd0-bfad-4bdc44f3adf9",
+                "url": "https://detransp-app-editor-assets.s3.amazonaws.com/b7dc190c-2afb-4119-a070-e9a29af3b04d.png"
+              }
+            }
+          },
+          {
+            "id": "c_fd40e2b1e89b",
+            "type": "text_heading",
+            "name": null,
+            "data": {
+              "text": "Pague com pix",
+              "align": "center"
+            }
+          },
+          {
+            "id": "c_c2d0a4fddd65",
+            "type": "text_body",
+            "name": null,
+            "data": {
+              "text": "E resolva tudo mais rápido pelo nosso aplicativo"
+            }
+          }
+        ]
+      },
+      "footer": {
+        "id": "c_c15bb24096bd",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_8740a40c5026",
+            "type": "button",
+            "name": null,
+            "data": {
+              "label": "Continuar"
+            }
+          }
+        ]
+      },
+      "navbar": {
+        "id": "9c764671-eba6-467f-a170-b900b17c4bcf",
+        "data": {
+          "steps": 7,
+          "variant": "stepper",
+          "currentStep": 6
+        },
+        "name": null,
+        "type": "nav_bar"
+      },
+      "data": {
+        "position": {
+          "x": 2300,
+          "y": 60
+        }
+      }
+    },
+    {
+      "id": "s_95c89379f948",
+      "name": "Onboarding 7",
+      "content": {
+        "id": "c_7e25fc2b3842",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_ee17af039cdb",
+            "type": "image",
+            "name": null,
+            "data": {
+              "asset": {
+                "id": "e53caef2-466d-4ea7-92fe-b7e13302d8db",
+                "url": "https://detransp-app-editor-assets.s3.amazonaws.com/4199212a-6744-4162-80d6-4430cfe0a7f4.png"
+              }
+            }
+          },
+          {
+            "id": "c_a865f501b75f",
+            "type": "text_heading",
+            "name": null,
+            "data": {
+              "text": "Você vai precisar do aplicativo gov.br",
+              "align": "center"
+            }
+          },
+          {
+            "id": "c_1476161603ab",
+            "type": "text_body",
+            "name": null,
+            "data": {
+              "text": "Certifique se o app gov.br está instalado no seu celular para o reconhecimento facial."
+            }
+          }
+        ]
+      },
+      "footer": {
+        "id": "c_d284eb364059",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_62125e5d5178",
+            "type": "button",
+            "name": null,
+            "data": {
+              "label": "Continuar"
+            }
+          }
+        ]
+      },
+      "navbar": {
+        "id": "cdaaf5bf-e81b-4630-a024-624bf3e02137",
+        "data": {
+          "steps": 7,
+          "variant": "stepper",
+          "currentStep": 7
+        },
+        "name": null,
+        "type": "nav_bar"
+      },
+      "data": {
+        "position": {
+          "x": 2840,
+          "y": 60
+        }
+      }
+    },
+    {
+      "id": "s_d1720681ec27",
+      "name": "Escolha caminho",
+      "content": {
+        "id": "c_301c4dcd5e39",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_b68bbbc072eb",
+            "type": "radio_card_buttons",
+            "name": "seletor",
+            "data": {
+              "options": [
+                {
+                  "id": "1",
+                  "icon": "directions_car",
+                  "label": "Estou vendendo o veículo"
+                },
+                {
+                  "id": "2",
+                  "icon": "pix",
+                  "label": "Estou comprando o veículo"
+                }
+              ],
+              "required": true
+            }
+          }
+        ]
+      },
+      "footer": {
+        "id": "c_8ccb3a00a8e4",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_2ee80a561196",
+            "type": "button",
+            "name": null,
+            "data": {
+              "label": "Continuar"
+            }
+          }
+        ]
+      },
+      "navbar": {
+        "id": "379a15e5-304e-4e90-ab7e-946393e578e6",
+        "data": {
+          "title": "Tranferir Veículo",
+          "variant": "regular",
+          "showReturn": true
+        },
+        "name": null,
+        "type": "nav_bar"
+      },
+      "data": {
+        "position": {
+          "x": 3640,
+          "y": 60
+        }
+      }
+    },
+    {
+      "id": "s_83bb5547ec06",
+      "name": "[Vendedor] Escolha veículo",
+      "content": {
+        "id": "c_8591876ce25d",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_16234f6930af",
+            "type": "text_body",
+            "name": null,
+            "data": {
+              "text": "Qual veículo será vendido?"
+            }
+          },
+          {
+            "id": "c_917cc0ef5a31",
+            "type": "vehicle_select",
+            "name": "seletor",
+            "data": {
+              "source": "@{node:n_4104c4067c20.vehicles}",
+              "variant": "compact",
+              "required": true,
+              "vehicles": [
+                {
+                  "id": "1",
+                  "type": "Utilitario",
+                  "plate": "BXG3U71",
+                  "title": "VOLKS/GOL GTI 1.0",
+                  "status": "REGULAR",
+                  "renavam": "00001002003",
+                  "yearFab": "2014",
+                  "yearMod": "2015",
+                  "brandModel": "VOLKS/GOL GTI 1.0",
+                  "lastLicensing": "03/12/2025",
+                  "licensingExpirationDate": "31/12/2025"
+                },
+                {
+                  "id": "2",
+                  "type": "Passeio",
+                  "plate": "CED3J65",
+                  "title": "ONIX LT - GM",
+                  "status": "A VENCER",
+                  "renavam": "00002003004",
+                  "yearFab": "2021",
+                  "yearMod": "2022",
+                  "brandModel": "ONIX LT - GM",
+                  "lastLicensing": "15/01/2024",
+                  "licensingExpirationDate": "31/12/2024"
+                },
+                {
+                  "id": "3",
+                  "type": "Utilitario",
+                  "plate": "RNI4Z30",
+                  "title": "FIAT/UNO MILLE",
+                  "status": "VENCIDO",
+                  "renavam": "00003004005",
+                  "yearFab": "2008",
+                  "yearMod": "2009",
+                  "brandModel": "FIAT/UNO MILLE",
+                  "lastLicensing": "20/08/2022",
+                  "licensingExpirationDate": "31/07/2023"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "footer": {
+        "id": "c_464dc4fd9cc9",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_d3be8a364c48",
+            "type": "button",
+            "name": null,
+            "data": {
+              "label": "Continuar"
+            }
+          }
+        ]
+      },
+      "navbar": {
+        "id": "ca4dde85-ac9c-4e6b-8ec2-02e38a422620",
+        "data": {
+          "title": "Escolha o veículo",
+          "variant": "regular",
+          "showReturn": true
+        },
+        "name": null,
+        "type": "nav_bar"
+      },
+      "data": {
+        "position": {
+          "x": 5180,
+          "y": -600
+        }
+      }
+    },
+    {
+      "id": "s_62e905fb199e",
+      "name": "[Vendedor] TDV aberta",
+      "content": {
+        "id": "c_778f92574b78",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_97a71e539e87",
+            "type": "text_body",
+            "name": null,
+            "data": {
+              "text": "Veículo já possui processo de transferência em andamento. \n"
+            }
+          },
+          {
+            "id": "c_5f95272197b1",
+            "type": "text_heading",
+            "name": null,
+            "data": {
+              "text": "Deseja continuar com o processo de transferência em andamento?\n",
+              "align": "center"
+            }
+          }
+        ]
+      },
+      "footer": {
+        "id": "c_7b45f7ab9a55",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_70ffc7dac521",
+            "type": "button",
+            "name": null,
+            "data": {
+              "label": "Sim, continuar",
+              "clickAction": "back"
+            }
+          },
+          {
+            "id": "c_d3576283536b",
+            "type": "button",
+            "name": null,
+            "data": {
+              "label": "Não, cancelar processo",
+              "variant": "outline",
+              "drawerId": "c_50c0d8053ec8",
+              "clickAction": "open_drawer"
+            }
+          }
+        ]
+      },
+      "navbar": {
+        "id": "e98c6ef7-d2ff-43c5-a617-501fe6199140",
+        "data": {
+          "title": "Transferência em andamento",
+          "variant": "regular",
+          "showReturn": true
+        },
+        "name": null,
+        "type": "nav_bar"
+      },
+      "data": {
+        "position": {
+          "x": 6980,
+          "y": -2200
+        }
+      }
+    },
+    {
+      "id": "s_37dddfb990e3",
+      "name": "[Vendedor] Veículo com restrição",
+      "content": {
+        "id": "c_0c548ff57b58",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_650c26b32946",
+            "type": "icon_text",
+            "name": null,
+            "data": {
+              "icon": "cancel",
+              "text": "Esse veículo tem restrição e não pode ser transferido.",
+              "color": "danger",
+              "variant": "vertical"
+            }
+          },
+          {
+            "id": "c_e7263c74a1bd",
+            "type": "text_body",
+            "name": null,
+            "data": {
+              "text": "Para resolver, regularize a pendência com o órgão responsável.\n"
+            }
+          }
+        ]
+      },
+      "footer": {
+        "id": "c_88d785a49d95",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_094f1b558b5e",
+            "type": "button",
+            "name": null,
+            "data": {
+              "label": "Voltar",
+              "variant": "outline",
+              "clickAction": "back"
+            }
+          }
+        ]
+      },
+      "navbar": {
+        "id": "e5fdda87-887d-4841-bee2-88eef1e22861",
+        "data": {
+          "title": "Análise de requisitos",
+          "variant": "regular",
+          "showReturn": true
+        },
+        "name": null,
+        "type": "nav_bar"
+      },
+      "data": {
+        "position": {
+          "x": 6960,
+          "y": -1380
+        }
+      }
+    },
+    {
+      "id": "s_8fefaaacf3d9",
+      "name": "[Vendedor] Sucesso requisitos",
+      "content": {
+        "id": "c_6b3542c17ba8",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_f2afab55e8dc",
+            "type": "icon_text",
+            "name": null,
+            "data": {
+              "icon": "check_circle",
+              "text": "Está tudo certo com seu veículo",
+              "color": "success",
+              "variant": "vertical"
+            }
+          }
+        ]
+      },
+      "footer": {
+        "id": "c_92306b673fde",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_b1ff1279cc4e",
+            "type": "button",
+            "name": null,
+            "data": {
+              "label": "Continuar"
+            }
+          }
+        ]
+      },
+      "navbar": {
+        "id": "a0f6c3e3-79f1-4aec-b733-e3bc80b2ce07",
+        "data": {
+          "title": "Análise de requisitos",
+          "variant": "regular",
+          "showReturn": true
+        },
+        "name": null,
+        "type": "nav_bar"
+      },
+      "data": {
+        "position": {
+          "x": 6600,
+          "y": -220
+        }
+      }
+    },
+    {
+      "id": "s_2909315de67e",
+      "name": "[Vendedor] Dados comprador",
+      "content": {
+        "id": "c_14759c856109",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_fb72964238d6",
+            "type": "text_body",
+            "name": null,
+            "data": {
+              "text": "Preencha os dados de quem está comprando"
+            }
+          },
+          {
+            "id": "c_676202e6fd57",
+            "type": "text_input",
+            "name": "cpf",
+            "data": {
+              "label": "CPF",
+              "required": true
+            }
+          },
+          {
+            "id": "c_eb386ba9d15a",
+            "type": "text_input",
+            "name": "nome",
+            "data": {
+              "label": "Nome",
+              "required": true
+            }
+          },
+          {
+            "id": "c_85fbac00c3aa",
+            "type": "text_input",
+            "name": "email",
+            "data": {
+              "label": "E-mail",
+              "required": true
+            }
+          },
+          {
+            "id": "c_24e94a494019",
+            "type": "text_input",
+            "name": "cep",
+            "data": {
+              "label": "CEP",
+              "required": true
+            }
+          }
+        ]
+      },
+      "footer": {
+        "id": "c_ed74a07ce22b",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_9f7abbd72413",
+            "type": "button",
+            "name": null,
+            "data": {
+              "label": "Avançar"
+            }
+          }
+        ]
+      },
+      "navbar": {
+        "id": "86959e70-c9c2-4de7-af0b-90ed79814d61",
+        "data": {
+          "title": "Informações sobre a venda",
+          "variant": "regular",
+          "showReturn": true
+        },
+        "name": null,
+        "type": "nav_bar"
+      },
+      "data": {
+        "position": {
+          "x": 7540,
+          "y": -220
+        }
+      }
+    },
+    {
+      "id": "s_8ed2db9cbfd7",
+      "name": "[Vendedor] Dados venda",
+      "content": {
+        "id": "c_d31548afd895",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_5b3ce251f9ce",
+            "type": "text_body",
+            "name": null,
+            "data": {
+              "text": "Preencha os dados do veículo\n"
+            }
+          },
+          {
+            "id": "c_f0a773241106",
+            "type": "text_input",
+            "name": "valor",
+            "data": {
+              "label": "Valor da venda do veículo"
+            }
+          },
+          {
+            "id": "c_95aef308d32f",
+            "type": "text_input",
+            "name": "km",
+            "data": {
+              "label": "Quilometragem (km)",
+              "required": true
+            }
+          }
+        ]
+      },
+      "footer": {
+        "id": "c_b4d21c6bc366",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_6909006a32c0",
+            "type": "button",
+            "name": null,
+            "data": {
+              "label": "Avançar"
+            }
+          }
+        ]
+      },
+      "navbar": {
+        "id": "7b2365a7-98f2-47c0-80b0-c7ee0fc0c012",
+        "data": {
+          "title": "Informações sobre a venda",
+          "variant": "regular",
+          "showReturn": true
+        },
+        "name": null,
+        "type": "nav_bar"
+      },
+      "data": {
+        "position": {
+          "x": 8560,
+          "y": -220
+        }
+      }
+    },
+    {
+      "id": "s_eb956ee1dce8",
+      "name": "[Vendedor] Erro placa",
+      "content": {
+        "id": "c_840d5fd33226",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_d058091411ef",
+            "type": "icon_text",
+            "name": null,
+            "data": {
+              "icon": "cancel",
+              "text": "Esse veículo precisa ter placa no padrão Mercosul para a transferência",
+              "color": "danger",
+              "variant": "vertical"
+            }
+          },
+          {
+            "id": "c_590f0e1f1297",
+            "type": "text_body",
+            "name": null,
+            "data": {
+              "text": "Percebemos que o veículo está registrado em cidade diferente da residência de quem está comprando. Nesse caso, é necessário fazer a troca da placa cinza para o padrão Mercosul.\n\n\n"
+            }
+          },
+          {
+            "id": "c_d0949d1e81b2",
+            "type": "vehicle_plate",
+            "name": null,
+            "data": {
+              "size": "md",
+              "plate": "EXC1A22",
+              "source": "",
+              "variant": "default"
+            }
+          }
+        ]
+      },
+      "footer": {
+        "id": "c_eff318534de3",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_ee087ad678bc",
+            "type": "button",
+            "name": null,
+            "data": {
+              "label": "Saber como trocar"
+            }
+          },
+          {
+            "id": "c_09851a0ecabc",
+            "type": "button",
+            "name": null,
+            "data": {
+              "label": "Voltar",
+              "variant": "outline"
+            }
+          }
+        ]
+      },
+      "navbar": {
+        "id": "4ab64a26-cf4d-4817-8a0d-73ac5e63c9e4",
+        "data": {
+          "title": "Informações sobre a venda",
+          "variant": "regular",
+          "showReturn": true
+        },
+        "name": null,
+        "type": "nav_bar"
+      },
+      "data": {
+        "position": {
+          "x": 10180,
+          "y": -1020
+        }
+      }
+    },
+    {
+      "id": "s_3a0b04432a52",
+      "name": "[Vendedor] Confirmação dados",
+      "content": {
+        "id": "c_dd07d0fb3d0c",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_45e58a6d55b2",
+            "type": "text_body",
+            "name": null,
+            "data": {
+              "text": "Confirme os dados informados para a venda do veículo\n"
+            }
+          },
+          {
+            "id": "c_ff09c69bff05",
+            "type": "card",
+            "name": null,
+            "children": [
+              {
+                "id": "c_67afa8f97d6f",
+                "type": "text_heading",
+                "name": null,
+                "data": {
+                  "text": "Dados do comprador",
+                  "type": "text_heading"
+                }
+              },
+              {
+                "id": "c_a352193338ab",
+                "type": "label_text",
+                "name": null,
+                "data": {
+                  "text": "@{node:n_02ec1db459dc.cpfComprador}",
+                  "label": "CPF"
+                }
+              },
+              {
+                "id": "c_ecdba61563a5",
+                "type": "label_text",
+                "name": null,
+                "data": {
+                  "text": "@{node:n_02ec1db459dc.nomeComprador}",
+                  "label": "Nome"
+                }
+              },
+              {
+                "id": "c_c0da528e9caa",
+                "type": "label_text",
+                "name": null,
+                "data": {
+                  "text": "@{node:n_02ec1db459dc.enderecoComprador}",
+                  "label": "Endereço"
+                }
+              }
+            ],
+            "data": {}
+          },
+          {
+            "id": "c_b59d229b8b67",
+            "type": "vehicle_info",
+            "name": null,
+            "data": {
+              "source": "@{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle}",
+              "vehicle": {
+                "id": "1",
+                "plate": "EXC1A22",
+                "title": "Veículo 1",
+                "status": "REGULAR",
+                "brandModel": "VOLKS/GOL GTI 1.0",
+                "licensingExpirationDate": "2024-12-31"
+              }
+            }
+          }
+        ]
+      },
+      "footer": {
+        "id": "c_5a8352b6383c",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_cf4904357f7c",
+            "type": "button",
+            "name": null,
+            "data": {
+              "label": "Confirmar"
+            }
+          }
+        ]
+      },
+      "navbar": {
+        "id": "ac4c005a-eb6d-45e7-ab2b-b4ed8f18f56f",
+        "data": {
+          "title": "Confirmação dos dados",
+          "variant": "regular",
+          "showReturn": true
+        },
+        "name": null,
+        "type": "nav_bar"
+      },
+      "data": {
+        "position": {
+          "x": 10180,
+          "y": 40
+        }
+      }
+    },
+    {
+      "id": "s_7d910eaa66ad",
+      "name": "[Vendedor] Confirmação intenção",
+      "content": {
+        "id": "c_a0e8a363dde2",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_5426830a81d2",
+            "type": "text_body",
+            "name": null,
+            "data": {
+              "text": "Ao confirmar, será criada a autorização para transferência de veículo, a ATPV-e\n"
+            }
+          }
+        ]
+      },
+      "footer": {
+        "id": "c_e9fc0c19302b",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_8c410daf9e3e",
+            "type": "button",
+            "name": null,
+            "data": {
+              "label": "Confirmar"
+            }
+          }
+        ]
+      },
+      "navbar": {
+        "id": "c3fc6a17-5d02-437b-9e12-ae5b6d970b8d",
+        "data": {
+          "title": "Confirmação intenção de venda",
+          "variant": "regular",
+          "showReturn": true
+        },
+        "name": null,
+        "type": "nav_bar"
+      },
+      "data": {
+        "position": {
+          "x": 10800,
+          "y": 40
+        }
+      }
+    },
+    {
+      "id": "s_8080e0ac9d2e",
+      "name": "[Vendedor] Conclusão",
+      "content": {
+        "id": "c_fac8c4adc191",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_e36e53e48278",
+            "type": "icon_text",
+            "name": null,
+            "data": {
+              "icon": "check_circle",
+              "text": "Sua intenção de venda foi concluída",
+              "color": "success",
+              "variant": "vertical"
+            }
+          },
+          {
+            "id": "c_beecfacfa869",
+            "type": "text_body",
+            "name": null,
+            "data": {
+              "text": "A pessoa que está comprando o veículo foi informada.\n"
+            }
+          },
+          {
+            "id": "c_1af5dd23abe0",
+            "type": "text_body",
+            "name": null,
+            "data": {
+              "text": "Agora, é só aguardar que ela confirme a compra do veículo para continuar o processo de transferência.\n"
+            }
+          }
+        ]
+      },
+      "footer": {
+        "id": "c_d001795645eb",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_4be85500bc5e",
+            "type": "button",
+            "name": null,
+            "data": {
+              "icon": "arrow_back",
+              "label": "Retornar para a tela inicial"
+            }
+          }
+        ]
+      },
+      "navbar": {
+        "id": "f8a3ea6a-6e80-459e-9538-abf82898c548",
+        "data": {
+          "title": "Conclusão",
+          "variant": "regular",
+          "showReturn": true
+        },
+        "name": null,
+        "type": "nav_bar"
+      },
+      "data": {
+        "position": {
+          "x": 11620,
+          "y": 40
+        }
+      }
+    },
+    {
+      "id": "s_52363926e91c",
+      "name": "[Comprador] Escolha veículo",
+      "content": {
+        "id": "c_48b9995a7045",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_3e0c049e83c6",
+            "type": "text_body",
+            "name": null,
+            "data": {
+              "text": "Qual veículo está sendo comprado?\n"
+            }
+          },
+          {
+            "id": "c_15bff69dea7e",
+            "type": "vehicle_select",
+            "name": null,
+            "data": {
+              "source": "@{node:n_598dfad57128.vehicles}",
+              "variant": "compact",
+              "required": true,
+              "vehicles": [
+                {
+                  "id": "1",
+                  "type": "Utilitario",
+                  "plate": "BXG3U71",
+                  "title": "VOLKS/GOL GTI 1.0",
+                  "status": "REGULAR",
+                  "renavam": "00001002003",
+                  "yearFab": "2014",
+                  "yearMod": "2015",
+                  "brandModel": "VOLKS/GOL GTI 1.0",
+                  "lastLicensing": "03/12/2025",
+                  "licensingExpirationDate": "31/12/2025"
+                },
+                {
+                  "id": "2",
+                  "type": "Passeio",
+                  "plate": "CED3J65",
+                  "title": "ONIX LT - GM",
+                  "status": "A VENCER",
+                  "renavam": "00002003004",
+                  "yearFab": "2021",
+                  "yearMod": "2022",
+                  "brandModel": "ONIX LT - GM",
+                  "lastLicensing": "15/01/2024",
+                  "licensingExpirationDate": "31/12/2024"
+                },
+                {
+                  "id": "3",
+                  "type": "Utilitario",
+                  "plate": "RNI4Z30",
+                  "title": "FIAT/UNO MILLE",
+                  "status": "VENCIDO",
+                  "renavam": "00003004005",
+                  "yearFab": "2008",
+                  "yearMod": "2009",
+                  "brandModel": "FIAT/UNO MILLE",
+                  "lastLicensing": "20/08/2022",
+                  "licensingExpirationDate": "31/07/2023"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "footer": {
+        "id": "c_df0ce52da4d0",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_ebf361a4035f",
+            "type": "button",
+            "name": null,
+            "data": {
+              "label": "Continuar"
+            }
+          }
+        ]
+      },
+      "navbar": {
+        "id": "0aea202f-9089-43ed-bed8-2e5754df23bd",
+        "data": {
+          "title": "Escolha o veículo",
+          "variant": "regular",
+          "showReturn": true
+        },
+        "name": null,
+        "type": "nav_bar"
+      },
+      "data": {
+        "position": {
+          "x": 5200,
+          "y": 1760
+        }
+      }
+    },
+    {
+      "id": "s_31f3e90bbdcc",
+      "name": "[Comprador] Confirmação dados",
+      "content": {
+        "id": "c_c27ecddfdc69",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_407acc92b041",
+            "type": "text_body",
+            "name": null,
+            "data": {
+              "text": "Confirme as informações para a compra do veículo\n"
+            }
+          },
+          {
+            "id": "c_d99d05b4c5cd",
+            "type": "card",
+            "name": null,
+            "children": [
+              {
+                "id": "c_925dd4263612",
+                "type": "text_heading",
+                "name": null,
+                "data": {
+                  "text": "Dados do comprador",
+                  "type": "text_heading"
+                }
+              },
+              {
+                "id": "c_22e2087d5535",
+                "type": "label_text",
+                "name": null,
+                "data": {
+                  "text": "@{node:n_0a7cda804e6d.cpfComprador}",
+                  "label": "CPF"
+                }
+              },
+              {
+                "id": "c_c50e635eff87",
+                "type": "label_text",
+                "name": null,
+                "data": {
+                  "text": "@{node:n_0a7cda804e6d.nomeComprador}",
+                  "label": "Nome"
+                }
+              },
+              {
+                "id": "c_c52c9fb1affb",
+                "type": "label_text",
+                "name": null,
+                "data": {
+                  "text": "@{node:n_0a7cda804e6d.enderecoComprador}",
+                  "label": "Endereço"
+                }
+              }
+            ],
+            "data": {}
+          },
+          {
+            "id": "c_fcf3a1f793c9",
+            "type": "vehicle_info",
+            "name": null,
+            "data": {
+              "source": "@{node:n_0a7cda804e6d.vehicle}",
+              "vehicle": {
+                "id": "1",
+                "plate": "EXC1A22",
+                "title": "Veículo 1",
+                "status": "REGULAR",
+                "brandModel": "VOLKS/GOL GTI 1.0",
+                "licensingExpirationDate": "2024-12-31"
+              }
+            }
+          }
+        ]
+      },
+      "footer": {
+        "id": "c_5a5646262dfc",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_c29973b3a9ca",
+            "type": "button",
+            "name": null,
+            "data": {
+              "label": "Confirmar"
+            }
+          },
+          {
+            "id": "c_78ed063a4397",
+            "type": "button",
+            "name": null,
+            "data": {
+              "label": "Cancelar",
+              "variant": "outline",
+              "clickAction": "submit"
+            }
+          }
+        ]
+      },
+      "navbar": {
+        "id": "38d11bb1-752b-4b3f-ba0a-7bad12402b6d",
+        "data": {
+          "title": "Confirmação de compra",
+          "variant": "regular",
+          "showReturn": true
+        },
+        "name": null,
+        "type": "nav_bar"
+      },
+      "data": {
+        "position": {
+          "x": 6500,
+          "y": 1780
+        }
+      }
+    },
+    {
+      "id": "s_c482ac86f650",
+      "name": "[Comprador] Endereço",
+      "content": {
+        "id": "c_53538c719750",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_3ee08a72f3a0",
+            "type": "text_body",
+            "name": null,
+            "data": {
+              "text": "Confirme seu endereço para continuar a transferência do veículo\n"
+            }
+          },
+          {
+            "id": "c_79e2ebce8df7",
+            "type": "text_heading",
+            "name": null,
+            "data": {
+              "text": "Dados de quem está comprando"
+            }
+          },
+          {
+            "id": "c_61aa261b7bc9",
+            "type": "text_body",
+            "name": null,
+            "data": {
+              "text": "Eu, @{node:n_0a7cda804e6d.nomeComprador}, inscrito no CPF sob o nº @{node:n_0a7cda804e6d.cpfComprador}, declaro para os devidos fins que resido em @{node:n_0a7cda804e6d.enderecoComprador}.",
+              "align": "justify"
+            }
+          },
+          {
+            "id": "c_f8f3a8f6a923",
+            "type": "text_body",
+            "name": null,
+            "data": {
+              "text": "Sob pena da lei, estou ciente de que a falsidade destas informações implicará em penalidades.\n",
+              "align": "justify"
+            }
+          },
+          {
+            "id": "c_a2f578f5c566",
+            "type": "opt_in",
+            "name": null,
+            "data": {
+              "text": "Eu confirmo que as informações acima são verdadeiras\n",
+              "checked": false,
+              "required": true
+            }
+          }
+        ]
+      },
+      "footer": {
+        "id": "c_68300dc59d3a",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_5d63b6199d05",
+            "type": "button",
+            "name": null,
+            "data": {
+              "label": "Confirmar"
+            }
+          },
+          {
+            "id": "c_93988923339d",
+            "type": "button",
+            "name": null,
+            "data": {
+              "label": "Voltar",
+              "variant": "outline",
+              "clickAction": "back"
+            }
+          }
+        ]
+      },
+      "navbar": {
+        "id": "5b6ef436-f31b-49ef-94c9-ee0f4eff7ec0",
+        "data": {
+          "title": "Confirmação de endereço",
+          "variant": "regular",
+          "showReturn": true
+        },
+        "name": null,
+        "type": "nav_bar"
+      },
+      "data": {
+        "position": {
+          "x": 7160,
+          "y": 1780
+        }
+      }
+    },
+    {
+      "id": "s_24b45fd19f30",
+      "name": "[Comprador] Assinatura",
+      "content": {
+        "id": "c_afb2c9e6a5bf",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_5b7482fd57f9",
+            "type": "icon_text",
+            "name": null,
+            "data": {
+              "icon": "warning",
+              "text": "Precisamos que confirme a transferência do veículo com sua assinatura eletrônica.",
+              "color": "warning",
+              "variant": "vertical"
+            }
+          },
+          {
+            "id": "c_d1e265554e1a",
+            "type": "text_body",
+            "name": null,
+            "data": {
+              "text": "Ao assinar, enviaremos uma notificação para que a pessoa que está vendendo o veículo conclua o processo.\n"
+            }
+          }
+        ]
+      },
+      "footer": {
+        "id": "c_bb0f38cbd0c3",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_f95e240f9b02",
+            "type": "button",
+            "name": null,
+            "data": {
+              "icon": "check",
+              "label": "Assinar"
+            }
+          },
+          {
+            "id": "c_253757d25313",
+            "type": "button",
+            "name": null,
+            "data": {
+              "icon": "close",
+              "label": "Cancelar",
+              "variant": "outline"
+            }
+          }
+        ]
+      },
+      "navbar": {
+        "id": "b1581ec5-a786-4283-9c63-479b98aef092",
+        "data": {
+          "title": "Assinatura do documento",
+          "variant": "regular",
+          "showReturn": true
+        },
+        "name": null,
+        "type": "nav_bar"
+      },
+      "data": {
+        "position": {
+          "x": 7920,
+          "y": 1780
+        }
+      }
+    },
+    {
+      "id": "s_0dab2f87c6ad",
+      "name": "[Comprador] Conclusão",
+      "content": {
+        "id": "c_5df11ea24802",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_c76cb5553b00",
+            "type": "icon_text",
+            "name": null,
+            "data": {
+              "icon": "check_circle",
+              "text": "Sua intenção de compra do veículo foi concluída",
+              "color": "success",
+              "variant": "vertical"
+            }
+          },
+          {
+            "id": "c_f976f3967d7c",
+            "type": "text_body",
+            "name": null,
+            "data": {
+              "text": "Já avisamos a pessoa que está vendendo o veículo para assinar o documento.\n"
+            }
+          },
+          {
+            "id": "c_cb567e2ab2d7",
+            "type": "text_body",
+            "name": null,
+            "data": {
+              "text": "Agora, é só aguardar que ela confirme a venda do veículo para continuar o processo de transferência."
+            }
+          }
+        ]
+      },
+      "footer": {
+        "id": "c_1b6740549d9f",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_6e892f1ec541",
+            "type": "button",
+            "name": null,
+            "data": {
+              "icon": "arrow_back",
+              "label": "Retornar para a tela inicial"
+            }
+          }
+        ]
+      },
+      "navbar": {
+        "id": "ca1a45e3-3771-476a-99b5-7798f3968541",
+        "data": {
+          "title": "Conclusão",
+          "variant": "regular",
+          "showReturn": true
+        },
+        "name": null,
+        "type": "nav_bar"
+      },
+      "data": {
+        "position": {
+          "x": 9400,
+          "y": 1800
+        }
+      }
+    },
+    {
+      "id": "s_f0ef50595f87",
+      "name": "[Vendedor] Comprador assinou",
+      "content": {
+        "id": "c_7da92f4c35a8",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_4921dfc79212",
+            "type": "text_body",
+            "name": null,
+            "data": {
+              "text": "Olá, Ricardo\n\nO processo de transferência do seu veículo foi confirmado pelo comprador. \n"
+            }
+          },
+          {
+            "id": "c_c8a343c5a26a",
+            "type": "vehicle_info",
+            "name": null,
+            "data": {
+              "source": "@{node:n_90a9d6db5f4b.vehicle}",
+              "vehicle": {
+                "id": "1",
+                "plate": "EXC1A22",
+                "title": "Veículo 1",
+                "status": "REGULAR",
+                "brandModel": "VOLKS/GOL GTI 1.0",
+                "licensingExpirationDate": "2024-12-31"
+              }
+            }
+          }
+        ]
+      },
+      "footer": {
+        "id": "c_598f544aaa85",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_44fe592f850b",
+            "type": "button",
+            "name": null,
+            "data": {
+              "label": "Assinar"
+            }
+          }
+        ]
+      },
+      "navbar": {
+        "id": "fd7f989a-a4ae-455b-bbcf-03730337368b",
+        "data": {
+          "title": "Transferir Veículo",
+          "variant": "regular",
+          "showReturn": true
+        },
+        "name": null,
+        "type": "nav_bar"
+      },
+      "data": {
+        "position": {
+          "x": -340,
+          "y": 2460
+        }
+      }
+    },
+    {
+      "id": "s_46aa0d528dfd",
+      "name": "[Vendedor] Assinatura coletada",
+      "content": {
+        "id": "c_beadb219a80a",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_77fb18b6ade7",
+            "type": "icon_text",
+            "name": null,
+            "data": {
+              "icon": "check_circle",
+              "text": "Tudo certo,  você concluiu a venda do veículo",
+              "color": "success",
+              "variant": "vertical"
+            }
+          },
+          {
+            "id": "c_7fd58eac0708",
+            "type": "text_body",
+            "name": null,
+            "data": {
+              "text": "A partir de agora, a responsabilidade do veículo Mitsubishi Pajero Sport, cor cinza, placa GAT3U02 é de quem fez a compra.\n\nAssim que o pagamento for realizado, o veículo será registrado em nome do comprador.\n"
+            }
+          }
+        ]
+      },
+      "footer": {
+        "id": "c_8994a0166b46",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_d214c4655ccc",
+            "type": "button",
+            "name": null,
+            "data": {
+              "label": "Retornar para a tela inicial"
+            }
+          }
+        ]
+      },
+      "navbar": {
+        "id": "d5e542c0-60d9-4ffa-9d0f-ac0f1c3302a1",
+        "data": {
+          "title": "Transferir Veículo",
+          "variant": "regular",
+          "showReturn": true
+        },
+        "name": null,
+        "type": "nav_bar"
+      },
+      "data": {
+        "position": {
+          "x": 1200,
+          "y": 2460
+        }
+      }
+    },
+    {
+      "id": "s_4f0a972b5591",
+      "name": "[Comprador] Dados pagamento",
+      "content": {
+        "id": "c_8e250d170c37",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_b04db635eb89",
+            "type": "card",
+            "name": null,
+            "children": [
+              {
+                "id": "c_53d9ecc64dbe",
+                "type": "text_heading",
+                "name": null,
+                "data": {
+                  "text": "Transferência de veículo\n"
+                }
+              },
+              {
+                "id": "c_dd811f56a96a",
+                "type": "label_text",
+                "name": null,
+                "data": {
+                  "text": "@{node:n_b685a31ed52c.nomeComprador}",
+                  "label": "Pessoa que assinou a compra"
+                }
+              },
+              {
+                "id": "c_c33e21638bdd",
+                "type": "divider",
+                "name": null,
+                "data": {}
+              },
+              {
+                "id": "c_90d48ffc11dd",
+                "type": "label_text",
+                "name": null,
+                "data": {
+                  "text": "@{node:n_b685a31ed52c.taxaTransferencia}",
+                  "label": "Transferência do veículo"
+                }
+              },
+              {
+                "id": "c_381e0ff4556e",
+                "type": "divider",
+                "name": null,
+                "data": {}
+              },
+              {
+                "id": "c_9db5f315559a",
+                "type": "label_text",
+                "name": null,
+                "data": {
+                  "text": "@{node:n_b685a31ed52c.taxaLicenciamento}",
+                  "label": "Licenciamento"
+                }
+              },
+              {
+                "id": "c_f6b5788ae741",
+                "type": "divider",
+                "name": null,
+                "data": {}
+              },
+              {
+                "id": "c_161e9c548d0b",
+                "type": "label_text",
+                "name": null,
+                "data": {
+                  "text": "@{node:n_b685a31ed52c.totalDebitos}",
+                  "label": "Valor total"
+                }
+              }
+            ],
+            "data": {}
+          }
+        ]
+      },
+      "footer": {
+        "id": "c_056494041e7c",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_35b1d64b818d",
+            "type": "label_text",
+            "name": null,
+            "data": {
+              "text": "@{node:n_b685a31ed52c.totalDebitos}",
+              "label": "Total de débitos"
+            }
+          },
+          {
+            "id": "c_27715ff703a0",
+            "type": "button",
+            "name": null,
+            "data": {
+              "icon": "pix",
+              "label": "Pagar com Pix"
+            }
+          }
+        ]
+      },
+      "navbar": {
+        "id": "b997d9c1-0ad7-4d0c-a4dd-fbf6e23098a4",
+        "data": {
+          "title": "Dados do pagamento",
+          "variant": "regular",
+          "showReturn": true
+        },
+        "name": null,
+        "type": "nav_bar"
+      },
+      "stickyFooter": true,
+      "data": {
+        "position": {
+          "x": 580,
+          "y": 3780
+        }
+      }
+    },
+    {
+      "id": "s_fb22aac48147",
+      "name": "[Comprador] Aviso pagamento",
+      "content": {
+        "id": "c_b7f059f6e0a4",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_1675a5ae95e6",
+            "type": "text_body",
+            "name": null,
+            "data": {
+              "text": "Olá, Ricardo.\n\nA transferência do veículo será finalizada após o pagamento da taxa.\n",
+              "align": "left"
+            }
+          },
+          {
+            "id": "c_dbc1daefa527",
+            "type": "alert",
+            "name": null,
+            "data": {
+              "body": "Você tem 30 dias para pagar a taxa de transferência à contar da data de assinatura do vendedor.\n",
+              "title": "Importante",
+              "variant": "warning"
+            }
+          },
+          {
+            "id": "c_0a1e9af9e170",
+            "type": "vehicle_info",
+            "name": null,
+            "data": {
+              "source": "@{node:n_90a9d6db5f4b.vehicle}",
+              "vehicle": {
+                "id": "1",
+                "plate": "EXC1A22",
+                "title": "Veículo 1",
+                "status": "REGULAR",
+                "brandModel": "VOLKS/GOL GTI 1.0",
+                "licensingExpirationDate": "2024-12-31"
+              }
+            }
+          },
+          {
+            "id": "c_aa3245234c0a",
+            "type": "icon_text",
+            "name": null,
+            "data": {
+              "icon": "info",
+              "text": "Informação",
+              "color": "info",
+              "variant": "horizontal"
+            }
+          },
+          {
+            "id": "c_ca56c3b6a284",
+            "type": "text_body",
+            "name": null,
+            "data": {
+              "text": "Saiba que, se o pagamento não for feito no prazo, você receberá uma multa de trânsito por infração média e possível remoção do veículo a um pátio, segundo Código Brasileiro de Trânsito.\n",
+              "align": "left"
+            }
+          }
+        ]
+      },
+      "footer": {
+        "id": "c_deb1015414c0",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_63dd5a7688b7",
+            "type": "button",
+            "name": null,
+            "data": {
+              "icon": "pix",
+              "label": "Pagar com Pix"
+            }
+          }
+        ]
+      },
+      "navbar": {
+        "id": "a773205c-3b9c-419e-bd09-8b84db454c84",
+        "data": {
+          "title": "Transferir Veículo",
+          "variant": "regular",
+          "showReturn": true
+        },
+        "name": null,
+        "type": "nav_bar"
+      },
+      "data": {
+        "position": {
+          "x": -340,
+          "y": 3740
+        }
+      }
+    },
+    {
+      "id": "s_2b3f4c280a32",
+      "name": "[Comprador] Pagamento concluído",
+      "content": {
+        "id": "c_8d78d9c53415",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_dc90837afe99",
+            "type": "icon_text",
+            "name": null,
+            "data": {
+              "icon": "check_circle",
+              "text": "Seu pagamento foi confirmado",
+              "color": "success",
+              "variant": "vertical"
+            }
+          },
+          {
+            "id": "c_1a76940794fe",
+            "type": "card",
+            "name": null,
+            "children": [
+              {
+                "id": "c_9c6bd19eb4c1",
+                "type": "label_text",
+                "name": null,
+                "data": {
+                  "text": "@{node:n_de17c35410fd.comprovante}",
+                  "label": "Comprovante do pagamento"
+                }
+              },
+              {
+                "id": "c_7dbb89941111",
+                "type": "divider",
+                "name": null,
+                "data": {}
+              },
+              {
+                "id": "c_e2e6b499d19c",
+                "type": "label_text",
+                "name": null,
+                "data": {
+                  "text": "Pix",
+                  "label": "Forma de pagamento"
+                }
+              },
+              {
+                "id": "c_86d49f0b4fe4",
+                "type": "divider",
+                "name": null,
+                "data": {}
+              },
+              {
+                "id": "c_7228906217dc",
+                "type": "label_text",
+                "name": null,
+                "data": {
+                  "text": "@{node:n_de17c35410fd.confirmedDate}",
+                  "label": "Data e hora da confirmação"
+                }
+              }
+            ],
+            "data": {}
+          }
+        ]
+      },
+      "footer": {
+        "id": "c_a32429448dc7",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_aa05e13986b7",
+            "type": "button",
+            "name": null,
+            "data": {
+              "icon": "check",
+              "label": "Concluir"
+            }
+          }
+        ]
+      },
+      "navbar": {
+        "id": "9a180d13-e23e-4cd0-9ed6-26aceba13ca7",
+        "data": {
+          "title": "Conclusão",
+          "variant": "regular",
+          "showReturn": true
+        },
+        "name": null,
+        "type": "nav_bar"
+      },
+      "data": {
+        "position": {
+          "x": 1640,
+          "y": 3800
+        }
+      }
+    },
+    {
+      "id": "s_ffbdc2f4fe37",
+      "name": "[Comprador] Confirmar cancelamento",
+      "content": {
+        "id": "c_ecafd8ee2436",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_ebfa5c6d5784",
+            "type": "icon_text",
+            "name": null,
+            "data": {
+              "icon": "warning",
+              "text": "Se você confirmar o cancelamento da transferência do veículo, iremos encerrar essa solicitação.",
+              "color": "warning",
+              "variant": "vertical"
+            }
+          },
+          {
+            "id": "c_2c6466c68695",
+            "type": "text_body",
+            "name": null,
+            "data": {
+              "text": "Para realizar nova transferência, a pessoa que está fazendo a venda deverá iniciar o processo novamente.\n",
+              "align": "left"
+            }
+          },
+          {
+            "id": "c_cf97fedbde13",
+            "type": "text_body",
+            "name": null,
+            "data": {
+              "text": "Tem certeza que podemos continuar com o cancelamento?\n"
+            }
+          }
+        ]
+      },
+      "footer": {
+        "id": "c_2fedc5ca4c3f",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_078a6b779b86",
+            "type": "button",
+            "name": null,
+            "data": {
+              "label": "Confirmar cancelamento"
+            }
+          },
+          {
+            "id": "c_0fbfe220a3ba",
+            "type": "button",
+            "name": null,
+            "data": {
+              "label": "Voltar",
+              "variant": "outline",
+              "clickAction": "back"
+            }
+          }
+        ]
+      },
+      "navbar": {
+        "id": "ff606708-aad9-4f73-9eab-1bc609d7eacf",
+        "data": {
+          "title": "Atenção",
+          "variant": "regular",
+          "showReturn": true
+        },
+        "name": null,
+        "type": "nav_bar"
+      },
+      "data": {
+        "position": {
+          "x": 7160,
+          "y": 2800
+        }
+      }
+    },
+    {
+      "id": "s_e28e30972542",
+      "name": "[Vendedor] Venda cancelada",
+      "content": {
+        "id": "c_33daad73fd25",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_113388528540",
+            "type": "icon_text",
+            "name": null,
+            "data": {
+              "icon": "cancel",
+              "text": " ",
+              "color": "danger",
+              "variant": "vertical"
+            }
+          },
+          {
+            "id": "c_cf13fc57af79",
+            "type": "text_body",
+            "name": null,
+            "data": {
+              "text": "Olá, NOME_VENDEDOR\n\nA compra do veículo foi cancelada pela pessoa que você indicou como compradora. Por isso, encerramos sua solicitação.\n\nCaso precise, você deve iniciar uma nova intenção de venda do veículo.\n",
+              "align": "left"
+            }
+          }
+        ]
+      },
+      "footer": {
+        "id": "c_6ff70ccca1df",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_cb7418aee6f4",
+            "type": "button",
+            "name": null,
+            "data": {
+              "label": "Fazer nova venda"
+            }
+          },
+          {
+            "id": "c_f5597476d911",
+            "type": "button",
+            "name": null,
+            "data": {
+              "label": "Voltar",
+              "variant": "outline"
+            }
+          }
+        ]
+      },
+      "navbar": {
+        "id": "a3502dc1-24d1-443a-bf01-b460d8953546",
+        "data": {
+          "title": "Venda cancelada",
+          "variant": "regular",
+          "showReturn": true
+        },
+        "name": null,
+        "type": "nav_bar"
+      },
+      "data": {
+        "position": {
+          "x": -340,
+          "y": 1140
+        }
+      }
+    },
+    {
+      "id": "s_db3a8a326b6e",
+      "name": "[Comprador] Concluído",
+      "content": {
+        "id": "c_c606d13842ed",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_c32fa2252896",
+            "type": "icon_text",
+            "name": null,
+            "data": {
+              "icon": "check_circle",
+              "text": "Transferência realizada com sucesso",
+              "color": "success",
+              "variant": "vertical"
+            }
+          },
+          {
+            "id": "c_1b35bab5e5b8",
+            "type": "text_body",
+            "name": null,
+            "data": {
+              "text": "Olá, @{node:n_90a9d6db5f4b.nomeComprador}. \nA transferência do veículo @{node:n_90a9d6db5f4b.vehicle.brandModel}, placa @{node:n_90a9d6db5f4b.vehicle.plate} foi realizada com sucesso e o veículo encontra-se em seu nome.\n\nAcesse o aplicativo da Carteira Digital de Trânsito - CDT para baixar o documento do veículo.\n",
+              "align": "left"
+            }
+          },
+          {
+            "id": "c_612f16419cc7",
+            "type": "text_heading",
+            "name": null,
+            "data": {
+              "text": "\n"
+            }
+          }
+        ]
+      },
+      "footer": {
+        "id": "c_c302d44a55b9",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_b596e5c3b061",
+            "type": "button",
+            "name": null,
+            "data": {
+              "icon": "chevron_left",
+              "label": "Retornar para a tela inicial"
+            }
+          }
+        ]
+      },
+      "navbar": {
+        "id": "6f483e31-3f04-4651-94db-8cadaa23c869",
+        "data": {
+          "title": "Conclusão",
+          "variant": "regular",
+          "showReturn": true
+        },
+        "name": null,
+        "type": "nav_bar"
+      },
+      "data": {
+        "position": {
+          "x": 240,
+          "y": 5460
+        }
+      }
+    },
+    {
+      "id": "s_c8758a377d35",
+      "name": "[Comprador] Pagamento confirmado",
+      "content": {
+        "id": "c_d3082631ac2e",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_260fad63636d",
+            "type": "icon_text",
+            "name": null,
+            "data": {
+              "icon": "check_circle",
+              "text": "Pagamento confirmado",
+              "color": "success",
+              "variant": "vertical"
+            }
+          },
+          {
+            "id": "c_57d2dbcf5d15",
+            "type": "text_body",
+            "name": null,
+            "data": {
+              "text": "Olá, @{node:n_90a9d6db5f4b.nomeComprador}. \n\nFoi confirmado o pagamento da taxa de transferência do veículo @{node:n_90a9d6db5f4b.vehicle.brandModel}, placa @{node:n_90a9d6db5f4b.vehicle.plate}.\n\nAguarde enquanto validamos o processo e registramos o veículo em seu nome.\n",
+              "align": "left"
+            }
+          },
+          {
+            "id": "c_94c7b464ec0a",
+            "type": "text_body",
+            "name": null,
+            "data": {
+              "text": "Acesse o aplicativo da Carteira Digital de Trânsito - CDT para consultar os veículos em seu nome.\n"
+            }
+          }
+        ]
+      },
+      "footer": {
+        "id": "c_5d59745b3e60",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_c628dcdabad5",
+            "type": "button",
+            "name": null,
+            "data": {
+              "icon": "chevron_left",
+              "label": "Retornar para a tela inicial"
+            }
+          }
+        ]
+      },
+      "navbar": {
+        "id": "5e730814-6dff-4d83-b889-1af89c6ccb6a",
+        "data": {
+          "title": "Conclusão",
+          "variant": "regular",
+          "showReturn": true
+        },
+        "name": null,
+        "type": "nav_bar"
+      },
+      "data": {
+        "position": {
+          "x": -300,
+          "y": 5880
+        }
+      }
+    },
+    {
+      "id": "s_89a40a2ddf9a",
+      "name": "[Comprador] Vendedor cancelou",
+      "content": {
+        "id": "c_e3f555bfcc6c",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_8ebb6d4c942b",
+            "type": "icon_text",
+            "name": null,
+            "data": {
+              "icon": "check_circle",
+              "text": " ",
+              "color": "danger",
+              "variant": "vertical"
+            }
+          },
+          {
+            "id": "c_e8d709832748",
+            "type": "text_body",
+            "name": null,
+            "data": {
+              "text": "Olá, @{node:n_90a9d6db5f4b.nomeComprador}.\n\nA compra do veículo foi cancelada pelo vendedor do veículo. Por isso, encerramos sua solicitação.\n",
+              "align": "left"
+            }
+          },
+          {
+            "id": "c_caa46070f81d",
+            "type": "vehicle_info",
+            "name": null,
+            "data": {
+              "source": "@{node:n_90a9d6db5f4b.vehicle}",
+              "vehicle": {
+                "id": "1",
+                "plate": "EXC1A22",
+                "title": "Veículo 1",
+                "status": "REGULAR",
+                "brandModel": "VOLKS/GOL GTI 1.0",
+                "licensingExpirationDate": "2024-12-31"
+              }
+            }
+          }
+        ]
+      },
+      "footer": {
+        "id": "c_7f0c3da251a3",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_6451d273bad5",
+            "type": "button",
+            "name": null,
+            "data": {
+              "icon": "chevron_left",
+              "label": "Retornar para a tela inicial"
+            }
+          }
+        ]
+      },
+      "navbar": {
+        "id": "690e63c0-8c58-48f7-b8ff-8556e7969f7b",
+        "data": {
+          "title": "Venda cancelada",
+          "variant": "regular",
+          "showReturn": true
+        },
+        "name": null,
+        "type": "nav_bar"
+      },
+      "data": {
+        "position": {
+          "x": 780,
+          "y": 5080
+        }
+      }
+    }
+  ],
+  "drawers": [
+    {
+      "id": "d_2d7cb6069d63",
+      "name": "[Vendedor] Cancelar TDV",
+      "content": {
+        "id": "c_8d9c2fbafac7",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_443512d51b5a",
+            "type": "text_heading",
+            "name": null,
+            "data": {
+              "text": "Cancelar venda de veículo\n"
+            }
+          },
+          {
+            "id": "c_e0b6a6b948ef",
+            "type": "icon_text",
+            "name": null,
+            "data": {
+              "icon": "warning",
+              "text": "Tem certeza que deseja cancelar o processo iniciado?",
+              "color": "warning",
+              "variant": "horizontal"
+            }
+          }
+        ]
+      },
+      "footer": {
+        "id": "c_8841ea43d96e",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_5bd83944647f",
+            "type": "button",
+            "name": null,
+            "data": {
+              "label": "Sim, quero cancelar"
+            }
+          },
+          {
+            "id": "c_b72e3e1123cb",
+            "type": "button",
+            "name": null,
+            "data": {
+              "label": "Fechar",
+              "variant": "outline",
+              "clickAction": "back"
+            }
+          }
+        ]
+      },
+      "data": {
+        "position": {
+          "x": 7640,
+          "y": -2200
+        }
+      }
+    },
+    {
+      "id": "d_73700eef12bc",
+      "name": "[Vendedor] TDV cancelada",
+      "content": {
+        "id": "c_eb7acd150687",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_0b0a9b86d5b3",
+            "type": "text_heading",
+            "name": null,
+            "data": {
+              "text": "Processo de venda cancelado\n"
+            }
+          },
+          {
+            "id": "c_14aeae910067",
+            "type": "icon_text",
+            "name": null,
+            "data": {
+              "icon": "info",
+              "text": "Cancelamos a venda iniciada. Se precisar, reinicie o processo quando quiser.",
+              "color": "info",
+              "variant": "horizontal"
+            }
+          }
+        ]
+      },
+      "footer": {
+        "id": "c_88485698d6a5",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_faa30ee67553",
+            "type": "button",
+            "name": null,
+            "data": {
+              "label": "Continuar"
+            }
+          }
+        ]
+      },
+      "data": {
+        "position": {
+          "x": 8560,
+          "y": -2200
+        }
+      }
+    },
+    {
+      "id": "d_5fdc480fb32b",
+      "name": "[Comprador] TDV cancelada",
+      "content": {
+        "id": "c_fee9484ffb38",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_1904092e6991",
+            "type": "text_heading",
+            "name": null,
+            "data": {
+              "text": "Intenção de venda"
+            }
+          },
+          {
+            "id": "c_fb819671ae05",
+            "type": "icon_text",
+            "name": null,
+            "data": {
+              "icon": "info",
+              "text": "Encerramos a transferência de veículo.",
+              "color": "info",
+              "variant": "horizontal"
+            }
+          },
+          {
+            "id": "c_b855a103f918",
+            "type": "text_body",
+            "name": null,
+            "data": {
+              "text": "Caso precise, quem está vendendo o veículo deve iniciar o processo novamente.\n",
+              "align": "left"
+            }
+          }
+        ]
+      },
+      "footer": {
+        "id": "c_ad9b7e083aa5",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_880c4afa0dbe",
+            "type": "button",
+            "name": null,
+            "data": {
+              "label": "Finalizar"
+            }
+          }
+        ]
+      },
+      "data": {
+        "position": {
+          "x": 7920,
+          "y": 2800
+        }
+      }
+    }
+  ],
+  "actions": [
+    {
+      "id": "n_5bd3d687408b",
+      "type": "start_node",
+      "name": "Start",
+      "data": {
+        "position": {
+          "x": -2640,
+          "y": 1860
+        }
+      }
+    },
+    {
+      "id": "n_b92680d39623",
+      "type": "if_node",
+      "name": "É vendedor?",
+      "data": {
+        "position": {
+          "x": 4180,
+          "y": 1080
+        },
+        "condition": {
+          "clauses": [
+            {
+              "id": "29e7370f-0d95-4441-86ea-d86a7bdaeaee",
+              "left": "@{screen:s_d1720681ec27.comp:c_b68bbbc072eb.selectedLabel}",
+              "right": "Estou vendendo o veículo",
+              "operator": "equals"
+            }
+          ],
+          "combinator": "or"
+        }
+      }
+    },
+    {
+      "id": "n_4104c4067c20",
+      "type": "http_node",
+      "name": "Consulta Veículos",
+      "data": {
+        "position": {
+          "x": 4820,
+          "y": -20
+        },
+        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/veiculos",
+        "responseExamples": [
+          {
+            "id": "aec85839-8e5f-43c4-a716-86b9bf8897eb",
+            "name": "Lista 3 veículos",
+            "value": "{\n  \"vehicles\": [\n    {\n      \"id\": \"1\",\n      \"title\": \"VOLKS/GOL GTI 1.0\",\n      \"plate\": \"BXG3U71\",\n      \"status\": \"REGULAR\",\n      \"licensingExpirationDate\": \"31/12/2025\",\n      \"type\": \"Utilitario\",\n      \"brandModel\": \"VOLKS/GOL GTI 1.0\",\n      \"renavam\": \"00001002003\",\n      \"lastLicensing\": \"03/12/2025\",\n      \"yearFab\": \"2014\",\n      \"yearMod\": \"2015\"\n    },\n    {\n      \"id\": \"2\",\n      \"title\": \"ONIX LT - GM\",\n      \"plate\": \"CED3J65\",\n      \"status\": \"A VENCER\",\n      \"licensingExpirationDate\": \"31/12/2024\",\n      \"type\": \"Passeio\",\n      \"brandModel\": \"ONIX LT - GM\",\n      \"renavam\": \"00002003004\",\n      \"lastLicensing\": \"15/01/2024\",\n      \"yearFab\": \"2021\",\n      \"yearMod\": \"2022\"\n    },\n    {\n      \"id\": \"3\",\n      \"title\": \"FIAT/UNO MILLE\",\n      \"plate\": \"RNI4Z30\",\n      \"status\": \"VENCIDO\",\n      \"licensingExpirationDate\": \"31/07/2023\",\n      \"type\": \"Utilitario\",\n      \"brandModel\": \"FIAT/UNO MILLE\",\n      \"renavam\": \"00003004005\",\n      \"lastLicensing\": \"20/08/2022\",\n      \"yearFab\": \"2008\",\n      \"yearMod\": \"2009\"\n    }\n  ]\n}"
+          },
+          {
+            "id": "f35db1c4-5587-4c79-a239-6551c1a6b6cf",
+            "name": "Error",
+            "value": "{\n  \"showSnackbar\": {\n    \"variant\": \"error\",\n    \"title\": \"Erro\",\n    \"description\": \"Erro ao buscar veículos\"\n  }\n}"
+          }
+        ],
+        "showSnackbar": true
+      }
+    },
+    {
+      "id": "n_b824c7dd9350",
+      "type": "http_node",
+      "name": "Análise Requisitos",
+      "data": {
+        "position": {
+          "x": 5840,
+          "y": -100
+        },
+        "method": "POST",
+        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/analise-requisitos",
+        "body": "{\n  \"selectedVehicle\": @{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle}\n}",
+        "responseExamples": [
+          {
+            "id": "00ed0db0-44a2-4311-a651-64e4ce12975e",
+            "name": "Aprovado",
+            "value": "{ \"hasRestriction\": false, \"hasActiveTDV\": false }"
+          },
+          {
+            "id": "0ad95ca6-eb99-4379-8363-262961c02efc",
+            "name": "TDV em andamento",
+            "value": "{ \"hasRestriction\": false, \"hasActiveTDV\": true, \"codigoTransferencia\": \"TDV-000000\" }"
+          },
+          {
+            "id": "b6f66d6a-af30-4594-b1c0-87a11d2c87be",
+            "name": "Veículo com restrição",
+            "value": "{ \"hasRestriction\": true, \"hasActiveTDV\": false }"
+          }
+        ]
+      }
+    },
+    {
+      "id": "n_b2c6d93e6c54",
+      "type": "if_node",
+      "name": "Possui erros?",
+      "data": {
+        "position": {
+          "x": 6120,
+          "y": -300
+        },
+        "condition": {
+          "clauses": [
+            {
+              "id": "832591d8-1351-4e41-a720-395f77ae7344",
+              "left": "@{node:n_b824c7dd9350.hasRestriction}",
+              "right": "true",
+              "operator": "equals"
+            },
+            {
+              "id": "8362e9c7-d3e6-4e38-8ea4-b49e7b4d1f0c",
+              "left": "@{node:n_b824c7dd9350.hasActiveTDV}",
+              "right": "true",
+              "operator": "equals"
+            }
+          ],
+          "combinator": "or"
+        }
+      }
+    },
+    {
+      "id": "n_2def40605e61",
+      "type": "if_node",
+      "name": "TDV aberta?",
+      "data": {
+        "position": {
+          "x": 6500,
+          "y": -1420
+        },
+        "condition": {
+          "clauses": [
+            {
+              "id": "03de2d4c-1cb9-4b4b-a0ee-56a58d4cf721",
+              "left": "@{node:n_b824c7dd9350.hasActiveTDV}",
+              "right": "true",
+              "operator": "equals"
+            }
+          ],
+          "combinator": "or"
+        }
+      }
+    },
+    {
+      "id": "n_02ec1db459dc",
+      "type": "http_node",
+      "name": "Validação Comprador",
+      "data": {
+        "position": {
+          "x": 8180,
+          "y": 0
+        },
+        "method": "POST",
+        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/validacao-comprador",
+        "body": "{\n  \"cpfComprador\": \"@{screen:s_2909315de67e.comp:c_676202e6fd57.value}\",\n  \"cepComprador\": \"@{screen:s_2909315de67e.comp:c_24e94a494019.value}\"\n}",
+        "responseExamples": [
+          {
+            "id": "e2ef8121-9ccd-477c-8d4a-0c2a82684031",
+            "name": "Comprador válido",
+            "value": "{\n  \"nomeComprador\": \"Carlos da Silva\",\n  \"cpfComprador\": \"721.169.550-17\",\n  \"enderecoComprador\": \"Rua Aulide Carini, 345, Vila Jacuí, São Paulo - SP\"\n}"
+          },
+          {
+            "id": "457b9ed8-71de-49cf-8f2d-50acaab7b2ef",
+            "name": "CPF invalido",
+            "value": "{ \"showSnackbar\": { \"variant\": \"error\", \"title\": \"Erro\", \"description\": \"CPF do comprador não encontrado\" } }\n"
+          }
+        ],
+        "showSnackbar": true
+      }
+    },
+    {
+      "id": "n_4378ea225f58",
+      "type": "http_node",
+      "name": "Validação Venda",
+      "data": {
+        "position": {
+          "x": 9220,
+          "y": 60
+        },
+        "method": "POST",
+        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/validacao-venda",
+        "body": "{\n  \"placaVeiculo\": \"@{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.plate}\",\n  \"renavamVeiculo\": \"@{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.renavam}\",\n  \"cpfComprador\": \"@{screen:s_2909315de67e.comp:c_676202e6fd57.value}\",\n  \"cepComprador\": \"@{screen:s_2909315de67e.comp:c_24e94a494019.value}\",\n  \"valorVenda\": \"@{screen:s_8ed2db9cbfd7.comp:c_f0a773241106.value}\",\n  \"quilometragem\": \"@{screen:s_8ed2db9cbfd7.comp:c_95aef308d32f.value}\"\n}",
+        "responseExamples": [
+          {
+            "id": "5f6ed066-0770-4256-8f82-50ad40f3620e",
+            "name": "Mesma cidade",
+            "value": "{ \"cidadesDiferentes\": false }\n"
+          },
+          {
+            "id": "e250cf43-f8c9-4739-aa7e-559151c06725",
+            "name": "Cidades diferentes — troca de placa necessária",
+            "value": "{ \"cidadesDiferentes\": true }\n"
+          }
+        ]
+      }
+    },
+    {
+      "id": "n_d371d777d048",
+      "type": "if_node",
+      "name": "Cidade diferente?",
+      "data": {
+        "position": {
+          "x": 9580,
+          "y": -180
+        },
+        "condition": {
+          "clauses": [
+            {
+              "id": "ee978e25-e9aa-47c8-a796-c3e62bea4cc6",
+              "left": "@{node:n_4378ea225f58.cidadesDiferentes}",
+              "right": "true",
+              "operator": "equals"
+            }
+          ],
+          "combinator": "or"
+        }
+      }
+    },
+    {
+      "id": "n_2f71a8110ee1",
+      "type": "end_node",
+      "name": "End",
+      "data": {
+        "position": {
+          "x": 12340,
+          "y": 400
+        }
+      }
+    },
+    {
+      "id": "n_598dfad57128",
+      "type": "http_node",
+      "name": "Consulta Compras",
+      "data": {
+        "position": {
+          "x": 4940,
+          "y": 2040
+        },
+        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/compras",
+        "responseExamples": [
+          {
+            "id": "2eaf52de-b422-48f5-8166-e8ca4ded4630",
+            "name": "Lista 3 veículos",
+            "value": "{\n  \"vehicles\": [\n    {\n      \"id\": \"1\",\n      \"title\": \"VOLKS/GOL GTI 1.0\",\n      \"plate\": \"BXG3U71\",\n      \"status\": \"REGULAR\",\n      \"licensingExpirationDate\": \"31/12/2025\",\n      \"type\": \"Utilitario\",\n      \"brandModel\": \"VOLKS/GOL GTI 1.0\",\n      \"renavam\": \"00001002003\",\n      \"lastLicensing\": \"03/12/2025\",\n      \"yearFab\": \"2014\",\n      \"yearMod\": \"2015\",\n      \"codigoTransferencia\": \"TDV-000001\"\n    },\n    {\n      \"id\": \"2\",\n      \"title\": \"ONIX LT - GM\",\n      \"plate\": \"CED3J65\",\n      \"status\": \"A VENCER\",\n      \"licensingExpirationDate\": \"31/12/2024\",\n      \"type\": \"Passeio\",\n      \"brandModel\": \"ONIX LT - GM\",\n      \"renavam\": \"00002003004\",\n      \"lastLicensing\": \"15/01/2024\",\n      \"yearFab\": \"2021\",\n      \"yearMod\": \"2022\",\n      \"codigoTransferencia\": \"TDV-000002\"\n    },\n    {\n      \"id\": \"3\",\n      \"title\": \"FIAT/UNO MILLE\",\n      \"plate\": \"RNI4Z30\",\n      \"status\": \"VENCIDO\",\n      \"licensingExpirationDate\": \"31/07/2023\",\n      \"type\": \"Utilitario\",\n      \"brandModel\": \"FIAT/UNO MILLE\",\n      \"renavam\": \"00003004005\",\n      \"lastLicensing\": \"20/08/2022\",\n      \"yearFab\": \"2008\",\n      \"yearMod\": \"2009\",\n      \"codigoTransferencia\": \"TDV-000003\"\n    }\n  ]\n}\n"
+          },
+          {
+            "id": "6b7ae0d4-fed7-4944-ab40-8aaeb8b2ea30",
+            "name": "Sem compras ativas",
+            "value": "{ \"showSnackbar\": { \"variant\": \"error\", \"title\": \"Erro\", \"description\": \"Nenhuma transferência ativa encontrada para este CPF\" } }"
+          }
+        ]
+      }
+    },
+    {
+      "id": "n_0a7cda804e6d",
+      "type": "http_node",
+      "name": "Confirmar Compra",
+      "data": {
+        "position": {
+          "x": 6140,
+          "y": 2120
+        },
+        "method": "POST",
+        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/confirmar-compra",
+        "body": "{\n  \"codigoTransferencia\": \"@{node:n_90a9d6db5f4b.codigoTransferencia}\",\n  \"codigoProvaVidaComprador\": \"@{node:n_32b7a4b7dfc4.codigoProvaVida}\"\n}",
+        "responseExamples": [
+          {
+            "id": "13ca35ee-ca27-4e9f-b5f2-21dd6e91360c",
+            "name": "Confirma compra",
+            "value": "{\n  \"nomeComprador\": \"Carlos da Silva\",\n  \"cpfComprador\": \"721.169.550-17\",\n  \"enderecoComprador\": \"Rua Aulide Carini, 345, Vila Jacuí, São Paulo - SP\",\n  \"vehicle\": {\n    \"id\": \"1\",\n    \"plate\": \"ABC1D23\",\n    \"title\": \"Toyota Corolla 2.0\",\n    \"status\": \"REGULAR\",\n    \"brandModel\": \"Toyota Corolla 2.0\",\n    \"licensingExpirationDate\": \"31/12/2025\",\n    \"renavam\": \"00001002003\",\n    \"lastLicensing\": \"03/12/2025\",\n    \"yearFab\": \"2022\",\n    \"yearMod\": \"2023\"\n  }\n}"
+          }
+        ]
+      }
+    },
+    {
+      "id": "n_cb65bf887105",
+      "type": "end_node",
+      "name": "End",
+      "data": {
+        "position": {
+          "x": 10120,
+          "y": 2160
+        }
+      }
+    },
+    {
+      "id": "n_7ca898ea4ec4",
+      "type": "http_node",
+      "name": "Cancelar TDV",
+      "data": {
+        "position": {
+          "x": 8260,
+          "y": -1820
+        },
+        "method": "POST",
+        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/cancelar",
+        "body": "{ \"codigoTransferencia\": \"@{node:n_b824c7dd9350.codigoTransferencia}\" }\n",
+        "responseExamples": [
+          {
+            "id": "0fef2101-5265-4903-8929-12b62fab554d",
+            "name": "Sucesso",
+            "value": "{}"
+          }
+        ]
+      }
+    },
+    {
+      "id": "n_33825c778fc5",
+      "type": "end_node",
+      "name": "End",
+      "data": {
+        "position": {
+          "x": 10900,
+          "y": -620
+        }
+      }
+    },
+    {
+      "id": "n_3bad58f20fff",
+      "type": "web_view_screen",
+      "name": "Documento",
+      "data": {
+        "position": {
+          "x": 8520,
+          "y": 2160
+        },
+        "url": "https://cas.iti.br/oauth2.0/authorize?response_type=code&redirect_uri=spgovbr://localhost/appspgovbr/iti/oauth_redirect.html&scope=sign&client_id=spgovbrprod",
+        "callbackPrefix": "spgovbr://"
+      }
+    },
+    {
+      "id": "n_8f4f853ebbfd",
+      "type": "http_node",
+      "name": "Valida Assinatura",
+      "data": {
+        "position": {
+          "x": 8740,
+          "y": 2160
+        },
+        "method": "POST",
+        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/valida-assinatura",
+        "body": "{ \"codigoTransferencia\": \"@{node:n_90a9d6db5f4b.codigoTransferencia}\" }\n",
+        "responseExamples": [
+          {
+            "id": "2f26dc5c-5d01-488a-8e76-1ca8f0dd33a7",
+            "name": "Válido",
+            "value": "{ \"valid\": true }"
+          },
+          {
+            "id": "dccc7ab8-1e2b-47a9-bf23-b435e52ed83c",
+            "name": "Inválido",
+            "value": "{ \"valid\": false }"
+          }
+        ]
+      }
+    },
+    {
+      "id": "n_69a265bcd005",
+      "type": "if_node",
+      "name": "Assinado?",
+      "data": {
+        "position": {
+          "x": 8980,
+          "y": 2160
+        },
+        "condition": {
+          "clauses": [
+            {
+              "id": "d356953a-eb14-40d8-bbf1-dfd1610eaed5",
+              "left": "@{node:n_8f4f853ebbfd.valid}",
+              "right": "true",
+              "operator": "equals"
+            }
+          ],
+          "combinator": "or"
+        }
+      }
+    },
+    {
+      "id": "n_cab5c7cef409",
+      "type": "web_view_screen",
+      "name": "Placa Mercosul",
+      "data": {
+        "position": {
+          "x": 10880,
+          "y": -860
+        }
+      }
+    },
+    {
+      "id": "n_91c08998ee76",
+      "type": "waypoint_node",
+      "name": null,
+      "data": {
+        "position": {
+          "x": 9260,
+          "y": -2420
+        }
+      }
+    },
+    {
+      "id": "n_d13ec1183b57",
+      "type": "waypoint_node",
+      "name": null,
+      "data": {
+        "position": {
+          "x": 8180,
+          "y": 2660
+        }
+      }
+    },
+    {
+      "id": "n_32b7a4b7dfc4",
+      "type": "liveness_screen",
+      "name": "Liveness",
+      "data": {
+        "position": {
+          "x": 5880,
+          "y": 2120
+        }
+      }
+    },
+    {
+      "id": "n_90a9d6db5f4b",
+      "type": "http_node",
+      "name": "Verificar estado TDV",
+      "data": {
+        "position": {
+          "x": -2200,
+          "y": 2060
+        },
+        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/verificar-estado",
+        "responseExamples": [
+          {
+            "id": "324edac1-bfb2-40b4-bf17-7db4f1aa8519",
+            "name": "Nova TDV",
+            "value": "{ \"proximaAcao\": \"nova_tdv\" }"
+          },
+          {
+            "id": "aa3b6e4e-0632-4c0d-8bd5-91dca5d73026",
+            "name": "Comprador",
+            "value": "{ \"proximaAcao\": \"comprador\", \"vehicles\": [{ \"plate\": \"ABC1D23\", \"brandModel\": \"Toyota Corolla\", \"renavam\": \"00000000000\", \"codigoTransferencia\": \"TDV-000000\" }] }"
+          },
+          {
+            "id": "c267ad04-f8a0-4b68-8054-8153029406fc",
+            "name": "Vendedor 2",
+            "value": "{\n  \"proximaAcao\": \"vendedor_2\",\n  \"nomeComprador\": \"João Silva\",\n  \"codigoTransferencia\": \"TDV-000000\",\n  \"vehicle\": {\n    \"id\": \"1\",\n    \"plate\": \"ABC1D23\",\n    \"title\": \"Toyota Corolla 2.0\",\n    \"status\": \"REGULAR\",\n    \"brandModel\": \"Toyota Corolla 2.0\",\n    \"licensingExpirationDate\": \"31/12/2025\",\n    \"renavam\": \"00001002003\",\n    \"lastLicensing\": \"03/12/2025\",\n    \"yearFab\": \"2022\",\n    \"yearMod\": \"2023\"\n  }\n}\n"
+          },
+          {
+            "id": "5da43371-c2ac-41da-9c0c-1ba0959b266d",
+            "name": "Comprador 2",
+            "value": "{\n  \"proximaAcao\": \"comprador_2\",\n  \"codigoTransferencia\": \"TDV-000000\",\n  \"vehicle\": {\n    \"id\": \"1\",\n    \"plate\": \"ABC1D23\",\n    \"title\": \"Toyota Corolla 2.0\",\n    \"status\": \"REGULAR\",\n    \"brandModel\": \"Toyota Corolla 2.0\",\n    \"licensingExpirationDate\": \"31/12/2025\",\n    \"renavam\": \"00001002003\",\n    \"lastLicensing\": \"03/12/2025\",\n    \"yearFab\": \"2022\",\n    \"yearMod\": \"2023\"\n  }\n}"
+          },
+          {
+            "id": "1ffd8ef3-080e-418d-9101-2ed2b30bdc5d",
+            "name": "Concluído",
+            "value": "{ \"proximaAcao\": \"concluido\" }"
+          }
+        ]
+      }
+    },
+    {
+      "id": "n_cd7b779a01a0",
+      "type": "case_node",
+      "name": "Rotear por ação",
+      "data": {
+        "position": {
+          "x": -1704,
+          "y": 2104
+        },
+        "value": "@{node:n_90a9d6db5f4b.proximaAcao}",
+        "routes": [
+          {
+            "id": "b9a984e3-5280-40e3-bd80-bd597df5da89",
+            "label": "Nova TDV",
+            "value": "nova_tdv"
+          },
+          {
+            "id": "5a63bc3a-59bb-4258-9927-d496147f49a2",
+            "label": "Comprador Cancelou",
+            "value": "comprador_cancelou"
+          },
+          {
+            "id": "fb741670-fa17-498b-b9c9-cc00349ea0be",
+            "label": "Comprador 1",
+            "value": "comprador"
+          },
+          {
+            "id": "d5bb251f-200e-4547-879e-c20202b5042d",
+            "label": "Vendedor 2",
+            "value": "vendedor_2"
+          },
+          {
+            "id": "1394b265-113e-4c2a-af0c-c950abbdf258",
+            "label": "Comprador 2",
+            "value": "comprador_2"
+          },
+          {
+            "id": "38c9ab5b-70a0-4a55-b7c2-a1a8e49a2e9c",
+            "label": "Vendedor Cancelou",
+            "value": "vendedor_cancelou"
+          },
+          {
+            "id": "3f5213c7-0029-4f08-9683-f70d379c9f5b",
+            "label": "Concluído",
+            "value": "concluido"
+          },
+          {
+            "id": "cb2cf280-8e9c-4242-979a-67c89f4ad4f2",
+            "label": "Pagamento Confirmado",
+            "value": "pagamento_confirmado"
+          }
+        ]
+      }
+    },
+    {
+      "id": "n_d87067e61ebb",
+      "type": "http_node",
+      "name": "Criar TDV",
+      "data": {
+        "position": {
+          "x": 11360,
+          "y": 360
+        },
+        "method": "POST",
+        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/criar",
+        "body": "{\n  \"placaVeiculo\": \"@{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.plate}\",\n  \"renavamVeiculo\": \"@{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.renavam}\",\n  \"cpfComprador\": \"@{screen:s_2909315de67e.comp:c_676202e6fd57.value}\",\n  \"nomeComprador\": \"@{screen:s_2909315de67e.comp:c_eb386ba9d15a.value}\",\n  \"emailComprador\": \"@{screen:s_2909315de67e.comp:c_85fbac00c3aa.value}\",\n  \"cepComprador\": \"@{screen:s_2909315de67e.comp:c_24e94a494019.value}\",\n  \"valorVenda\": \"@{screen:s_8ed2db9cbfd7.comp:c_f0a773241106.value}\",\n  \"quilometragem\": \"@{screen:s_8ed2db9cbfd7.comp:c_95aef308d32f.value}\",\n  \"codigoProvaVidaVendedor\": \"@{node:n_4d4ab6c16ec8.codigoProvaVida}\"\n}",
+        "responseExamples": [
+          {
+            "id": "f0c3aea6-736b-4662-a6ff-a468f5c7fa53",
+            "name": "Sucesso",
+            "value": "{ \"codigo\": \"TDV-123456\" }"
+          }
+        ]
+      }
+    },
+    {
+      "id": "n_4d4ab6c16ec8",
+      "type": "liveness_screen",
+      "name": "Liveness",
+      "data": {
+        "position": {
+          "x": 7180,
+          "y": 40
+        }
+      }
+    },
+    {
+      "id": "n_54e1a65041fa",
+      "type": "web_view_screen",
+      "name": "Documento",
+      "data": {
+        "position": {
+          "x": 320,
+          "y": 2820
+        }
+      }
+    },
+    {
+      "id": "n_be558ba59c69",
+      "type": "http_node",
+      "name": "Valida Assinatura",
+      "data": {
+        "position": {
+          "x": 540,
+          "y": 2820
+        },
+        "method": "POST",
+        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/valida-assinatura",
+        "body": "{ \"codigoTransferencia\": \"@{node:n_90a9d6db5f4b.codigoTransferencia}\" }\n",
+        "responseExamples": [
+          {
+            "id": "bbf0c143-4114-42fc-b2e2-632fae3bef9d",
+            "name": "Válido",
+            "value": "{ \"valid\": true }\n"
+          },
+          {
+            "id": "a2165852-e67c-4196-93f1-dc545eaaafc4",
+            "name": "Inválido",
+            "value": "{ \"valid\": false }\n"
+          }
+        ]
+      }
+    },
+    {
+      "id": "n_25840654bbac",
+      "type": "if_node",
+      "name": "Assinado?",
+      "data": {
+        "position": {
+          "x": 780,
+          "y": 2820
+        },
+        "condition": {
+          "clauses": [
+            {
+              "id": "e62721f1-0857-4234-924e-31a963e9783b",
+              "left": "@{node:n_be558ba59c69.valid}",
+              "right": "true",
+              "operator": "equals"
+            }
+          ],
+          "combinator": "or"
+        }
+      }
+    },
+    {
+      "id": "n_055bfbb86b6a",
+      "type": "end_node",
+      "name": "End",
+      "data": {
+        "position": {
+          "x": 1980,
+          "y": 2860
+        }
+      }
+    },
+    {
+      "id": "n_1b63dd156738",
+      "type": "waypoint_node",
+      "name": null,
+      "data": {
+        "position": {
+          "x": -300,
+          "y": 3360
+        }
+      }
+    },
+    {
+      "id": "n_b685a31ed52c",
+      "type": "http_node",
+      "name": "Consulta Débitos",
+      "data": {
+        "position": {
+          "x": 260,
+          "y": 4080
+        },
+        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/consulta-debitos?codigoTransferencia=@{node:n_90a9d6db5f4b.codigoTransferencia}",
+        "responseExamples": [
+          {
+            "id": "662e4b72-b520-47e2-a222-bd21ed66959a",
+            "name": "Com débitos",
+            "value": "{\n  \"nomeComprador\": \"Carlos da Silva\",\n  \"taxaTransferencia\": \"R$ 243,77\",\n  \"taxaLicenciamento\": \"R$ 120,50\",\n  \"totalDebitos\": \"R$ 364,27\"\n}"
+          }
+        ]
+      }
+    },
+    {
+      "id": "n_de17c35410fd",
+      "type": "pix_screen",
+      "name": "Pagamento PIX",
+      "data": {
+        "position": {
+          "x": 1260,
+          "y": 4100
+        },
+        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/consulta-debitos?codigoTransferencia=@{node:n_90a9d6db5f4b.codigoTransferencia}"
+      }
+    },
+    {
+      "id": "n_61a5b829b730",
+      "type": "end_node",
+      "name": "End",
+      "data": {
+        "position": {
+          "x": 2320,
+          "y": 4160
+        }
+      }
+    },
+    {
+      "id": "n_f0798c61f005",
+      "type": "waypoint_node",
+      "name": null,
+      "data": {
+        "position": {
+          "x": 5800,
+          "y": 2640
+        }
+      }
+    },
+    {
+      "id": "n_af6ed7678583",
+      "type": "http_node",
+      "name": "Cancela TDV",
+      "data": {
+        "position": {
+          "x": 7720,
+          "y": 3100
+        },
+        "method": "POST",
+        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/cancelar",
+        "body": "{ \"codigoTransferencia\": \"@{node:n_90a9d6db5f4b.codigoTransferencia}\" }\n",
+        "responseExamples": [
+          {
+            "id": "5af6911b-58b6-4337-843e-002fa8eb4e6f",
+            "name": "Sucesso",
+            "value": "{}"
+          }
+        ]
+      }
+    },
+    {
+      "id": "n_4005e7a1b0f3",
+      "type": "end_node",
+      "name": "End",
+      "data": {
+        "position": {
+          "x": 8600,
+          "y": 3180
+        }
+      }
+    },
+    {
+      "id": "n_0f8657fd66bf",
+      "type": "end_node",
+      "name": "End",
+      "data": {
+        "position": {
+          "x": 780,
+          "y": 1920
+        }
+      }
+    },
+    {
+      "id": "n_35cae2d8889d",
+      "type": "waypoint_node",
+      "name": null,
+      "data": {
+        "position": {
+          "x": 3500,
+          "y": 1380
+        }
+      }
+    },
+    {
+      "id": "n_3172cd0b9b1e",
+      "type": "end_node",
+      "name": "End",
+      "data": {
+        "position": {
+          "x": 1520,
+          "y": 5960
+        }
+      }
+    },
+    {
+      "id": "n_0a27c95080a8",
+      "type": "waypoint_node",
+      "name": null,
+      "data": {
+        "position": {
+          "x": -700,
+          "y": 5852
+        }
+      }
+    },
+    {
+      "id": "n_d3aac54b01b3",
+      "type": "waypoint_node",
+      "name": null,
+      "data": {
+        "position": {
+          "x": -940,
+          "y": 6272
+        }
+      }
+    },
+    {
+      "id": "n_7df94cbc03bc",
+      "type": "waypoint_node",
+      "name": null,
+      "data": {
+        "position": {
+          "x": -480,
+          "y": 5472
+        }
+      }
+    },
+    {
+      "id": "n_47fa84a2ee52",
+      "type": "waypoint_node",
+      "name": null,
+      "data": {
+        "position": {
+          "x": -1184,
+          "y": 2300
+        }
+      }
+    },
+    {
+      "id": "n_546b746fc7b5",
+      "type": "waypoint_node",
+      "name": null,
+      "data": {
+        "position": {
+          "x": -1344,
+          "y": 2336
+        }
+      }
+    },
+    {
+      "id": "n_217d5ae8935f",
+      "type": "waypoint_node",
+      "name": null,
+      "data": {
+        "position": {
+          "x": -564,
+          "y": 1532
+        }
+      }
+    },
+    {
+      "id": "n_b17e692471e5",
+      "type": "waypoint_node",
+      "name": null,
+      "data": {
+        "position": {
+          "x": -860,
+          "y": 452
+        }
+      }
+    }
+  ],
+  "edges": [
+    {
+      "sourceId": "n_b92680d39623",
+      "targetId": "n_4104c4067c20",
+      "sourceHandle": "true",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_4104c4067c20",
+      "targetId": "s_83bb5547ec06",
+      "sourceHandle": "output",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_b824c7dd9350",
+      "targetId": "n_b2c6d93e6c54",
+      "sourceHandle": "output",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_2def40605e61",
+      "targetId": "s_62e905fb199e",
+      "sourceHandle": "true",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_2def40605e61",
+      "targetId": "s_37dddfb990e3",
+      "sourceHandle": "false",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_b2c6d93e6c54",
+      "targetId": "s_8fefaaacf3d9",
+      "sourceHandle": "false",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_b2c6d93e6c54",
+      "targetId": "n_2def40605e61",
+      "sourceHandle": "true",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_02ec1db459dc",
+      "targetId": "s_8ed2db9cbfd7",
+      "sourceHandle": "output",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_4378ea225f58",
+      "targetId": "n_d371d777d048",
+      "sourceHandle": "output",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_d371d777d048",
+      "targetId": "s_eb956ee1dce8",
+      "sourceHandle": "true",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_d371d777d048",
+      "targetId": "s_3a0b04432a52",
+      "sourceHandle": "false",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_b92680d39623",
+      "targetId": "n_598dfad57128",
+      "sourceHandle": "false",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_598dfad57128",
+      "targetId": "s_52363926e91c",
+      "sourceHandle": "output",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_0a7cda804e6d",
+      "targetId": "s_31f3e90bbdcc",
+      "sourceHandle": "output",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_a95b06ade63c",
+      "targetId": "s_bced62eb751b",
+      "sourceHandle": "c_fd714f3609d1",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_bced62eb751b",
+      "targetId": "s_047f159425d9",
+      "sourceHandle": "c_e821ec3e1383",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_047f159425d9",
+      "targetId": "s_ef18ee58cdf5",
+      "sourceHandle": "c_ef2408d34320",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_ef18ee58cdf5",
+      "targetId": "s_7fdb8d61c217",
+      "sourceHandle": "c_4e38749a7e2f",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_7fdb8d61c217",
+      "targetId": "s_eac3ed5620ab",
+      "sourceHandle": "c_2676051eb29d",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_eac3ed5620ab",
+      "targetId": "s_95c89379f948",
+      "sourceHandle": "c_8740a40c5026",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_95c89379f948",
+      "targetId": "s_d1720681ec27",
+      "sourceHandle": "c_62125e5d5178",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_62e905fb199e",
+      "targetId": "d_2d7cb6069d63",
+      "sourceHandle": "c_d3576283536b",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_2909315de67e",
+      "targetId": "n_02ec1db459dc",
+      "sourceHandle": "c_9f7abbd72413",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_8ed2db9cbfd7",
+      "targetId": "n_4378ea225f58",
+      "sourceHandle": "c_6909006a32c0",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_3a0b04432a52",
+      "targetId": "s_7d910eaa66ad",
+      "sourceHandle": "c_cf4904357f7c",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_8080e0ac9d2e",
+      "targetId": "n_2f71a8110ee1",
+      "sourceHandle": "c_4be85500bc5e",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_eb956ee1dce8",
+      "targetId": "n_33825c778fc5",
+      "sourceHandle": "c_09851a0ecabc",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_31f3e90bbdcc",
+      "targetId": "s_c482ac86f650",
+      "sourceHandle": "c_c29973b3a9ca",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_c482ac86f650",
+      "targetId": "s_24b45fd19f30",
+      "sourceHandle": "c_5d63b6199d05",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_0dab2f87c6ad",
+      "targetId": "n_cb65bf887105",
+      "sourceHandle": "c_6e892f1ec541",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_24b45fd19f30",
+      "targetId": "n_3bad58f20fff",
+      "sourceHandle": "c_f95e240f9b02",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_3bad58f20fff",
+      "targetId": "n_8f4f853ebbfd",
+      "sourceHandle": "output",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_8f4f853ebbfd",
+      "targetId": "n_69a265bcd005",
+      "sourceHandle": "output",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_69a265bcd005",
+      "targetId": "s_0dab2f87c6ad",
+      "sourceHandle": "true",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "d_2d7cb6069d63",
+      "targetId": "n_7ca898ea4ec4",
+      "sourceHandle": "c_5bd83944647f",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_eb956ee1dce8",
+      "targetId": "n_cab5c7cef409",
+      "sourceHandle": "c_ee087ad678bc",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_d1720681ec27",
+      "targetId": "n_b92680d39623",
+      "sourceHandle": "c_2ee80a561196",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_83bb5547ec06",
+      "targetId": "n_b824c7dd9350",
+      "sourceHandle": "c_d3be8a364c48",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_7ca898ea4ec4",
+      "targetId": "d_73700eef12bc",
+      "sourceHandle": "output",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "d_73700eef12bc",
+      "targetId": "n_91c08998ee76",
+      "sourceHandle": "c_faa30ee67553",
+      "targetHandle": "right-target"
+    },
+    {
+      "sourceId": "n_91c08998ee76",
+      "targetId": "s_83bb5547ec06",
+      "sourceHandle": "left-source",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_69a265bcd005",
+      "targetId": "n_d13ec1183b57",
+      "sourceHandle": "false",
+      "targetHandle": "right-target"
+    },
+    {
+      "sourceId": "n_d13ec1183b57",
+      "targetId": "s_24b45fd19f30",
+      "sourceHandle": "left-source",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_32b7a4b7dfc4",
+      "targetId": "n_0a7cda804e6d",
+      "sourceHandle": "output",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_52363926e91c",
+      "targetId": "n_32b7a4b7dfc4",
+      "sourceHandle": "c_ebf361a4035f",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_5bd3d687408b",
+      "targetId": "n_90a9d6db5f4b",
+      "sourceHandle": "output",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_90a9d6db5f4b",
+      "targetId": "n_cd7b779a01a0",
+      "sourceHandle": "output",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_7d910eaa66ad",
+      "targetId": "n_d87067e61ebb",
+      "sourceHandle": "c_8c410daf9e3e",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_d87067e61ebb",
+      "targetId": "s_8080e0ac9d2e",
+      "sourceHandle": "output",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_8fefaaacf3d9",
+      "targetId": "n_4d4ab6c16ec8",
+      "sourceHandle": "c_b1ff1279cc4e",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_4d4ab6c16ec8",
+      "targetId": "s_2909315de67e",
+      "sourceHandle": "output",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_46aa0d528dfd",
+      "targetId": "n_055bfbb86b6a",
+      "sourceHandle": "c_d214c4655ccc",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_f0ef50595f87",
+      "targetId": "n_54e1a65041fa",
+      "sourceHandle": "c_44fe592f850b",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_54e1a65041fa",
+      "targetId": "n_be558ba59c69",
+      "sourceHandle": "output",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_be558ba59c69",
+      "targetId": "n_25840654bbac",
+      "sourceHandle": "output",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_25840654bbac",
+      "targetId": "s_46aa0d528dfd",
+      "sourceHandle": "true",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_25840654bbac",
+      "targetId": "n_1b63dd156738",
+      "sourceHandle": "false",
+      "targetHandle": "right-target"
+    },
+    {
+      "sourceId": "n_1b63dd156738",
+      "targetId": "s_f0ef50595f87",
+      "sourceHandle": "left-source",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_fb22aac48147",
+      "targetId": "n_b685a31ed52c",
+      "sourceHandle": "c_63dd5a7688b7",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_b685a31ed52c",
+      "targetId": "s_4f0a972b5591",
+      "sourceHandle": "output",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_4f0a972b5591",
+      "targetId": "n_de17c35410fd",
+      "sourceHandle": "c_27715ff703a0",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_de17c35410fd",
+      "targetId": "s_2b3f4c280a32",
+      "sourceHandle": "output",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_2b3f4c280a32",
+      "targetId": "n_61a5b829b730",
+      "sourceHandle": "c_aa05e13986b7",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_f0798c61f005",
+      "targetId": "n_32b7a4b7dfc4",
+      "sourceHandle": "right-source",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_31f3e90bbdcc",
+      "targetId": "s_ffbdc2f4fe37",
+      "sourceHandle": "c_78ed063a4397",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "d_5fdc480fb32b",
+      "targetId": "n_4005e7a1b0f3",
+      "sourceHandle": "c_880c4afa0dbe",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_af6ed7678583",
+      "targetId": "d_5fdc480fb32b",
+      "sourceHandle": "output",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_ffbdc2f4fe37",
+      "targetId": "n_af6ed7678583",
+      "sourceHandle": "c_078a6b779b86",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_e28e30972542",
+      "targetId": "n_0f8657fd66bf",
+      "sourceHandle": "c_f5597476d911",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_cd7b779a01a0",
+      "targetId": "n_f0798c61f005",
+      "sourceHandle": "fb741670-fa17-498b-b9c9-cc00349ea0be",
+      "targetHandle": "left-target"
+    },
+    {
+      "sourceId": "s_e28e30972542",
+      "targetId": "n_35cae2d8889d",
+      "sourceHandle": "c_cb7418aee6f4",
+      "targetHandle": "left-target"
+    },
+    {
+      "sourceId": "n_35cae2d8889d",
+      "targetId": "s_d1720681ec27",
+      "sourceHandle": "right-source",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_db3a8a326b6e",
+      "targetId": "n_3172cd0b9b1e",
+      "sourceHandle": "c_b596e5c3b061",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_c8758a377d35",
+      "targetId": "n_3172cd0b9b1e",
+      "sourceHandle": "c_c628dcdabad5",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_89a40a2ddf9a",
+      "targetId": "n_3172cd0b9b1e",
+      "sourceHandle": "c_6451d273bad5",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_cd7b779a01a0",
+      "targetId": "n_0a27c95080a8",
+      "sourceHandle": "3f5213c7-0029-4f08-9683-f70d379c9f5b",
+      "targetHandle": "left-target"
+    },
+    {
+      "sourceId": "n_0a27c95080a8",
+      "targetId": "s_db3a8a326b6e",
+      "sourceHandle": "right-source",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_cd7b779a01a0",
+      "targetId": "n_d3aac54b01b3",
+      "sourceHandle": "cb2cf280-8e9c-4242-979a-67c89f4ad4f2",
+      "targetHandle": "left-target"
+    },
+    {
+      "sourceId": "n_d3aac54b01b3",
+      "targetId": "s_c8758a377d35",
+      "sourceHandle": "right-source",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_cd7b779a01a0",
+      "targetId": "n_7df94cbc03bc",
+      "sourceHandle": "38c9ab5b-70a0-4a55-b7c2-a1a8e49a2e9c",
+      "targetHandle": "left-target"
+    },
+    {
+      "sourceId": "n_7df94cbc03bc",
+      "targetId": "s_89a40a2ddf9a",
+      "sourceHandle": "right-source",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_cd7b779a01a0",
+      "targetId": "n_47fa84a2ee52",
+      "sourceHandle": "d5bb251f-200e-4547-879e-c20202b5042d",
+      "targetHandle": "left-target"
+    },
+    {
+      "sourceId": "n_47fa84a2ee52",
+      "targetId": "s_f0ef50595f87",
+      "sourceHandle": "right-source",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_cd7b779a01a0",
+      "targetId": "n_546b746fc7b5",
+      "sourceHandle": "1394b265-113e-4c2a-af0c-c950abbdf258",
+      "targetHandle": "left-target"
+    },
+    {
+      "sourceId": "n_546b746fc7b5",
+      "targetId": "s_fb22aac48147",
+      "sourceHandle": "right-source",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_cd7b779a01a0",
+      "targetId": "n_217d5ae8935f",
+      "sourceHandle": "5a63bc3a-59bb-4258-9927-d496147f49a2",
+      "targetHandle": "left-target"
+    },
+    {
+      "sourceId": "n_217d5ae8935f",
+      "targetId": "s_e28e30972542",
+      "sourceHandle": "right-source",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_cd7b779a01a0",
+      "targetId": "n_b17e692471e5",
+      "sourceHandle": "b9a984e3-5280-40e3-bd80-bd597df5da89",
+      "targetHandle": "left-target"
+    },
+    {
+      "sourceId": "n_b17e692471e5",
+      "targetId": "s_a95b06ade63c",
+      "sourceHandle": "right-source",
+      "targetHandle": "input"
+    }
+  ]
+}
