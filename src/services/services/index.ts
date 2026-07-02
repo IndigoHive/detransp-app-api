@@ -1,6 +1,3 @@
 export * from './services-services'
-export * from './get-vehicles-service'
-export * from './solicitar-vistoria-em-transito'
-export * from './list-service-cases-service/list-service-cases-service'
-export * from './get-service-case-detail-service/get-service-case-detail-service'
+export * from './get-service-case-detail-service'
 export * from './validar-curso-teorico-da-cnh-do-brasil-no-detran-sp'
