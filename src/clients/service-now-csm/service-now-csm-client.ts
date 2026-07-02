@@ -118,6 +118,15 @@ export class ServiceNowCsmClient {
     return response.data
   }
 
+  async addComment<T = unknown> (protocolId: string, comment: string): Promise<T> {
+    const response = await this.axios.patch<T>(
+      `/api/now/table/x_mdpdd_detran_srv_service_case/${protocolId}`,
+      { comments: comment }
+    )
+
+    return response.data
+  }
+
   async getProtocols<T = unknown> (params?: Record<string, string | number | boolean>): Promise<T> {
     try {
       const response = await this.axios.get<T>('/api/now/table/x_mdpdd_detran_srv_service_case', {
