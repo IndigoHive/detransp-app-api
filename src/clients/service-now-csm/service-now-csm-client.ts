@@ -2,6 +2,14 @@ import axios, { type AxiosInstance, type AxiosRequestConfig } from 'axios'
 import type { Logger } from 'pino'
 import type { Config } from '../../types'
 
+export type UploadAttachmentParams = {
+  tableName: string
+  tableSysId: string
+  fileName: string
+  fileBuffer: Buffer
+  contentType?: string | undefined
+}
+
 const SERVICE_NAME = 'servicenow-csm'
 
 export type ServiceNowCsmClientParams = {
@@ -88,6 +96,23 @@ export class ServiceNowCsmClient {
       `/api/sn_sc/v1/servicecatalog/items/${catalogItemId}/submit_producer`,
       payload
     )
+
+    return response.data
+  }
+
+  async uploadAttachment<T = unknown> ({ tableName, tableSysId, fileName, fileBuffer, contentType }: UploadAttachmentParams): Promise<T> {
+    const formData = new FormData()
+    const fileBytes = new Uint8Array(fileBuffer)
+
+    formData.append('table_name', tableName)
+    formData.append('table_sys_id', tableSysId)
+    formData.append('uploadFile', new Blob([fileBytes], { type: contentType ?? 'application/octet-stream' }), fileName)
+
+    const response = await this.axios.post<T>('/api/now/attachment/upload', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
 
     return response.data
   }

@@ -10,7 +10,8 @@ type Dependencies = {
 
 type ServiceNowCsmSubmitResult = {
   result: {
-    number: string
+    number?: string
+    sys_id?: string
     [key: string]: unknown
   }
 }
@@ -31,8 +32,21 @@ export class ValidarCursoTeoricoDaCNHDoBrasilNoDetranSpService {
         payload
       )
 
+      const protocol = result.result?.number
+      const recordSysId = result.result?.sys_id
+
+      if (recordSysId && input.attachment) {
+        await this.serviceNowCsm.uploadAttachment({
+          tableName: 'x_mdpdd_detran_srv_service_case',
+          tableSysId: recordSysId,
+          fileName: input.attachment.originalName,
+          fileBuffer: input.attachment.buffer,
+          contentType: input.attachment.mimetype ?? undefined,
+        })
+      }
+
       return {
-        protocol: result.result.number ,
+        protocol: protocol ?? recordSysId ?? 'Protocolo não disponível',
       }
     } catch (error) {
       console.error('Erro ao enviar payload para o ServiceNow CSM:', error)

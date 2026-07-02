@@ -9,6 +9,11 @@ export type ValidarCursoTeoricoDaCNHDoBrasilNoDetranSpInput = {
   jaConcluiEtapaCursoTeoricoExpedicaoCertificado: boolean
   documentoComprovanteRepresentacao?: boolean
   representation: boolean
+  attachment?: {
+    buffer: Buffer
+    originalName: string
+    mimetype?: string
+  }
 }
 
 export type ValidarCursoTeoricoDaCNHDoBrasilNoDetranSpResponse =
