@@ -136,7 +136,10 @@ export class VerificaVeiculoLicenciamentoService {
   private async fetchMultas(auth: LicenciamentoVeiculoAuth): Promise<MultasDetail> {
     try {
       const result = await this.licenciamentoClient.listaMultas(auth, auth.renavam)
-      const items = result?.result ?? []
+      const items = result?.result?.map(multa => ({
+        ...multa,
+        dataInfracao: new Date(multa.dataInfracao).toLocaleDateString(),
+      })) ?? []
 
       return {
         items,
