@@ -168,11 +168,12 @@ export class VerificaVeiculoRepresentacaoService {
     try {
       const result = await this.licenciamentoClient.listaMultas(auth, auth.renavam)
       const items = result?.result?.map(multa => {
-        const dataInfracao = multa.dataInfracao ? new Date(multa.dataInfracao) : null
-        const formatedDataInfracao = dataInfracao ? Intl.DateTimeFormat('pt-BR').format(dataInfracao) : ''
+        const formattedDataInfracao = multa?.dataInfracao
+           ? multa?.dataInfracao?.split('T')[0]?.split('-').reverse().join('/')
+           : ''
         return {
           ...multa,
-          dataInfracao: formatedDataInfracao,
+          dataInfracao: formattedDataInfracao ?? '',
         }
       }) ?? []
       return {
