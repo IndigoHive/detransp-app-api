@@ -65,7 +65,7 @@ export class ProvaVidaService {
       macAddressAtendente: '00:00:00:00:00:00'
     })
 
-    if (match.confere !== 'true') {
+    if (match.confere !== true) {
       throw createError(422, 'Biometria facial não conferida.', { expose: true })
     }
 

@@ -63,7 +63,8 @@ export type MatchBiometriaInput = {
 }
 
 export type MatchBiometriaResult = {
-  confere: string
+  confere: boolean
+  score?: number
 }
 
 export class RotaVidaClient {
