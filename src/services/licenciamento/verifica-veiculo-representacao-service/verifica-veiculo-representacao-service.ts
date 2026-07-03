@@ -167,10 +167,14 @@ export class VerificaVeiculoRepresentacaoService {
   private async fetchMultas(auth: LicenciamentoVeiculoAuth): Promise<MultasDetail> {
     try {
       const result = await this.licenciamentoClient.listaMultas(auth, auth.renavam)
-      const items = result?.result?.map(multa => ({
-        ...multa,
-        dataInfracao: new Date(multa.dataInfracao).toLocaleDateString(),
-      })) ?? []
+      const items = result?.result?.map(multa => {
+        const dataInfracao = multa.dataInfracao ? new Date(multa.dataInfracao) : null
+        const formatedDataInfracao = dataInfracao ? Intl.DateTimeFormat('pt-BR').format(dataInfracao) : ''
+        return {
+          ...multa,
+          dataInfracao: formatedDataInfracao,
+        }
+      }) ?? []
       return {
         items,
         total: formatCurrency(items.reduce((sum, m) => sum + (m.valor ?? 0), 0)),
