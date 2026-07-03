@@ -26,7 +26,7 @@ export class ProvaVidaService {
     const cpf = extractCpfFromToken(token)
 
     if (!cpf) {
-      throw createError(400, 'CPF não encontrado no token.', { expose: true })
+      throw createError(401, 'Token de autorização inválido ou expirado.', { expose: true })
     }
 
     const integrityToken = token
