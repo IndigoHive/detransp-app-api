@@ -174,13 +174,13 @@ const MOCK_FLOWS = [
     id: FLOW_ID_LICENCIAMENTO,
     name: 'Licenciamento',
     description: 'Realize o licenciamento do seu veículo',
-    iconName: 'car',
+    iconName: 'directions-car',
   },
   {
     id: FLOW_ID_TDV,
     name: 'Transferência de Veículo',
     description: 'Transfira a propriedade do seu veículo',
-    iconName: 'swap-horizontal',
+    iconName: 'swap-horiz',
   },
 ]
 
@@ -710,6 +710,14 @@ app.post('/api/tdv/valida-assinatura', (req, res) => {
   })
 })
 
+app.post('/api/tdv/prova-vida', (req, res) => {
+  setTimeout(() => {
+    res.json({
+      codigoProvaVida: 'MOCK-PV-' + Date.now(),
+    })
+  }, 2000)
+})
+
 app.get('/api/tdv/consulta-debitos', (req, res) => {
   const codigoTransferencia = (req.query.codigoTransferencia as string) || 'TDV-MOCK'
   res.json({
@@ -778,6 +786,7 @@ app.listen(PORT, () => {
   console.log('    GET  /api/tdv/compras')
   console.log('    POST /api/tdv/confirmar-compra')
   console.log('    POST /api/tdv/valida-assinatura')
+  console.log('    POST /api/tdv/prova-vida')
   console.log('    GET  /api/tdv/consulta-debitos')
   console.log('')
 })

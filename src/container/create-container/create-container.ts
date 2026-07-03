@@ -18,6 +18,7 @@ import { getAuthRegistrations, getFlowsRegistrations, getServicesRegistrations, 
 import { getClientRegistrations, DetranSpServiceNowLicenciamentoClient } from '../../clients'
 import { DetranSpServiceNowDebRestrClient } from '../../clients/detran-sp-service-now-deb-restr'
 import { RotaCaixaPostalClient } from '../../clients/rota-caixa-postal'
+import { RotaVidaClient } from '../../clients/rota-vida'
 import pino, { type Logger } from 'pino'
 export type CreateContainerOptions = {
   config?: Config
@@ -38,6 +39,13 @@ export function createContainer (
       new RotaCaixaPostalClient({
         baseUrl: cfg.rotaCaixaPostal.baseUrl,
         appTopic: cfg.rotaCaixaPostal.appTopic,
+        logger,
+      })
+    ).scoped(),
+    rotaVidaClient: asFunction(({ config: cfg, logger }: { config: Config; logger: Logger }) =>
+      new RotaVidaClient({
+        vidaBaseUrl: cfg.rotaVida.vidaBaseUrl,
+        arquivosBaseUrl: cfg.rotaVida.arquivosBaseUrl,
         logger,
       })
     ).scoped(),
