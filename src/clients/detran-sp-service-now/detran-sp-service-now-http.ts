@@ -34,6 +34,10 @@ export class DetranSpServiceNowHttp {
   }
 
   protected withAuth (auth: DetranSpServiceNowAuth): AxiosRequestConfig {
+    if (!auth.cpf) {
+      throw createError(401, 'Token de autorização inválido ou expirado.', { expose: true })
+    }
+
     return {
       headers: {
         Authorization: `Bearer ${auth.token}`,
