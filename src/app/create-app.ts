@@ -1,5 +1,6 @@
 import type { AwilixContainer } from 'awilix'
 import express from 'express'
+import type { Logger } from 'pino'
 import { authRouter, dashboardRouter, debRestrRouter, flowsRouter, healthRouter, licenciamentoRouter, notificacoesRouter, servicesRouter, tdvRouter } from './routers'
 import { ContainerServices, createContainer } from '../container'
 import { fallbackErrorHandler, httpErrorHandler, scopePerRequest, sessionAuth } from './middlewares'
@@ -14,6 +15,13 @@ export function createApp (options: CreateAppOptions = {}) {
   const app = express()
 
   app.use(scopePerRequest(container))
+
+  // Request logger
+  const logger: Logger = container.resolve('logger')
+  app.use((req, _res, next) => {
+    logger.info({ method: req.method, url: req.url }, 'incoming request')
+    next()
+  })
 
   // Middlewares
   app.use(express.json({ limit: '10mb' }))

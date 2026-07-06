@@ -1,5 +1,6 @@
 import type { DetranSpServiceNowTdvClient } from '../../../clients/detran-sp-service-now/tdv'
 import { CodigoEstadoTDV, CodigoOrigemTDV } from '../../../clients/detran-sp-service-now/tdv/types'
+import { extractBearerToken, extractCpfFromToken, extractNameFromToken, extractEmailFromToken } from '../../../utils/token'
 
 type Dependencies = {
   detranSpServiceNowTdv: DetranSpServiceNowTdvClient
@@ -28,11 +29,19 @@ export class CriarTdvService {
     this.client = detranSpServiceNowTdv
   }
 
-  async run (accessToken: string, cpfVendedor: string, nomeVendedor: string, emailVendedor: string, input: CriarTdvInput): Promise<CriarTdvResult> {
-    const enderecoResult = await this.client.buscaEndereco(accessToken, input.cepComprador)
+  async run (authorizationHeader: string | undefined, input: CriarTdvInput): Promise<CriarTdvResult> {
+    const token = extractBearerToken(authorizationHeader)
+    const cpfVendedor = extractCpfFromToken(token)
+    const nomeVendedor = extractNameFromToken(token)
+    const emailVendedor = extractEmailFromToken(token)
+    const auth = { token, cpf: cpfVendedor }
+
+    // Fetch buyer address details from CEP
+    const enderecoResult = await this.client.buscaEndereco(auth, input.cepComprador)
     const endereco = enderecoResult?.result
 
-    const createResult = await this.client.criaTdv(accessToken, {
+    // Step 1: Create the TDV (state 1 - VEICULO_SELECIONADO)
+    const createResult = await this.client.criaTdv(auth, {
       codigoRenavamVeiculo: input.renavamVeiculo,
       placaVeiculo: input.placaVeiculo,
       nomeVendedor,
@@ -46,7 +55,8 @@ export class CriarTdvService {
       throw new Error('Falha ao criar transferência')
     }
 
-    await this.client.atualizaTdv(accessToken, codigoTransferencia, {
+    // Step 2: Advance to state 2 (DADOS_VENDA_INFORMADOS)
+    await this.client.atualizaTdv(auth, codigoTransferencia, {
       estado: CodigoEstadoTDV.DADOS_VENDA_INFORMADOS,
       codigoComprador: input.cpfComprador,
       nomeComprador: input.nomeComprador,
@@ -59,13 +69,14 @@ export class CriarTdvService {
       valorVendaVeiculo: input.valorVenda,
       kmVeiculo: input.quilometragem,
       codigoProvaVidaVendedor: input.codigoProvaVidaVendedor,
-      tipoProvaVidaVendedor: '2'
+      tipoProvaVidaVendedor: '2' // LIVENESS
     })
 
-    await this.client.atualizaTdv(accessToken, codigoTransferencia, {
+    // Step 3: Advance to state 3 (ATPVE_CRIADA)
+    await this.client.atualizaTdv(auth, codigoTransferencia, {
       estado: CodigoEstadoTDV.ATPVE_CRIADA,
       codigoProvaVidaVendedor: input.codigoProvaVidaVendedor,
-      tipoProvaVidaVendedor: '2'
+      tipoProvaVidaVendedor: '2' // LIVENESS
     })
 
     return { codigo: codigoTransferencia }

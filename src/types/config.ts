@@ -37,11 +37,6 @@ export type Config = {
       baseUrl: string,
       dashboardUrl: string
     }
-    tdv: {
-      baseUrl: string
-      username: string
-      password: string
-    }
   }
   rotaCaixaPostal: {
     baseUrl: string
@@ -49,6 +44,10 @@ export type Config = {
   }
   security: {
     encryptionKey: string
+  }
+  rotaVida: {
+    vidaBaseUrl: string
+    arquivosBaseUrl: string
   }
   logging: {
     level: string

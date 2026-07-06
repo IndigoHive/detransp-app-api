@@ -1,4 +1,5 @@
 import type { DetranSpServiceNowTdvClient } from '../../../clients/detran-sp-service-now/tdv'
+import { extractBearerToken, extractCpfFromToken } from '../../../utils/token'
 
 type Dependencies = {
   detranSpServiceNowTdv: DetranSpServiceNowTdvClient
@@ -28,10 +29,14 @@ export class ValidacaoCompradorService {
     this.client = detranSpServiceNowTdv
   }
 
-  async run (accessToken: string, input: ValidacaoCompradorInput): Promise<ValidacaoCompradorResult> {
+  async run (authorizationHeader: string | undefined, input: ValidacaoCompradorInput): Promise<ValidacaoCompradorResult> {
+    const token = extractBearerToken(authorizationHeader)
+    const cpf = extractCpfFromToken(token)
+    const auth = { token, cpf }
+
     const [cidadaoResult, enderecoResult] = await Promise.all([
-      this.client.buscaCidadao(accessToken, input.cpfComprador),
-      this.client.buscaEndereco(accessToken, input.cepComprador)
+      this.client.buscaCidadao(auth, input.cpfComprador),
+      this.client.buscaEndereco(auth, input.cepComprador)
     ])
 
     if (!cidadaoResult?.result) {

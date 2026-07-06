@@ -1,5 +1,6 @@
 import type { DetranSpServiceNowTdvClient } from '../../../clients/detran-sp-service-now/tdv'
 import { CodigoEstadoTDV } from '../../../clients/detran-sp-service-now/tdv/types'
+import { extractBearerToken, extractCpfFromToken } from '../../../utils/token'
 
 type Dependencies = {
   detranSpServiceNowTdv: DetranSpServiceNowTdvClient
@@ -26,8 +27,13 @@ export class AnaliseRequisitosService {
     this.client = detranSpServiceNowTdv
   }
 
-  async run (accessToken: string, cpf: string, input: AnaliseRequisitosInput): Promise<AnaliseRequisitosResult> {
-    const tdvs = await this.client.listaTdvs(accessToken, {
+  async run (authorizationHeader: string | undefined, input: AnaliseRequisitosInput): Promise<AnaliseRequisitosResult> {
+    const token = extractBearerToken(authorizationHeader)
+    const cpf = extractCpfFromToken(token)
+    const auth = { token, cpf }
+
+    // Check for existing active TDV on this plate
+    const tdvs = await this.client.listaTdvs(auth, {
       ativa: 'true',
       codigoVendedor: cpf,
       placaVeiculo: input.selectedVehicle.plate

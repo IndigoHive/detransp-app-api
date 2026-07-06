@@ -822,7 +822,7 @@
             "type": "button",
             "name": null,
             "data": {
-              "icon": "pix",
+              "icon": "attach-money",
               "label": "Pagar com Pix"
             }
           }

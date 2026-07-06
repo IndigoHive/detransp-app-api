@@ -1,5 +1,6 @@
 import type { DetranSpServiceNowTdvClient } from '../../../clients/detran-sp-service-now/tdv'
 import { CodigoEstadoTDV } from '../../../clients/detran-sp-service-now/tdv/types'
+import { extractBearerToken, extractCpfFromToken } from '../../../utils/token'
 
 type Dependencies = {
   detranSpServiceNowTdv: DetranSpServiceNowTdvClient
@@ -20,8 +21,12 @@ export class CancelarTdvService {
     this.client = detranSpServiceNowTdv
   }
 
-  async run (accessToken: string, input: CancelarTdvInput): Promise<CancelarTdvResult> {
-    await this.client.atualizaTdv(accessToken, input.codigoTransferencia, {
+  async run (authorizationHeader: string | undefined, input: CancelarTdvInput): Promise<CancelarTdvResult> {
+    const token = extractBearerToken(authorizationHeader)
+    const cpf = extractCpfFromToken(token)
+    const auth = { token, cpf }
+
+    await this.client.atualizaTdv(auth, input.codigoTransferencia, {
       estado: CodigoEstadoTDV.TRANSFERENCIA_CANCELADA,
       ativa: 'false'
     })

@@ -1,4 +1,5 @@
 import type { DetranSpServiceNowTdvClient } from '../../../clients/detran-sp-service-now/tdv'
+import { extractBearerToken, extractCpfFromToken } from '../../../utils/token'
 
 type Dependencies = {
   detranSpServiceNowTdv: DetranSpServiceNowTdvClient
@@ -27,8 +28,12 @@ export class ConsultaVeiculosService {
     this.client = detranSpServiceNowTdv
   }
 
-  async run (accessToken: string): Promise<ConsultaVeiculosResult> {
-    const result = await this.client.listaVeiculosProprietario(accessToken)
+  async run (authorizationHeader: string | undefined): Promise<ConsultaVeiculosResult> {
+    const token = extractBearerToken(authorizationHeader)
+    const cpf = extractCpfFromToken(token)
+    const auth = { token, cpf }
+
+    const result = await this.client.listaVeiculosProprietario(auth)
 
     if (!result?.result) {
       return { vehicles: [] }
