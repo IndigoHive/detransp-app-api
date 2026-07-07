@@ -1,4 +1,7 @@
 import { Router } from 'express'
+import multer from 'multer'
+
+const upload = multer({ storage: multer.memoryStorage() })
 
 // Duas camadas de corrupção possíveis no nome do arquivo até chegar aqui:
 // 1. O busboy (usado pelo multer) decodifica o header Content-Disposition como latin1 —
@@ -20,10 +23,21 @@ function decodeFileName (name: string): string {
 export function servicesRouter (): Router {
   const router = Router()
 
-  router.post('/validar-curso-teorico-da-cnh-do-brasil-no-detran-sp', async (req, res) => {
+  router.post('/validar-curso-teorico-da-cnh-do-brasil-no-detran-sp', upload.single('anexos'), async (req, res) => {
     const service = req.scope.resolve('validarCursoTeoricoDaCNHDoBrasilNoDetranSpService')
 
-    const result = await service.run(req.body)
+    const result = await service.run({
+      ...req.body,
+      ...(req.file
+        ? {
+            attachment: {
+              buffer: req.file.buffer,
+              originalName: decodeFileName(req.file.originalname),
+              mimetype: req.file.mimetype,
+            },
+          }
+        : {}),
+    })
 
     res.status(200).json(result)
   })
@@ -33,6 +47,25 @@ export function servicesRouter (): Router {
     const service = req.scope.resolve('listServiceCasesService')
 
     const result = await service.run(cpf)
+
+    res.status(200).json(result)
+  })
+
+  router.post('/protocols/attachment', upload.single('anexos'), async (req, res) => {
+    const service = req.scope.resolve('uploadProtocolAttachmentService')
+
+    const result = await service.run({
+      ...req.body,
+      ...(req.file
+        ? {
+            attachment: {
+              buffer: req.file.buffer,
+              originalName: decodeFileName(req.file.originalname),
+              mimetype: req.file.mimetype,
+            },
+          }
+        : {}),
+    })
 
     res.status(200).json(result)
   })

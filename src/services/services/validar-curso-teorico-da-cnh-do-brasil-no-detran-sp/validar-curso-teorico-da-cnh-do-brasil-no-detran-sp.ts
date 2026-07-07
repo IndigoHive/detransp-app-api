@@ -1,4 +1,5 @@
 import type { ServiceNowCsmClient } from '../../../clients'
+import type { Logger } from 'pino'
 import type {
   ValidarCursoTeoricoDaCNHDoBrasilNoDetranSpInput,
   ValidarCursoTeoricoDaCNHDoBrasilNoDetranSpResponse,
@@ -6,24 +7,55 @@ import type {
 
 type Dependencies = {
   serviceNowCsm: ServiceNowCsmClient
+  logger: Logger
 }
 
 type ServiceNowCsmSubmitResult = {
   result: {
-    number: string
+    number?: string
+    sys_id?: string
     [key: string]: unknown
   }
 }
 
+type NormalizedInput = {
+  nome: string
+  cpfOuCnpj: string
+  telefone: string
+  email: string
+  municipio: string
+  jaRealizeiEtapaIniciarProcessoPrimeiraHabilitacaoJuntoPortalDetranSP: boolean
+  jaRealizeiExameAptidaoFisicaMentalExameMedicoAvaliacaoPsicologica: boolean
+  jaConcluiEtapaCursoTeoricoExpedicaoCertificado: boolean
+  documentoComprovanteRepresentacao?: boolean
+  representation: boolean
+  attachment?: {
+    buffer: Buffer
+    originalName: string
+    mimetype?: string
+  }
+}
+
+function toBoolean (value: unknown): boolean {
+  return value === true || value === 'true'
+}
+
+function toText (value: unknown): string {
+  return typeof value === 'string' ? value : ''
+}
+
 export class ValidarCursoTeoricoDaCNHDoBrasilNoDetranSpService {
   private readonly serviceNowCsm: ServiceNowCsmClient
+  private readonly logger: Logger
 
-  constructor ({ serviceNowCsm }: Dependencies) {
+  constructor ({ serviceNowCsm, logger }: Dependencies) {
     this.serviceNowCsm = serviceNowCsm
+    this.logger = logger
   }
 
-  async run (input: ValidarCursoTeoricoDaCNHDoBrasilNoDetranSpInput): Promise<ValidarCursoTeoricoDaCNHDoBrasilNoDetranSpResponse> {
+  async run (rawInput: ValidarCursoTeoricoDaCNHDoBrasilNoDetranSpInput): Promise<ValidarCursoTeoricoDaCNHDoBrasilNoDetranSpResponse> {
     try {
+      const input = this.normalizeInput(rawInput)
       const payload = this.mapInputToServiceNowPayload(input)
 
       const result = await this.serviceNowCsm.submitProducer<ServiceNowCsmSubmitResult>(
@@ -31,11 +63,24 @@ export class ValidarCursoTeoricoDaCNHDoBrasilNoDetranSpService {
         payload
       )
 
+      const protocol = result.result?.number
+      const recordSysId = result.result?.sys_id
+
+      if (recordSysId && input.attachment) {
+        await this.serviceNowCsm.uploadAttachment({
+          tableName: 'x_mdpdd_detran_srv_service_case',
+          tableSysId: recordSysId,
+          fileName: input.attachment.originalName,
+          fileBuffer: input.attachment.buffer,
+          contentType: input.attachment.mimetype ?? undefined,
+        })
+      }
+
       return {
-        protocol: result.result.number,
+        protocol: protocol ?? recordSysId ?? 'Protocolo não disponível',
       }
     } catch (error) {
-      // Error details are logged by ServiceNowCsmClient interceptors
+      this.logger.error('Erro ao enviar payload para o ServiceNow CSM:')
       return {
         showSnackbar: {
           variant: 'error',
@@ -46,7 +91,23 @@ export class ValidarCursoTeoricoDaCNHDoBrasilNoDetranSpService {
     }
   }
 
-  private mapInputToServiceNowPayload (input: ValidarCursoTeoricoDaCNHDoBrasilNoDetranSpInput) {
+  private normalizeInput (input: ValidarCursoTeoricoDaCNHDoBrasilNoDetranSpInput): NormalizedInput {
+    return {
+      nome: toText(input.nome),
+      cpfOuCnpj: toText(input.cpfOuCnpj),
+      telefone: toText(input.telefone),
+      email: toText(input.email),
+      municipio: toText(input.municipio),
+      jaRealizeiEtapaIniciarProcessoPrimeiraHabilitacaoJuntoPortalDetranSP: toBoolean(input.jaRealizeiEtapaIniciarProcessoPrimeiraHabilitacaoJuntoPortalDetranSP),
+      jaRealizeiExameAptidaoFisicaMentalExameMedicoAvaliacaoPsicologica: toBoolean(input.jaRealizeiExameAptidaoFisicaMentalExameMedicoAvaliacaoPsicologica),
+      jaConcluiEtapaCursoTeoricoExpedicaoCertificado: toBoolean(input.jaConcluiEtapaCursoTeoricoExpedicaoCertificado),
+      ...(input.documentoComprovanteRepresentacao === undefined ? {} : { documentoComprovanteRepresentacao: toBoolean(input.documentoComprovanteRepresentacao) }),
+      representation: toBoolean(input.representation),
+      ...(input.attachment ? { attachment: input.attachment } : {}),
+    }
+  }
+
+  private mapInputToServiceNowPayload (input: NormalizedInput) {
     return {
       variables: {
         requester_cpf: input.cpfOuCnpj.replace(/\D/g, '').length === 11 ? input.cpfOuCnpj : '',
@@ -75,7 +136,7 @@ export class ValidarCursoTeoricoDaCNHDoBrasilNoDetranSpService {
         contact_type: 'cidadao',
         requester_proof_of_representation: input.representation ? 'true' : 'false',
         requester_name: input.nome,
-        'IO:b82641dd47f9cf501405ae88036d43d6': 'true',
+        'IO:b82641dd47f9cf501405ae88036d43d6': "true",
         requester: 'true',
         deployed_item: '0a6d000147f53a9006482a54f26d431b',
         cadastro_descadastro: 'Cadastro',

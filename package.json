@@ -14,6 +14,7 @@
   "license": "UNLICENSED",
   "dependencies": {
     "@types/cors": "^2.8.19",
+    "@types/multer": "^2.2.0",
     "awilix": "^13.0.3",
     "axios": "^1.16.1",
     "cors": "^2.8.6",
