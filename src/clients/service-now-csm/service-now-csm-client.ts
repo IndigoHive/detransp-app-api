@@ -11,6 +11,21 @@ export type UploadAttachmentParams = {
   contentType?: string | undefined
 }
 
+export type ProtocolMessage = {
+  sys_id: string
+  sys_created_on: string
+  name: string
+  element_id: string
+  sys_tags: string
+  value: string
+  sys_created_by: string
+  element: string
+}
+
+export type GetProtocolMessagesResult = {
+  result: ProtocolMessage[]
+}
+
 const SERVICE_NAME = 'servicenow-csm'
 
 export type ServiceNowCsmClientParams = {
@@ -163,9 +178,9 @@ export class ServiceNowCsmClient {
     }
   }
 
-  async getProtocolMessages<T = unknown> (protocolId: string): Promise<T> {
+  async getProtocolMessages (protocolId: string): Promise<GetProtocolMessagesResult> {
     try {
-      const response = await this.axios.get<T>('/api/now/table/sys_journal_field', {
+      const response = await this.axios.get<GetProtocolMessagesResult>('/api/now/table/sys_journal_field', {
         params: {
           sysparm_query: `element_id=${protocolId}`,
           sysparm_order_by_desc: 'sys_created_on',
