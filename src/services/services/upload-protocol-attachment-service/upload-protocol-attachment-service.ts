@@ -1,4 +1,6 @@
 import type { ServiceNowCsmClient } from '../../../clients'
+import { BadRequest } from 'http-errors'
+import type { Logger } from 'pino'
 import type {
   UploadProtocolAttachmentInput,
   UploadProtocolAttachmentResponse,
@@ -6,27 +8,30 @@ import type {
 
 type Dependencies = {
   serviceNowCsm: ServiceNowCsmClient
+  logger: Logger
 }
 
 export class UploadProtocolAttachmentService {
   private readonly serviceNowCsm: ServiceNowCsmClient
+  private readonly logger: Logger
 
-  constructor ({ serviceNowCsm }: Dependencies) {
+  constructor ({ serviceNowCsm, logger }: Dependencies) {
     this.serviceNowCsm = serviceNowCsm
+    this.logger = logger
   }
 
   async run (input: UploadProtocolAttachmentInput): Promise<UploadProtocolAttachmentResponse> {
     try {
       if (!input.sysId.trim()) {
-        throw new Error('sys_id é obrigatório para enviar o anexo')
+        throw new BadRequest('sys_id é obrigatório para enviar o anexo')
       }
 
       if (!input.comment.trim()) {
-        throw new Error('É necessário informar um comentário para enviar o anexo')
+        throw new BadRequest('É necessário informar um comentário para enviar o anexo')
       }
 
       if (!input.attachment) {
-        throw new Error('Nenhum arquivo foi enviado')
+        throw new BadRequest('Nenhum arquivo foi enviado')
       }
 
       await this.serviceNowCsm.uploadAttachment({
@@ -41,7 +46,7 @@ export class UploadProtocolAttachmentService {
 
       return { success: true }
     } catch (error) {
-      console.error('Erro ao enviar anexo com comentário para o ServiceNow CSM:', error)
+      this.logger.error('Erro ao enviar anexo com comentário para o ServiceNow CSM:')
       return {
         showSnackbar: {
           variant: 'error',

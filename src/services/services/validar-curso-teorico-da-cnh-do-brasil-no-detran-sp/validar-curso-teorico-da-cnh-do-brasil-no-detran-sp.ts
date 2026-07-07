@@ -1,4 +1,5 @@
 import type { ServiceNowCsmClient } from '../../../clients'
+import type { Logger } from 'pino'
 import type {
   ValidarCursoTeoricoDaCNHDoBrasilNoDetranSpInput,
   ValidarCursoTeoricoDaCNHDoBrasilNoDetranSpResponse,
@@ -6,6 +7,7 @@ import type {
 
 type Dependencies = {
   serviceNowCsm: ServiceNowCsmClient
+  logger: Logger
 }
 
 type ServiceNowCsmSubmitResult = {
@@ -18,9 +20,11 @@ type ServiceNowCsmSubmitResult = {
 
 export class ValidarCursoTeoricoDaCNHDoBrasilNoDetranSpService {
   private readonly serviceNowCsm: ServiceNowCsmClient
+  private readonly logger: Logger
 
-  constructor ({ serviceNowCsm }: Dependencies) {
+  constructor ({ serviceNowCsm, logger }: Dependencies) {
     this.serviceNowCsm = serviceNowCsm
+    this.logger = logger
   }
 
   async run (input: ValidarCursoTeoricoDaCNHDoBrasilNoDetranSpInput): Promise<ValidarCursoTeoricoDaCNHDoBrasilNoDetranSpResponse> {
@@ -49,7 +53,7 @@ export class ValidarCursoTeoricoDaCNHDoBrasilNoDetranSpService {
         protocol: protocol ?? recordSysId ?? 'Protocolo não disponível',
       }
     } catch (error) {
-      console.error('Erro ao enviar payload para o ServiceNow CSM:', error)
+      this.logger.error('Erro ao enviar payload para o ServiceNow CSM:')
       return {
         showSnackbar: {
           variant: 'error',
