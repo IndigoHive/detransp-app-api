@@ -45,7 +45,9 @@ export class UploadProtocolAttachmentService {
         contentType: rawInput.attachment.mimetype ?? undefined,
       })
 
-      await this.serviceNowCsm.addComment(sysId, comment)
+      const commentWithAttachment = `${comment}\n\nAnexo: ${rawInput.attachment.originalName}`
+
+      await this.serviceNowCsm.addComment(sysId, commentWithAttachment)
 
       return { success: true }
     } catch (error) {
