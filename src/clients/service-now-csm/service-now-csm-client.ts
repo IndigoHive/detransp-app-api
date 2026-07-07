@@ -11,6 +11,21 @@ export type UploadAttachmentParams = {
   contentType?: string | undefined
 }
 
+export type ProtocolMessage = {
+  sys_id: string
+  sys_created_on: string
+  name: string
+  element_id: string
+  sys_tags: string
+  value: string
+  sys_created_by: string
+  element: string
+}
+
+export type GetProtocolMessagesResult = {
+  result: ProtocolMessage[]
+}
+
 const SERVICE_NAME = 'servicenow-csm'
 
 export type ServiceNowCsmClientParams = {
@@ -152,6 +167,25 @@ export class ServiceNowCsmClient {
         `/api/now/table/x_mdpdd_detran_srv_service_case/${protocolId}`,
         { params }
       )
+
+      return response.data
+    } catch (error) {
+      throw createError(
+        (axios.isAxiosError(error) ? error.response?.status : undefined) ?? 500,
+        'Não foi possível completar a operação no ServiceNow CSM.',
+        { expose: true }
+      )
+    }
+  }
+
+  async getProtocolMessages (protocolId: string): Promise<GetProtocolMessagesResult> {
+    try {
+      const response = await this.axios.get<GetProtocolMessagesResult>('/api/now/table/sys_journal_field', {
+        params: {
+          sysparm_query: `element_id=${protocolId}`,
+          sysparm_order_by_desc: 'sys_created_on',
+        },
+      })
 
       return response.data
     } catch (error) {
