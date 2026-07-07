@@ -80,5 +80,15 @@ export function servicesRouter (): Router {
     res.status(200).json(result)
   })
 
+  router.get('/protocols/messages', async (req, res) => {
+    const service = req.scope.resolve('listProtocolMessagesService')
+
+    const sysId = typeof req.query.sys_id === 'string' ? req.query.sys_id : ''
+
+    const result = await service.run(sysId)
+
+    res.status(200).json(result)
+  })
+
   return router
 }

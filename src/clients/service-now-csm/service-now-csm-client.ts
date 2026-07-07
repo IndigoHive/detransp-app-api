@@ -162,4 +162,23 @@ export class ServiceNowCsmClient {
       )
     }
   }
+
+  async getProtocolMessages<T = unknown> (protocolId: string): Promise<T> {
+    try {
+      const response = await this.axios.get<T>('/api/now/table/sys_journal_field', {
+        params: {
+          sysparm_query: `element_id=${protocolId}`,
+          sysparm_order_by_desc: 'sys_created_on',
+        },
+      })
+
+      return response.data
+    } catch (error) {
+      throw createError(
+        (axios.isAxiosError(error) ? error.response?.status : undefined) ?? 500,
+        'Não foi possível completar a operação no ServiceNow CSM.',
+        { expose: true }
+      )
+    }
+  }
 }
