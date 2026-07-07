@@ -26,21 +26,8 @@ export function servicesRouter (): Router {
   router.post('/validar-curso-teorico-da-cnh-do-brasil-no-detran-sp', upload.single('anexos'), async (req, res) => {
     const service = req.scope.resolve('validarCursoTeoricoDaCNHDoBrasilNoDetranSpService')
 
-    const body = req.body ?? {}
-    const toBoolean = (value: unknown): boolean => value === true || value === 'true'
-    const toString = (value: unknown): string => typeof value === 'string' ? value : ''
-
     const result = await service.run({
-      nome: toString(body.nome),
-      cpfOuCnpj: toString(body.cpfOuCnpj),
-      telefone: toString(body.telefone),
-      email: toString(body.email),
-      municipio: toString(body.municipio),
-      jaRealizeiEtapaIniciarProcessoPrimeiraHabilitacaoJuntoPortalDetranSP: toBoolean(body.jaRealizeiEtapaIniciarProcessoPrimeiraHabilitacaoJuntoPortalDetranSP),
-      jaRealizeiExameAptidaoFisicaMentalExameMedicoAvaliacaoPsicologica: toBoolean(body.jaRealizeiExameAptidaoFisicaMentalExameMedicoAvaliacaoPsicologica),
-      jaConcluiEtapaCursoTeoricoExpedicaoCertificado: toBoolean(body.jaConcluiEtapaCursoTeoricoExpedicaoCertificado),
-      ...(body.documentoComprovanteRepresentacao === undefined ? {} : { documentoComprovanteRepresentacao: toBoolean(body.documentoComprovanteRepresentacao) }),
-      representation: toBoolean(body.representation),
+      ...req.body,
       ...(req.file
         ? {
             attachment: {
@@ -67,12 +54,8 @@ export function servicesRouter (): Router {
   router.post('/protocols/attachment', upload.single('anexos'), async (req, res) => {
     const service = req.scope.resolve('uploadProtocolAttachmentService')
 
-    const sysId = typeof req.body?.sys_id === 'string' ? req.body.sys_id : ''
-    const comment = typeof req.body?.comment === 'string' ? req.body.comment : ''
-
     const result = await service.run({
-      sysId,
-      comment,
+      ...req.body,
       ...(req.file
         ? {
             attachment: {
