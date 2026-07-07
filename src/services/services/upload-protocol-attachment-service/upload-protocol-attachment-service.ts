@@ -20,29 +20,32 @@ export class UploadProtocolAttachmentService {
     this.logger = logger
   }
 
-  async run (input: UploadProtocolAttachmentInput): Promise<UploadProtocolAttachmentResponse> {
+  async run (rawInput: UploadProtocolAttachmentInput): Promise<UploadProtocolAttachmentResponse> {
     try {
-      if (!input.sysId.trim()) {
+      const sysId = typeof rawInput.sys_id === 'string' ? rawInput.sys_id : ''
+      const comment = typeof rawInput.comment === 'string' ? rawInput.comment : ''
+
+      if (!sysId.trim()) {
         throw new BadRequest('sys_id é obrigatório para enviar o anexo')
       }
 
-      if (!input.comment.trim()) {
+      if (!comment.trim()) {
         throw new BadRequest('É necessário informar um comentário para enviar o anexo')
       }
 
-      if (!input.attachment) {
+      if (!rawInput.attachment) {
         throw new BadRequest('Nenhum arquivo foi enviado')
       }
 
       await this.serviceNowCsm.uploadAttachment({
         tableName: 'x_mdpdd_detran_srv_service_case',
-        tableSysId: input.sysId,
-        fileName: input.attachment.originalName,
-        fileBuffer: input.attachment.buffer,
-        contentType: input.attachment.mimetype ?? undefined,
+        tableSysId: sysId,
+        fileName: rawInput.attachment.originalName,
+        fileBuffer: rawInput.attachment.buffer,
+        contentType: rawInput.attachment.mimetype ?? undefined,
       })
 
-      await this.serviceNowCsm.addComment(input.sysId, input.comment)
+      await this.serviceNowCsm.addComment(sysId, comment)
 
       return { success: true }
     } catch (error) {

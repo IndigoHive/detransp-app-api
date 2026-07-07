@@ -18,6 +18,32 @@ type ServiceNowCsmSubmitResult = {
   }
 }
 
+type NormalizedInput = {
+  nome: string
+  cpfOuCnpj: string
+  telefone: string
+  email: string
+  municipio: string
+  jaRealizeiEtapaIniciarProcessoPrimeiraHabilitacaoJuntoPortalDetranSP: boolean
+  jaRealizeiExameAptidaoFisicaMentalExameMedicoAvaliacaoPsicologica: boolean
+  jaConcluiEtapaCursoTeoricoExpedicaoCertificado: boolean
+  documentoComprovanteRepresentacao?: boolean
+  representation: boolean
+  attachment?: {
+    buffer: Buffer
+    originalName: string
+    mimetype?: string
+  }
+}
+
+function toBoolean (value: unknown): boolean {
+  return value === true || value === 'true'
+}
+
+function toText (value: unknown): string {
+  return typeof value === 'string' ? value : ''
+}
+
 export class ValidarCursoTeoricoDaCNHDoBrasilNoDetranSpService {
   private readonly serviceNowCsm: ServiceNowCsmClient
   private readonly logger: Logger
@@ -27,8 +53,9 @@ export class ValidarCursoTeoricoDaCNHDoBrasilNoDetranSpService {
     this.logger = logger
   }
 
-  async run (input: ValidarCursoTeoricoDaCNHDoBrasilNoDetranSpInput): Promise<ValidarCursoTeoricoDaCNHDoBrasilNoDetranSpResponse> {
+  async run (rawInput: ValidarCursoTeoricoDaCNHDoBrasilNoDetranSpInput): Promise<ValidarCursoTeoricoDaCNHDoBrasilNoDetranSpResponse> {
     try {
+      const input = this.normalizeInput(rawInput)
       const payload = this.mapInputToServiceNowPayload(input)
 
       const result = await this.serviceNowCsm.submitProducer<ServiceNowCsmSubmitResult>(
@@ -64,7 +91,23 @@ export class ValidarCursoTeoricoDaCNHDoBrasilNoDetranSpService {
     }
   }
 
-  private mapInputToServiceNowPayload (input: ValidarCursoTeoricoDaCNHDoBrasilNoDetranSpInput) {
+  private normalizeInput (input: ValidarCursoTeoricoDaCNHDoBrasilNoDetranSpInput): NormalizedInput {
+    return {
+      nome: toText(input.nome),
+      cpfOuCnpj: toText(input.cpfOuCnpj),
+      telefone: toText(input.telefone),
+      email: toText(input.email),
+      municipio: toText(input.municipio),
+      jaRealizeiEtapaIniciarProcessoPrimeiraHabilitacaoJuntoPortalDetranSP: toBoolean(input.jaRealizeiEtapaIniciarProcessoPrimeiraHabilitacaoJuntoPortalDetranSP),
+      jaRealizeiExameAptidaoFisicaMentalExameMedicoAvaliacaoPsicologica: toBoolean(input.jaRealizeiExameAptidaoFisicaMentalExameMedicoAvaliacaoPsicologica),
+      jaConcluiEtapaCursoTeoricoExpedicaoCertificado: toBoolean(input.jaConcluiEtapaCursoTeoricoExpedicaoCertificado),
+      ...(input.documentoComprovanteRepresentacao === undefined ? {} : { documentoComprovanteRepresentacao: toBoolean(input.documentoComprovanteRepresentacao) }),
+      representation: toBoolean(input.representation),
+      ...(input.attachment ? { attachment: input.attachment } : {}),
+    }
+  }
+
+  private mapInputToServiceNowPayload (input: NormalizedInput) {
     return {
       variables: {
         requester_cpf: input.cpfOuCnpj.replace(/\D/g, '').length === 11 ? input.cpfOuCnpj : '',

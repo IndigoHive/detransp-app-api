@@ -1,6 +1,4 @@
-export type UploadProtocolAttachmentInput = {
-  sysId: string
-  comment: string
+export type UploadProtocolAttachmentInput = Record<string, unknown> & {
   attachment?: {
     buffer: Buffer
     originalName: string
