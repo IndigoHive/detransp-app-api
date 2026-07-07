@@ -142,6 +142,16 @@ export class ServiceNowCsmClient {
     return response.data
   }
 
+  async finalizeProtocol (protocolId: string): Promise<void> {
+    await this.axios.patch(
+      `/api/now/table/x_mdpdd_detran_srv_service_case/${protocolId}`,
+      {
+        comments: 'Solicitação encerrada pelo aplicativo Detran-SP',
+        state: '3',
+      }
+    )
+  }
+
   async getProtocols<T = unknown> (params?: Record<string, string | number | boolean>): Promise<T> {
     try {
       const response = await this.axios.get<T>('/api/now/table/x_mdpdd_detran_srv_service_case', {
