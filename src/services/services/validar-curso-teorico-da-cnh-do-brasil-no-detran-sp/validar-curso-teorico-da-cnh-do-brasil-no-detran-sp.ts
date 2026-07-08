@@ -112,7 +112,7 @@ export class ValidarCursoTeoricoDaCNHDoBrasilNoDetranSpService {
       variables: {
         requester_cpf: input.cpfOuCnpj.replace(/\D/g, '').length === 11 ? input.cpfOuCnpj : '',
         solicito_a_alteracao_da_s__seguintes_informacoes_em_meu_prontuario_de_habilitacao: '1',
-        representation: input.representation ? 'true' : 'false',
+        representation: 'true',
         polopassivo: 'nao_reu',
         municipio: input.municipio,
         requester_email: input.email,

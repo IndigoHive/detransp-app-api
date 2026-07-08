@@ -27,7 +27,7 @@ export function servicesRouter (): Router {
     const service = req.scope.resolve('validarCursoTeoricoDaCNHDoBrasilNoDetranSpService')
 
     const result = await service.run({
-      ...req.body,
+      ...JSON.parse(req.body.data),
       ...(req.file
         ? {
             attachment: {
