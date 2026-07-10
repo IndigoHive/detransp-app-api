@@ -1,5 +1,6 @@
 import type { DetranSpServiceNowTdvClient } from '../../../clients/detran-sp-service-now/tdv'
 import { CodigoEstadoTDV } from '../../../clients/detran-sp-service-now/tdv/types'
+import type { BuscaTdvResultData, ListaTdvsResultData } from '../../../clients/detran-sp-service-now/tdv/types'
 import { extractBearerToken, extractCpfFromToken } from '../../../utils/token'
 
 type Dependencies = {
@@ -19,8 +20,29 @@ type VehicleData = {
   yearMod: string
 }
 
+function buildVehicleData (data: BuscaTdvResultData | undefined, fallback: ListaTdvsResultData): VehicleData {
+  return {
+    id: '1',
+    plate: data?.placaVeiculo ?? fallback.placaVeiculo ?? '',
+    title: data?.descricaoMarcaVeiculo ?? fallback.descricaoMarcaVeiculo ?? '',
+    status: 'REGULAR',
+    brandModel: data?.descricaoMarcaVeiculo ?? fallback.descricaoMarcaVeiculo ?? '',
+    licensingExpirationDate: '',
+    renavam: data?.codigoRenavamVeiculo ?? fallback.codigoRenavamVeiculo ?? '',
+    lastLicensing: '',
+    yearFab: '',
+    yearMod: ''
+  }
+}
+
 export type VerificarEstadoTdvResult = {
-  proximaAcao: 'nova_tdv' | 'comprador' | 'vendedor_2' | 'comprador_2' | 'concluido'
+  proximaAcao:
+    | 'nova_tdv'
+    | 'comprador'
+    | 'vendedor_2'
+    | 'comprador_2'
+    | 'pagamento_confirmado'
+    | 'concluido'
   vehicles?: Array<{
     plate: string
     brandModel: string
@@ -65,18 +87,7 @@ export class VerificarEstadoTdvService {
 
         return {
           proximaAcao: 'vendedor_2',
-          vehicle: {
-            id: '1',
-            plate: data?.placaVeiculo ?? activeSeller.placaVeiculo ?? '',
-            title: data?.descricaoMarcaVeiculo ?? activeSeller.descricaoMarcaVeiculo ?? '',
-            status: 'REGULAR',
-            brandModel: data?.descricaoMarcaVeiculo ?? activeSeller.descricaoMarcaVeiculo ?? '',
-            licensingExpirationDate: '',
-            renavam: data?.codigoRenavamVeiculo ?? activeSeller.codigoRenavamVeiculo ?? '',
-            lastLicensing: '',
-            yearFab: '',
-            yearMod: ''
-          },
+          vehicle: buildVehicleData(data, activeSeller),
           nomeComprador: data?.nomeComprador ?? activeSeller.nomeComprador ?? '',
           codigoTransferencia: codigo
         }
@@ -109,11 +120,8 @@ export class VerificarEstadoTdvService {
         }
       }
 
-      // Buyer needs to pay (seller already signed)
-      if (
-        estado === CodigoEstadoTDV.ATPVE_ASSINADA_VENDEDOR_COMUNICACAO_VENDA_GERADA ||
-        estado === CodigoEstadoTDV.TAXA_SERVICO_PAGA
-      ) {
+      // Buyer needs to pay (seller already signed, communication generated)
+      if (estado === CodigoEstadoTDV.ATPVE_ASSINADA_VENDEDOR_COMUNICACAO_VENDA_GERADA) {
         const codigo = activeBuyer.codigoTransferenciaVeiculo ?? ''
         const tdvDetails = await this.client.buscaTdv(auth, codigo)
         const data = tdvDetails?.result
@@ -121,18 +129,35 @@ export class VerificarEstadoTdvService {
         return {
           proximaAcao: 'comprador_2',
           codigoTransferencia: codigo,
-          vehicle: {
-            id: '1',
-            plate: data?.placaVeiculo ?? activeBuyer.placaVeiculo ?? '',
-            title: data?.descricaoMarcaVeiculo ?? activeBuyer.descricaoMarcaVeiculo ?? '',
-            status: 'REGULAR',
-            brandModel: data?.descricaoMarcaVeiculo ?? activeBuyer.descricaoMarcaVeiculo ?? '',
-            licensingExpirationDate: '',
-            renavam: data?.codigoRenavamVeiculo ?? activeBuyer.codigoRenavamVeiculo ?? '',
-            lastLicensing: '',
-            yearFab: '',
-            yearMod: ''
-          }
+          vehicle: buildVehicleData(data, activeBuyer)
+        }
+      }
+
+      // Buyer already paid — waiting for the transfer to be finalized
+      if (estado === CodigoEstadoTDV.TAXA_SERVICO_PAGA) {
+        const codigo = activeBuyer.codigoTransferenciaVeiculo ?? ''
+        const tdvDetails = await this.client.buscaTdv(auth, codigo)
+        const data = tdvDetails?.result
+
+        return {
+          proximaAcao: 'pagamento_confirmado',
+          codigoTransferencia: codigo,
+          nomeComprador: data?.nomeComprador ?? activeBuyer.nomeComprador ?? '',
+          vehicle: buildVehicleData(data, activeBuyer)
+        }
+      }
+
+      // Transfer fully concluded
+      if (estado === CodigoEstadoTDV.TRANSFERENCIA_CONCLUIDA) {
+        const codigo = activeBuyer.codigoTransferenciaVeiculo ?? ''
+        const tdvDetails = await this.client.buscaTdv(auth, codigo)
+        const data = tdvDetails?.result
+
+        return {
+          proximaAcao: 'concluido',
+          codigoTransferencia: codigo,
+          nomeComprador: data?.nomeComprador ?? activeBuyer.nomeComprador ?? '',
+          vehicle: buildVehicleData(data, activeBuyer)
         }
       }
     }

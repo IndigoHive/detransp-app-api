@@ -2939,7 +2939,7 @@
         },
         "method": "POST",
         "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/confirmar-compra",
-        "body": "{\n  \"codigoTransferencia\": \"@{node:n_90a9d6db5f4b.codigoTransferencia}\",\n  \"codigoProvaVidaComprador\": \"@{node:n_32b7a4b7dfc4.codigoProvaVida}\"\n}",
+        "body": "{\n  \"codigoTransferencia\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoTransferencia}\",\n  \"codigoProvaVidaComprador\": \"@{node:n_32b7a4b7dfc4.codigoProvaVida}\"\n}",
         "responseExamples": [
           {
             "id": "13ca35ee-ca27-4e9f-b5f2-21dd6e91360c",
@@ -3016,7 +3016,7 @@
         },
         "method": "POST",
         "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/valida-assinatura",
-        "body": "{ \"codigoTransferencia\": \"@{node:n_90a9d6db5f4b.codigoTransferencia}\" }\n",
+        "body": "{\n  \"codigoTransferencia\": \"@{node:n_90a9d6db5f4b.codigoTransferencia}\",\n  \"itiCode\": \"@{node:n_3bad58f20fff.code}\"\n}\n",
         "responseExamples": [
           {
             "id": "2f26dc5c-5d01-488a-8e76-1ca8f0dd33a7",
@@ -3230,7 +3230,9 @@
         "position": {
           "x": 320,
           "y": 2820
-        }
+        },
+        "url": "https://cas.iti.br/oauth2.0/authorize?response_type=code&redirect_uri=spgovbr://localhost/appspgovbr/iti/oauth_redirect.html&scope=sign&client_id=spgovbrprod",
+        "callbackPrefix": "spgovbr://"
       }
     },
     {
@@ -3244,7 +3246,7 @@
         },
         "method": "POST",
         "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/valida-assinatura",
-        "body": "{ \"codigoTransferencia\": \"@{node:n_90a9d6db5f4b.codigoTransferencia}\" }\n",
+        "body": "{\n  \"codigoTransferencia\": \"@{node:n_90a9d6db5f4b.codigoTransferencia}\",\n  \"itiCode\": \"@{node:n_54e1a65041fa.code}\"\n}\n",
         "responseExamples": [
           {
             "id": "bbf0c143-4114-42fc-b2e2-632fae3bef9d",
