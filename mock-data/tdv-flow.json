@@ -55,7 +55,8 @@
         "id": "20d3206d-354b-45eb-b76f-a42e922ee60a",
         "data": {
           "steps": 7,
-          "variant": "stepper",
+          "actionIcon": "close",
+          "showReturn": true,
           "currentStep": 1
         },
         "name": null,
@@ -123,7 +124,8 @@
         "id": "c8d644f9-9db8-4d3d-8ef4-e9a573aa75c4",
         "data": {
           "steps": 7,
-          "variant": "stepper",
+          "actionIcon": "close",
+          "showReturn": true,
           "currentStep": 2
         },
         "name": null,
@@ -191,7 +193,8 @@
         "id": "fdb3b6e5-ee5c-4f5e-abe0-533be8ad8966",
         "data": {
           "steps": 7,
-          "variant": "stepper",
+          "actionIcon": "close",
+          "showReturn": true,
           "currentStep": 3
         },
         "name": null,
@@ -259,7 +262,8 @@
         "id": "32d7fa07-2551-4936-a3a4-0cac31db5cee",
         "data": {
           "steps": 7,
-          "variant": "stepper",
+          "actionIcon": "close",
+          "showReturn": true,
           "currentStep": 4
         },
         "name": null,
@@ -327,7 +331,8 @@
         "id": "b893755a-c2ea-45b2-bd09-1bbbb85f3f63",
         "data": {
           "steps": 7,
-          "variant": "stepper",
+          "actionIcon": "close",
+          "showReturn": true,
           "currentStep": 5
         },
         "name": null,
@@ -335,7 +340,7 @@
       },
       "data": {
         "position": {
-          "x": 1740,
+          "x": 1720,
           "y": 60
         }
       }
@@ -395,7 +400,8 @@
         "id": "9c764671-eba6-467f-a170-b900b17c4bcf",
         "data": {
           "steps": 7,
-          "variant": "stepper",
+          "actionIcon": "close",
+          "showReturn": true,
           "currentStep": 6
         },
         "name": null,
@@ -403,8 +409,8 @@
       },
       "data": {
         "position": {
-          "x": 2300,
-          "y": 60
+          "x": 2276,
+          "y": 56
         }
       }
     },
@@ -463,7 +469,8 @@
         "id": "cdaaf5bf-e81b-4630-a024-624bf3e02137",
         "data": {
           "steps": 7,
-          "variant": "stepper",
+          "actionIcon": "close",
+          "showReturn": true,
           "currentStep": 7
         },
         "name": null,
@@ -471,8 +478,8 @@
       },
       "data": {
         "position": {
-          "x": 2840,
-          "y": 60
+          "x": 2772,
+          "y": 56
         }
       }
     },
@@ -496,7 +503,7 @@
                 },
                 {
                   "id": "2",
-                  "icon": "attach-money",
+                  "icon": "pix",
                   "label": "Estou comprando o veículo"
                 }
               ],
@@ -523,7 +530,6 @@
         "id": "379a15e5-304e-4e90-ab7e-946393e578e6",
         "data": {
           "title": "Tranferir Veículo",
-          "variant": "regular",
           "showReturn": true
         },
         "name": null,
@@ -556,8 +562,13 @@
             "type": "vehicle_select",
             "name": "seletor",
             "data": {
+              "layout": [
+                "plate",
+                "badge",
+                "brand_model",
+                "licensing_expiration"
+              ],
               "source": "@{node:n_4104c4067c20.vehicles}",
-              "variant": "compact",
               "required": true,
               "vehicles": [
                 {
@@ -622,7 +633,6 @@
         "id": "ca4dde85-ac9c-4e6b-8ec2-02e38a422620",
         "data": {
           "title": "Escolha o veículo",
-          "variant": "regular",
           "showReturn": true
         },
         "name": null,
@@ -691,7 +701,6 @@
         "id": "e98c6ef7-d2ff-43c5-a617-501fe6199140",
         "data": {
           "title": "Transferência em andamento",
-          "variant": "regular",
           "showReturn": true
         },
         "name": null,
@@ -752,7 +761,6 @@
         "id": "e5fdda87-887d-4841-bee2-88eef1e22861",
         "data": {
           "title": "Análise de requisitos",
-          "variant": "regular",
           "showReturn": true
         },
         "name": null,
@@ -803,7 +811,6 @@
         "id": "a0f6c3e3-79f1-4aec-b733-e3bc80b2ce07",
         "data": {
           "title": "Análise de requisitos",
-          "variant": "regular",
           "showReturn": true
         },
         "name": null,
@@ -887,7 +894,6 @@
         "id": "86959e70-c9c2-4de7-af0b-90ed79814d61",
         "data": {
           "title": "Informações sobre a venda",
-          "variant": "regular",
           "showReturn": true
         },
         "name": null,
@@ -952,7 +958,6 @@
         "id": "7b2365a7-98f2-47c0-80b0-c7ee0fc0c012",
         "data": {
           "title": "Informações sobre a venda",
-          "variant": "regular",
           "showReturn": true
         },
         "name": null,
@@ -1031,7 +1036,6 @@
         "id": "4ab64a26-cf4d-4817-8a0d-73ac5e63c9e4",
         "data": {
           "title": "Informações sobre a venda",
-          "variant": "regular",
           "showReturn": true
         },
         "name": null,
@@ -1139,7 +1143,6 @@
         "id": "ac4c005a-eb6d-45e7-ab2b-b4ed8f18f56f",
         "data": {
           "title": "Confirmação dos dados",
-          "variant": "regular",
           "showReturn": true
         },
         "name": null,
@@ -1187,7 +1190,6 @@
         "id": "c3fc6a17-5d02-437b-9e12-ae5b6d970b8d",
         "data": {
           "title": "Confirmação intenção de venda",
-          "variant": "regular",
           "showReturn": true
         },
         "name": null,
@@ -1255,7 +1257,6 @@
         "id": "f8a3ea6a-6e80-459e-9538-abf82898c548",
         "data": {
           "title": "Conclusão",
-          "variant": "regular",
           "showReturn": true
         },
         "name": null,
@@ -1288,8 +1289,13 @@
             "type": "vehicle_select",
             "name": null,
             "data": {
+              "layout": [
+                "plate",
+                "badge",
+                "brand_model",
+                "licensing_expiration"
+              ],
               "source": "@{node:n_598dfad57128.vehicles}",
-              "variant": "compact",
               "required": true,
               "vehicles": [
                 {
@@ -1354,7 +1360,6 @@
         "id": "0aea202f-9089-43ed-bed8-2e5754df23bd",
         "data": {
           "title": "Escolha o veículo",
-          "variant": "regular",
           "showReturn": true
         },
         "name": null,
@@ -1472,7 +1477,6 @@
         "id": "38d11bb1-752b-4b3f-ba0a-7bad12402b6d",
         "data": {
           "title": "Confirmação de compra",
-          "variant": "regular",
           "showReturn": true
         },
         "name": null,
@@ -1566,7 +1570,6 @@
         "id": "5b6ef436-f31b-49ef-94c9-ee0f4eff7ec0",
         "data": {
           "title": "Confirmação de endereço",
-          "variant": "regular",
           "showReturn": true
         },
         "name": null,
@@ -1636,7 +1639,6 @@
         "id": "b1581ec5-a786-4283-9c63-479b98aef092",
         "data": {
           "title": "Assinatura do documento",
-          "variant": "regular",
           "showReturn": true
         },
         "name": null,
@@ -1704,7 +1706,6 @@
         "id": "ca1a45e3-3771-476a-99b5-7798f3968541",
         "data": {
           "title": "Conclusão",
-          "variant": "regular",
           "showReturn": true
         },
         "name": null,
@@ -1768,7 +1769,6 @@
         "id": "fd7f989a-a4ae-455b-bbcf-03730337368b",
         "data": {
           "title": "Transferir Veículo",
-          "variant": "regular",
           "showReturn": true
         },
         "name": null,
@@ -1827,7 +1827,6 @@
         "id": "d5e542c0-60d9-4ffa-9d0f-ac0f1c3302a1",
         "data": {
           "title": "Transferir Veículo",
-          "variant": "regular",
           "showReturn": true
         },
         "name": null,
@@ -1937,7 +1936,7 @@
             "type": "button",
             "name": null,
             "data": {
-              "icon": "attach-money",
+              "icon": "pix",
               "label": "Pagar com Pix"
             }
           }
@@ -1947,7 +1946,6 @@
         "id": "b997d9c1-0ad7-4d0c-a4dd-fbf6e23098a4",
         "data": {
           "title": "Dados do pagamento",
-          "variant": "regular",
           "showReturn": true
         },
         "name": null,
@@ -2034,7 +2032,7 @@
             "type": "button",
             "name": null,
             "data": {
-              "icon": "attach-money",
+              "icon": "pix",
               "label": "Pagar com Pix"
             }
           }
@@ -2044,7 +2042,6 @@
         "id": "a773205c-3b9c-419e-bd09-8b84db454c84",
         "data": {
           "title": "Transferir Veículo",
-          "variant": "regular",
           "showReturn": true
         },
         "name": null,
@@ -2143,7 +2140,6 @@
         "id": "9a180d13-e23e-4cd0-9ed6-26aceba13ca7",
         "data": {
           "title": "Conclusão",
-          "variant": "regular",
           "showReturn": true
         },
         "name": null,
@@ -2221,7 +2217,6 @@
         "id": "ff606708-aad9-4f73-9eab-1bc609d7eacf",
         "data": {
           "title": "Atenção",
-          "variant": "regular",
           "showReturn": true
         },
         "name": null,
@@ -2290,7 +2285,6 @@
         "id": "a3502dc1-24d1-443a-bf01-b460d8953546",
         "data": {
           "title": "Venda cancelada",
-          "variant": "regular",
           "showReturn": true
         },
         "name": null,
@@ -2359,7 +2353,6 @@
         "id": "6f483e31-3f04-4651-94db-8cadaa23c869",
         "data": {
           "title": "Conclusão",
-          "variant": "regular",
           "showReturn": true
         },
         "name": null,
@@ -2428,7 +2421,6 @@
         "id": "5e730814-6dff-4d83-b889-1af89c6ccb6a",
         "data": {
           "title": "Conclusão",
-          "variant": "regular",
           "showReturn": true
         },
         "name": null,
@@ -2505,7 +2497,6 @@
         "id": "690e63c0-8c58-48f7-b8ff-8556e7969f7b",
         "data": {
           "title": "Venda cancelada",
-          "variant": "regular",
           "showReturn": true
         },
         "name": null,
@@ -2948,7 +2939,7 @@
         },
         "method": "POST",
         "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/confirmar-compra",
-        "body": "{\n  \"codigoTransferencia\": \"@{node:n_90a9d6db5f4b.codigoTransferencia}\",\n  \"codigoProvaVidaComprador\": \"@{node:n_32b7a4b7dfc4.codigoProvaVida}\"\n}",
+        "body": "{\n  \"codigoTransferencia\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoTransferencia}\",\n  \"codigoProvaVidaComprador\": \"@{node:n_32b7a4b7dfc4.codigoProvaVida}\"\n}",
         "responseExamples": [
           {
             "id": "13ca35ee-ca27-4e9f-b5f2-21dd6e91360c",
@@ -3003,7 +2994,7 @@
     },
     {
       "id": "n_3bad58f20fff",
-      "type": "web_view_screen",
+      "type": "iti_signature_screen",
       "name": "Documento",
       "data": {
         "position": {
@@ -3025,7 +3016,7 @@
         },
         "method": "POST",
         "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/valida-assinatura",
-        "body": "{ \"codigoTransferencia\": \"@{node:n_90a9d6db5f4b.codigoTransferencia}\" }\n",
+        "body": "{\n  \"codigoTransferencia\": \"@{node:n_90a9d6db5f4b.codigoTransferencia}\",\n  \"itiCode\": \"@{node:n_3bad58f20fff.code}\"\n}\n",
         "responseExamples": [
           {
             "id": "2f26dc5c-5d01-488a-8e76-1ca8f0dd33a7",
@@ -3233,13 +3224,15 @@
     },
     {
       "id": "n_54e1a65041fa",
-      "type": "web_view_screen",
+      "type": "iti_signature_screen",
       "name": "Documento",
       "data": {
         "position": {
           "x": 320,
           "y": 2820
-        }
+        },
+        "url": "https://cas.iti.br/oauth2.0/authorize?response_type=code&redirect_uri=spgovbr://localhost/appspgovbr/iti/oauth_redirect.html&scope=sign&client_id=spgovbrprod",
+        "callbackPrefix": "spgovbr://"
       }
     },
     {
@@ -3253,7 +3246,7 @@
         },
         "method": "POST",
         "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/valida-assinatura",
-        "body": "{ \"codigoTransferencia\": \"@{node:n_90a9d6db5f4b.codigoTransferencia}\" }\n",
+        "body": "{\n  \"codigoTransferencia\": \"@{node:n_90a9d6db5f4b.codigoTransferencia}\",\n  \"itiCode\": \"@{node:n_54e1a65041fa.code}\"\n}\n",
         "responseExamples": [
           {
             "id": "bbf0c143-4114-42fc-b2e2-632fae3bef9d",
@@ -3414,8 +3407,8 @@
       "name": null,
       "data": {
         "position": {
-          "x": 3500,
-          "y": 1380
+          "x": 3428,
+          "y": 1376
         }
       }
     },
@@ -3504,6 +3497,171 @@
         "position": {
           "x": -860,
           "y": 452
+        }
+      }
+    },
+    {
+      "id": "n_0be79e85fea6",
+      "type": "waypoint_node",
+      "name": null,
+      "data": {
+        "position": {
+          "x": 3424,
+          "y": -52
+        }
+      }
+    },
+    {
+      "id": "n_796144e7ef81",
+      "type": "waypoint_node",
+      "name": null,
+      "data": {
+        "position": {
+          "x": 2744,
+          "y": -52
+        }
+      }
+    },
+    {
+      "id": "n_784a9d924ef1",
+      "type": "waypoint_node",
+      "name": null,
+      "data": {
+        "position": {
+          "x": 3424,
+          "y": -52
+        }
+      }
+    },
+    {
+      "id": "n_d4a2a3dc90ff",
+      "type": "waypoint_node",
+      "name": null,
+      "data": {
+        "position": {
+          "x": 2180,
+          "y": -52
+        }
+      }
+    },
+    {
+      "id": "n_c8aaa630031b",
+      "type": "waypoint_node",
+      "name": null,
+      "data": {
+        "position": {
+          "x": 3424,
+          "y": -52
+        }
+      }
+    },
+    {
+      "id": "n_95a171688f5a",
+      "type": "waypoint_node",
+      "name": null,
+      "data": {
+        "position": {
+          "x": 1648,
+          "y": -52
+        }
+      }
+    },
+    {
+      "id": "n_a585915a9599",
+      "type": "waypoint_node",
+      "name": null,
+      "data": {
+        "position": {
+          "x": 3424,
+          "y": -52
+        }
+      }
+    },
+    {
+      "id": "n_ffd9791cea8d",
+      "type": "waypoint_node",
+      "name": null,
+      "data": {
+        "position": {
+          "x": 1128,
+          "y": -52
+        }
+      }
+    },
+    {
+      "id": "n_5ad559265624",
+      "type": "waypoint_node",
+      "name": null,
+      "data": {
+        "position": {
+          "x": 3424,
+          "y": -52
+        }
+      }
+    },
+    {
+      "id": "n_ad71a1187a12",
+      "type": "waypoint_node",
+      "name": null,
+      "data": {
+        "position": {
+          "x": 652,
+          "y": -52
+        }
+      }
+    },
+    {
+      "id": "n_4f6e63f38ac1",
+      "type": "waypoint_node",
+      "name": null,
+      "data": {
+        "position": {
+          "x": 3424,
+          "y": -52
+        }
+      }
+    },
+    {
+      "id": "n_69b1f8f1af45",
+      "type": "waypoint_node",
+      "name": null,
+      "data": {
+        "position": {
+          "x": 88,
+          "y": -52
+        }
+      }
+    },
+    {
+      "id": "n_fed412d3078d",
+      "type": "waypoint_node",
+      "name": null,
+      "data": {
+        "position": {
+          "x": 3424,
+          "y": -52
+        }
+      }
+    },
+    {
+      "id": "n_4a9529e3107c",
+      "type": "end_node",
+      "name": "End",
+      "data": {
+        "position": {
+          "x": 3760,
+          "y": -36
+        }
+      }
+    },
+    {
+      "id": "n_acb9e7f8d196",
+      "type": "waypoint_node",
+      "name": null,
+      "data": {
+        "position": {
+          "x": 3616,
+          "y": 4
         }
       }
     }
@@ -4040,6 +4198,138 @@
     {
       "sourceId": "n_b17e692471e5",
       "targetId": "s_a95b06ade63c",
+      "sourceHandle": "right-source",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_95c89379f948",
+      "targetId": "n_0be79e85fea6",
+      "sourceHandle": "navbar_action",
+      "targetHandle": "left-target"
+    },
+    {
+      "sourceId": "n_0be79e85fea6",
+      "targetId": "s_d1720681ec27",
+      "sourceHandle": "right-source",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_eac3ed5620ab",
+      "targetId": "n_796144e7ef81",
+      "sourceHandle": "navbar_action",
+      "targetHandle": "left-target"
+    },
+    {
+      "sourceId": "n_796144e7ef81",
+      "targetId": "n_784a9d924ef1",
+      "sourceHandle": "right-source",
+      "targetHandle": "left-target"
+    },
+    {
+      "sourceId": "n_784a9d924ef1",
+      "targetId": "s_d1720681ec27",
+      "sourceHandle": "right-source",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_7fdb8d61c217",
+      "targetId": "n_d4a2a3dc90ff",
+      "sourceHandle": "navbar_action",
+      "targetHandle": "left-target"
+    },
+    {
+      "sourceId": "n_d4a2a3dc90ff",
+      "targetId": "n_c8aaa630031b",
+      "sourceHandle": "right-source",
+      "targetHandle": "left-target"
+    },
+    {
+      "sourceId": "n_c8aaa630031b",
+      "targetId": "s_d1720681ec27",
+      "sourceHandle": "right-source",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_ef18ee58cdf5",
+      "targetId": "n_95a171688f5a",
+      "sourceHandle": "navbar_action",
+      "targetHandle": "left-target"
+    },
+    {
+      "sourceId": "n_95a171688f5a",
+      "targetId": "n_a585915a9599",
+      "sourceHandle": "right-source",
+      "targetHandle": "left-target"
+    },
+    {
+      "sourceId": "n_a585915a9599",
+      "targetId": "s_d1720681ec27",
+      "sourceHandle": "right-source",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_047f159425d9",
+      "targetId": "n_ffd9791cea8d",
+      "sourceHandle": "navbar_action",
+      "targetHandle": "left-target"
+    },
+    {
+      "sourceId": "n_ffd9791cea8d",
+      "targetId": "n_5ad559265624",
+      "sourceHandle": "right-source",
+      "targetHandle": "left-target"
+    },
+    {
+      "sourceId": "n_5ad559265624",
+      "targetId": "s_d1720681ec27",
+      "sourceHandle": "right-source",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_bced62eb751b",
+      "targetId": "n_ad71a1187a12",
+      "sourceHandle": "navbar_action",
+      "targetHandle": "left-target"
+    },
+    {
+      "sourceId": "n_ad71a1187a12",
+      "targetId": "n_4f6e63f38ac1",
+      "sourceHandle": "right-source",
+      "targetHandle": "left-target"
+    },
+    {
+      "sourceId": "n_4f6e63f38ac1",
+      "targetId": "s_d1720681ec27",
+      "sourceHandle": "right-source",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_a95b06ade63c",
+      "targetId": "n_69b1f8f1af45",
+      "sourceHandle": "navbar_action",
+      "targetHandle": "left-target"
+    },
+    {
+      "sourceId": "n_69b1f8f1af45",
+      "targetId": "n_fed412d3078d",
+      "sourceHandle": "right-source",
+      "targetHandle": "left-target"
+    },
+    {
+      "sourceId": "n_fed412d3078d",
+      "targetId": "s_d1720681ec27",
+      "sourceHandle": "right-source",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_d1720681ec27",
+      "targetId": "n_acb9e7f8d196",
+      "sourceHandle": "navbar_back",
+      "targetHandle": "left-target"
+    },
+    {
+      "sourceId": "n_acb9e7f8d196",
+      "targetId": "n_4a9529e3107c",
       "sourceHandle": "right-source",
       "targetHandle": "input"
     }

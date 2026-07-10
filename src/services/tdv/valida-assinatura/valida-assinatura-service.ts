@@ -8,6 +8,7 @@ type Dependencies = {
 
 export type ValidaAssinaturaInput = {
   codigoTransferencia: string
+  itiCode?: string
 }
 
 export type ValidaAssinaturaResult = {
@@ -49,10 +50,33 @@ export class ValidaAssinaturaService {
     // Determine role from TDV data
     const isSeller = tdv.result?.codigoVendedor === cpf
 
-    if (isSeller) {
-      return { valid: SELLER_SIGNED_STATES.includes(estado) }
+    // The ITI WebView hands back a signing authorization code, not a signed/unsigned flag.
+    // Forward it to ServiceNow so it can advance the TDV to the next signature state
+    // (5 -> 6 when the buyer signs, 6 -> 7 when the seller signs). ServiceNow itself
+    // performs the ITI code exchange; we only need to attach it to the right transition.
+    let effectiveEstado = estado
+    if (input.itiCode) {
+      if (!isSeller && estado === CodigoEstadoTDV.AUTODECLARACAO_RESIDENCIA_CONFIRMADA) {
+        await this.client.atualizaTdv(auth, input.codigoTransferencia, {
+          estado: CodigoEstadoTDV.ATPVE_ASSINADA_COMPRADOR,
+          itiCode: input.itiCode
+        })
+        effectiveEstado = CodigoEstadoTDV.ATPVE_ASSINADA_COMPRADOR
+      } else if (isSeller && estado === CodigoEstadoTDV.ATPVE_ASSINADA_COMPRADOR) {
+        await this.client.atualizaTdv(auth, input.codigoTransferencia, {
+          estado: CodigoEstadoTDV.ATPVE_ASSINADA_VENDEDOR_COMUNICACAO_VENDA_GERADA,
+          itiCode: input.itiCode
+        })
+        effectiveEstado = CodigoEstadoTDV.ATPVE_ASSINADA_VENDEDOR_COMUNICACAO_VENDA_GERADA
+      }
+      // If the state doesn't match the expected precondition (e.g. a retried call after the
+      // transition already happened), fall through and just report the current signed status.
     }
 
-    return { valid: BUYER_SIGNED_STATES.includes(estado) }
+    if (isSeller) {
+      return { valid: SELLER_SIGNED_STATES.includes(effectiveEstado) }
+    }
+
+    return { valid: BUYER_SIGNED_STATES.includes(effectiveEstado) }
   }
 }
