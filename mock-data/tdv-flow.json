@@ -2994,7 +2994,7 @@
     },
     {
       "id": "n_3bad58f20fff",
-      "type": "web_view_screen",
+      "type": "iti_signature_screen",
       "name": "Documento",
       "data": {
         "position": {
@@ -3224,7 +3224,7 @@
     },
     {
       "id": "n_54e1a65041fa",
-      "type": "web_view_screen",
+      "type": "iti_signature_screen",
       "name": "Documento",
       "data": {
         "position": {
