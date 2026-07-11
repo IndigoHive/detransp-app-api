@@ -7,6 +7,12 @@ export function httpErrorHandler (): ErrorRequestHandler {
       return next(err)
     }
 
+    const logger = req.scope.resolve('logger')
+    logger.warn(
+      { method: req.method, url: req.originalUrl, status: err.status, message: err.message },
+      'Request rejected with HTTP error'
+    )
+
     res.status(err.status).json({
       status: err.status,
       message: err.message
