@@ -31,7 +31,7 @@ export function toVehicleItemFromLista(vehicle: ListaVeiculosVeiculoData): Vehic
     title: vehicle.marcaVeiculo,
     brandModel: vehicle.marcaVeiculo,
     plate: vehicle.placaVeiculo,
-    status: mapStatus(vehicle.situacaoLicenciamento),
+    licensingStatus: mapStatus(vehicle.situacaoLicenciamento),
     licensingExpirationDate: formatDateBr(vehicle.dataVencimentoLicenciamento),
     lastLicensing: formatDateBr(vehicle.dataLicenciamentoVeiculo),
   }
@@ -44,7 +44,7 @@ export function toVehicleItemFromVerifica(vehicle: VerificaVeiculoData): Vehicle
     title: vehicle.marcaVeiculo,
     brandModel: vehicle.marcaVeiculo,
     plate: vehicle.placaVeiculo,
-    status: mapStatus(vehicle.situacaoLicenciamento),
+    licensingStatus: mapStatus(vehicle.situacaoLicenciamento),
     licensingExpirationDate: formatDateBr(vehicle.dataVencimentoLicenciamento),
   }
 }

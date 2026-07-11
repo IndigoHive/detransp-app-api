@@ -10,7 +10,7 @@ export type ConsultaComprasResult = {
     id: string
     title: string
     plate: string
-    status: string
+    licensingStatus: string
     licensingExpirationDate: string
     type: string
     brandModel: string
@@ -47,7 +47,7 @@ export class ConsultaComprasService {
       id: String(index + 1),
       title: tdv.descricaoMarcaVeiculo ?? '',
       plate: tdv.placaVeiculo ?? '',
-      status: 'PENDENTE',
+      licensingStatus: 'PENDENTE',
       licensingExpirationDate: '',
       type: 'Passeio',
       brandModel: tdv.descricaoMarcaVeiculo ?? '',

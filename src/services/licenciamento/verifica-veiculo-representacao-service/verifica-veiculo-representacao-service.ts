@@ -38,7 +38,7 @@ export class VerificaVeiculoRepresentacaoService {
       }
 
       const vehicle = vehicleBase ?? toVehicleItemFromVerifica(data)
-      const vigency = vehicle.status
+      const vigency = vehicle.licensingStatus
       const isLicensingOverdue = vigency !== 'REGULAR'
 
       const debitosData = await this.fetchDebitos(auth)
@@ -73,7 +73,7 @@ export class VerificaVeiculoRepresentacaoService {
             plate: auth.placa,
             title: '',
             brandModel: '',
-            status: 'VENCIDO',
+            licensingStatus: 'VENCIDO',
             licensingExpirationDate: '',
           },
           vigency: 'VENCIDO',
@@ -100,7 +100,7 @@ export class VerificaVeiculoRepresentacaoService {
             plate: auth.placa,
             title: '',
             brandModel: '',
-            status: 'VENCIDO',
+            licensingStatus: 'VENCIDO',
             licensingExpirationDate: '',
           },
           vigency: 'VENCIDO',
