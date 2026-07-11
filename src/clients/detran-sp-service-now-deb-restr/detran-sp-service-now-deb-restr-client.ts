@@ -37,12 +37,23 @@ export class DetranSpServiceNowDebRestrClient extends DetranSpServiceNowDebRestr
     return (await this.axios.get('', this.withAuth(auth))).data
   }
 
-  async buscaVeiculo (auth: DetranSpServiceNowClientAuthWithVeiculo, renavam: Renavam): Promise<BuscaVeiculoResult> {
+  async buscaVeiculo (
+    auth: DetranSpServiceNowClientAuthWithVeiculo,
+    renavam: Renavam,
+    options?: { includeProcedencia?: boolean }
+  ): Promise<BuscaVeiculoResult> {
+    const include = options?.includeProcedencia ? `${DEBITOS_INCLUDE},procedencia` : DEBITOS_INCLUDE
     return (
       await this.axios.get(`/${renavam}/placa/${auth.placa}`, {
         ...this.withAuth(auth),
-        params: { include: DEBITOS_INCLUDE }
+        params: { include }
       })
+    ).data
+  }
+
+  async buscaCertidao (auth: DetranSpServiceNowClientAuthWithVeiculo, renavam: Renavam): Promise<CertidaoResult> {
+    return (
+      await this.axios.get(`/${renavam}/placa/${auth.placa}/relationships/certidao`, this.withAuth(auth))
     ).data
   }
 
