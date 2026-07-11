@@ -10,7 +10,7 @@ export type ConsultaVeiculosResult = {
     id: string
     title: string
     plate: string
-    status: string
+    licensingStatus: string
     licensingExpirationDate: string
     type: string
     brandModel: string
@@ -43,7 +43,7 @@ export class ConsultaVeiculosService {
       id: String(index + 1),
       title: v.descricaoMarca,
       plate: v.placa,
-      status: 'REGULAR',
+      licensingStatus: 'REGULAR',
       licensingExpirationDate: v.anoExercicio ? `31/12/${v.anoExercicio}` : '',
       type: 'Passeio',
       brandModel: v.descricaoMarca,
