@@ -9,6 +9,7 @@ import type { LicenciamentoServices } from '../../services/licenciamento/licenci
 import type { DebRestrServices } from '../../services/deb-restr/deb-restr-services'
 import type { Clients, DetranSpServiceNowLicenciamentoClient } from '../../clients'
 import type { DetranSpServiceNowDebRestrClient } from '../../clients/detran-sp-service-now-deb-restr'
+import type { DetranSpServiceNowPgtoClient } from '../../clients/detran-sp-service-now-pgto'
 import type { RotaCaixaPostalClient } from '../../clients/rota-caixa-postal'
 import type { RotaVidaClient } from '../../clients/rota-vida'
 import type { TdvServices } from '../../services/tdv/tdv-services'
@@ -20,6 +21,7 @@ export type ContainerServices = RepositoryServices & FlowServices & ServicesServ
   logger: Logger
   detranSpServiceNowLicenciamentoClient: DetranSpServiceNowLicenciamentoClient
   detranSpServiceNowDebRestrClient: DetranSpServiceNowDebRestrClient
+  detranSpServiceNowPgtoClient: DetranSpServiceNowPgtoClient
   rotaCaixaPostalClient: RotaCaixaPostalClient
   rotaVidaClient: RotaVidaClient
 }

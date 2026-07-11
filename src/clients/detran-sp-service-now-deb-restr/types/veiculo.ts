@@ -39,11 +39,20 @@ export type VeiculoMeta = {
   valorDebitos?: number | null
 }
 
+export type VeiculoRelationships = {
+  certidao?: {
+    links?: {
+      self?: string | null
+    }
+  }
+}
+
 export type VeiculoResource = {
   id: string
   type: string
   attributes: VeiculoAttributes
   meta?: VeiculoMeta
+  relationships?: VeiculoRelationships
 }
 
 export type ListaVeiculosResponse = {
