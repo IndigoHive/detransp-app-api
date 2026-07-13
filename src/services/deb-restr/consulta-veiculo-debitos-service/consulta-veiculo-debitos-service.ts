@@ -116,6 +116,9 @@ export class ConsultaVeiculoDebitosService {
     const hasOtherDebts = ipva.length > 0 || multas.length > 0
 
     const licenciamentoPayable = licenciamento.length > 0 && !hasOtherDebts
+    // pix/total only earns its place when it bundles more than one section —
+    // see the VehicleDebtsPayload.total comment for the full rationale
+    const totalPayable = ipva.length > 0 && multas.length > 0 && !hasMultaForaDoSistema
 
     return {
       ipva: {
@@ -139,10 +142,17 @@ export class ConsultaVeiculoDebitosService {
       licenciamento: {
         status: deriveSectionStatus(licenciamento),
         items: licenciamento.map((d) => ({ exercicio: d.attributes.exercicio ?? null, valor: d.attributes.valor })),
-        pixButton: hasMultaForaDoSistema ? 'hidden' : licenciamentoPayable ? 'visible' : 'disabled',
+        // No debt → no button; debt blocked by other debts → disabled; payable → visible
+        pixButton: hasMultaForaDoSistema || licenciamento.length === 0
+          ? 'hidden'
+          : licenciamentoPayable ? 'visible' : 'disabled',
         ...(licenciamentoPayable
           ? {}
-          : { helperText: hasOtherDebts ? LICENCIAMENTO_BLOQUEADO_TEXT : LICENCIAMENTO_EM_DIA_TEXT }),
+          : { helperText: licenciamento.length > 0 ? LICENCIAMENTO_BLOQUEADO_TEXT : LICENCIAMENTO_EM_DIA_TEXT }),
+      },
+      total: {
+        pixButton: totalPayable ? 'visible' : 'hidden',
+        totalLabel: totalPayable ? formatCurrencyBr(sumValores([...ipva, ...multas])) : null,
       },
     }
   }
