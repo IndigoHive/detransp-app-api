@@ -13,7 +13,6 @@ import type {
 import { deriveIpvaSectionStatus, deriveSectionStatus, formatCurrencyBr, sumValores } from '../utils'
 
 const IPVA_HELPER_TEXT = 'Parcelamento em até 5x no Pix sem juros'
-const LICENCIAMENTO_EM_DIA_TEXT = 'Licenciamento em dia. Pagamento via Pix disponível após vencimento.'
 const LICENCIAMENTO_BLOQUEADO_TEXT = 'Para liberar o pagamento do licenciamento, quite os demais débitos do veículo.'
 
 export type ConsultaVeiculoDebitosParams = DebRestrVeiculoAuth & {
@@ -146,9 +145,9 @@ export class ConsultaVeiculoDebitosService {
         pixButton: hasMultaForaDoSistema || licenciamento.length === 0
           ? 'hidden'
           : licenciamentoPayable ? 'visible' : 'disabled',
-        ...(licenciamentoPayable
-          ? {}
-          : { helperText: licenciamento.length > 0 ? LICENCIAMENTO_BLOQUEADO_TEXT : LICENCIAMENTO_EM_DIA_TEXT }),
+        ...(licenciamento.length > 0 && !licenciamentoPayable
+          ? { helperText: LICENCIAMENTO_BLOQUEADO_TEXT }
+          : {}),
       },
       total: {
         pixButton: totalPayable ? 'visible' : 'hidden',
