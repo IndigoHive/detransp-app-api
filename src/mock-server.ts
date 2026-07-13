@@ -39,7 +39,7 @@ const MOCK_VEHICLES = [
     plate: 'ABC1D23',
     title: 'TOYOTA COROLLA CROSS XRE',
     type: 'AUTOMOVEL',
-    status: 'REGULAR' as const,
+    licensingStatus: 'REGULAR' as const,
     brandModel: 'TOYOTA/COROLLA CROSS XRE',
     renavam: '00123456789',
     lastLicensing: '2025',
@@ -52,7 +52,7 @@ const MOCK_VEHICLES = [
     plate: 'XYZ9E86',
     title: 'HONDA CIVIC TOURING',
     type: 'AUTOMOVEL',
-    status: 'A VENCER' as const,
+    licensingStatus: 'A VENCER' as const,
     brandModel: 'HONDA/CIVIC TOURING',
     renavam: '00987654321',
     lastLicensing: '2024',
@@ -65,7 +65,7 @@ const MOCK_VEHICLES = [
     plate: 'QRS4F56',
     title: 'VW GOL 1.0',
     type: 'AUTOMOVEL',
-    status: 'VENCIDO' as const,
+    licensingStatus: 'VENCIDO' as const,
     brandModel: 'VW/GOL 1.0',
     renavam: '00555666777',
     lastLicensing: '2023',
@@ -359,10 +359,10 @@ app.post('/api/licenciamento/veiculos/:renavam/verificar', (req, res) => {
     return
   }
 
-  const isVencido = vehicle.status === 'VENCIDO'
+  const isVencido = vehicle.licensingStatus === 'VENCIDO'
   const debts = isVencido
     ? [...MOCK_DEBTS_LICENCIAMENTO, ...MOCK_DEBTS_IPVA, ...MOCK_DEBTS_MULTA]
-    : vehicle.status === 'A VENCER'
+    : vehicle.licensingStatus === 'A VENCER'
       ? [...MOCK_DEBTS_LICENCIAMENTO]
       : []
 
@@ -370,11 +370,11 @@ app.post('/api/licenciamento/veiculos/:renavam/verificar', (req, res) => {
 
   res.json({
     vehicle,
-    vigency: vehicle.status,
+    vigency: vehicle.licensingStatus,
     isBlocked: false,
     isGnvBlocked: false,
     hasMultaForaDoSistema: isVencido,
-    onlyLicensing: vehicle.status === 'A VENCER',
+    onlyLicensing: vehicle.licensingStatus === 'A VENCER',
     hasPayableDebts: debts.length > 0,
     isLicensingOverdue: isVencido,
     debts,
@@ -617,7 +617,7 @@ app.get('/api/tdv/veiculos', (_req, res) => {
       id: v.id,
       title: v.title,
       plate: v.plate,
-      status: v.status,
+      licensingStatus: v.licensingStatus,
       licensingExpirationDate: v.licensingExpirationDate,
       type: v.type,
       brandModel: v.brandModel,
@@ -670,7 +670,7 @@ app.get('/api/tdv/compras', (_req, res) => {
         id: '10',
         title: 'FIAT/ARGO 1.0',
         plate: 'DEF5G67',
-        status: 'REGULAR',
+        licensingStatus: 'REGULAR',
         licensingExpirationDate: '31/12/2025',
         type: 'Passeio',
         brandModel: 'FIAT/ARGO 1.0',
@@ -693,7 +693,7 @@ app.post('/api/tdv/confirmar-compra', (req, res) => {
       id: MOCK_VEHICLES[0].id,
       plate: MOCK_VEHICLES[0].plate,
       title: MOCK_VEHICLES[0].title,
-      status: MOCK_VEHICLES[0].status,
+      licensingStatus: MOCK_VEHICLES[0].licensingStatus,
       brandModel: MOCK_VEHICLES[0].brandModel,
       licensingExpirationDate: MOCK_VEHICLES[0].licensingExpirationDate,
       renavam: MOCK_VEHICLES[0].renavam,

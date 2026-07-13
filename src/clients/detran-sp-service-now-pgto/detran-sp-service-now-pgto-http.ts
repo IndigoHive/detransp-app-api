@@ -1,12 +1,12 @@
 import axios, { type AxiosError, type AxiosInstance, type AxiosRequestConfig } from 'axios'
 import createError from 'http-errors'
 import type { Logger } from 'pino'
-import { DetranSpServiceNowDebRestrError } from './errors/detran-sp-service-now-deb-restr-error'
+import { DetranSpServiceNowPgtoError } from './errors/detran-sp-service-now-pgto-error'
 
-const SERVICE_NAME = 'detran-sp-servicenow-deb-restr'
+const SERVICE_NAME = 'detran-sp-servicenow-pgto'
 const MAX_TIMEOUT_MS = 30000
 
-export type DetranSpServiceNowDebRestrHttpParams = {
+export type DetranSpServiceNowPgtoHttpParams = {
   baseURL: string
   logger: Logger
 }
@@ -22,11 +22,11 @@ export type DetranSpServiceNowClientAuthWithVeiculo = DetranSpServiceNowClientAu
   placa: string
 }
 
-export class DetranSpServiceNowDebRestrHttp {
+export class DetranSpServiceNowPgtoHttp {
   protected axios: AxiosInstance
   protected logger: Logger
 
-  constructor (params: DetranSpServiceNowDebRestrHttpParams) {
+  constructor (params: DetranSpServiceNowPgtoHttpParams) {
     this.logger = params.logger
 
     this.axios = axios.create({
@@ -48,12 +48,12 @@ export class DetranSpServiceNowDebRestrHttp {
       (config) => {
         this.logger.debug(
           { baseURL: config.baseURL, method: config.method, timeout: config.timeout, url: config.url, service: SERVICE_NAME },
-          'ServiceNow deb-restr request'
+          'ServiceNow pgto request'
         )
         return config
       },
       (error) => {
-        this.logger.error({ err: error?.message, service: SERVICE_NAME }, 'ServiceNow deb-restr request error')
+        this.logger.error({ err: error?.message, service: SERVICE_NAME }, 'ServiceNow pgto request error')
         return Promise.reject(error)
       }
     )
@@ -62,26 +62,30 @@ export class DetranSpServiceNowDebRestrHttp {
       (response) => {
         this.logger.info(
           { method: response.config.method, service: SERVICE_NAME, status: response.status, url: response.config.url },
-          'ServiceNow deb-restr response'
+          'ServiceNow pgto response'
         )
         return response
       },
       (error: AxiosError) => {
-        const data = error.response?.data as { error?: { message?: string; detail?: string } } | undefined
-        const message = data?.error?.message
-        const detail = data?.error?.detail
+        // pgto errors come in two shapes: {error: {message, detail}} and {errors: [{title, detail}]}
+        const data = error.response?.data as {
+          error?: { message?: string; detail?: string }
+          errors?: Array<{ title?: string; detail?: string }>
+        } | undefined
+        const message = data?.error?.message ?? data?.errors?.[0]?.title
+        const detail = data?.error?.detail ?? data?.errors?.[0]?.detail
 
         this.logger.error(
           { service: SERVICE_NAME, status: error.response?.status, url: error.config?.url, errorMessage: message, errorDetail: detail },
-          'ServiceNow deb-restr response error'
+          'ServiceNow pgto response error'
         )
 
-        const userMessage = detail ?? 'Tivemos um problema ao processar sua solicitação.'
+        const userMessage = detail || 'Tivemos um problema ao processar sua solicitação.'
         const status = error.response?.status ?? 422
 
         throw createError(
           status,
-          new DetranSpServiceNowDebRestrError(message ?? 'UnknownError', userMessage, error.response?.data),
+          new DetranSpServiceNowPgtoError(message ?? 'UnknownError', userMessage, error.response?.data),
           { expose: true }
         )
       }

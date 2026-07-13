@@ -29,7 +29,7 @@ export class VerificaVeiculoLicenciamentoService {
 
     let hasMultaForaDoSistema = false
     let vigency: VehicleStatus = 'VENCIDO'
-    const isLicensingOverdue = vehicle?.status === 'VENCIDO'
+    const isLicensingOverdue = vehicle?.licensingStatus === 'VENCIDO'
 
     try {
       const verifyResult = await this.licenciamentoClient.verificaVeiculo(auth, auth.renavam)

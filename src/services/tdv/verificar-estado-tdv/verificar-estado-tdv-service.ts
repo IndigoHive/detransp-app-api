@@ -11,7 +11,7 @@ type VehicleData = {
   id: string
   plate: string
   title: string
-  status: string
+  licensingStatus: string
   brandModel: string
   licensingExpirationDate: string
   renavam: string
@@ -25,7 +25,7 @@ function buildVehicleData (data: BuscaTdvResultData | undefined, fallback: Lista
     id: '1',
     plate: data?.placaVeiculo ?? fallback.placaVeiculo ?? '',
     title: data?.descricaoMarcaVeiculo ?? fallback.descricaoMarcaVeiculo ?? '',
-    status: 'REGULAR',
+    licensingStatus: 'REGULAR',
     brandModel: data?.descricaoMarcaVeiculo ?? fallback.descricaoMarcaVeiculo ?? '',
     licensingExpirationDate: '',
     renavam: data?.codigoRenavamVeiculo ?? fallback.codigoRenavamVeiculo ?? '',

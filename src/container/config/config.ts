@@ -128,11 +128,13 @@ export const config: Config = {
 }
 
 function getIdspConfig (): Config['idsp'] {
+  const envScopes = env.GOVBR_IDSP_SCOPE?.split(/\s+/).filter(Boolean) ?? []
+
   return {
     authorizeUrl: env.GOVBR_IDSP_AUTHORIZE_URL || DEFAULT_GOVBR_AUTHORIZE_URL,
     tokenUrl: env.GOVBR_IDSP_TOKEN_URL || DEFAULT_GOVBR_TOKEN_URL,
     userInfoUrl: env.GOVBR_IDSP_USERINFO_URL || DEFAULT_GOVBR_USERINFO_URL,
-    scope: GOVBR_SCOPES.join(' '),
+    scope: [...new Set([...GOVBR_SCOPES, ...envScopes])].join(' '),
     android: {
       clientId: env.GOVBR_IDSP_ANDROID_CLIENT_ID || '',
       ...(env.GOVBR_IDSP_ANDROID_CLIENT_SECRET

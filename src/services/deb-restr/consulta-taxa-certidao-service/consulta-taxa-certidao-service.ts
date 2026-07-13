@@ -1,5 +1,6 @@
 import type { DetranSpServiceNowDebRestrClient } from '../../../clients/detran-sp-service-now-deb-restr'
 import type { DebRestrVeiculoAuth, TaxaCertidaoResult } from '../types'
+import { formatDateBr } from '../utils'
 
 export class ConsultaTaxaCertidaoService {
   private readonly client: DetranSpServiceNowDebRestrClient
@@ -14,7 +15,7 @@ export class ConsultaTaxaCertidaoService {
     return {
       valor: attrs?.valor ?? null,
       descricao: attrs?.descricao ?? null,
-      vencimento: attrs?.vencimento ?? null,
+      vencimento: attrs?.vencimento ? formatDateBr(attrs.vencimento) : null,
     }
   }
 }

@@ -21,7 +21,7 @@ export type VehicleItem = {
   id: string
   title: string
   plate: string
-  status: VehicleStatus
+  licensingStatus: VehicleStatus
   licensingExpirationDate: string
   brandModel: string
   renavam: string

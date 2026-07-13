@@ -19,7 +19,7 @@ export type ConfirmarCompraResult = {
     id: string
     plate: string
     title: string
-    status: string
+    licensingStatus: string
     brandModel: string
     licensingExpirationDate: string
     renavam: string
@@ -76,7 +76,7 @@ export class ConfirmarCompraService {
         id: '1',
         plate: data?.placaVeiculo ?? '',
         title: data?.descricaoMarcaVeiculo ?? '',
-        status: 'REGULAR',
+        licensingStatus: 'REGULAR',
         brandModel: data?.descricaoMarcaVeiculo ?? '',
         licensingExpirationDate: '',
         renavam: data?.codigoRenavamVeiculo ?? '',

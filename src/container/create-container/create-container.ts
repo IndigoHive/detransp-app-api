@@ -17,6 +17,7 @@ import { PgSessionRepository } from '../../repositories/pg-session-repository'
 import { getAuthRegistrations, getFlowsRegistrations, getServicesRegistrations, getDashboardRegistrations, getLicenciamentoRegistrations, getDebRestrRegistrations, getTdvRegistrations } from '../../services'
 import { getClientRegistrations, DetranSpServiceNowLicenciamentoClient } from '../../clients'
 import { DetranSpServiceNowDebRestrClient } from '../../clients/detran-sp-service-now-deb-restr'
+import { DetranSpServiceNowPgtoClient } from '../../clients/detran-sp-service-now-pgto'
 import { RotaCaixaPostalClient } from '../../clients/rota-caixa-postal'
 import { RotaVidaClient } from '../../clients/rota-vida'
 import pino, { type Logger } from 'pino'
@@ -35,6 +36,7 @@ export function createContainer (
     config: asValue(config),
     detranSpServiceNowLicenciamentoClient: asClass(DetranSpServiceNowLicenciamentoClient).scoped(),
     detranSpServiceNowDebRestrClient: asClass(DetranSpServiceNowDebRestrClient).scoped(),
+    detranSpServiceNowPgtoClient: asClass(DetranSpServiceNowPgtoClient).scoped(),
     rotaCaixaPostalClient: asFunction(({ config: cfg, logger }: { config: Config; logger: Logger }) =>
       new RotaCaixaPostalClient({
         baseUrl: cfg.rotaCaixaPostal.baseUrl,
