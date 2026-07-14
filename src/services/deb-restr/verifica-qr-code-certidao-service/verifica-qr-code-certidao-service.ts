@@ -13,14 +13,23 @@ export class VerificaQRCodeCertidaoService {
     const result = await this.client.verificaQRCodeCertidao(auth, auth.renavam)
     const data = result?.data
     const estadoId = data?.relationships?.estado?.links?.data?.id
-    const estado = estadoId != null ? Number(estadoId) : null
+    const rawEstado = estadoId != null ? Number(estadoId) : null
 
     // ServiceNow sends "" (not absent) for unpaid QRs — coalesce to null so
     // both PIX polls (debt and certidão) expose the same unpaid shape
     const dataPagamento = data?.attributes?.dataPagamento
 
+    // Observed in homolog (2026-07-14): a paid certidão QR comes back with
+    // estado id 3 even though dataPagamento/endToEndId are filled — either the
+    // EstadoQRCodeCertidao enum doesn't match the estados-qr-code table or
+    // estado ignores payment. dataPagamento is the reliable paid signal, and
+    // the app only advances past the PIX screen on estado 2 (pago).
+    const estado = dataPagamento
+      ? 2
+      : rawEstado != null && Number.isFinite(rawEstado) ? rawEstado : null
+
     return {
-      estado: estado != null && Number.isFinite(estado) ? estado : null,
+      estado,
       comprovante: data?.attributes?.endToEndId || null,
       confirmedDate: dataPagamento ? formatDateTimeBr(dataPagamento) : null,
     }
