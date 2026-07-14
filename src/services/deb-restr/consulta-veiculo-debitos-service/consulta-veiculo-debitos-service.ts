@@ -13,7 +13,6 @@ import type {
 import { deriveIpvaSectionStatus, deriveSectionStatus, formatCurrencyBr, sumValores } from '../utils'
 
 const IPVA_HELPER_TEXT = 'Parcelamento em até 5x no Pix sem juros'
-const LICENCIAMENTO_EM_DIA_TEXT = 'Licenciamento em dia. Pagamento via Pix disponível após vencimento.'
 const LICENCIAMENTO_BLOQUEADO_TEXT = 'Para liberar o pagamento do licenciamento, quite os demais débitos do veículo.'
 
 export type ConsultaVeiculoDebitosParams = DebRestrVeiculoAuth & {
@@ -116,6 +115,9 @@ export class ConsultaVeiculoDebitosService {
     const hasOtherDebts = ipva.length > 0 || multas.length > 0
 
     const licenciamentoPayable = licenciamento.length > 0 && !hasOtherDebts
+    // pix/total only earns its place when it bundles more than one section —
+    // see the VehicleDebtsPayload.total comment for the full rationale
+    const totalPayable = ipva.length > 0 && multas.length > 0 && !hasMultaForaDoSistema
 
     return {
       ipva: {
@@ -139,10 +141,17 @@ export class ConsultaVeiculoDebitosService {
       licenciamento: {
         status: deriveSectionStatus(licenciamento),
         items: licenciamento.map((d) => ({ exercicio: d.attributes.exercicio ?? null, valor: d.attributes.valor })),
-        pixButton: hasMultaForaDoSistema ? 'hidden' : licenciamentoPayable ? 'visible' : 'disabled',
-        ...(licenciamentoPayable
-          ? {}
-          : { helperText: hasOtherDebts ? LICENCIAMENTO_BLOQUEADO_TEXT : LICENCIAMENTO_EM_DIA_TEXT }),
+        // No debt → no button; debt blocked by other debts → disabled; payable → visible
+        pixButton: hasMultaForaDoSistema || licenciamento.length === 0
+          ? 'hidden'
+          : licenciamentoPayable ? 'visible' : 'disabled',
+        ...(licenciamento.length > 0 && !licenciamentoPayable
+          ? { helperText: LICENCIAMENTO_BLOQUEADO_TEXT }
+          : {}),
+      },
+      total: {
+        pixButton: totalPayable ? 'visible' : 'hidden',
+        totalLabel: totalPayable ? formatCurrencyBr(sumValores([...ipva, ...multas])) : null,
       },
     }
   }
