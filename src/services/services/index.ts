@@ -1,6 +1,7 @@
 export * from './services-services'
 export * from './get-service-case-detail-service'
 export * from './validar-curso-teorico-da-cnh-do-brasil-no-detran-sp'
+export * from './liberar-matricula-da-autoescola'
 export * from './upload-protocol-attachment-service'
 export * from './list-protocol-messages-service'
 export * from './finalize-protocol-service'
