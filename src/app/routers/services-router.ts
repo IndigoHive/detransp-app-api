@@ -42,6 +42,25 @@ export function servicesRouter (): Router {
     res.status(200).json(result)
   })
 
+  router.post('/liberar-matricula-da-autoescola', upload.single('anexos'), async (req, res) => {
+    const service = req.scope.resolve('liberarMatriculaDaAutoescolaService')
+
+    const result = await service.run({
+      ...JSON.parse(req.body.data),
+      ...(req.file
+        ? {
+            attachment: {
+              buffer: req.file.buffer,
+              originalName: decodeFileName(req.file.originalname),
+              mimetype: req.file.mimetype,
+            },
+          }
+        : {}),
+    })
+
+    res.status(200).json(result)
+  })
+
   router.get('/protocols', async (req, res) => {
     const { cpf } = req.session!
     const service = req.scope.resolve('listServiceCasesService')
