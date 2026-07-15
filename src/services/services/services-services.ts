@@ -5,9 +5,11 @@ import { ValidarCursoTeoricoDaCNHDoBrasilNoDetranSpService } from './validar-cur
 import { UploadProtocolAttachmentService } from './upload-protocol-attachment-service'
 import { ListProtocolMessagesService } from './list-protocol-messages-service'
 import { FinalizeProtocolService } from './finalize-protocol-service'
+import { liberarMatriculaDaAutoescolaService } from './liberar-matricula-da-autoescola'
 
 export type ServicesServices = {
   validarCursoTeoricoDaCNHDoBrasilNoDetranSpService: ValidarCursoTeoricoDaCNHDoBrasilNoDetranSpService
+  liberarMatriculaDaAutoescolaService: liberarMatriculaDaAutoescolaService
   listServiceCasesService: ListServiceCasesService
   getServiceCaseDetailService: GetServiceCaseDetailService
   uploadProtocolAttachmentService: UploadProtocolAttachmentService
@@ -18,6 +20,7 @@ export type ServicesServices = {
 export function getServicesRegistrations (): Required<NameAndRegistrationPair<ServicesServices>> {
   return {
     validarCursoTeoricoDaCNHDoBrasilNoDetranSpService: asClass(ValidarCursoTeoricoDaCNHDoBrasilNoDetranSpService).scoped(),
+    liberarMatriculaDaAutoescolaService: asClass(liberarMatriculaDaAutoescolaService).scoped(),
     listServiceCasesService: asClass(ListServiceCasesService).scoped(),
     getServiceCaseDetailService: asClass(GetServiceCaseDetailService).scoped(),
     uploadProtocolAttachmentService: asClass(UploadProtocolAttachmentService).scoped(),
