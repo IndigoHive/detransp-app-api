@@ -6,10 +6,12 @@ import { UploadProtocolAttachmentService } from './upload-protocol-attachment-se
 import { ListProtocolMessagesService } from './list-protocol-messages-service'
 import { FinalizeProtocolService } from './finalize-protocol-service'
 import { liberarMatriculaDaAutoescolaService } from './liberar-matricula-da-autoescola'
+import { retirarCorrigirBloqueioBeneficioTributarioService } from './retirar-corrigir-bloqueio-beneficio-tributario'
 
 export type ServicesServices = {
   validarCursoTeoricoDaCNHDoBrasilNoDetranSpService: ValidarCursoTeoricoDaCNHDoBrasilNoDetranSpService
   liberarMatriculaDaAutoescolaService: liberarMatriculaDaAutoescolaService
+  retirarCorrigirBloqueioBeneficioTributarioService: retirarCorrigirBloqueioBeneficioTributarioService
   listServiceCasesService: ListServiceCasesService
   getServiceCaseDetailService: GetServiceCaseDetailService
   uploadProtocolAttachmentService: UploadProtocolAttachmentService
@@ -21,6 +23,7 @@ export function getServicesRegistrations (): Required<NameAndRegistrationPair<Se
   return {
     validarCursoTeoricoDaCNHDoBrasilNoDetranSpService: asClass(ValidarCursoTeoricoDaCNHDoBrasilNoDetranSpService).scoped(),
     liberarMatriculaDaAutoescolaService: asClass(liberarMatriculaDaAutoescolaService).scoped(),
+    retirarCorrigirBloqueioBeneficioTributarioService: asClass(retirarCorrigirBloqueioBeneficioTributarioService).scoped(),
     listServiceCasesService: asClass(ListServiceCasesService).scoped(),
     getServiceCaseDetailService: asClass(GetServiceCaseDetailService).scoped(),
     uploadProtocolAttachmentService: asClass(UploadProtocolAttachmentService).scoped(),
