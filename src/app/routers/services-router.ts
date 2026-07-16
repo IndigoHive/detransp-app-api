@@ -1,5 +1,11 @@
-import { Router } from 'express'
+import { Router, type Request, type Response } from 'express'
 import multer from 'multer'
+import type { ContainerServices } from '../../container'
+import type { ServiceNowFormService } from '../../services/services'
+
+type ServiceNowFormServiceName = {
+  [K in keyof ContainerServices]: ContainerServices[K] extends ServiceNowFormService ? K : never
+}[keyof ContainerServices]
 
 const upload = multer({ storage: multer.memoryStorage() })
 
@@ -20,65 +26,40 @@ function decodeFileName (name: string): string {
   }
 }
 
+function attachmentFromRequest (req: Request) {
+  return req.file
+    ? {
+        attachment: {
+          buffer: req.file.buffer,
+          originalName: decodeFileName(req.file.originalname),
+          mimetype: req.file.mimetype,
+        },
+      }
+    : {}
+}
+
+const SERVICE_NOW_FORM_ROUTES: Array<{ path: string, serviceName: ServiceNowFormServiceName }> = [
+  { path: '/validar-curso-teorico-da-cnh-do-brasil-no-detran-sp', serviceName: 'validarCursoTeoricoDaCNHDoBrasilNoDetranSpService' },
+  { path: '/liberar-matricula-da-autoescola', serviceName: 'liberarMatriculaDaAutoescolaService' },
+  { path: '/retirar-corrigir-bloqueio-beneficio-tributario', serviceName: 'retirarCorrigirBloqueioBeneficioTributarioService' },
+  { path: '/solicitar-cancelamento-intencao-venda', serviceName: 'solicitarCancelamentoIntencaoVendaService' },
+]
+
 export function servicesRouter (): Router {
   const router = Router()
 
-  router.post('/validar-curso-teorico-da-cnh-do-brasil-no-detran-sp', upload.single('anexos'), async (req, res) => {
-    const service = req.scope.resolve('validarCursoTeoricoDaCNHDoBrasilNoDetranSpService')
+  for (const { path, serviceName } of SERVICE_NOW_FORM_ROUTES) {
+    router.post(path, upload.single('anexos'), async (req: Request, res: Response) => {
+      const service = req.scope.resolve(serviceName)
 
-    const result = await service.run({
-      ...JSON.parse(req.body.data),
-      ...(req.file
-        ? {
-            attachment: {
-              buffer: req.file.buffer,
-              originalName: decodeFileName(req.file.originalname),
-              mimetype: req.file.mimetype,
-            },
-          }
-        : {}),
+      const result = await service.run({
+        ...JSON.parse(req.body.data),
+        ...attachmentFromRequest(req),
+      })
+
+      res.status(200).json(result)
     })
-
-    res.status(200).json(result)
-  })
-
-  router.post('/liberar-matricula-da-autoescola', upload.single('anexos'), async (req, res) => {
-    const service = req.scope.resolve('liberarMatriculaDaAutoescolaService')
-
-    const result = await service.run({
-      ...JSON.parse(req.body.data),
-      ...(req.file
-        ? {
-            attachment: {
-              buffer: req.file.buffer,
-              originalName: decodeFileName(req.file.originalname),
-              mimetype: req.file.mimetype,
-            },
-          }
-        : {}),
-    })
-
-    res.status(200).json(result)
-  })
-
-  router.post('/retirar-corrigir-bloqueio-beneficio-tributario', upload.single('anexos'), async (req, res) => {
-    const service = req.scope.resolve('retirarCorrigirBloqueioBeneficioTributarioService')
-
-    const result = await service.run({
-      ...JSON.parse(req.body.data),
-      ...(req.file
-        ? {
-            attachment: {
-              buffer: req.file.buffer,
-              originalName: decodeFileName(req.file.originalname),
-              mimetype: req.file.mimetype,
-            },
-          }
-        : {}),
-    })
-
-    res.status(200).json(result)
-  })
+  }
 
   router.get('/protocols', async (req, res) => {
     const { cpf } = req.session!
@@ -94,15 +75,7 @@ export function servicesRouter (): Router {
 
     const result = await service.run({
       ...req.body,
-      ...(req.file
-        ? {
-            attachment: {
-              buffer: req.file.buffer,
-              originalName: decodeFileName(req.file.originalname),
-              mimetype: req.file.mimetype,
-            },
-          }
-        : {}),
+      ...attachmentFromRequest(req),
     })
 
     res.status(200).json(result)
