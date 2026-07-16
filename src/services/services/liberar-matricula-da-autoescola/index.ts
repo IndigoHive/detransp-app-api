@@ -1,2 +1,1 @@
-export * from './liberar-matricula-da-autoescola'
-export * from './types'
+export * from './config'
