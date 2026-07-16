@@ -1,2 +1,1 @@
-export * from './retirar-corrigir-bloqueio-beneficio-tributario'
-export * from './types'
+export * from './config'
