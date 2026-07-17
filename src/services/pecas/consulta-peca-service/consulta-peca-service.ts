@@ -83,16 +83,6 @@ export class ConsultaPecaService {
       })),
     )
 
-    for (const [i, result] of settled.entries()) {
-      if (result.status === 'rejected') {
-        const arquivo = arquivos[i]
-        this.logger.warn(
-          { err: result.reason, url: arquivo?.url, codigo: arquivo?.codigo },
-          'Falha ao baixar arquivo da peça (best-effort).',
-        )
-      }
-    }
-
     return settled.flatMap((result) => (result.status === 'fulfilled' ? [result.value] : []))
   }
 
