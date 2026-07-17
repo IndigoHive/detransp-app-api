@@ -6,6 +6,7 @@ const SERVICE_NAME = 'rota-crv-pecas'
 
 export type RotaCrvPecasClientParams = {
   baseUrl: string
+  arquivosBaseUrl: string
   logger: Logger
 }
 
@@ -54,9 +55,10 @@ export type BuscaArquivosResponse = {
 
 export class RotaCrvPecasClient {
   private readonly axios: AxiosInstance
+  private readonly arquivosAxios: AxiosInstance
   private readonly logger: Logger
 
-  constructor({ baseUrl, logger }: RotaCrvPecasClientParams) {
+  constructor({ baseUrl, arquivosBaseUrl, logger }: RotaCrvPecasClientParams) {
     this.logger = logger
 
     this.axios = axios.create({
@@ -64,7 +66,12 @@ export class RotaCrvPecasClient {
       headers: { 'Content-Type': 'application/json' },
     })
 
-    this.setupInterceptors()
+    this.arquivosAxios = axios.create({
+      baseURL: arquivosBaseUrl,
+    })
+
+    this.setupInterceptors(this.axios)
+    this.setupInterceptors(this.arquivosAxios)
   }
 
   private withAuth(accessToken: string) {
@@ -81,8 +88,8 @@ export class RotaCrvPecasClient {
     }
   }
 
-  private setupInterceptors() {
-    this.axios.interceptors.response.use(
+  private setupInterceptors(instance: AxiosInstance) {
+    instance.interceptors.response.use(
       (response) => response,
       (error: AxiosError) => {
         const meta = this.buildRequestMeta(error.config)
@@ -127,5 +134,17 @@ export class RotaCrvPecasClient {
       this.withAuth(accessToken),
     )
     return response.data
+  }
+
+  async baixaArquivoBinario(accessToken: string, url: string): Promise<{ data: Buffer; contentType: string }> {
+    const response = await this.arquivosAxios.get(url, {
+      ...this.withAuth(accessToken),
+      responseType: 'arraybuffer',
+    })
+    const contentType = response.headers['content-type']
+    return {
+      data: Buffer.from(response.data),
+      contentType: typeof contentType === 'string' ? contentType : 'application/octet-stream',
+    }
   }
 }

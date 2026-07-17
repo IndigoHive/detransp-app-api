@@ -1,4 +1,5 @@
-export type ConsultaPecaResult = {
+export type ConsultaPecaSuccessResult = {
+  isError: false
   empresa: {
     cnpj: string | null
     razaoSocial: string | null
@@ -22,5 +23,17 @@ export type ConsultaPecaResult = {
     anoModelo: string | null
     combustivel: string | null
   }
-  imagens: Array<{ url: string; descricao: string | null; sequencia: number }>
+  imagens: Array<{ binario: string; descricao: string | null; sequencia: number; codigo: string; extensao: string }>
+  documentos: Array<{ binario: string; descricao: string | null; sequencia: number; codigo: string; extensao: string }>
+  isEmpty: boolean
 }
+
+// Erro conhecido (403/500/400/404) vindo do rota-crv-pecas-client, normalizado em 200 para que o
+// flow do app roteie no grafo (if_node/case_node) em vez de tratar como falha de HTTP.
+export type ConsultaPecaErrorResult = {
+  isError: true
+  errorCode: number
+  message: string
+}
+
+export type ConsultaPecaResult = ConsultaPecaSuccessResult | ConsultaPecaErrorResult

@@ -54,7 +54,11 @@ export function createContainer (
       })
     ).scoped(),
     rotaCrvPecasClient: asFunction(({ config: cfg, logger }: { config: Config; logger: Logger }) =>
-      new RotaCrvPecasClient({ baseUrl: cfg.rotaCrvPecas.baseUrl, logger })
+      new RotaCrvPecasClient({
+        baseUrl: cfg.rotaCrvPecas.baseUrl,
+        arquivosBaseUrl: cfg.rotaCrvPecas.arquivosBaseUrl,
+        logger,
+      })
     ).scoped(),
     rotaVistoriasClient: asFunction(({ config: cfg, logger }: { config: Config; logger: Logger }) =>
       new RotaVistoriasClient({ baseUrl: cfg.rotaVistorias.baseUrl, logger })

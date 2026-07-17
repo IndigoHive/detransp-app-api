@@ -124,6 +124,7 @@ export const config: Config = {
   },
   rotaCrvPecas: {
     baseUrl: env.ROTA_CRV_PECAS_BASE_URL || '',
+    arquivosBaseUrl: env.ROTA_ARQUIVOS_BASE_URL || '',
   },
   rotaVistorias: {
     baseUrl: env.ROTA_VISTORIAS_BASE_URL || '',

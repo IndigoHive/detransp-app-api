@@ -51,6 +51,7 @@ export type Config = {
   }
   rotaCrvPecas: {
     baseUrl: string
+    arquivosBaseUrl: string
   }
   rotaVistorias: {
     baseUrl: string
