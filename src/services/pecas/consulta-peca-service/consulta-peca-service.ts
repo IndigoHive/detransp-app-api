@@ -3,7 +3,6 @@ import type { ArquivoPecaRaw, PecaRaw, RotaCrvPecasClient } from '../../../clien
 import type { RotaVistoriasClient } from '../../../clients/rota-vistorias'
 import { extractNumeroFromQrUrl } from '../utils'
 import type { ConsultaPecaResult } from '../types'
-import { Logger } from 'pino'
 
 // Fotos do veículo às vezes chegam do upstream embrulhadas em PDF em vez de
 // imagem direta — descartadas do carrossel de imagens (aparecem em
@@ -21,12 +20,10 @@ type ArquivoComBinario = ArquivoPecaRaw & { binario: string }
 export class ConsultaPecaService {
   private readonly rotaCrvPecasClient: RotaCrvPecasClient
   private readonly rotaVistoriasClient: RotaVistoriasClient
-  private readonly logger: Logger
 
-  constructor(rotaCrvPecasClient: RotaCrvPecasClient, rotaVistoriasClient: RotaVistoriasClient, logger: Logger) {
+  constructor(rotaCrvPecasClient: RotaCrvPecasClient, rotaVistoriasClient: RotaVistoriasClient) {
     this.rotaCrvPecasClient = rotaCrvPecasClient
     this.rotaVistoriasClient = rotaVistoriasClient
-    this.logger = logger
   }
 
   async run(accessToken: string, numero: string): Promise<ConsultaPecaResult | undefined> {
