@@ -82,11 +82,20 @@ export class ConsultaPecaService {
     const settled = await Promise.allSettled(
       arquivos.map(async (arquivo) => ({
         ...arquivo,
-        binario: (await this.rotaCrvPecasClient.baixaArquivoBinario(accessToken, arquivo.url)).data.toString(
-          'base64',
-        ),
+        binario: (await this.rotaCrvPecasClient.baixaArquivoBinario(accessToken, arquivo.url)).data.toString('base64'),
       })),
     )
+
+    for (const [i, result] of settled.entries()) {
+      if (result.status === 'rejected') {
+        const arquivo = arquivos[i]
+        this.logger.warn(
+          { err: result.reason, url: arquivo?.url, codigo: arquivo?.codigo },
+          'Falha ao baixar arquivo da peça (best-effort).',
+        )
+      }
+    }
+
     return settled.flatMap((result) => (result.status === 'fulfilled' ? [result.value] : []))
   }
 
