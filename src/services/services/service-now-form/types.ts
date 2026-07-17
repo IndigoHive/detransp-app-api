@@ -1,10 +1,19 @@
-export type ServiceNowFormInput = Record<string, unknown> & {
-  attachment?: {
-    buffer: Buffer
-    originalName: string
-    mimetype?: string
-  }
+export type ServiceNowFormFieldValue = string | boolean
+
+export type ServiceNowFormAttachment = {
+  buffer: Buffer
+  originalName: string
+  mimetype?: string
 }
+
+export type ServiceNowFormInput = {
+  nome: string
+  cpfOuCnpj: string
+  telefone: string
+  email: string
+  representation: boolean
+  attachment?: ServiceNowFormAttachment
+} & Record<string, ServiceNowFormFieldValue | ServiceNowFormAttachment | undefined>
 
 export type ServiceNowFormResponse =
   | {

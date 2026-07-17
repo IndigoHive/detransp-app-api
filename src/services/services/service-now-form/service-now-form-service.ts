@@ -43,15 +43,7 @@ const COMMON_VARIABLES: Record<string, string> = {
   statements: 'true',
 }
 
-function toBoolean (value: unknown): boolean {
-  return value === true || value === 'true'
-}
-
-function toText (value: unknown): string {
-  return typeof value === 'string' ? value : ''
-}
-
-export class ServiceNowFormService {
+export class GenerateServiceNowFormService {
   private readonly config: ServiceNowFormConfig
   private readonly serviceNowCsm: ServiceNowCsmClient
   private readonly logger: Logger
@@ -100,24 +92,21 @@ export class ServiceNowFormService {
   }
 
   private mapInputToServiceNowPayload (input: ServiceNowFormInput) {
-    const cpfOuCnpj = toText(input.cpfOuCnpj)
-
     const variables: Record<string, string> = {
       ...COMMON_VARIABLES,
       ...this.config.extraStaticVariables,
-      requester_cpf: cpfOuCnpj.replace(/\D/g, '').length === 11 ? cpfOuCnpj : '',
-      requester_email: toText(input.email),
-      requester_phone: toText(input.telefone),
-      requester_name: toText(input.nome),
-      requester_proof_of_representation: toBoolean(input.representation) ? 'true' : 'false',
+      requester_cpf: input.cpfOuCnpj.replace(/\D/g, '').length === 11 ? input.cpfOuCnpj : '',
+      requester_email: input.email,
+      requester_phone: input.telefone,
+      requester_name: input.nome,
+      requester_proof_of_representation: input.representation ? 'true' : 'false',
       deployed_item: this.config.deployedItem,
       [this.config.ioKey]: 'true',
     }
 
     for (const field of this.config.fields) {
-      variables[field.variable] = field.type === 'boolean'
-        ? (toBoolean(input[field.key]) ? 'true' : 'false')
-        : toText(input[field.key])
+      const value = input[field.key]
+      variables[field.variable] = field.type === 'boolean' ? (value ? 'true' : 'false') : `${value ?? ''}`
     }
 
     return {

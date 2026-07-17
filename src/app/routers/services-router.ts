@@ -1,10 +1,10 @@
 import { Router, type Request, type Response } from 'express'
 import multer from 'multer'
 import type { ContainerServices } from '../../container'
-import type { ServiceNowFormService } from '../../services/services'
+import type { GenerateServiceNowFormService } from '../../services/services'
 
 type ServiceNowFormServiceName = {
-  [K in keyof ContainerServices]: ContainerServices[K] extends ServiceNowFormService ? K : never
+  [K in keyof ContainerServices]: ContainerServices[K] extends GenerateServiceNowFormService ? K : never
 }[keyof ContainerServices]
 
 const upload = multer({ storage: multer.memoryStorage() })
