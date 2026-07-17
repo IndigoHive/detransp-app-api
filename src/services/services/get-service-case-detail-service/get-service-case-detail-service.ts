@@ -22,7 +22,7 @@ export class GetServiceCaseDetailService {
       throw error
     }
 
-    const sysparmFields = 'sys_id,number,state,active,short_description,opened_at,sys_updated_on,x_mdpdd_detran_csm_reopen_count,contact_type'
+    const sysparmFields = 'sys_id,number,state,active,short_description,opened_at,sys_updated_on,x_mdpdd_detran_csm_reopen_count,contact_type, public_resolution_code'
 
     return await this.serviceNowCsm.getProtocolDetail<GetServiceCaseDetailResult>(
       protocolId,
