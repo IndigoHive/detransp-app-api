@@ -14,12 +14,14 @@ import { ContainerServices } from '../types/container-services'
 import { Database } from '../../db/pool'
 import { PgFlowRepository } from '../../repositories/pg-flow-repository'
 import { PgSessionRepository } from '../../repositories/pg-session-repository'
-import { getAuthRegistrations, getFlowsRegistrations, getServicesRegistrations, getDashboardRegistrations, getLicenciamentoRegistrations, getDebRestrRegistrations, getTdvRegistrations } from '../../services'
+import { getAuthRegistrations, getFlowsRegistrations, getServicesRegistrations, getDashboardRegistrations, getLicenciamentoRegistrations, getDebRestrRegistrations, getTdvRegistrations, getPecasRegistrations } from '../../services'
 import { getClientRegistrations, DetranSpServiceNowLicenciamentoClient } from '../../clients'
 import { DetranSpServiceNowDebRestrClient } from '../../clients/detran-sp-service-now-deb-restr'
 import { DetranSpServiceNowPgtoClient } from '../../clients/detran-sp-service-now-pgto'
 import { RotaCaixaPostalClient } from '../../clients/rota-caixa-postal'
 import { RotaVidaClient } from '../../clients/rota-vida'
+import { RotaCrvPecasClient } from '../../clients/rota-crv-pecas'
+import { RotaVistoriasClient } from '../../clients/rota-vistorias'
 import pino, { type Logger } from 'pino'
 export type CreateContainerOptions = {
   config?: Config
@@ -51,6 +53,16 @@ export function createContainer (
         logger,
       })
     ).scoped(),
+    rotaCrvPecasClient: asFunction(({ config: cfg, logger }: { config: Config; logger: Logger }) =>
+      new RotaCrvPecasClient({
+        baseUrl: cfg.rotaCrvPecas.baseUrl,
+        arquivosBaseUrl: cfg.rotaCrvPecas.arquivosBaseUrl,
+        logger,
+      })
+    ).scoped(),
+    rotaVistoriasClient: asFunction(({ config: cfg, logger }: { config: Config; logger: Logger }) =>
+      new RotaVistoriasClient({ baseUrl: cfg.rotaVistorias.baseUrl, logger })
+    ).scoped(),
     logger: asFunction(() => pino({ serializers: { err: pino.stdSerializers.err } })).singleton(),
   })
   container.register(getClientRegistrations())
@@ -61,6 +73,7 @@ export function createContainer (
   container.register(getLicenciamentoRegistrations())
   container.register(getDebRestrRegistrations())
   container.register(getTdvRegistrations())
+  container.register(getPecasRegistrations())
   container.register(getPool(config))
   container.register(getRepositoryRegistrations())
 

@@ -49,6 +49,13 @@ export type Config = {
     vidaBaseUrl: string
     arquivosBaseUrl: string
   }
+  rotaCrvPecas: {
+    baseUrl: string
+    arquivosBaseUrl: string
+  }
+  rotaVistorias: {
+    baseUrl: string
+  }
   logging: {
     level: string
   }
