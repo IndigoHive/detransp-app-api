@@ -34,7 +34,7 @@ const COMMON_VARIABLES: Record<string, string> = {
   justificativas_para_redirecionamento: '1',
   resultado_do_exame_: 'A) Apto',
   retorno_para_categoria: '1',
-  contact_type: 'cidadao',
+  contact_type: 'aplicativo_detran',
   requester: 'true',
   cadastro_descadastro: 'Cadastro',
   categoria_de_titular: 'Cidadão',

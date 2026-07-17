@@ -43,6 +43,9 @@ const SERVICE_NOW_FORM_ROUTES: Array<{ path: string, serviceName: ServiceNowForm
   { path: '/liberar-matricula-da-autoescola', serviceName: 'liberarMatriculaDaAutoescolaService' },
   { path: '/retirar-corrigir-bloqueio-beneficio-tributario', serviceName: 'retirarCorrigirBloqueioBeneficioTributarioService' },
   { path: '/solicitar-cancelamento-intencao-venda', serviceName: 'solicitarCancelamentoIntencaoVendaService' },
+  { path: '/solicitar-desbloqueio-laudo-vistoria', serviceName: 'solicitarDesbloqueioLaudoVistoriaService' },
+  { path: '/alterar-endereco-veiculo-mesmo-municipio', serviceName: 'alterarEnderecoVeiculoMesmoMunicipioService' },
+  { path: '/alterar-tipo-processo-habilitacao', serviceName: 'alterarTipoProcessoHabilitacaoService' },
 ]
 
 export function servicesRouter (): Router {
