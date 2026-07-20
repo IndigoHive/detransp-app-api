@@ -31,10 +31,8 @@ export class CriaQRCodeLicenciamentoService {
       const result = await this.client.criaQRCode(auth, auth.renavam)
       const data = result?.result
       // Temporary (do not ship): raw payload exposes the txid for mock-paying
-      // via the SEFAZ homolog webhook (field name unverified on this client).
-      // debug-only (LOG_LEVEL=debug) so it's silent by default — this one
-      // still dumps the raw payload, so keep it opt-in even more strictly.
-      this.logger.debug(
+      // via the SEFAZ homolog webhook (field name unverified on this client)
+      this.logger.info(
         { action: 'mock-pay-txid', renavam: auth.renavam, valor: emvAmount(data?.qrCode), qrRawResponse: result },
         'QR licenciamento criado — resposta ServiceNow completa'
       )
