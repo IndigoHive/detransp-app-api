@@ -44,8 +44,8 @@ export function getDebRestrRegistrations (): Required<NameAndRegistrationPair<De
         new ConsultaTaxaCertidaoService(detranSpServiceNowDebRestrClient)
     ).scoped(),
     criaQRCodeCertidaoService: asFunction(
-      ({ detranSpServiceNowDebRestrClient }) =>
-        new CriaQRCodeCertidaoService(detranSpServiceNowDebRestrClient)
+      ({ detranSpServiceNowDebRestrClient, logger }) =>
+        new CriaQRCodeCertidaoService(detranSpServiceNowDebRestrClient, logger)
     ).scoped(),
     verificaQRCodeCertidaoService: asFunction(
       ({ detranSpServiceNowDebRestrClient }) =>
@@ -80,8 +80,8 @@ export function getDebRestrRegistrations (): Required<NameAndRegistrationPair<De
         new TiposServicoResolverService(detranSpServiceNowPgtoClient, logger)
     ).scoped(),
     criaPixDebitoService: asFunction(
-      ({ detranSpServiceNowPgtoClient, tiposServicoResolverService }) =>
-        new CriaPixDebitoService(detranSpServiceNowPgtoClient, tiposServicoResolverService)
+      ({ detranSpServiceNowPgtoClient, tiposServicoResolverService, logger }) =>
+        new CriaPixDebitoService(detranSpServiceNowPgtoClient, tiposServicoResolverService, logger)
     ).scoped(),
     verificaPixDebitoService: asFunction(
       ({ detranSpServiceNowPgtoClient }) =>

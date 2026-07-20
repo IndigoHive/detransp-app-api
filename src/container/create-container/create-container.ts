@@ -63,7 +63,12 @@ export function createContainer (
     rotaVistoriasClient: asFunction(({ config: cfg, logger }: { config: Config; logger: Logger }) =>
       new RotaVistoriasClient({ baseUrl: cfg.rotaVistorias.baseUrl, logger })
     ).scoped(),
-    logger: asFunction(() => pino({ serializers: { err: pino.stdSerializers.err } })).singleton(),
+    // LOG_LEVEL was previously never wired here — pino defaulted to 'info'
+    // regardless of config, so every .debug() call in the codebase (e.g. the
+    // ServiceNow request interceptors) was silently dropped everywhere.
+    logger: asFunction(({ config: cfg }: { config: Config }) =>
+      pino({ level: cfg.logging.level, serializers: { err: pino.stdSerializers.err } })
+    ).singleton(),
   })
   container.register(getClientRegistrations())
   container.register(getFlowsRegistrations())

@@ -70,9 +70,22 @@ export class DetranSpServiceNowDebRestrHttp {
         const data = error.response?.data as { error?: { message?: string; detail?: string } } | undefined
         const message = data?.error?.message
         const detail = data?.error?.detail
+        // Without a response (timeout, DNS, connection reset), status/message
+        // above are undefined — that used to log as an unexplained blank
+        // error. Surface the axios error code/message explicitly so a
+        // timeout is never indistinguishable from a real upstream 4xx/5xx.
+        const noResponse = !error.response
 
         this.logger.error(
-          { service: SERVICE_NAME, status: error.response?.status, url: error.config?.url, errorMessage: message, errorDetail: detail },
+          {
+            service: SERVICE_NAME,
+            method: error.config?.method,
+            status: error.response?.status,
+            url: error.config?.url,
+            errorMessage: message,
+            errorDetail: detail,
+            ...(noResponse ? { networkErrorCode: error.code, networkErrorMessage: error.message } : {})
+          },
           'ServiceNow deb-restr response error'
         )
 
