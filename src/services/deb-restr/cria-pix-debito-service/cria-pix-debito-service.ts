@@ -1,4 +1,5 @@
 import { BadGateway } from 'http-errors'
+import type { Logger } from 'pino'
 import type {
   CriaPixBody,
   DetranSpServiceNowPgtoClient,
@@ -28,10 +29,12 @@ export type CriaPixDebitoParams = DebRestrVeiculoAuth & {
 export class CriaPixDebitoService {
   private readonly client: DetranSpServiceNowPgtoClient
   private readonly tiposServicoResolver: TiposServicoResolverService
+  private readonly logger: Logger
 
-  constructor (client: DetranSpServiceNowPgtoClient, tiposServicoResolver: TiposServicoResolverService) {
+  constructor (client: DetranSpServiceNowPgtoClient, tiposServicoResolver: TiposServicoResolverService, logger: Logger) {
     this.client = client
     this.tiposServicoResolver = tiposServicoResolver
+    this.logger = logger
   }
 
   async run (params: CriaPixDebitoParams): Promise<CriaPixDebitoResult> {
@@ -70,6 +73,20 @@ export class CriaPixDebitoService {
 
     const result = await this.criaPixComRetry(auth, body)
     const qrCode = result?.included?.find((item) => item.type === 'qr-code')
+
+    // Temporary (do not ship): txid for mock-paying the QR via the SEFAZ
+    // homolog webhook — only present in the raw ServiceNow payload.
+    this.logger.info(
+      {
+        action: 'mock-pay-txid',
+        tipo,
+        renavam: auth.renavam,
+        txid: qrCode?.attributes?.idQRCode,
+        idSolServico: qrCode?.attributes?.idSolServico,
+        valor: result?.meta?.valorDebitos
+      },
+      'PIX débito criado — txid para pagamento mock em homolog'
+    )
 
     return {
       qrCode: qrCode?.attributes?.qrCode ?? null,
