@@ -55,7 +55,7 @@ nvm use
 ```bash
 npm install
 ```
-3. Peça o arquivo `.env.development` de outro dev para atualiza-lo.
+3. Crie o arquivo `.env` baseado em `.env.example`, peça os valores para outro dev.
 4. Rode em desenvolvimento:
 ```bash
 npm run dev
