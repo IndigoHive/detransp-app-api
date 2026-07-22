@@ -3,3 +3,5 @@ node_modules
 /postgres
 .env
 .env.*.local
+.vscode/settings.json
+.env.development
