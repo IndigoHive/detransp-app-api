@@ -47,18 +47,26 @@ src/
 ```
 
 ## Como executar
-1. Instale as dependencias:
+1. Use a versao do Node.js definida no projeto:
+```bash
+nvm use
+```
+2. Instale as dependencias:
 ```bash
 npm install
 ```
-2. Crie o arquivo `.env` baseado em `.env.example`.
-3. Rode em desenvolvimento:
+3. Crie o arquivo `.env` baseado em `.env.example`, peça os valores para outro dev.
+4. Rode em desenvolvimento:
 ```bash
 npm run dev
 ```
-4. Gere o build de producao:
+5. Gere o build de producao:
 ```bash
 npm run build
+```
+6. Confirme que o server está funcional com:
+```bash
+curl http://localhost:3500/api/health/health
 ```
 
 ## Endpoints
