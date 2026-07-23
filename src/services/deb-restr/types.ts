@@ -88,18 +88,15 @@ export type DetailsButtonState = 'visible' | 'hidden'
 
 export type VehicleDebtsPayload = {
   ipva: {
-    status: DebtSectionStatus
+    status?: DebtSectionStatus
     items: DebtExercicioItem[]
-    // Display keys — the card renders the total row only when totalLabel is
-    // non-null and the Detalhes link only when detailsButton is visible, so
-    // a REGULAR section shows neither a bogus "R$ 0,00" nor a dead link
     totalLabel: string | null
     detailsButton: DetailsButtonState
     pixButton: PixButtonState
     helperText?: string
   }
   multas: {
-    status: DebtSectionStatus
+    status?: DebtSectionStatus
     items: DebtMultaItem[]
     totalLabel: string | null
     detailsButton: DetailsButtonState
@@ -160,8 +157,6 @@ export type DetalhesIpvaItem = {
   valorLabel: string
   vencimento: string | null
   chips: DetalhesIpvaChip[]
-  // payment-form options for THIS exercício; only the current exercise can offer
-  // parcelamento — null while ServiceNow rejects parcelado PIX (verified 2026-07-07)
   parcels: IpvaParcelsInfo | null
 }
 
@@ -208,9 +203,6 @@ export type CertidaoVigenteResult = {
   descricao: string | null
 }
 
-// Mirrors the editor's VehicleItem (vehicle_info component). Fields the
-// deb-restr scope cannot source are omitted from the type on purpose:
-// licensingExpirationDate and issuanceCount don't exist in this ServiceNow scope.
 export type ResumoCertidaoVehicle = {
   id: string | null
   plate: string | null

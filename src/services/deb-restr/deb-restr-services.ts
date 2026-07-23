@@ -7,6 +7,7 @@ import { EmiteCertidaoService } from './emite-certidao-service'
 import { BuscaDocumentoCertidaoService } from './busca-documento-certidao-service'
 import { ListaVeiculosDebRestrService } from './lista-veiculos-deb-restr-service'
 import { ConsultaVeiculoDebitosService } from './consulta-veiculo-debitos-service'
+import { ConsultaVeiculoImpressaoService } from './consulta-veiculo-impressao-service'
 import { DetalhesIpvaService } from './detalhes-ipva-service'
 import { DetalhesMultasService } from './detalhes-multas-service'
 import { TiposServicoResolverService } from './tipos-servico-resolver-service'
@@ -24,6 +25,7 @@ export type DebRestrServices = {
   buscaDocumentoCertidaoService: BuscaDocumentoCertidaoService
   listaVeiculosDebRestrService: ListaVeiculosDebRestrService
   consultaVeiculoDebitosService: ConsultaVeiculoDebitosService
+  consultaVeiculoImpressaoService: ConsultaVeiculoImpressaoService
   detalhesIpvaService: DetalhesIpvaService
   detalhesMultasService: DetalhesMultasService
   tiposServicoResolverService: TiposServicoResolverService
@@ -66,6 +68,10 @@ export function getDebRestrRegistrations (): Required<NameAndRegistrationPair<De
     consultaVeiculoDebitosService: asFunction(
       ({ detranSpServiceNowDebRestrClient, detranSpServiceNowPgtoClient }) =>
         new ConsultaVeiculoDebitosService(detranSpServiceNowDebRestrClient, detranSpServiceNowPgtoClient)
+    ).scoped(),
+    consultaVeiculoImpressaoService: asFunction(
+      ({ consultaVeiculoDebitosService }) =>
+        new ConsultaVeiculoImpressaoService(consultaVeiculoDebitosService)
     ).scoped(),
     detalhesIpvaService: asFunction(
       ({ detranSpServiceNowDebRestrClient }) =>
