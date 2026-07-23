@@ -67,9 +67,13 @@ export class DetranSpServiceNowDebRestrHttp {
         return response
       },
       (error: AxiosError) => {
-        const data = error.response?.data as { error?: { message?: string; detail?: string } } | undefined
-        const message = data?.error?.message
-        const detail = data?.error?.detail
+        // deb-restr errors come in two shapes: {error: {message, detail}} and {errors: [{title, detail}]}
+        const data = error.response?.data as {
+          error?: { message?: string; detail?: string }
+          errors?: Array<{ title?: string; detail?: string }>
+        } | undefined
+        const message = data?.error?.message ?? data?.errors?.[0]?.title
+        const detail = data?.error?.detail ?? data?.errors?.[0]?.detail
         // Without a response (timeout, DNS, connection reset), status/message
         // above are undefined — that used to log as an unexplained blank
         // error. Surface the axios error code/message explicitly so a
