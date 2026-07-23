@@ -1,37 +1,43 @@
 import { asClass, asFunction, type NameAndRegistrationPair } from 'awilix'
 import { ListServiceCasesService } from './list-service-cases-service/list-service-cases-service'
-import { GetServiceCaseDetailService } from './get-service-case-detail-service/get-service-case-detail-service'
-import { UploadProtocolAttachmentService } from './upload-protocol-attachment-service'
+import { GetProtocolCaseDetailService } from './get-protocol-case-detail-service'
 import { ListProtocolMessagesService } from './list-protocol-messages-service'
-import { FinalizeProtocolService } from './finalize-protocol-service'
-import { GenerateServiceNowFormService } from './service-now-form'
-import { validarCursoTeoricoDaCNHDoBrasilNoDetranSpFormConfig } from './validar-curso-teorico-da-cnh-do-brasil-no-detran-sp'
-import { liberarMatriculaDaAutoescolaFormConfig } from './liberar-matricula-da-autoescola'
-import { retirarCorrigirBloqueioBeneficioTributarioFormConfig } from './retirar-corrigir-bloqueio-beneficio-tributario'
-import { solicitarCancelamentoIntencaoVendaFormConfig } from './solicitar-cancelamento-intencao-venda'
-import { solicitarDesbloqueioLaudoVistoriaFormConfig } from './solicitar-desbloqueio-laudo-vistoria'
-import { alterarEnderecoVeiculoMesmoMunicipioConfig } from './alterar-endereco-veiculo-mesmo-municipio'
-import { alterarTipoProcessoHabilitacaoConfig } from './alterar-tipo-processo-habilitacao'
-
-export type ServicesServices = {
+import { FinalizeProtocolService, UploadProtocolAttachmentService, GenerateServiceNowFormService } from './_common'
+import {
+  validarCursoTeoricoDaCNHDoBrasilNoDetranSpFormConfig,
+  liberarMatriculaDaAutoescolaFormConfig,
+  retirarCorrigirBloqueioBeneficioTributarioFormConfig,
+  solicitarCancelamentoIntencaoVendaFormConfig,
+  solicitarDesbloqueioLaudoVistoriaFormConfig,
+  alterarTipoProcessoHabilitacaoConfig,
+  validarCursoPraticoDaCNHDoBrasilNoDetranSpFormConfig,
+  desistirCategoriaProcessoHabilitacaoConfig,
+  retirarRestricaoInfracaoTransitoVeiculoConfig,
+} from './available-services'
+export type ProtocolsServices = {
   validarCursoTeoricoDaCNHDoBrasilNoDetranSpService: GenerateServiceNowFormService
+  validarCursoPraticoDaCNHDoBrasilNoDetranSpService: GenerateServiceNowFormService
   liberarMatriculaDaAutoescolaService: GenerateServiceNowFormService
   retirarCorrigirBloqueioBeneficioTributarioService: GenerateServiceNowFormService
   solicitarCancelamentoIntencaoVendaService: GenerateServiceNowFormService
   solicitarDesbloqueioLaudoVistoriaService: GenerateServiceNowFormService
-  alterarEnderecoVeiculoMesmoMunicipioService: GenerateServiceNowFormService
   alterarTipoProcessoHabilitacaoService: GenerateServiceNowFormService
+  desistirCategoriaProcessoHabilitacaoService: GenerateServiceNowFormService
+  retirarRestricaoInfracaoTransitoVeiculoService: GenerateServiceNowFormService
   listServiceCasesService: ListServiceCasesService
-  getServiceCaseDetailService: GetServiceCaseDetailService
+  getProtocolCaseDetailService: GetProtocolCaseDetailService
   uploadProtocolAttachmentService: UploadProtocolAttachmentService
   listProtocolMessagesService: ListProtocolMessagesService
   finalizeProtocolService: FinalizeProtocolService
 }
 
-export function getServicesRegistrations (): Required<NameAndRegistrationPair<ServicesServices>> {
+export function getProtocolsRegistrations (): Required<NameAndRegistrationPair<ProtocolsServices>> {
   return {
     validarCursoTeoricoDaCNHDoBrasilNoDetranSpService: asFunction(({ serviceNowCsm, logger }) =>
       new GenerateServiceNowFormService(validarCursoTeoricoDaCNHDoBrasilNoDetranSpFormConfig, { serviceNowCsm, logger }),
+    ).scoped(),
+    validarCursoPraticoDaCNHDoBrasilNoDetranSpService: asFunction(({ serviceNowCsm, logger }) =>
+      new GenerateServiceNowFormService(validarCursoPraticoDaCNHDoBrasilNoDetranSpFormConfig, { serviceNowCsm, logger }),
     ).scoped(),
     liberarMatriculaDaAutoescolaService: asFunction(({ serviceNowCsm, logger }) =>
       new GenerateServiceNowFormService(liberarMatriculaDaAutoescolaFormConfig, { serviceNowCsm, logger }),
@@ -45,14 +51,17 @@ export function getServicesRegistrations (): Required<NameAndRegistrationPair<Se
     solicitarDesbloqueioLaudoVistoriaService: asFunction(({ serviceNowCsm, logger }) =>
       new GenerateServiceNowFormService(solicitarDesbloqueioLaudoVistoriaFormConfig, { serviceNowCsm, logger }),
     ).scoped(),
-    alterarEnderecoVeiculoMesmoMunicipioService: asFunction(({ serviceNowCsm, logger }) =>
-      new GenerateServiceNowFormService(alterarEnderecoVeiculoMesmoMunicipioConfig, { serviceNowCsm, logger }),
-    ).scoped(),
     alterarTipoProcessoHabilitacaoService: asFunction(({ serviceNowCsm, logger }) =>
       new GenerateServiceNowFormService(alterarTipoProcessoHabilitacaoConfig, { serviceNowCsm, logger }),
     ).scoped(),
+    desistirCategoriaProcessoHabilitacaoService: asFunction(({ serviceNowCsm, logger }) =>
+      new GenerateServiceNowFormService(desistirCategoriaProcessoHabilitacaoConfig, { serviceNowCsm, logger }),
+    ).scoped(),
+    retirarRestricaoInfracaoTransitoVeiculoService: asFunction(({ serviceNowCsm, logger }) =>
+      new GenerateServiceNowFormService(retirarRestricaoInfracaoTransitoVeiculoConfig, { serviceNowCsm, logger }),
+    ).scoped(),
     listServiceCasesService: asClass(ListServiceCasesService).scoped(),
-    getServiceCaseDetailService: asClass(GetServiceCaseDetailService).scoped(),
+    getProtocolCaseDetailService: asClass(GetProtocolCaseDetailService).scoped(),
     uploadProtocolAttachmentService: asClass(UploadProtocolAttachmentService).scoped(),
     listProtocolMessagesService: asClass(ListProtocolMessagesService).scoped(),
     finalizeProtocolService: asClass(FinalizeProtocolService).scoped(),

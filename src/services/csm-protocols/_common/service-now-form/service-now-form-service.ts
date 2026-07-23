@@ -1,4 +1,4 @@
-import type { ServiceNowCsmClient } from '../../../clients'
+import type { ServiceNowCsmClient } from '../../../../clients'
 import type { Logger } from 'pino'
 import type { ServiceNowFormConfig, ServiceNowFormInput, ServiceNowFormResponse } from './types'
 
@@ -92,6 +92,8 @@ export class GenerateServiceNowFormService {
   }
 
   private mapInputToServiceNowPayload (input: ServiceNowFormInput) {
+    const isTruthy = (val: unknown): boolean => val === true || val === 'true'
+
     const variables: Record<string, string> = {
       ...COMMON_VARIABLES,
       ...this.config.extraStaticVariables,
@@ -99,14 +101,14 @@ export class GenerateServiceNowFormService {
       requester_email: input.email,
       requester_phone: input.telefone,
       requester_name: input.nome,
-      requester_proof_of_representation: input.representation ? 'true' : 'false',
+      requester_proof_of_representation: isTruthy(input.representation) ? 'true' : 'false',
       deployed_item: this.config.deployedItem,
       [this.config.ioKey]: 'true',
     }
 
     for (const field of this.config.fields) {
       const value = input[field.key]
-      variables[field.variable] = field.type === 'boolean' ? (value ? 'true' : 'false') : `${value ?? ''}`
+      variables[field.variable] = field.type === 'boolean' ? (isTruthy(value) ? 'true' : 'false') : `${value ?? ''}`
     }
 
     return {

@@ -1,0 +1,10 @@
+export * from './alterar-tipo-processo-habilitacao'
+export * from './desistir-categoria-processo-habilitacao'
+export * from './liberar-matricula-da-autoescola'
+export * from './retirar-restricao-infracao-transito-veiculo'
+export * from './retirar-corrigir-bloqueio-beneficio-tributario'
+export * from './solicitar-cancelamento-intencao-venda'
+export * from './solicitar-desbloqueio-laudo-vistoria'
+export * from './validar-curso-pratico-da-cnh-do-brasil-no-detran-sp'
+export * from './validar-curso-teorico-da-cnh-do-brasil-no-detran-sp'
+

@@ -14,7 +14,7 @@ import { ContainerServices } from '../types/container-services'
 import { Database } from '../../db/pool'
 import { PgFlowRepository } from '../../repositories/pg-flow-repository'
 import { PgSessionRepository } from '../../repositories/pg-session-repository'
-import { getAuthRegistrations, getFlowsRegistrations, getServicesRegistrations, getDashboardRegistrations, getLicenciamentoRegistrations, getDebRestrRegistrations, getTdvRegistrations, getPecasRegistrations } from '../../services'
+import { getAuthRegistrations, getFlowsRegistrations, getProtocolsRegistrations, getDashboardRegistrations, getLicenciamentoRegistrations, getDebRestrRegistrations, getTdvRegistrations, getPecasRegistrations } from '../../services'
 import { getClientRegistrations, DetranSpServiceNowLicenciamentoClient } from '../../clients'
 import { DetranSpServiceNowDebRestrClient } from '../../clients/detran-sp-service-now-deb-restr'
 import { DetranSpServiceNowPgtoClient } from '../../clients/detran-sp-service-now-pgto'
@@ -73,7 +73,7 @@ export function createContainer (
   container.register(getClientRegistrations())
   container.register(getFlowsRegistrations())
   container.register(getAuthRegistrations())
-  container.register(getServicesRegistrations())
+  container.register(getProtocolsRegistrations())
   container.register(getDashboardRegistrations())
   container.register(getLicenciamentoRegistrations())
   container.register(getDebRestrRegistrations())

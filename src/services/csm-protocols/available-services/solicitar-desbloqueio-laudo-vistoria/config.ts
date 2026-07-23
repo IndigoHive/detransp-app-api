@@ -1,9 +1,9 @@
-import { SERVICE_NOW_FORM_PRODUCER_SYS_ID, type ServiceNowFormConfig } from '../service-now-form'
+import { SERVICE_NOW_FORM_PRODUCER_SYS_ID, type ServiceNowFormConfig } from '../../_common'
 
 export const solicitarDesbloqueioLaudoVistoriaFormConfig: ServiceNowFormConfig = {
   producerSysId: SERVICE_NOW_FORM_PRODUCER_SYS_ID,
   deployedItem: 'fc810e0087ee2610d826c9160cbb3510',
-  ioKey: 'IO:621861cb4706c3101405ae88036d43c1',
+  ioKey: 'IO:d65c3cc187560b90fbb365790cbb3597',
   extraStaticVariables: {
     documentos: 'true',
   },

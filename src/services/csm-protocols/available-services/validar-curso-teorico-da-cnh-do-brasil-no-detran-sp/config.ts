@@ -1,4 +1,4 @@
-import { SERVICE_NOW_FORM_PRODUCER_SYS_ID, type ServiceNowFormConfig } from '../service-now-form'
+import { SERVICE_NOW_FORM_PRODUCER_SYS_ID, type ServiceNowFormConfig } from '../../_common'
 
 export const validarCursoTeoricoDaCNHDoBrasilNoDetranSpFormConfig: ServiceNowFormConfig = {
   producerSysId: SERVICE_NOW_FORM_PRODUCER_SYS_ID,

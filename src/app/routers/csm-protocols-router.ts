@@ -1,7 +1,7 @@
 import { Router, type Request, type Response } from 'express'
 import multer from 'multer'
 import type { ContainerServices } from '../../container'
-import type { GenerateServiceNowFormService } from '../../services/services'
+import type { GenerateServiceNowFormService } from '../../services/csm-protocols'
 
 type ServiceNowFormServiceName = {
   [K in keyof ContainerServices]: ContainerServices[K] extends GenerateServiceNowFormService ? K : never
@@ -39,24 +39,29 @@ function attachmentFromRequest (req: Request) {
 }
 
 const SERVICE_NOW_FORM_ROUTES: Array<{ path: string, serviceName: ServiceNowFormServiceName }> = [
+  { path: '/validar-curso-pratico-cnh-brasil', serviceName: 'validarCursoPraticoDaCNHDoBrasilNoDetranSpService' },
   { path: '/validar-curso-teorico-da-cnh-do-brasil-no-detran-sp', serviceName: 'validarCursoTeoricoDaCNHDoBrasilNoDetranSpService' },
   { path: '/liberar-matricula-da-autoescola', serviceName: 'liberarMatriculaDaAutoescolaService' },
   { path: '/retirar-corrigir-bloqueio-beneficio-tributario', serviceName: 'retirarCorrigirBloqueioBeneficioTributarioService' },
   { path: '/solicitar-cancelamento-intencao-venda', serviceName: 'solicitarCancelamentoIntencaoVendaService' },
   { path: '/solicitar-desbloqueio-laudo-vistoria', serviceName: 'solicitarDesbloqueioLaudoVistoriaService' },
-  { path: '/alterar-endereco-veiculo-mesmo-municipio', serviceName: 'alterarEnderecoVeiculoMesmoMunicipioService' },
   { path: '/alterar-tipo-processo-habilitacao', serviceName: 'alterarTipoProcessoHabilitacaoService' },
+  { path: '/desistir-categoria-processo-habilitacao', serviceName: 'desistirCategoriaProcessoHabilitacaoService' },
+  { path: '/retirar-restricao-infracao-transito-veiculo', serviceName: 'retirarRestricaoInfracaoTransitoVeiculoService' },
 ]
 
-export function servicesRouter (): Router {
+export function csmProtocolsRouter (): Router {
   const router = Router()
 
   for (const { path, serviceName } of SERVICE_NOW_FORM_ROUTES) {
     router.post(path, upload.single('anexos'), async (req: Request, res: Response) => {
       const service = req.scope.resolve(serviceName)
 
+      // Sem anexo o app manda JSON puro; com anexo, multipart com o body em `data`.
+      const data = typeof req.body.data === 'string' ? JSON.parse(req.body.data) : req.body
+
       const result = await service.run({
-        ...JSON.parse(req.body.data),
+        ...data,
         ...attachmentFromRequest(req),
       })
 
@@ -85,7 +90,7 @@ export function servicesRouter (): Router {
   })
 
   router.get('/protocols/detail', async (req, res) => {
-    const service = req.scope.resolve('getServiceCaseDetailService')
+    const service = req.scope.resolve('getProtocolCaseDetailService')
 
     const sysId = typeof req.query.sys_id === 'string' ? req.query.sys_id : ''
 

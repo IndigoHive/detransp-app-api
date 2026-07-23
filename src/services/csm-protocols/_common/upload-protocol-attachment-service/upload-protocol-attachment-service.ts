@@ -1,4 +1,4 @@
-import type { ServiceNowCsmClient } from '../../../clients'
+import type { ServiceNowCsmClient } from '../../../../clients'
 import { BadRequest } from 'http-errors'
 import type { Logger } from 'pino'
 import type {
