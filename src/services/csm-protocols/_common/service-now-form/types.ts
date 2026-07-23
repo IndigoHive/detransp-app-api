@@ -8,7 +8,7 @@ export type ServiceNowFormAttachment = {
 
 export type ServiceNowFormInput = {
   nome: string
-  cpfOuCnpj: string
+  cpf_cnpj: string
   telefone: string
   email: string
   representation: boolean

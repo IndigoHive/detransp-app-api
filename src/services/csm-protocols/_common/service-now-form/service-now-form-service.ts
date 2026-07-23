@@ -100,7 +100,7 @@ export class GenerateServiceNowFormService {
     const variables: Record<string, string> = {
       ...COMMON_VARIABLES,
       ...this.config.extraStaticVariables,
-      requester_cpf: input.cpfOuCnpj.replace(/\D/g, '').length === 11 ? input.cpfOuCnpj : '',
+      requester_cpf: input.cpf_cnpj.replace(/\D/g, '').length === 11 ? input.cpf_cnpj : '',
       requester_email: input.email,
       requester_phone: input.telefone,
       requester_name: input.nome,
