@@ -88,7 +88,11 @@ export class DetranSpServiceNowPgtoHttp {
             url: error.config?.url,
             errorMessage: message,
             errorDetail: detail,
-            ...(noResponse ? { networkErrorCode: error.code, networkErrorMessage: error.message } : {})
+            ...(noResponse ? { networkErrorCode: error.code, networkErrorMessage: error.message } : {}),
+            // message/detail are only populated when the body matches one of the
+            // two known shapes — log the raw body too, otherwise an unrecognized
+            // ServiceNow error shape leaves nothing to debug from
+            ...(message === undefined && detail === undefined ? { responseData: error.response?.data } : {})
           },
           'ServiceNow pgto response error'
         )
