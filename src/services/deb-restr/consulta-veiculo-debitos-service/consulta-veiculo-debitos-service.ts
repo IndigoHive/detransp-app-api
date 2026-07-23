@@ -10,7 +10,7 @@ import type {
   DebRestrVeiculoAuth,
   VehicleDebtsPayload
 } from '../types'
-import { deriveIpvaSectionStatus, deriveSectionStatus, formatCurrencyBr, sumValores } from '../utils'
+import { deriveIpvaSectionStatus, deriveSectionStatus, formatCurrencyBr, sumValores, toSentenceCase } from '../utils'
 
 const IPVA_HELPER_TEXT = 'Parcelamento em até 5x no Pix sem juros'
 const LICENCIAMENTO_BLOQUEADO_TEXT = 'Para liberar o pagamento do licenciamento, quite os demais débitos do veículo.'
@@ -84,9 +84,9 @@ export class ConsultaVeiculoDebitosService {
         renavam: attributes.renavam ?? null,
         yearFab: attributes.anoFabricacao?.toString() ?? null,
         yearMod: attributes.anoModelo?.toString() ?? null,
-        cor: attributes.cor?.descricao ?? null,
-        tipo: attributes.tipo?.descricao ?? null,
-        combustivel: attributes.combustivel?.descricao ?? null,
+        cor: attributes.cor?.descricao ? toSentenceCase(attributes.cor.descricao) : null,
+        tipo: attributes.tipo?.descricao ? toSentenceCase(attributes.tipo.descricao) : null,
+        combustivel: attributes.combustivel?.descricao ? toSentenceCase(attributes.combustivel.descricao) : null,
       },
       restrictions: {
         bloqueioFurtoRoubo: meta?.bloqueioFurtoRoubo,
@@ -119,9 +119,12 @@ export class ConsultaVeiculoDebitosService {
     // see the VehicleDebtsPayload.total comment for the full rationale
     const totalPayable = ipva.length > 0 && multas.length > 0 && !hasMultaForaDoSistema
 
+    const ipvaStatus = deriveIpvaSectionStatus(ipva)
+    const multasStatus = deriveSectionStatus(multas)
+
     return {
       ipva: {
-        status: deriveIpvaSectionStatus(ipva),
+        ...(ipvaStatus === 'REGULAR' ? { status: ipvaStatus } : {}),
         items: ipva.map((d) => ({ exercicio: d.attributes.exercicio ?? null, valor: d.attributes.valor })),
         totalLabel: ipva.length > 0 ? formatCurrencyBr(sumValores(ipva)) : null,
         detailsButton: ipva.length > 0 ? 'visible' : 'hidden',
@@ -129,7 +132,7 @@ export class ConsultaVeiculoDebitosService {
         ...(ipva.length > 0 ? { helperText: IPVA_HELPER_TEXT } : {}),
       },
       multas: {
-        status: deriveSectionStatus(multas),
+        ...(multasStatus === 'REGULAR' ? { status: multasStatus } : {}),
         items: multas.map((d) => ({
           descricao: d.attributes.descricao ?? d.attributes.autoInfracao ?? d.attributes.nomeServico ?? '',
           valor: d.attributes.valor,

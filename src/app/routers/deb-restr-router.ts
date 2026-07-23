@@ -66,6 +66,20 @@ export function debRestrRouter (): Router {
     res.status(200).json(result)
   })
 
+  router.post('/veiculos/:renavam/consulta/impressao', async (req, res) => {
+    const { accessToken, cpf: userCpf } = req.session!
+    const renavam = asNonEmptyString(req.params.renavam)
+    const placa = asNonEmptyString(req.body?.placa)
+    const representacao = parseRepresentacao(req.body?.representacao)
+    if (!userCpf || !renavam || !placa) {
+      throw BadRequest('Requisição inválida.')
+    }
+    logRequest(req, 'consulta-veiculo-impressao', { renavam, placa, representacao })
+    const service = req.scope.resolve('consultaVeiculoImpressaoService')
+    const result = await service.run({ accessToken, userCpf, renavam, placa, representacao })
+    res.status(200).json(result)
+  })
+
   router.get('/veiculos/:renavam/debitos/ipva', async (req, res) => {
     const { accessToken, cpf: userCpf } = req.session!
     const renavam = asNonEmptyString(req.params.renavam)
