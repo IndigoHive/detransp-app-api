@@ -1,9 +1,9 @@
 import type { AwilixContainer } from 'awilix'
 import express from 'express'
 import type { Logger } from 'pino'
-import { authRouter, dashboardRouter, debRestrRouter, flowsRouter, healthRouter, licenciamentoRouter, notificacoesRouter, pecasRouter, servicesRouter, tdvRouter } from './routers'
+import { authRouter, dashboardRouter, debRestrRouter, flowsRouter, healthRouter, licenciamentoRouter, notificacoesRouter, pecasRouter, csmProtocolsRouter, tdvRouter } from './routers'
 import { ContainerServices, createContainer } from '../container'
-import { fallbackErrorHandler, httpErrorHandler, scopePerRequest, sessionAuth } from './middlewares'
+import { fallbackErrorHandler, httpErrorHandler, multerErrorHandler, scopePerRequest, sessionAuth } from './middlewares'
 
 export type CreateAppOptions = {
   container?: AwilixContainer<ContainerServices>
@@ -41,10 +41,11 @@ export function createApp (options: CreateAppOptions = {}) {
   app.use('/api/licenciamento', protect, licenciamentoRouter())
   app.use('/api/notificacoes', protect, notificacoesRouter())
   app.use('/api/pecas', protect, pecasRouter())
-  app.use('/api/services', protect, servicesRouter())
+  app.use('/api/services', protect, csmProtocolsRouter())
   app.use('/api/tdv', protect, tdvRouter())
 
-  // Error handlers
+  // Error handlers — multer primeiro: converte a falha de upload em 400 antes do catch-all.
+  app.use(multerErrorHandler())
   app.use(httpErrorHandler())
   app.use(fallbackErrorHandler())
 
