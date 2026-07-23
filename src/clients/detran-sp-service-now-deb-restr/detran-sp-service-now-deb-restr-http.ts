@@ -84,7 +84,11 @@ export class DetranSpServiceNowDebRestrHttp {
             url: error.config?.url,
             errorMessage: message,
             errorDetail: detail,
-            ...(noResponse ? { networkErrorCode: error.code, networkErrorMessage: error.message } : {})
+            ...(noResponse ? { networkErrorCode: error.code, networkErrorMessage: error.message } : {}),
+            // message/detail are only populated when the body matches the shape
+            // we know about — log the raw body too, otherwise an unrecognized
+            // ServiceNow error shape leaves nothing to debug from
+            ...(message === undefined && detail === undefined ? { responseData: error.response?.data } : {})
           },
           'ServiceNow deb-restr response error'
         )
