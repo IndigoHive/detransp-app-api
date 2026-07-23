@@ -1,9 +1,9 @@
 export type UploadProtocolAttachmentInput = Record<string, unknown> & {
-  attachment?: {
+  attachments?: Array<{
     buffer: Buffer
     originalName: string
     mimetype?: string
-  }
+  }>
 }
 
 export type UploadProtocolAttachmentResponse =

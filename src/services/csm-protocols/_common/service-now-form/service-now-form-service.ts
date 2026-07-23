@@ -66,14 +66,17 @@ export class GenerateServiceNowFormService {
       const protocol = result.result?.number
       const recordSysId = result.result?.sys_id
 
-      if (recordSysId && rawInput.attachment) {
-        await this.serviceNowCsm.uploadAttachment({
-          tableName: 'x_mdpdd_detran_srv_service_case',
-          tableSysId: recordSysId,
-          fileName: rawInput.attachment.originalName,
-          fileBuffer: rawInput.attachment.buffer,
-          contentType: rawInput.attachment.mimetype ?? undefined,
-        })
+      if (recordSysId) {
+        // A API de anexos do ServiceNow é um arquivo por request — não há variante em lote.
+        for (const attachment of rawInput.attachments ?? []) {
+          await this.serviceNowCsm.uploadAttachment({
+            tableName: 'x_mdpdd_detran_srv_service_case',
+            tableSysId: recordSysId,
+            fileName: attachment.originalName,
+            fileBuffer: attachment.buffer,
+            contentType: attachment.mimetype ?? undefined,
+          })
+        }
       }
 
       return {

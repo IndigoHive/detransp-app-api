@@ -12,8 +12,8 @@ export type ServiceNowFormInput = {
   telefone: string
   email: string
   representation: boolean
-  attachment?: ServiceNowFormAttachment
-} & Record<string, ServiceNowFormFieldValue | ServiceNowFormAttachment | undefined>
+  attachments?: ServiceNowFormAttachment[]
+} & Record<string, ServiceNowFormFieldValue | ServiceNowFormAttachment[] | undefined>
 
 export type ServiceNowFormResponse =
   | {

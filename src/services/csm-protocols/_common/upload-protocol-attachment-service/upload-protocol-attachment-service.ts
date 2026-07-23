@@ -33,19 +33,25 @@ export class UploadProtocolAttachmentService {
         throw new BadRequest('É necessário informar um comentário para enviar o anexo')
       }
 
-      if (!rawInput.attachment) {
+      const attachments = rawInput.attachments ?? []
+
+      if (attachments.length === 0) {
         throw new BadRequest('Nenhum arquivo foi enviado')
       }
 
-      await this.serviceNowCsm.uploadAttachment({
-        tableName: 'x_mdpdd_detran_srv_service_case',
-        tableSysId: sysId,
-        fileName: rawInput.attachment.originalName,
-        fileBuffer: rawInput.attachment.buffer,
-        contentType: rawInput.attachment.mimetype ?? undefined,
-      })
+      // A API de anexos do ServiceNow é um arquivo por request — não há variante em lote.
+      for (const attachment of attachments) {
+        await this.serviceNowCsm.uploadAttachment({
+          tableName: 'x_mdpdd_detran_srv_service_case',
+          tableSysId: sysId,
+          fileName: attachment.originalName,
+          fileBuffer: attachment.buffer,
+          contentType: attachment.mimetype ?? undefined,
+        })
+      }
 
-      const commentWithAttachment = `${comment}\n\nAnexo: ${rawInput.attachment.originalName}`
+      const nomes = attachments.map((attachment) => attachment.originalName).join(', ')
+      const commentWithAttachment = `${comment}\n\n${attachments.length > 1 ? 'Anexos' : 'Anexo'}: ${nomes}`
 
       await this.serviceNowCsm.addComment(sysId, commentWithAttachment)
 

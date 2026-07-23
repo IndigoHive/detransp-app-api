@@ -7,7 +7,17 @@ type ServiceNowFormServiceName = {
   [K in keyof ContainerServices]: ContainerServices[K] extends GenerateServiceNowFormService ? K : never
 }[keyof ContainerServices]
 
-const upload = multer({ storage: multer.memoryStorage() })
+// O app anexa vários arquivos de uma vez (DocumentPicker com `multiple: true`), todos no
+// mesmo campo `anexos` — por isso `upload.array` e não `upload.single`.
+// Como o storage é em memória, os limites abaixo são o que impede N buffers arbitrários na heap;
+// `files` é a única fonte de verdade da quantidade (por isso `array()` vai sem maxCount).
+const MAX_ANEXOS = 10
+const MAX_ANEXO_BYTES = 10 * 1024 * 1024
+
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: { files: MAX_ANEXOS, fileSize: MAX_ANEXO_BYTES },
+})
 
 // Duas camadas de corrupção possíveis no nome do arquivo até chegar aqui:
 // 1. O busboy (usado pelo multer) decodifica o header Content-Disposition como latin1 —
@@ -26,16 +36,14 @@ function decodeFileName (name: string): string {
   }
 }
 
-function attachmentFromRequest (req: Request) {
-  return req.file
-    ? {
-        attachment: {
-          buffer: req.file.buffer,
-          originalName: decodeFileName(req.file.originalname),
-          mimetype: req.file.mimetype,
-        },
-      }
-    : {}
+function attachmentsFromRequest (req: Request) {
+  const files = Array.isArray(req.files) ? req.files : []
+
+  return files.map((file) => ({
+    buffer: file.buffer,
+    originalName: decodeFileName(file.originalname),
+    mimetype: file.mimetype,
+  }))
 }
 
 const SERVICE_NOW_FORM_ROUTES: Array<{ path: string, serviceName: ServiceNowFormServiceName }> = [
@@ -54,7 +62,7 @@ export function csmProtocolsRouter (): Router {
   const router = Router()
 
   for (const { path, serviceName } of SERVICE_NOW_FORM_ROUTES) {
-    router.post(path, upload.single('anexos'), async (req: Request, res: Response) => {
+    router.post(path, upload.array('anexos'), async (req: Request, res: Response) => {
       const service = req.scope.resolve(serviceName)
 
       // Sem anexo o app manda JSON puro; com anexo, multipart com o body em `data`.
@@ -62,7 +70,7 @@ export function csmProtocolsRouter (): Router {
 
       const result = await service.run({
         ...data,
-        ...attachmentFromRequest(req),
+        attachments: attachmentsFromRequest(req),
       })
 
       res.status(200).json(result)
@@ -78,12 +86,12 @@ export function csmProtocolsRouter (): Router {
     res.status(200).json(result)
   })
 
-  router.post('/protocols/attachment', upload.single('anexos'), async (req, res) => {
+  router.post('/protocols/attachment', upload.array('anexos'), async (req, res) => {
     const service = req.scope.resolve('uploadProtocolAttachmentService')
 
     const result = await service.run({
       ...req.body,
-      ...attachmentFromRequest(req),
+      attachments: attachmentsFromRequest(req),
     })
 
     res.status(200).json(result)
