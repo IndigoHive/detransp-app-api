@@ -86,6 +86,22 @@ export function authRouter (): Router {
     res.status(200).json({ data: req.session.userInfo })
   })
 
+  router.get('/govbr/flow-user-info', sessionAuth(), async (req, res) => {
+    if (!req.session) {
+      throw Unauthorized('Sessão não encontrada.')
+    }
+
+    const userInfoService = req.scope.resolve('getGovBrUserInfoService')
+    const { data } = await userInfoService.run({ accessToken: req.session.accessToken })
+
+    res.status(200).json({
+      cpf: data.preferred_username as string,
+      full_name: `${data.given_name as string} ${data.family_name as string}`,
+      email: data.email,
+      phone_number: data.phone_number,
+    })
+  })
+
   router.post('/govbr/logout', sessionAuth(), async (req, res) => {
     if (!req.session) {
       throw Unauthorized('Sessão não encontrada.')
