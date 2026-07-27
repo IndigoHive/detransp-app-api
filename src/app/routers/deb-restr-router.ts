@@ -11,7 +11,7 @@ function asNonEmptyString (value: unknown): string | undefined {
 // alongside booleans. Any other non-empty value means the flow copy drifted —
 // fail loudly instead of silently treating it as "meus veículos".
 const REPRESENTACAO_TRUE = new Set<unknown>([true, 'true', 'Veículos de outras pessoas'])
-const REPRESENTACAO_FALSE = new Set<unknown>([false, 'false', '', undefined, null, 'Meus Veículos'])
+const REPRESENTACAO_FALSE = new Set<unknown>([false, 'false', '', undefined, null, 'Meus Veículos', 'Meus veículos'])
 
 function parseRepresentacao (value: unknown): boolean {
   if (REPRESENTACAO_TRUE.has(value)) return true
