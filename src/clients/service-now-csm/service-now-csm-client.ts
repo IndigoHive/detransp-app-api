@@ -188,12 +188,34 @@ export class ServiceNowCsmClient {
     }
   }
 
+  async getOpenedBy<T = unknown> (
+    sysUserId: string,
+    params?: Record<string, string | number | boolean>
+  ): Promise<T> {
+    try {
+      const response = await this.axios.get<T>(
+        `/api/now/table/sys_user/${sysUserId}`,
+        { params }
+      )
+
+      return response.data
+    } catch (error) {
+      throw createError(
+        (axios.isAxiosError(error) ? error.response?.status : undefined) ?? 500,
+        'Não foi possível completar a operação no ServiceNow CSM.',
+        { expose: true }
+      )
+    }
+  }
+
+
   async getProtocolMessages (protocolId: string): Promise<GetProtocolMessagesResult> {
     try {
       const response = await this.axios.get<GetProtocolMessagesResult>('/api/now/table/sys_journal_field', {
         params: {
           sysparm_query: `element_id=${protocolId}`,
           sysparm_order_by_desc: 'sys_created_on',
+          sysparm_limit: 1,
         },
       })
 
