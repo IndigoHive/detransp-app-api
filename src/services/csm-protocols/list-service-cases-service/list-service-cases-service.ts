@@ -37,7 +37,8 @@ export class ListServiceCasesService {
     return await this.serviceNowCsm.getProtocols<ListServiceCasesResult>({
       sysparm_query: sysparmQuery,
       sysparm_fields: sysparmFields,
-      sysparm_limit: 50
+      sysparm_limit: 5,
+      sysparm_order_by_desc: 'sys_updated_on'
     })
   }
 }
