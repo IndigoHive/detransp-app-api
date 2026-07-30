@@ -230,4 +230,27 @@ describe('vistorias services', () => {
     })
   })
 
+  it('returns snackbar feedback when the authorization document is not generated', async () => {
+    const service = new GeraAutorizacaoVistoriaService(asClient({
+      geraDocumento: vi.fn().mockResolvedValue({
+        result: {
+          success: false,
+          message: 'Documento não encontrado'
+        }
+      })
+    }))
+
+    await expect(service.run({
+      numeroPEV: 'PEV0001136',
+      documento: 'b18b59d4-c599-4424-bf7a-ad90c57696e8'
+    })).resolves.toEqual({
+      pdf: null,
+      showSnackbar: {
+        variant: 'error',
+        title: 'Não foi possível gerar a autorização',
+        description: 'Documento não encontrado'
+      }
+    })
+  })
+
 })
