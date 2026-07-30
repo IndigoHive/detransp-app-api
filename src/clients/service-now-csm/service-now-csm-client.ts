@@ -44,6 +44,7 @@ export class ServiceNowCsmClient {
 
     this.axios = axios.create({
       baseURL: baseUrl,
+      timeout: 25000,
       auth: {
         username,
         password
