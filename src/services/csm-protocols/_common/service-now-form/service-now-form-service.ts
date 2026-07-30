@@ -66,6 +66,17 @@ export class GenerateServiceNowFormService {
       const protocol = result.result?.number
       const recordSysId = result.result?.sys_id
 
+      if (!protocol) {
+        this.logger.error({ result: result.result }, 'ServiceNow CSM respondeu sem number — protocolo não foi criado')
+        return {
+          showSnackbar: {
+            variant: 'error',
+            title: 'Não foi possível enviar',
+            description: 'Não foi possível confirmar a criação do protocolo. Tente novamente.',
+          },
+        }
+      }
+
       if (recordSysId) {
         // A API de anexos do ServiceNow é um arquivo por request — não há variante em lote.
         for (const attachment of rawInput.attachments ?? []) {
@@ -79,9 +90,7 @@ export class GenerateServiceNowFormService {
         }
       }
 
-      return {
-        protocol: protocol ?? recordSysId ?? 'Protocolo não disponível',
-      }
+      return { protocol }
     } catch (error) {
       this.logger.error('Erro ao enviar payload para o ServiceNow CSM:')
       return {
