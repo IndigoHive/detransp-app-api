@@ -80,19 +80,43 @@ export class GenerateServiceNowFormService {
       if (recordSysId) {
         // A API de anexos do ServiceNow é um arquivo por request — não há variante em lote.
         for (const attachment of rawInput.attachments ?? []) {
-          await this.serviceNowCsm.uploadAttachment({
-            tableName: 'x_mdpdd_detran_srv_service_case',
-            tableSysId: recordSysId,
-            fileName: attachment.originalName,
-            fileBuffer: attachment.buffer,
-            contentType: attachment.mimetype ?? undefined,
-          })
+          try {
+            const resultAttachment = await this.serviceNowCsm.uploadAttachment({
+              tableName: 'x_mdpdd_detran_srv_service_case',
+              tableSysId: recordSysId,
+              fileName: attachment.originalName,
+              fileBuffer: attachment.buffer,
+              contentType: attachment.mimetype ?? undefined,
+            })
+
+          } catch (attachmentError) {
+            const axiosError = attachmentError as { message?: string; stack?: string; code?: string; response?: { status?: number; data?: unknown } }
+            this.logger.error(
+              {
+                err: { message: axiosError?.message, stack: axiosError?.stack },
+                code: axiosError?.code,
+                status: axiosError?.response?.status,
+                responseData: axiosError?.response?.data,
+                protocol,
+              },
+              'Erro ao enviar anexo para o ServiceNow CSM — protocolo já criado, anexo não incluído'
+            )
+          }
         }
       }
 
       return { protocol }
     } catch (error) {
-      this.logger.error('Erro ao enviar payload para o ServiceNow CSM:')
+      const axiosError = error as { message?: string; stack?: string; code?: string; response?: { status?: number; data?: unknown } }
+      this.logger.error(
+        {
+          err: { message: axiosError?.message, stack: axiosError?.stack },
+          code: axiosError?.code,
+          status: axiosError?.response?.status,
+          responseData: axiosError?.response?.data,
+        },
+        'Erro ao enviar payload para o ServiceNow CSM'
+      )
       return {
         showSnackbar: {
           variant: 'error',
