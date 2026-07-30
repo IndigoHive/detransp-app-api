@@ -4,7 +4,6 @@ import type { Logger } from 'pino'
 import { DetranSpServiceNowVistoriasError } from './errors/detran-sp-service-now-vistorias-error'
 
 const SERVICE_NAME = 'detran-sp-servicenow-vistorias'
-const MAX_TIMEOUT_MS = 8000
 const TIMEOUT_ERROR_CODES = new Set(['ECONNABORTED', 'ETIMEDOUT'])
 
 export type DetranSpServiceNowVistoriasHttpParams = {
@@ -25,7 +24,6 @@ export class DetranSpServiceNowVistoriasHttp {
         'Content-Type': 'application/json',
         'User-Agent': 'iOS/appsp/1.0.0'
       },
-      timeout: MAX_TIMEOUT_MS,
       withCredentials: true
     })
     this.setupInterceptors()
