@@ -57,7 +57,16 @@ export class UploadProtocolAttachmentService {
 
       return { success: true }
     } catch (error) {
-      this.logger.error('Erro ao enviar anexo com comentário para o ServiceNow CSM:')
+      const axiosError = error as { message?: string; stack?: string; code?: string; response?: { status?: number; data?: unknown } }
+      this.logger.error(
+        {
+          err: { message: axiosError?.message, stack: axiosError?.stack },
+          code: axiosError?.code,
+          status: axiosError?.response?.status,
+          responseData: axiosError?.response?.data,
+        },
+        'Erro ao enviar anexo com comentário para o ServiceNow CSM'
+      )
       return {
         showSnackbar: {
           variant: 'error',
