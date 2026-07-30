@@ -13,7 +13,8 @@ export class VerificaQRCodeVistoriaService {
     confirmedDate: string | null
   }> {
     const result = await this.client.verificaQRCode(paymentId)
-    const body = result?.result?.data?.body
+    const response = result?.result
+    const body = response?.success ? response.data.body : undefined
     const status = body?.status.toUpperCase()
     const estado = status === PAID_STATUS
       ? 2

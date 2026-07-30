@@ -9,7 +9,8 @@ export class CriaQRCodeVistoriaService {
     expiresAt: string | null
   }> {
     const result = await this.client.criaQRCode({ correlationID: correlationId })
-    const qrCode = result?.result?.data?.data
+    const response = result?.result
+    const qrCode = response?.success ? response.data.data : undefined
 
     return {
       idSolServico: qrCode?.id ?? null,

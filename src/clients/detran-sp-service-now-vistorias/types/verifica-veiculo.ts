@@ -11,11 +11,13 @@ export type VerificaVeiculoResponseData = {
   vehicle: VistoriaVehicle | null
   service: VistoriaService | null
   totalDebits: string | null
+  numeroPEV: string | null
   correlationId?: string
 }
 
 export type VerificaVeiculoServiceNowBody = {
   uuid: string
+  isSingle: boolean
   veiculo: {
     placa: string
     renavam: string
@@ -31,7 +33,7 @@ export type VerificaVeiculoServiceNowBody = {
   }
   elegibilidade: {
     podeVistoriar: boolean
-    motivo: string
+    motivo: string | null
   }
   tarifa: {
     id: string
@@ -43,19 +45,32 @@ export type VerificaVeiculoServiceNowBody = {
   }
 }
 
+type VerificaVeiculoSuccessResult = {
+  success: true
+  message: string
+  correlationID: string
+  data: {
+    process: 'success'
+    body: VerificaVeiculoServiceNowBody
+  }
+  items: Array<{
+    placa: string
+    renavam: string
+    number: string
+    correlationID: string
+  }>
+  errors: unknown[]
+}
+
+type VerificaVeiculoFailureResult = {
+  success: false
+  message: string
+  correlationID?: string
+}
+
 export type VerificaVeiculoResult =
   | {
-      result?: {
-        success: boolean
-        message: string
-        number?: string
-        correlationID?: string
-        correlationId?: string
-        data?: {
-          process: string
-          body?: VerificaVeiculoServiceNowBody
-        }
-      }
-    }
+    result?: VerificaVeiculoSuccessResult | VerificaVeiculoFailureResult
+  }
   | null
   | undefined

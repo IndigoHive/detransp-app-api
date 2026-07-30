@@ -4,6 +4,8 @@ import { DetranSpServiceNowVistoriasHttp } from './detran-sp-service-now-vistori
 import type {
   CriaQRCodeBody,
   CriaQRCodeResult,
+  GeraDocumentoBody,
+  GeraDocumentoResult,
   VerificaQRCodeResult,
   VerificaVeiculoBody,
   VerificaVeiculoResult
@@ -46,6 +48,15 @@ export class DetranSpServiceNowVistoriasClient extends DetranSpServiceNowVistori
     return (await this.axios.get(
       '/api/x_mdpdd_pev/v1/pev/status-qr-code',
       { params: { paymentID: paymentId } }
+    )).data
+  }
+
+  async geraDocumento (
+    body: GeraDocumentoBody
+  ): Promise<GeraDocumentoResult> {
+    return (await this.axios.post(
+      '/api/x_mdpdd_pev/v1/pev/gerar-documento',
+      body
     )).data
   }
 }

@@ -73,6 +73,7 @@ const EMPTY_RESULT: VerificaVeiculoResponseData = {
   vehicle: null,
   service: null,
   totalDebits: null,
+  numeroPEV: null,
 }
 
 const amountFormatter = new Intl.NumberFormat('pt-BR', {
@@ -108,14 +109,18 @@ export class VerificaVeiculoVistoriaService {
       throw error
     }
     const response = result?.result
-    const body = response?.data?.body
-    const correlationId = response?.correlationID ?? response?.correlationId
+    const correlationId = response?.correlationID
 
-    if (!response?.success || !body?.elegibilidade.podeVistoriar) {
+    if (!response?.success || !response.data.body.elegibilidade.podeVistoriar) {
       return this.withCorrelationId(EMPTY_RESULT, correlationId)
     }
 
-    return this.mapResponse(body, definition, correlationId)
+    return this.mapResponse(
+      response.data.body,
+      definition,
+      response.items[0]?.number,
+      correlationId
+    )
   }
 
   private getProcessDefinition (input: VerificaVistoriaInput): ProcessDefinition {
@@ -140,6 +145,7 @@ export class VerificaVeiculoVistoriaService {
   private mapResponse (
     body: VerificaVeiculoServiceNowBody,
     definition: ProcessDefinition,
+    numeroPEV: string | undefined,
     correlationId: string | undefined,
   ): VerificaVeiculoResponseData {
     const amount = amountFormatter.format(body.tarifa.valor)
@@ -158,6 +164,7 @@ export class VerificaVeiculoVistoriaService {
         amount,
       },
       totalDebits: amount,
+      numeroPEV: numeroPEV ?? null,
       ...(correlationId ? { correlationId } : {}),
     }
   }
