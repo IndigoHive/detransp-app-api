@@ -1,4 +1,4 @@
-import type { BuscaVeiculoResult, DetranSpServiceNowDebRestrClient, VeiculoMeta } from '../../../clients/detran-sp-service-now-deb-restr'
+import type { DetranSpServiceNowDebRestrClient, VeiculoMeta } from '../../../clients/detran-sp-service-now-deb-restr'
 import type { DebRestrVeiculoAuth, ResumoCertidaoResult } from '../types'
 import { formatCurrencyBr, formatDateBr } from '../utils'
 
@@ -74,7 +74,7 @@ export class ResumoCertidaoService {
         lastLicensing: attributes?.dataEmissaoLicenciamento
           ? formatDateBr(attributes.dataEmissaoLicenciamento)
           : attributes?.anoExercicioLicenciamento?.toString() ?? null,
-        lastIssuance: await this.buscaDataEmissaoCertidao(auth, veiculo),
+        lastIssuance: await this.buscaDataEmissaoCertidao(auth),
       },
       taxa: {
         valor: taxaAttrs?.valor ?? null,
@@ -85,8 +85,7 @@ export class ResumoCertidaoService {
     }
   }
 
-  private async buscaDataEmissaoCertidao (auth: DebRestrVeiculoAuth, veiculo: BuscaVeiculoResult): Promise<string | null> {
-    if (!veiculo?.data?.relationships?.certidao?.links?.self) return null
+  private async buscaDataEmissaoCertidao (auth: DebRestrVeiculoAuth): Promise<string | null> {
     try {
       const certidao = await this.client.buscaCertidao(auth, auth.renavam)
       const dataHoraEmissao = certidao?.data?.attributes?.dataHoraEmissao
