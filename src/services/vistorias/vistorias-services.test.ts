@@ -4,6 +4,7 @@ import type { DetranSpServiceNowVistoriasClient } from '../../clients/detran-sp-
 import { DetranSpServiceNowVistoriasError } from '../../clients/detran-sp-service-now-vistorias'
 import { CriaQRCodeVistoriaService } from './cria-qr-code-service'
 import { GeraAutorizacaoVistoriaService } from './gera-autorizacao-service'
+import { ListaPagamentosVistoriaService } from './lista-pagamentos-service'
 import { VerificaQRCodeVistoriaService } from './verifica-qr-code-service'
 import { VerificaVeiculoVistoriaService } from './verifica-veiculo-service'
 
@@ -251,6 +252,54 @@ describe('vistorias services', () => {
         description: 'Documento não encontrado'
       }
     })
+  })
+
+  it('returns only the first 100 payments with a PEV number', async () => {
+    const payments = Array.from({ length: 102 }, (_, index) => ({
+      id: `payment-${index}`,
+      placa: 'ABC1D23',
+      token: `token-${index}`,
+      status: 'ATIVO',
+      modeloAuto: 'FIAT/PALIO',
+      paymentDate: '2026-07-30T21:01:14.047Z',
+      tipo: 'IDENTIFICACAO',
+      subtipoDescricao: 'Preparação para leilão',
+      pagador: { nome: 'Pagador', documento: '12345678901' },
+      pevNumber: index === 0 ? '' : index === 1 ? '   ' : `PEV${index}`,
+      correlationId: `correlation-${index}`
+    }))
+    const listaPagamentos = vi.fn().mockResolvedValue({
+      result: {
+        success: true,
+        message: 'Evento processado',
+        items: payments,
+        total: payments.length,
+        page: 1,
+        pageSize: 100,
+        totalPages: 2
+      }
+    })
+    const service = new ListaPagamentosVistoriaService(asClient({ listaPagamentos }))
+
+    const result = await service.run('12345678901', false)
+
+    expect(result).toHaveLength(100)
+    expect(result[0]).toMatchObject({
+      pevNumber: 'PEV2',
+      plate: 'ABC1D23',
+      brandModel: 'FIAT/PALIO',
+      vistoriaToken: 'token-2',
+      vistoriaPaymentDate: '30/07/2026 18:01',
+      vistoriaSubtypeDescription: 'Preparação para leilão',
+      vistoriaStatus: 'ATIVO'
+    })
+    expect(result[0]).not.toHaveProperty('placa')
+    expect(result[0]).not.toHaveProperty('modeloAuto')
+    expect(result[0]).not.toHaveProperty('token')
+    expect(result[0]).not.toHaveProperty('status')
+    expect(result[0]).not.toHaveProperty('paymentDate')
+    expect(result[0]).not.toHaveProperty('subtipoDescricao')
+    expect(listaPagamentos).toHaveBeenCalledWith('12345678901', false)
   })
 
 })

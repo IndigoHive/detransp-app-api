@@ -5,6 +5,7 @@ import { isOtherProcessLabel, isProcessLabel } from '../../services/vistorias/ve
 const PLATE_PATTERN = /^[A-Z]{3}[0-9][A-Z0-9][0-9]{2}$/
 const RENAVAM_PATTERN = /^\d{9,11}$/
 const PEV_NUMBER_PATTERN = /^PEV\d+$/
+const DOCUMENT_PATTERN = /^(?:\d{11}|\d{14})$/
 
 function asNonEmptyString(value: unknown): string | undefined {
   return typeof value === 'string' && value.trim() ? value.trim() : undefined
@@ -95,6 +96,22 @@ export function vistoriasRouter(): Router {
 
     const service = req.scope.resolve('geraAutorizacaoVistoriaService')
     const result = await service.run({ numeroPEV, documento })
+    res.status(200).json(result)
+  })
+
+  router.get('/pagamentos/:documento', async (req, res) => {
+    const documento = asNonEmptyString(req.params.documento)
+    const docProprietario = asNonEmptyString(req.query.docProprietario)
+
+    if (!documento || !DOCUMENT_PATTERN.test(documento)) {
+      throw BadRequest('Documento inválido.')
+    }
+    if (docProprietario !== 'true' && docProprietario !== 'false') {
+      throw BadRequest('docProprietario deve ser true ou false.')
+    }
+
+    const service = req.scope.resolve('listaPagamentosVistoriaService')
+    const result = await service.run(documento, docProprietario === 'true')
     res.status(200).json(result)
   })
 

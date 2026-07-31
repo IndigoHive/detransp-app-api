@@ -6,6 +6,7 @@ import type {
   CriaQRCodeResult,
   GeraDocumentoBody,
   GeraDocumentoResult,
+  ListaPagamentosResult,
   VerificaQRCodeResult,
   VerificaVeiculoBody,
   VerificaVeiculoResult
@@ -57,6 +58,16 @@ export class DetranSpServiceNowVistoriasClient extends DetranSpServiceNowVistori
     return (await this.axios.post(
       '/api/x_mdpdd_pev/v1/pev/gerar-documento',
       body
+    )).data
+  }
+
+  async listaPagamentos (
+    documento: string,
+    docProprietario: boolean
+  ): Promise<ListaPagamentosResult> {
+    return (await this.axios.get(
+      `/api/x_mdpdd_pev/v1/pev/restituicao/listapagamentos/${documento}`,
+      { params: { docProprietario, pageSize: 100 } }
     )).data
   }
 }
