@@ -34,12 +34,8 @@ export class DetalhesIpvaService {
           vencimento: vencimento ? formatDateBr(vencimento) : null,
           chips: [
             statusChip,
-            // While parcelado PIX doesn't exist, every exercício is single-installment
             { id: '2', label: 'PARCELA ÚNICA', color: 'info' },
           ],
-          // ServiceNow rejects ipvaParcelado=true with 500 (verified 2026-07-07) and
-          // exposes no installment data anywhere — stays null until backend ships it;
-          // when it does, only the current exercise gets a parcels object
           parcels: null,
         }
       }),
