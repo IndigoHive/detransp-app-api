@@ -7,12 +7,24 @@ const PLATE_PATTERN = /^[A-Z]{3}[0-9][A-Z0-9][0-9]{2}$/
 const RENAVAM_PATTERN = /^\d{9,11}$/
 const PEV_NUMBER_PATTERN = /^PEV\d+$/
 const DOCUMENT_PATTERN = /^(?:\d{11}|\d{14})$/
+const DOC_PROPRIETARIO_BY_PAYMENT_LABEL = {
+  'Meus pagamentos': false,
+  'Meus veiculos': true
+} as const
 
 function asNonEmptyString(value: unknown): string | undefined {
   return typeof value === 'string' && value.trim() ? value.trim() : undefined
 }
 
-function getAuth (req: Request): VistoriasAuth {
+export function getDocProprietarioByPaymentLabel(label: string | undefined): boolean | undefined {
+  if (!label || !(label in DOC_PROPRIETARIO_BY_PAYMENT_LABEL)) {
+    return undefined
+  }
+
+  return DOC_PROPRIETARIO_BY_PAYMENT_LABEL[label as keyof typeof DOC_PROPRIETARIO_BY_PAYMENT_LABEL]
+}
+
+function getAuth(req: Request): VistoriasAuth {
   const token = req.session?.accessToken
   const cpf = req.session?.cpf
 
@@ -119,17 +131,18 @@ export function vistoriasRouter(): Router {
   router.get('/pagamentos/:documento', async (req, res) => {
     const auth = getAuth(req)
     const documento = asNonEmptyString(req.params.documento)
-    const docProprietario = asNonEmptyString(req.query.docProprietario)
+    const paymentLabel = asNonEmptyString(req.query.docProprietario)
+    const docProprietario = getDocProprietarioByPaymentLabel(paymentLabel)
 
     if (!documento || !DOCUMENT_PATTERN.test(documento)) {
       throw BadRequest('Documento inválido.')
     }
-    if (docProprietario !== 'true' && docProprietario !== 'false') {
-      throw BadRequest('docProprietario deve ser true ou false.')
+    if (docProprietario === undefined) {
+      throw BadRequest('docProprietario deve ser Meus pagamentos ou Meus veiculos.')
     }
 
     const service = req.scope.resolve('listaPagamentosVistoriaService')
-    const result = await service.run(auth, documento, docProprietario === 'true')
+    const result = await service.run(auth, documento, docProprietario)
     res.status(200).json(result)
   })
 
