@@ -1,4 +1,7 @@
 export * from './types'
 export * from './vistorias-services'
+export * from './busca-documento-service'
+export * from './busca-documento-restituicao-service'
 export * from './gera-autorizacao-service'
 export * from './lista-pagamentos-service'
+export * from './solicita-restituicao-service'
