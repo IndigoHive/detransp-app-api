@@ -3,6 +3,7 @@ import createError from 'http-errors'
 import type { DetranSpServiceNowVistoriasClient } from '../../clients/detran-sp-service-now-vistorias'
 import { DetranSpServiceNowVistoriasError } from '../../clients/detran-sp-service-now-vistorias'
 import { CriaQRCodeVistoriaService } from './cria-qr-code-service'
+import { GeraAutorizacaoVistoriaService } from './gera-autorizacao-service'
 import { VerificaQRCodeVistoriaService } from './verifica-qr-code-service'
 import { VerificaVeiculoVistoriaService } from './verifica-veiculo-service'
 
@@ -46,7 +47,7 @@ describe('vistorias services', () => {
       result: {
         success: true,
         message: 'Veículo encontrado',
-        number: 'PEV001',
+        items: [{ number: 'PEV001' }],
         correlationID: 'correlation-id',
         data: { process: 'validar-veiculo-vistoria', body }
       }
@@ -71,6 +72,7 @@ describe('vistorias services', () => {
         amount: '149,37'
       },
       totalDebits: '149,37',
+      numeroPEV: 'PEV001',
       correlationId: 'correlation-id'
     })
     expect(verificaVeiculo).toHaveBeenCalledWith({
@@ -89,7 +91,8 @@ describe('vistorias services', () => {
     await expect(service.run({ ...auth, tipoProcesso: 'Compra e Venda de Veículo' })).resolves.toEqual({
       vehicle: null,
       service: null,
-      totalDebits: null
+      totalDebits: null,
+      numeroPEV: null
     })
   })
 
@@ -115,6 +118,7 @@ describe('vistorias services', () => {
       vehicle: null,
       service: null,
       totalDebits: null,
+      numeroPEV: null,
       correlationId: 'correlation-id'
     })
   })
@@ -132,7 +136,8 @@ describe('vistorias services', () => {
     await expect(service.run({ ...auth, tipoProcesso: 'Classificação de Monta' })).resolves.toEqual({
       vehicle: null,
       service: null,
-      totalDebits: null
+      totalDebits: null,
+      numeroPEV: null
     })
   })
 
@@ -200,6 +205,52 @@ describe('vistorias services', () => {
       confirmedDate: expect.any(String)
     })
     expect(client.verificaQRCode).toHaveBeenCalledWith('qr-code-id')
+  })
+
+  it('maps the generated authorization document to the frontend contract', async () => {
+    const geraDocumento = vi.fn().mockResolvedValue({
+      result: {
+        success: true,
+        message: 'Documento gerado',
+        file_name: 'autorizacao.pdf',
+        content_type: 'application/pdf',
+        base64: 'pdf-base64',
+        attachment_id: 'attachment-id'
+      }
+    })
+    const service = new GeraAutorizacaoVistoriaService(asClient({ geraDocumento }))
+
+    await expect(service.run({
+      numeroPEV: 'PEV0001136',
+      documento: 'b18b59d4-c599-4424-bf7a-ad90c57696e8'
+    })).resolves.toEqual({ pdf: 'pdf-base64' })
+    expect(geraDocumento).toHaveBeenCalledWith({
+      numeroPEV: 'PEV0001136',
+      documento: 'b18b59d4-c599-4424-bf7a-ad90c57696e8'
+    })
+  })
+
+  it('returns snackbar feedback when the authorization document is not generated', async () => {
+    const service = new GeraAutorizacaoVistoriaService(asClient({
+      geraDocumento: vi.fn().mockResolvedValue({
+        result: {
+          success: false,
+          message: 'Documento não encontrado'
+        }
+      })
+    }))
+
+    await expect(service.run({
+      numeroPEV: 'PEV0001136',
+      documento: 'b18b59d4-c599-4424-bf7a-ad90c57696e8'
+    })).resolves.toEqual({
+      pdf: null,
+      showSnackbar: {
+        variant: 'error',
+        title: 'Não foi possível gerar a autorização',
+        description: 'Documento não encontrado'
+      }
+    })
   })
 
 })

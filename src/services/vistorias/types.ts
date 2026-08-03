@@ -4,3 +4,8 @@ export type VerificaVistoriaInput = {
   tipoProcesso: string
   outroProcesso?: string
 }
+
+export type GeraAutorizacaoVistoriaInput = {
+  numeroPEV: string
+  documento: string
+}

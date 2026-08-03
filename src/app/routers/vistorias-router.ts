@@ -4,6 +4,7 @@ import { isOtherProcessLabel, isProcessLabel } from '../../services/vistorias/ve
 
 const PLATE_PATTERN = /^[A-Z]{3}[0-9][A-Z0-9][0-9]{2}$/
 const RENAVAM_PATTERN = /^\d{9,11}$/
+const PEV_NUMBER_PATTERN = /^PEV\d+$/
 
 function asNonEmptyString(value: unknown): string | undefined {
   return typeof value === 'string' && value.trim() ? value.trim() : undefined
@@ -74,6 +75,26 @@ export function vistoriasRouter(): Router {
 
     const service = req.scope.resolve('verificaQRCodeVistoriaService')
     const result = await service.run(paymentId)
+    res.status(200).json(result)
+  })
+
+  router.post('/veiculos/:renavam/autorizacao', async (req, res) => {
+    const renavam = asNonEmptyString(req.params.renavam)
+    const numeroPEV = asNonEmptyString(req.body?.numeroPEV)
+    const documento = asNonEmptyString(req.body?.documento)
+
+    if (!renavam || !RENAVAM_PATTERN.test(renavam)) {
+      throw BadRequest('RENAVAM inválido.')
+    }
+    if (!numeroPEV || !documento) {
+      throw BadRequest('Campos obrigatórios ausentes: numeroPEV e documento.')
+    }
+    if (!PEV_NUMBER_PATTERN.test(numeroPEV)) {
+      throw BadRequest('Número PEV inválido.')
+    }
+
+    const service = req.scope.resolve('geraAutorizacaoVistoriaService')
+    const result = await service.run({ numeroPEV, documento })
     res.status(200).json(result)
   })
 
