@@ -6,8 +6,6 @@ const DETRAN_AUTHOR_LABEL = 'Detran-SP'
 const FALLBACK_USER_LABEL = 'Usuário'
 
 function isCpf (value: string): boolean {
-  // mesmo padrão usado em service-now-form-service.ts:136 — formato de pontuação
-  // do sys_created_by não é garantido, contagem de dígitos é o sinal robusto.
   return value.replace(/\D/g, '').length === 11
 }
 
