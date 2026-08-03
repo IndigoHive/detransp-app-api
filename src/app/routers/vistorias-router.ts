@@ -94,9 +94,14 @@ export function vistoriasRouter(): Router {
     res.status(200).json(result)
   })
 
-  router.get('/qr-code', async (req, res) => {
+  router.get('/veiculos/:renavam/qr-code', async (req, res) => {
     const auth = getAuth(req)
+    const renavam = asNonEmptyString(req.params.renavam)
     const paymentId = asNonEmptyString(req.query.id)
+
+    if (!renavam || !RENAVAM_PATTERN.test(renavam)) {
+      throw BadRequest('RENAVAM inválido.')
+    }
 
     if (!paymentId) {
       throw BadRequest('Identificador do pagamento não encontrado.')
