@@ -8,7 +8,13 @@ import { ListaPagamentosVistoriaService } from './lista-pagamentos-service'
 import { VerificaQRCodeVistoriaService } from './verifica-qr-code-service'
 import { VerificaVeiculoVistoriaService } from './verifica-veiculo-service'
 
+const clientAuth = {
+  token: 'govbr-access-token',
+  cpf: '12345678901'
+}
+
 const auth = {
+  ...clientAuth,
   renavam: '12345678901',
   placa: 'ABC1D23'
 }
@@ -76,12 +82,15 @@ describe('vistorias services', () => {
       numeroPEV: 'PEV001',
       correlationId: 'correlation-id'
     })
-    expect(verificaVeiculo).toHaveBeenCalledWith({
-      placa: 'ABC1D23',
-      renavam: '12345678901',
-      tipo: 'SEGURANCA',
-      subtipo: 'SEGURANCA_2'
-    })
+    expect(verificaVeiculo).toHaveBeenCalledWith(
+      clientAuth,
+      {
+        placa: 'ABC1D23',
+        renavam: '12345678901',
+        tipo: 'SEGURANCA',
+        subtipo: 'SEGURANCA_2'
+      }
+    )
   })
 
   it('returns the empty flow state when no vehicle is found', async () => {
@@ -194,18 +203,18 @@ describe('vistorias services', () => {
       })
     })
 
-    await expect(new CriaQRCodeVistoriaService(client).run('correlation-id')).resolves.toEqual({
+    await expect(new CriaQRCodeVistoriaService(client).run(clientAuth, 'correlation-id')).resolves.toEqual({
       idSolServico: 'qr-code-id',
       qrCode: 'pix-code',
       expiresAt: '2026-07-24 18:00:00'
     })
-    expect(criaQRCode).toHaveBeenCalledWith({ correlationID: 'correlation-id' })
-    await expect(new VerificaQRCodeVistoriaService(client).run('qr-code-id')).resolves.toEqual({
+    expect(criaQRCode).toHaveBeenCalledWith(clientAuth, { correlationID: 'correlation-id' })
+    await expect(new VerificaQRCodeVistoriaService(client).run(clientAuth, 'qr-code-id')).resolves.toEqual({
       estado: 2,
       comprovante: 'qr-code-id',
       confirmedDate: expect.any(String)
     })
-    expect(client.verificaQRCode).toHaveBeenCalledWith('qr-code-id')
+    expect(client.verificaQRCode).toHaveBeenCalledWith(clientAuth, 'qr-code-id')
   })
 
   it('maps the generated authorization document to the frontend contract', async () => {
@@ -222,13 +231,17 @@ describe('vistorias services', () => {
     const service = new GeraAutorizacaoVistoriaService(asClient({ geraDocumento }))
 
     await expect(service.run({
+      ...clientAuth,
       numeroPEV: 'PEV0001136',
       documento: 'b18b59d4-c599-4424-bf7a-ad90c57696e8'
     })).resolves.toEqual({ pdf: 'pdf-base64' })
-    expect(geraDocumento).toHaveBeenCalledWith({
-      numeroPEV: 'PEV0001136',
-      documento: 'b18b59d4-c599-4424-bf7a-ad90c57696e8'
-    })
+    expect(geraDocumento).toHaveBeenCalledWith(
+      clientAuth,
+      {
+        numeroPEV: 'PEV0001136',
+        documento: 'b18b59d4-c599-4424-bf7a-ad90c57696e8'
+      }
+    )
   })
 
   it('returns snackbar feedback when the authorization document is not generated', async () => {
@@ -242,6 +255,7 @@ describe('vistorias services', () => {
     }))
 
     await expect(service.run({
+      ...clientAuth,
       numeroPEV: 'PEV0001136',
       documento: 'b18b59d4-c599-4424-bf7a-ad90c57696e8'
     })).resolves.toEqual({
@@ -281,7 +295,7 @@ describe('vistorias services', () => {
     })
     const service = new ListaPagamentosVistoriaService(asClient({ listaPagamentos }))
 
-    const result = await service.run('12345678901', false)
+    const result = await service.run(clientAuth, '12345678901', false)
 
     expect(result).toHaveLength(100)
     expect(result[0]).toMatchObject({
@@ -299,7 +313,7 @@ describe('vistorias services', () => {
     expect(result[0]).not.toHaveProperty('status')
     expect(result[0]).not.toHaveProperty('paymentDate')
     expect(result[0]).not.toHaveProperty('subtipoDescricao')
-    expect(listaPagamentos).toHaveBeenCalledWith('12345678901', false)
+    expect(listaPagamentos).toHaveBeenCalledWith(clientAuth, '12345678901', false)
   })
 
 })

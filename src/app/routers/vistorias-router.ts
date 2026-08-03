@@ -1,6 +1,7 @@
-import { Router } from 'express'
+import { type Request, Router } from 'express'
 import { BadRequest } from 'http-errors'
 import { isOtherProcessLabel, isProcessLabel } from '../../services/vistorias/verifica-veiculo-service'
+import type { VistoriasAuth } from '../../services/vistorias'
 
 const PLATE_PATTERN = /^[A-Z]{3}[0-9][A-Z0-9][0-9]{2}$/
 const RENAVAM_PATTERN = /^\d{9,11}$/
@@ -11,10 +12,22 @@ function asNonEmptyString(value: unknown): string | undefined {
   return typeof value === 'string' && value.trim() ? value.trim() : undefined
 }
 
+function getAuth (req: Request): VistoriasAuth {
+  const token = req.session?.accessToken
+  const cpf = req.session?.cpf
+
+  if (!token || !cpf) {
+    throw BadRequest('Informações de autenticação não encontradas na sessão.')
+  }
+
+  return { token, cpf }
+}
+
 export function vistoriasRouter(): Router {
   const router = Router()
 
   router.post('/veiculos/verificar', async (req, res) => {
+    const auth = getAuth(req)
     const placa = asNonEmptyString(req.body?.placa)
     const renavam = asNonEmptyString(req.body?.renavam)
     const tipoProcesso = asNonEmptyString(req.body?.tipoProcesso)
@@ -42,6 +55,7 @@ export function vistoriasRouter(): Router {
 
     const service = req.scope.resolve('verificaVeiculoVistoriaService')
     const result = await service.run({
+      ...auth,
       placa: normalizedPlate,
       renavam,
       tipoProcesso,
@@ -51,6 +65,7 @@ export function vistoriasRouter(): Router {
   })
 
   router.post('/veiculos/:renavam/qr-code', async (req, res) => {
+    const auth = getAuth(req)
     const renavam = asNonEmptyString(req.params.renavam)
     const correlationId = asNonEmptyString(req.body?.correlationId)
 
@@ -63,11 +78,12 @@ export function vistoriasRouter(): Router {
     }
 
     const service = req.scope.resolve('criaQRCodeVistoriaService')
-    const result = await service.run(correlationId)
+    const result = await service.run(auth, correlationId)
     res.status(200).json(result)
   })
 
   router.get('/qr-code', async (req, res) => {
+    const auth = getAuth(req)
     const paymentId = asNonEmptyString(req.query.id)
 
     if (!paymentId) {
@@ -75,11 +91,12 @@ export function vistoriasRouter(): Router {
     }
 
     const service = req.scope.resolve('verificaQRCodeVistoriaService')
-    const result = await service.run(paymentId)
+    const result = await service.run(auth, paymentId)
     res.status(200).json(result)
   })
 
   router.post('/veiculos/:renavam/autorizacao', async (req, res) => {
+    const auth = getAuth(req)
     const renavam = asNonEmptyString(req.params.renavam)
     const numeroPEV = asNonEmptyString(req.body?.numeroPEV)
     const documento = asNonEmptyString(req.body?.documento)
@@ -95,11 +112,12 @@ export function vistoriasRouter(): Router {
     }
 
     const service = req.scope.resolve('geraAutorizacaoVistoriaService')
-    const result = await service.run({ numeroPEV, documento })
+    const result = await service.run({ ...auth, numeroPEV, documento })
     res.status(200).json(result)
   })
 
   router.get('/pagamentos/:documento', async (req, res) => {
+    const auth = getAuth(req)
     const documento = asNonEmptyString(req.params.documento)
     const docProprietario = asNonEmptyString(req.query.docProprietario)
 
@@ -111,7 +129,7 @@ export function vistoriasRouter(): Router {
     }
 
     const service = req.scope.resolve('listaPagamentosVistoriaService')
-    const result = await service.run(documento, docProprietario === 'true')
+    const result = await service.run(auth, documento, docProprietario === 'true')
     res.status(200).json(result)
   })
 

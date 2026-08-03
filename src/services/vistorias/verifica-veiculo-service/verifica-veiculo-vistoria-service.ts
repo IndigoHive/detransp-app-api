@@ -96,12 +96,15 @@ export class VerificaVeiculoVistoriaService {
     const definition = this.getProcessDefinition(input)
     let result: VerificaVeiculoResult
     try {
-      result = await this.client.verificaVeiculo({
-        placa: input.placa.toUpperCase(),
-        renavam: input.renavam,
-        tipo: definition.type,
-        subtipo: definition.subtype,
-      })
+      result = await this.client.verificaVeiculo(
+        { token: input.token, cpf: input.cpf },
+        {
+          placa: input.placa.toUpperCase(),
+          renavam: input.renavam,
+          tipo: definition.type,
+          subtipo: definition.subtype,
+        }
+      )
     } catch (error) {
       if (this.isInvalidVehicleResponse(error)) {
         return EMPTY_RESULT

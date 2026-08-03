@@ -1,5 +1,6 @@
 import type { DetranSpServiceNowVistoriasClient } from '../../../clients/detran-sp-service-now-vistorias'
 import { formatDateTimeBr } from '../../deb-restr/utils'
+import type { VistoriasAuth } from '../types'
 
 const PAID_STATUS = 'LIQUIDADO'
 const INACTIVE_STATUSES = new Set(['CANCELADO', 'EXPIRADO'])
@@ -7,12 +8,12 @@ const INACTIVE_STATUSES = new Set(['CANCELADO', 'EXPIRADO'])
 export class VerificaQRCodeVistoriaService {
   constructor (private readonly client: DetranSpServiceNowVistoriasClient) {}
 
-  async run (paymentId: string): Promise<{
+  async run (auth: VistoriasAuth, paymentId: string): Promise<{
     estado: number | null
     comprovante: string | null
     confirmedDate: string | null
   }> {
-    const result = await this.client.verificaQRCode(paymentId)
+    const result = await this.client.verificaQRCode(auth, paymentId)
     const response = result?.result
     const body = response?.success ? response.data.body : undefined
     const status = body?.status.toUpperCase()

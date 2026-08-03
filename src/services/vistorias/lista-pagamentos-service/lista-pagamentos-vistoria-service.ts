@@ -1,14 +1,19 @@
 import type { DetranSpServiceNowVistoriasClient } from '../../../clients/detran-sp-service-now-vistorias'
 import type { PagamentoVistoriaPublico } from '../../../clients/detran-sp-service-now-vistorias/types'
 import { formatDateTimeBr } from '../../deb-restr/utils'
+import type { VistoriasAuth } from '../types'
 
 const PAGE_SIZE = 100
 
 export class ListaPagamentosVistoriaService {
   constructor (private readonly client: DetranSpServiceNowVistoriasClient) {}
 
-  async run (documento: string, docProprietario: boolean): Promise<PagamentoVistoriaPublico[]> {
-    const result = await this.client.listaPagamentos(documento, docProprietario)
+  async run (
+    auth: VistoriasAuth,
+    documento: string,
+    docProprietario: boolean
+  ): Promise<PagamentoVistoriaPublico[]> {
+    const result = await this.client.listaPagamentos(auth, documento, docProprietario)
     const response = result?.result
 
     if (!response?.success) {
