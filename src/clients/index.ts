@@ -1,4 +1,5 @@
 export * from './detran-sp-service-now-licenciamento'
+export * from './detran-sp-service-now-vistorias'
 export * from './clients'
 export * from './detran-sp-service-now'
 export * from './idp-sp-gov-br-service'
