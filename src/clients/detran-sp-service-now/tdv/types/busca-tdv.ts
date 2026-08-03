@@ -1,8 +1,10 @@
-import type { CodigoEstadoTDV, CodigoEstadoQRCode } from './_common'
+import type { CodigoEstadoTDV, CodigoEstadoQRCode, CodigoOrigemComunicacaoVendaVeiculo, CodigoOrigemTDV } from './_common'
 
 export type BuscaTdvResultData = {
   ativa?: 'true' | 'false'
   estado?: CodigoEstadoTDV
+  origem?: CodigoOrigemTDV
+  origemComunicacaoVendaVeiculo?: CodigoOrigemComunicacaoVendaVeiculo
   codigoTransferenciaVeiculo?: string
   placaVeiculo?: string
   placaMercosul?: 'true' | 'false'

@@ -1,6 +1,6 @@
 import type { DetranSpServiceNowTdvClient } from '../../../clients/detran-sp-service-now/tdv'
 import { CodigoEstadoTDV } from '../../../clients/detran-sp-service-now/tdv/types'
-import type { BuscaTdvResultData, ListaTdvsResultData } from '../../../clients/detran-sp-service-now/tdv/types'
+import type { BuscaTdvResultData, CodigoOrigemComunicacaoVendaVeiculo, CodigoOrigemTDV, ListaTdvsResultData } from '../../../clients/detran-sp-service-now/tdv/types'
 import { extractBearerToken, extractCpfFromToken } from '../../../utils/token'
 
 type Dependencies = {
@@ -18,9 +18,14 @@ type VehicleData = {
   lastLicensing: string
   yearFab: string
   yearMod: string
+  origem?: CodigoOrigemTDV
+  origemComunicacaoVendaVeiculo?: CodigoOrigemComunicacaoVendaVeiculo
 }
 
 function buildVehicleData (data: BuscaTdvResultData | undefined, fallback: ListaTdvsResultData): VehicleData {
+  const origem = data?.origem ?? fallback.origem
+  const origemComunicacaoVendaVeiculo = data?.origemComunicacaoVendaVeiculo ?? fallback.origemComunicacaoVendaVeiculo
+
   return {
     id: '1',
     plate: data?.placaVeiculo ?? fallback.placaVeiculo ?? '',
@@ -31,7 +36,9 @@ function buildVehicleData (data: BuscaTdvResultData | undefined, fallback: Lista
     renavam: data?.codigoRenavamVeiculo ?? fallback.codigoRenavamVeiculo ?? '',
     lastLicensing: '',
     yearFab: '',
-    yearMod: ''
+    yearMod: '',
+    ...(origem !== undefined ? { origem } : {}),
+    ...(origemComunicacaoVendaVeiculo !== undefined ? { origemComunicacaoVendaVeiculo } : {})
   }
 }
 
@@ -48,6 +55,8 @@ export type VerificarEstadoTdvResult = {
     brandModel: string
     renavam: string
     codigoTransferencia: string
+    origem?: CodigoOrigemTDV
+    origemComunicacaoVendaVeiculo?: CodigoOrigemComunicacaoVendaVeiculo
   }>
   vehicle?: VehicleData
   nomeComprador?: string
@@ -115,7 +124,9 @@ export class VerificarEstadoTdvService {
             plate: activeBuyer.placaVeiculo ?? '',
             brandModel: activeBuyer.descricaoMarcaVeiculo ?? '',
             renavam: activeBuyer.codigoRenavamVeiculo ?? '',
-            codigoTransferencia: activeBuyer.codigoTransferenciaVeiculo ?? ''
+            codigoTransferencia: activeBuyer.codigoTransferenciaVeiculo ?? '',
+            ...(activeBuyer.origem !== undefined ? { origem: activeBuyer.origem } : {}),
+            ...(activeBuyer.origemComunicacaoVendaVeiculo !== undefined ? { origemComunicacaoVendaVeiculo: activeBuyer.origemComunicacaoVendaVeiculo } : {})
           }]
         }
       }

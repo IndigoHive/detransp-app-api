@@ -1,4 +1,4 @@
-import type { CodigoEstadoTDV } from './_common'
+import type { CodigoEstadoTDV, CodigoOrigemComunicacaoVendaVeiculo, CodigoOrigemTDV } from './_common'
 
 export type ListTdvsQuery = {
   ativa: 'true' | 'false'
@@ -10,6 +10,8 @@ export type ListTdvsQuery = {
 export type ListaTdvsResultData = {
   ativa?: 'true' | 'false'
   estado?: CodigoEstadoTDV
+  origem?: CodigoOrigemTDV
+  origemComunicacaoVendaVeiculo?: CodigoOrigemComunicacaoVendaVeiculo
   codigoTransferenciaVeiculo?: string
   placaVeiculo?: string
   descricaoMarcaVeiculo?: string

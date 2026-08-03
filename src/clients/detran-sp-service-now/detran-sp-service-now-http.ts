@@ -104,7 +104,9 @@ export class DetranSpServiceNowHttp {
         )
 
         const detail = data?.error?.detail ?? 'Tivemos um problema ao processar sua solicitação.'
-        throw createError(error.response?.status ?? 502, detail, { expose: true })
+        const code = data?.error?.message
+
+        throw createError(error.response?.status ?? 502, detail, { expose: true, code })
       }
     )
   }

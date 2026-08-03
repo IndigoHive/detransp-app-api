@@ -18,6 +18,18 @@ export const enum CodigoOrigemTDV {
   RENAVE = '4'
 }
 
+export const enum CodigoOrigemComunicacaoVendaVeiculo {
+  GEVER_ECRV = '1',
+  PORTAL = '2',
+  DETRAN = '3',
+  CARTORIO = '4',
+  SEFAZ = '5',
+  ARQUIVO_GRAVAMES = '6',
+  LEILAO = '7',
+  VENDA_DIGITAL = '8',
+  E_NOTARIADO = '9'
+}
+
 export const enum CodigoEstadoQRCode {
   ATIVO = '1',
   PAGO = '2',

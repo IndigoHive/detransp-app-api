@@ -1,4 +1,5 @@
 import type { DetranSpServiceNowTdvClient } from '../../../clients/detran-sp-service-now/tdv'
+import type { CodigoOrigemComunicacaoVendaVeiculo, CodigoOrigemTDV } from '../../../clients/detran-sp-service-now/tdv/types'
 import { extractBearerToken, extractCpfFromToken } from '../../../utils/token'
 
 type Dependencies = {
@@ -19,6 +20,8 @@ export type ConsultaComprasResult = {
     yearFab: string
     yearMod: string
     codigoTransferencia: string
+    origem?: CodigoOrigemTDV
+    origemComunicacaoVendaVeiculo?: CodigoOrigemComunicacaoVendaVeiculo
   }>
 }
 
@@ -55,7 +58,9 @@ export class ConsultaComprasService {
       lastLicensing: '',
       yearFab: '',
       yearMod: '',
-      codigoTransferencia: tdv.codigoTransferenciaVeiculo ?? ''
+      codigoTransferencia: tdv.codigoTransferenciaVeiculo ?? '',
+      ...(tdv.origem !== undefined ? { origem: tdv.origem } : {}),
+      ...(tdv.origemComunicacaoVendaVeiculo !== undefined ? { origemComunicacaoVendaVeiculo: tdv.origemComunicacaoVendaVeiculo } : {})
     }))
 
     return { vehicles }
