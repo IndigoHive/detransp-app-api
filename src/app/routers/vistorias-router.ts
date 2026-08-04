@@ -7,6 +7,7 @@ const PLATE_PATTERN = /^[A-Z]{3}[0-9][A-Z0-9][0-9]{2}$/
 const RENAVAM_PATTERN = /^\d{9,11}$/
 const PEV_NUMBER_PATTERN = /^PEV\d+$/
 const DOCUMENT_PATTERN = /^(?:\d{11}|\d{14})$/
+const VISTORIA_TOKEN_PATTERN = /^[A-Z0-9]{4}(?:-[A-Z0-9]{4}){3}$/
 const DOC_PROPRIETARIO_BY_PAYMENT_LABEL = {
   'Meus pagamentos': false,
   'Meus veiculos': true
@@ -152,6 +153,49 @@ export function vistoriasRouter(): Router {
 
     const service = req.scope.resolve('listaPagamentosVistoriaService')
     const result = await service.run(auth, documento, docProprietario)
+    res.status(200).json(result)
+  })
+
+  router.post('/restituicoes', async (req, res) => {
+    const auth = getAuth(req)
+    const token = asNonEmptyString(req.body?.token)
+    const documento = asNonEmptyString(req.body?.documento)
+
+    if (!token || !VISTORIA_TOKEN_PATTERN.test(token)) {
+      throw BadRequest('Token da vistoria inválido.')
+    }
+    if (!documento || !DOCUMENT_PATTERN.test(documento)) {
+      throw BadRequest('Documento inválido.')
+    }
+
+    const service = req.scope.resolve('solicitaRestituicaoVistoriaService')
+    const result = await service.run(auth, token, documento)
+    res.status(200).json(result)
+  })
+
+  router.get('/restituicoes/:numeroPEV/documento', async (req, res) => {
+    const auth = getAuth(req)
+    const numeroPEV = asNonEmptyString(req.params.numeroPEV)
+
+    if (!numeroPEV || !PEV_NUMBER_PATTERN.test(numeroPEV)) {
+      throw BadRequest('Número PEV inválido.')
+    }
+
+    const service = req.scope.resolve('buscaDocumentoRestituicaoVistoriaService')
+    const result = await service.run(auth, numeroPEV)
+    res.status(200).json(result)
+  })
+
+  router.get('/documentos/:numeroPEV', async (req, res) => {
+    const auth = getAuth(req)
+    const numeroPEV = asNonEmptyString(req.params.numeroPEV)
+
+    if (!numeroPEV || !PEV_NUMBER_PATTERN.test(numeroPEV)) {
+      throw BadRequest('Número PEV inválido.')
+    }
+
+    const service = req.scope.resolve('buscaDocumentoVistoriaService')
+    const result = await service.run(auth, numeroPEV)
     res.status(200).json(result)
   })
 

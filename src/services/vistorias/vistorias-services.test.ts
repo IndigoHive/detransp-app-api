@@ -3,8 +3,11 @@ import createError from 'http-errors'
 import type { DetranSpServiceNowVistoriasClient } from '../../clients/detran-sp-service-now-vistorias'
 import { DetranSpServiceNowVistoriasError } from '../../clients/detran-sp-service-now-vistorias'
 import { CriaQRCodeVistoriaService } from './cria-qr-code-service'
+import { BuscaDocumentoVistoriaService } from './busca-documento-service'
+import { BuscaDocumentoRestituicaoVistoriaService } from './busca-documento-restituicao-service'
 import { GeraAutorizacaoVistoriaService } from './gera-autorizacao-service'
 import { ListaPagamentosVistoriaService } from './lista-pagamentos-service'
+import { SolicitaRestituicaoVistoriaService } from './solicita-restituicao-service'
 import { VerificaQRCodeVistoriaService } from './verifica-qr-code-service'
 import { VerificaVeiculoVistoriaService } from './verifica-veiculo-service'
 
@@ -24,6 +27,78 @@ function asClient (client: Partial<DetranSpServiceNowVistoriasClient>): DetranSp
 }
 
 describe('vistorias services', () => {
+  it('maps the restitution document to the document viewer contract', async () => {
+    const buscaDocumentoRestituicao = vi.fn().mockResolvedValue({
+      result: {
+        success: true,
+        message: 'Evento processado',
+        correlationId: 'correlation-id',
+        data: { anexo_vistoria: 'restituicao-pdf-base64' }
+      }
+    })
+    const service = new BuscaDocumentoRestituicaoVistoriaService(asClient({ buscaDocumentoRestituicao }))
+
+    await expect(service.run(clientAuth, 'PEV0001157')).resolves.toEqual({
+      pdf: 'restituicao-pdf-base64'
+    })
+    expect(buscaDocumentoRestituicao).toHaveBeenCalledWith(clientAuth, 'PEV0001157')
+  })
+
+  it('returns feedback when the restitution document is unavailable', async () => {
+    const service = new BuscaDocumentoRestituicaoVistoriaService(asClient({
+      buscaDocumentoRestituicao: vi.fn().mockResolvedValue({
+        result: {
+          success: false,
+          message: 'Documento não encontrado'
+        }
+      })
+    }))
+
+    await expect(service.run(clientAuth, 'PEV0001157')).resolves.toEqual({
+      pdf: null,
+      showSnackbar: {
+        variant: 'error',
+        title: 'Não foi possível buscar o documento da restituição',
+        description: 'Documento não encontrado'
+      }
+    })
+  })
+
+  it('maps the inspection document to the document viewer contract', async () => {
+    const buscaDocumentoVistoria = vi.fn().mockResolvedValue({
+      result: {
+        success: true,
+        message: 'Evento processado',
+        correlationId: 'correlation-id',
+        data: { anexo_vistoria: 'pdf-base64' }
+      }
+    })
+    const service = new BuscaDocumentoVistoriaService(asClient({ buscaDocumentoVistoria }))
+
+    await expect(service.run(clientAuth, 'PEV0001148')).resolves.toEqual({ pdf: 'pdf-base64' })
+    expect(buscaDocumentoVistoria).toHaveBeenCalledWith(clientAuth, 'PEV0001148')
+  })
+
+  it('returns an empty document when ServiceNow does not find the inspection document', async () => {
+    const service = new BuscaDocumentoVistoriaService(asClient({
+      buscaDocumentoVistoria: vi.fn().mockResolvedValue({
+        result: {
+          success: false,
+          message: 'Documento não encontrado'
+        }
+      })
+    }))
+
+    await expect(service.run(clientAuth, 'PEV0001148')).resolves.toEqual({
+      pdf: null,
+      showSnackbar: {
+        variant: 'error',
+        title: 'Não foi possível buscar o documento de vistoria',
+        description: 'Documento não encontrado'
+      }
+    })
+  })
+
   it('forwards vehicle and process data when verifying the inspection', async () => {
     const body = {
       uuid: 'veh_1',
@@ -333,6 +408,107 @@ describe('vistorias services', () => {
     expect(result[0]).not.toHaveProperty('paymentDate')
     expect(result[0]).not.toHaveProperty('subtipoDescricao')
     expect(listaPagamentos).toHaveBeenCalledWith(clientAuth, '12345678901', false)
+  })
+
+  it('returns the restitution identifier after requesting a refund', async () => {
+    const solicitaRestituicao = vi.fn().mockResolvedValue({
+      result: {
+        success: true,
+        message: 'Pedido registrado',
+        correlationId: 'correlation-id',
+        data: {
+          id: 'restituicao-id',
+          token: '6557-A8E2-7A2C-6577',
+          statusAnterior: 'ATIVO',
+          statusAtual: 'RESTITUICAO_EM_ANALISE',
+          message: 'Pedido registrado',
+          registro_sys_id: 'registro-sys-id',
+          registro_number: 'RESTFI0001006'
+        }
+      }
+    })
+    const consultaComprovanteRestituicao = vi.fn()
+      .mockResolvedValueOnce({ result: { success: false, message: 'Em processamento' } })
+      .mockResolvedValueOnce({
+        result: {
+          success: true,
+          message: 'Evento processado',
+          correlationId: 'receipt-correlation-id',
+          data: { servico: {}, destino: {}, veiculo: {}, origem: {} }
+        }
+      })
+    const service = new SolicitaRestituicaoVistoriaService(
+      asClient({ solicitaRestituicao, consultaComprovanteRestituicao }),
+      { maxAttempts: 2, pollingIntervalMs: 0 }
+    )
+
+    await expect(service.run(
+      clientAuth,
+      '6557-A8E2-7A2C-6577',
+      '12345678901'
+    )).resolves.toEqual({ success: true, idRestituicao: 'restituicao-id' })
+    expect(solicitaRestituicao).toHaveBeenCalledWith(clientAuth, {
+      token: '6557-A8E2-7A2C-6577',
+      documento: '12345678901'
+    })
+    expect(consultaComprovanteRestituicao).toHaveBeenCalledTimes(2)
+    expect(consultaComprovanteRestituicao).toHaveBeenCalledWith(clientAuth, 'restituicao-id')
+  })
+
+  it('returns feedback when the restitution request is rejected', async () => {
+    const service = new SolicitaRestituicaoVistoriaService(asClient({
+      solicitaRestituicao: vi.fn().mockResolvedValue({
+        result: {
+          success: false,
+          message: 'Pagamento não elegível para restituição'
+        }
+      })
+    }))
+
+    await expect(service.run(
+      clientAuth,
+      '6557-A8E2-7A2C-6577',
+      '12345678901'
+    )).resolves.toEqual({
+      success: false,
+      idRestituicao: null,
+      showSnackbar: {
+        variant: 'error',
+        title: 'Não foi possível solicitar a restituição',
+        description: 'Pagamento não elegível para restituição'
+      }
+    })
+  })
+
+  it('returns feedback when the restitution receipt does not become available', async () => {
+    const solicitaRestituicao = vi.fn().mockResolvedValue({
+      result: {
+        success: true,
+        data: { id: 'restituicao-id' }
+      }
+    })
+    const consultaComprovanteRestituicao = vi.fn().mockResolvedValue({
+      result: { success: false, message: 'Comprovante em processamento' }
+    })
+    const service = new SolicitaRestituicaoVistoriaService(
+      asClient({ solicitaRestituicao, consultaComprovanteRestituicao }),
+      { maxAttempts: 2, pollingIntervalMs: 0 }
+    )
+
+    await expect(service.run(
+      clientAuth,
+      '6557-A8E2-7A2C-6577',
+      '12345678901'
+    )).resolves.toEqual({
+      success: false,
+      idRestituicao: null,
+      showSnackbar: {
+        variant: 'error',
+        title: 'Não foi possível solicitar a restituição',
+        description: 'Comprovante em processamento'
+      }
+    })
+    expect(consultaComprovanteRestituicao).toHaveBeenCalledTimes(2)
   })
 
 })

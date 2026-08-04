@@ -55,27 +55,3 @@ export type VerificaQRCodeResult =
     }
   | null
   | undefined
-
-export type GeraDocumentoBody = {
-  numeroPEV: string
-  documento: string
-}
-
-export type GeraDocumentoResult =
-  | {
-      result?:
-      | {
-        success: true
-        message: string
-        file_name: string
-        content_type: 'application/pdf'
-        base64: string
-        attachment_id: string
-      }
-      | {
-        success: false
-        message: string
-      }
-    }
-  | null
-  | undefined
