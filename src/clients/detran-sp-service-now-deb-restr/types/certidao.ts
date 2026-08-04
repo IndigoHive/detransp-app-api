@@ -57,11 +57,11 @@ export type CertidaoAttributes = {
 }
 
 export type CertidaoResponse = {
-  data: {
+  data: Array<{
     id: string
     type: string
     attributes: CertidaoAttributes
-  }
+  }>
 }
 
 export type CertidaoResult = CertidaoResponse | null | undefined

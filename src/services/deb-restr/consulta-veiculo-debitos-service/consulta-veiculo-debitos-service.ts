@@ -12,8 +12,11 @@ import type {
 } from '../types'
 import { deriveIpvaSectionStatus, deriveSectionStatus, formatCurrencyBr, sumValores, toSentenceCase } from '../utils'
 
-const IPVA_HELPER_TEXT = 'Parcelamento em até 5x no Pix sem juros'
 const LICENCIAMENTO_BLOQUEADO_TEXT = 'Para liberar o pagamento do licenciamento, quite os demais débitos do veículo.'
+
+function ipvaHelperText (parcelCount: number): string | undefined {
+  return parcelCount > 1 ? `Parcelamento em até ${parcelCount}x no Pix sem juros` : undefined
+}
 
 export type ConsultaVeiculoDebitosParams = DebRestrVeiculoAuth & {
   representacao?: boolean
@@ -121,6 +124,7 @@ export class ConsultaVeiculoDebitosService {
 
     const ipvaStatus = deriveIpvaSectionStatus(ipva)
     const multasStatus = deriveSectionStatus(multas)
+    const helperText = ipvaHelperText(ipva.length)
 
     return {
       ipva: {
@@ -129,7 +133,7 @@ export class ConsultaVeiculoDebitosService {
         totalLabel: ipva.length > 0 ? formatCurrencyBr(sumValores(ipva)) : null,
         detailsButton: ipva.length > 0 ? 'visible' : 'hidden',
         pixButton: hasMultaForaDoSistema ? 'hidden' : ipva.length > 0 ? 'visible' : 'hidden',
-        ...(ipva.length > 0 ? { helperText: IPVA_HELPER_TEXT } : {}),
+        ...(helperText ? { helperText } : {}),
       },
       multas: {
         ...(multasStatus === 'REGULAR' ? { status: multasStatus } : {}),
