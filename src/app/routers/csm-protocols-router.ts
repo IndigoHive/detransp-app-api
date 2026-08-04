@@ -77,8 +77,10 @@ export function csmProtocolsRouter (): Router {
     const service = req.scope.resolve('listProtocolMessagesService')
 
     const sysId = typeof req.query.sys_id === 'string' ? req.query.sys_id : ''
+    const userInfo = req.session?.userInfo as { name?: unknown } | undefined
+    const userName = typeof userInfo?.name === 'string' ? userInfo.name : undefined
 
-    const result = await service.run(sysId)
+    const result = await service.run(sysId, userName)
 
     res.status(200).json(result)
   })
