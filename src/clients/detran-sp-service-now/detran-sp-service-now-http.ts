@@ -42,7 +42,7 @@ export class DetranSpServiceNowHttp {
 
   protected withAuth (auth: DetranSpServiceNowAuth): AxiosRequestConfig {
     if (!auth.token || !auth.cpf) {
-      throw createError(401, 'Token de autorização inválido ou expirado.', { expose: true })
+      throw createError(401, 'Token de autorização inválido ou expirado, ou CPF ausente.', { expose: true })
     }
 
     return {

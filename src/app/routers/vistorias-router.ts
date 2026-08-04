@@ -1,5 +1,5 @@
 import { type Request, Router } from 'express'
-import { BadRequest } from 'http-errors'
+import { BadRequest, Unauthorized } from 'http-errors'
 import { isOtherProcessLabel, isProcessLabel } from '../../services/vistorias/verifica-veiculo-service'
 import type { VistoriasAuth } from '../../services/vistorias'
 
@@ -25,8 +25,12 @@ export function getDocProprietarioByPaymentLabel(label: string | undefined): boo
 }
 
 function getAuth(req: Request): VistoriasAuth {
-  const token = req.session?.accessToken
-  const cpf = req.session?.cpf
+  if (!req.session) {
+    throw Unauthorized('Sessão não encontrada.')
+  }
+
+  const token = req.session.accessToken
+  const cpf = req.session.cpf
 
   if (!token || !cpf) {
     throw BadRequest('Informações de autenticação não encontradas na sessão.')

@@ -6,7 +6,7 @@ import type { VistoriasAuth } from '../types'
 const PAGE_SIZE = 100
 
 export class ListaPagamentosVistoriaService {
-  constructor (private readonly client: DetranSpServiceNowVistoriasClient) {}
+  constructor(private readonly client: DetranSpServiceNowVistoriasClient) {}
 
   async run (
     auth: VistoriasAuth,
@@ -23,8 +23,9 @@ export class ListaPagamentosVistoriaService {
     return response.items
       .filter((item) => item.pevNumber.trim().length > 0)
       .slice(0, PAGE_SIZE)
-      .map(({ placa, token, status, modeloAuto, paymentDate, subtipoDescricao, ...item }) => ({
+      .map(({ placa, token, status, modeloAuto, paymentDate, subtipoDescricao, pevNumber, ...item }) => ({
         ...item,
+        pevNumber: pevNumber.trim(),
         plate: placa,
         brandModel: modeloAuto,
         vistoriaToken: token,
