@@ -93,7 +93,7 @@ describe('vistorias services', () => {
     )
   })
 
-  it('returns the empty flow state when no vehicle is found', async () => {
+  it('returns snackbar feedback when no vehicle is found', async () => {
     const service = new VerificaVeiculoVistoriaService(asClient({
       verificaVeiculo: vi.fn().mockResolvedValue(null)
     }))
@@ -102,11 +102,16 @@ describe('vistorias services', () => {
       vehicle: null,
       service: null,
       totalDebits: null,
-      numeroPEV: null
+      numeroPEV: null,
+      showSnackbar: {
+        variant: 'error',
+        title: 'Não foi possível verificar o veículo',
+        description: 'Tente novamente em alguns instantes.'
+      }
     })
   })
 
-  it('returns the empty flow state when ServiceNow reports that the vehicle is ineligible', async () => {
+  it('returns snackbar feedback when ServiceNow reports that the vehicle is ineligible', async () => {
     const service = new VerificaVeiculoVistoriaService(asClient({
       verificaVeiculo: vi.fn().mockResolvedValue({
         result: {
@@ -129,11 +134,16 @@ describe('vistorias services', () => {
       service: null,
       totalDebits: null,
       numeroPEV: null,
-      correlationId: 'correlation-id'
+      correlationId: 'correlation-id',
+      showSnackbar: {
+        variant: 'error',
+        title: 'Não foi possível verificar o veículo',
+        description: 'Veículo não encontrado'
+      }
     })
   })
 
-  it('returns the empty flow state for a ServiceNow vehicle validation error', async () => {
+  it('returns snackbar feedback for a ServiceNow vehicle validation error', async () => {
     const serviceNowError = createError(
       422,
       new DetranSpServiceNowVistoriasError('VeiculoNaoEncontradoError', 'Veículo não encontrado'),
@@ -147,7 +157,12 @@ describe('vistorias services', () => {
       vehicle: null,
       service: null,
       totalDebits: null,
-      numeroPEV: null
+      numeroPEV: null,
+      showSnackbar: {
+        variant: 'error',
+        title: 'Não foi possível verificar o veículo',
+        description: 'Veículo não encontrado'
+      }
     })
   })
 
@@ -296,6 +311,10 @@ describe('vistorias services', () => {
     const service = new ListaPagamentosVistoriaService(asClient({ listaPagamentos }))
 
     const result = await service.run(clientAuth, '12345678901', false)
+
+    if (!Array.isArray(result)) {
+      throw new Error('Expected a payment list')
+    }
 
     expect(result).toHaveLength(100)
     expect(result[0]).toMatchObject({
