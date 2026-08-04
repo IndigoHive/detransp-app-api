@@ -16,7 +16,8 @@ export class GeraAutorizacaoVistoriaService {
   constructor (private readonly client: DetranSpServiceNowVistoriasClient) {}
 
   async run (input: GeraAutorizacaoVistoriaInput): Promise<GeraAutorizacaoVistoriaOutput> {
-    const result = await this.client.geraDocumento(input)
+    const { token, cpf, ...body } = input
+    const result = await this.client.geraDocumento({ token, cpf }, body)
     const response = result?.result
 
     if (response?.success) {

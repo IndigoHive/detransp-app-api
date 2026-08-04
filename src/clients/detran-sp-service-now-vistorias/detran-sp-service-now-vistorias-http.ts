@@ -1,76 +1,45 @@
-import axios, { type AxiosError, type AxiosInstance } from 'axios'
+import type { AxiosError } from 'axios'
 import createError from 'http-errors'
-import type { Logger } from 'pino'
+import { DetranSpServiceNowHttp } from '../detran-sp-service-now/detran-sp-service-now-http'
 import { DetranSpServiceNowVistoriasError } from './errors/detran-sp-service-now-vistorias-error'
 
-const SERVICE_NAME = 'detran-sp-servicenow-vistorias'
 const TIMEOUT_ERROR_CODES = new Set(['ECONNABORTED', 'ETIMEDOUT'])
+const DEFAULT_ERROR_MESSAGE = 'Tivemos um problema ao processar sua solicitação.'
 
-export type DetranSpServiceNowVistoriasHttpParams = {
-  baseURL: string
-  logger: Logger
+type ServiceNowErrorData = {
+  error?: { message?: string; detail?: string }
+  errors?: Array<{ title?: string; detail?: string }>
+  message?: string
+  result?: {
+    success?: boolean
+    message?: string
+  }
 }
 
-export class DetranSpServiceNowVistoriasHttp {
-  protected readonly axios: AxiosInstance
-  private readonly logger: Logger
+export function getVistoriasErrorMessage (data: ServiceNowErrorData | undefined): string {
+  return data?.error?.detail
+    ?? data?.errors?.[0]?.detail
+    ?? data?.result?.message
+    ?? data?.error?.message
+    ?? data?.errors?.[0]?.title
+    ?? data?.message
+    ?? DEFAULT_ERROR_MESSAGE
+}
 
-  constructor (params: DetranSpServiceNowVistoriasHttpParams) {
-    this.logger = params.logger
-    this.axios = axios.create({
-      baseURL: params.baseURL,
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        'User-Agent': 'iOS/appsp/1.0.0'
-      },
-      withCredentials: true
-    })
-    this.setupInterceptors()
-  }
+export class DetranSpServiceNowVistoriasHttp extends DetranSpServiceNowHttp {
+  protected override createResponseError (error: AxiosError): Error {
+    const data = error.response?.data as ServiceNowErrorData | undefined
+    const message = data?.error?.message ?? data?.errors?.[0]?.title
+    const status = error.response?.status ?? (TIMEOUT_ERROR_CODES.has(error.code ?? '') ? 504 : 502)
 
-  private setupInterceptors () {
-    this.axios.interceptors.request.use((config) => {
-      this.logger.debug(
-        { baseURL: config.baseURL, method: config.method, timeout: config.timeout, url: config.url, service: SERVICE_NAME },
-        'ServiceNow vistorias request'
-      )
-      return config
-    })
-
-    this.axios.interceptors.response.use(
-      (response) => response,
-      (error: AxiosError) => {
-        const data = error.response?.data as {
-          error?: { message?: string; detail?: string }
-          errors?: Array<{ title?: string; detail?: string }>
-        } | undefined
-        const message = data?.error?.message ?? data?.errors?.[0]?.title
-        const detail = data?.error?.detail ?? data?.errors?.[0]?.detail
-
-        this.logger.error(
-          {
-            service: SERVICE_NAME,
-            status: error.response?.status,
-            url: error.config?.url,
-            errorMessage: message,
-            errorDetail: detail
-          },
-          'ServiceNow vistorias response error'
-        )
-
-        const status = error.response?.status ?? (TIMEOUT_ERROR_CODES.has(error.code ?? '') ? 504 : 502)
-
-        throw createError(
-          status,
-          new DetranSpServiceNowVistoriasError(
-            message ?? 'UnknownError',
-            detail ?? 'Tivemos um problema ao processar sua solicitação.',
-            error.response?.data
-          ),
-          { expose: true }
-        )
-      }
+    return createError(
+      status,
+      new DetranSpServiceNowVistoriasError(
+        message ?? 'UnknownError',
+        getVistoriasErrorMessage(data),
+        error.response?.data
+      ),
+      { expose: true }
     )
   }
 }

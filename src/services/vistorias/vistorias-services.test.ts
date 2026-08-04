@@ -4,10 +4,17 @@ import type { DetranSpServiceNowVistoriasClient } from '../../clients/detran-sp-
 import { DetranSpServiceNowVistoriasError } from '../../clients/detran-sp-service-now-vistorias'
 import { CriaQRCodeVistoriaService } from './cria-qr-code-service'
 import { GeraAutorizacaoVistoriaService } from './gera-autorizacao-service'
+import { ListaPagamentosVistoriaService } from './lista-pagamentos-service'
 import { VerificaQRCodeVistoriaService } from './verifica-qr-code-service'
 import { VerificaVeiculoVistoriaService } from './verifica-veiculo-service'
 
+const clientAuth = {
+  token: 'govbr-access-token',
+  cpf: '12345678901'
+}
+
 const auth = {
+  ...clientAuth,
   renavam: '12345678901',
   placa: 'ABC1D23'
 }
@@ -75,15 +82,18 @@ describe('vistorias services', () => {
       numeroPEV: 'PEV001',
       correlationId: 'correlation-id'
     })
-    expect(verificaVeiculo).toHaveBeenCalledWith({
-      placa: 'ABC1D23',
-      renavam: '12345678901',
-      tipo: 'SEGURANCA',
-      subtipo: 'SEGURANCA_2'
-    })
+    expect(verificaVeiculo).toHaveBeenCalledWith(
+      clientAuth,
+      {
+        placa: 'ABC1D23',
+        renavam: '12345678901',
+        tipo: 'SEGURANCA',
+        subtipo: 'SEGURANCA_2'
+      }
+    )
   })
 
-  it('returns the empty flow state when no vehicle is found', async () => {
+  it('returns snackbar feedback when no vehicle is found', async () => {
     const service = new VerificaVeiculoVistoriaService(asClient({
       verificaVeiculo: vi.fn().mockResolvedValue(null)
     }))
@@ -92,11 +102,16 @@ describe('vistorias services', () => {
       vehicle: null,
       service: null,
       totalDebits: null,
-      numeroPEV: null
+      numeroPEV: null,
+      showSnackbar: {
+        variant: 'error',
+        title: 'Não foi possível verificar o veículo',
+        description: 'Tente novamente em alguns instantes.'
+      }
     })
   })
 
-  it('returns the empty flow state when ServiceNow reports that the vehicle is ineligible', async () => {
+  it('returns snackbar feedback when ServiceNow reports that the vehicle is ineligible', async () => {
     const service = new VerificaVeiculoVistoriaService(asClient({
       verificaVeiculo: vi.fn().mockResolvedValue({
         result: {
@@ -119,11 +134,16 @@ describe('vistorias services', () => {
       service: null,
       totalDebits: null,
       numeroPEV: null,
-      correlationId: 'correlation-id'
+      correlationId: 'correlation-id',
+      showSnackbar: {
+        variant: 'error',
+        title: 'Não foi possível verificar o veículo',
+        description: 'Veículo não encontrado'
+      }
     })
   })
 
-  it('returns the empty flow state for a ServiceNow vehicle validation error', async () => {
+  it('returns snackbar feedback for a ServiceNow vehicle validation error', async () => {
     const serviceNowError = createError(
       422,
       new DetranSpServiceNowVistoriasError('VeiculoNaoEncontradoError', 'Veículo não encontrado'),
@@ -137,7 +157,12 @@ describe('vistorias services', () => {
       vehicle: null,
       service: null,
       totalDebits: null,
-      numeroPEV: null
+      numeroPEV: null,
+      showSnackbar: {
+        variant: 'error',
+        title: 'Não foi possível verificar o veículo',
+        description: 'Veículo não encontrado'
+      }
     })
   })
 
@@ -193,18 +218,18 @@ describe('vistorias services', () => {
       })
     })
 
-    await expect(new CriaQRCodeVistoriaService(client).run('correlation-id')).resolves.toEqual({
+    await expect(new CriaQRCodeVistoriaService(client).run(clientAuth, 'correlation-id')).resolves.toEqual({
       idSolServico: 'qr-code-id',
       qrCode: 'pix-code',
       expiresAt: '2026-07-24 18:00:00'
     })
-    expect(criaQRCode).toHaveBeenCalledWith({ correlationID: 'correlation-id' })
-    await expect(new VerificaQRCodeVistoriaService(client).run('qr-code-id')).resolves.toEqual({
+    expect(criaQRCode).toHaveBeenCalledWith(clientAuth, { correlationID: 'correlation-id' })
+    await expect(new VerificaQRCodeVistoriaService(client).run(clientAuth, 'qr-code-id')).resolves.toEqual({
       estado: 2,
       comprovante: 'qr-code-id',
       confirmedDate: expect.any(String)
     })
-    expect(client.verificaQRCode).toHaveBeenCalledWith('qr-code-id')
+    expect(client.verificaQRCode).toHaveBeenCalledWith(clientAuth, 'qr-code-id')
   })
 
   it('maps the generated authorization document to the frontend contract', async () => {
@@ -221,13 +246,17 @@ describe('vistorias services', () => {
     const service = new GeraAutorizacaoVistoriaService(asClient({ geraDocumento }))
 
     await expect(service.run({
+      ...clientAuth,
       numeroPEV: 'PEV0001136',
       documento: 'b18b59d4-c599-4424-bf7a-ad90c57696e8'
     })).resolves.toEqual({ pdf: 'pdf-base64' })
-    expect(geraDocumento).toHaveBeenCalledWith({
-      numeroPEV: 'PEV0001136',
-      documento: 'b18b59d4-c599-4424-bf7a-ad90c57696e8'
-    })
+    expect(geraDocumento).toHaveBeenCalledWith(
+      clientAuth,
+      {
+        numeroPEV: 'PEV0001136',
+        documento: 'b18b59d4-c599-4424-bf7a-ad90c57696e8'
+      }
+    )
   })
 
   it('returns snackbar feedback when the authorization document is not generated', async () => {
@@ -241,6 +270,7 @@ describe('vistorias services', () => {
     }))
 
     await expect(service.run({
+      ...clientAuth,
       numeroPEV: 'PEV0001136',
       documento: 'b18b59d4-c599-4424-bf7a-ad90c57696e8'
     })).resolves.toEqual({
@@ -251,6 +281,58 @@ describe('vistorias services', () => {
         description: 'Documento não encontrado'
       }
     })
+  })
+
+  it('returns only the first 100 payments with a PEV number', async () => {
+    const payments = Array.from({ length: 102 }, (_, index) => ({
+      id: `payment-${index}`,
+      placa: 'ABC1D23',
+      token: `token-${index}`,
+      status: 'ATIVO',
+      modeloAuto: 'FIAT/PALIO',
+      paymentDate: '2026-07-30T21:01:14.047Z',
+      tipo: 'IDENTIFICACAO',
+      subtipoDescricao: 'Preparação para leilão',
+      pagador: { nome: 'Pagador', documento: '12345678901' },
+      pevNumber: index === 0 ? '' : index === 1 ? '   ' : `PEV${index}`,
+      correlationId: `correlation-${index}`
+    }))
+    const listaPagamentos = vi.fn().mockResolvedValue({
+      result: {
+        success: true,
+        message: 'Evento processado',
+        items: payments,
+        total: payments.length,
+        page: 1,
+        pageSize: 100,
+        totalPages: 2
+      }
+    })
+    const service = new ListaPagamentosVistoriaService(asClient({ listaPagamentos }))
+
+    const result = await service.run(clientAuth, '12345678901', false)
+
+    if (!Array.isArray(result)) {
+      throw new Error('Expected a payment list')
+    }
+
+    expect(result).toHaveLength(100)
+    expect(result[0]).toMatchObject({
+      pevNumber: 'PEV2',
+      plate: 'ABC1D23',
+      brandModel: 'FIAT/PALIO',
+      vistoriaToken: 'token-2',
+      vistoriaPaymentDate: '30/07/2026 18:01',
+      vistoriaSubtypeDescription: 'Preparação para leilão',
+      vistoriaStatus: 'ATIVO'
+    })
+    expect(result[0]).not.toHaveProperty('placa')
+    expect(result[0]).not.toHaveProperty('modeloAuto')
+    expect(result[0]).not.toHaveProperty('token')
+    expect(result[0]).not.toHaveProperty('status')
+    expect(result[0]).not.toHaveProperty('paymentDate')
+    expect(result[0]).not.toHaveProperty('subtipoDescricao')
+    expect(listaPagamentos).toHaveBeenCalledWith(clientAuth, '12345678901', false)
   })
 
 })

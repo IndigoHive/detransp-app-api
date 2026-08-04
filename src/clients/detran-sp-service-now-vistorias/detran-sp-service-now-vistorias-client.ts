@@ -1,11 +1,13 @@
 import type { Logger } from 'pino'
 import type { Config } from '../../types'
+import type { DetranSpServiceNowAuth } from '../detran-sp-service-now/detran-sp-service-now-http'
 import { DetranSpServiceNowVistoriasHttp } from './detran-sp-service-now-vistorias-http'
 import type {
   CriaQRCodeBody,
   CriaQRCodeResult,
   GeraDocumentoBody,
   GeraDocumentoResult,
+  ListaPagamentosResult,
   VerificaQRCodeResult,
   VerificaVeiculoBody,
   VerificaVeiculoResult
@@ -20,43 +22,64 @@ export class DetranSpServiceNowVistoriasClient extends DetranSpServiceNowVistori
   constructor (params: DetranSpServiceNowVistoriasClientParams) {
     super({
       baseURL: params.config.serviceNow.api.baseUrl,
-      logger: params.logger
+      logger: params.logger,
+      serviceName: 'detran-sp-servicenow-vistorias',
+      userAgent: 'iOS/appsp/1.0.0',
+      withCredentials: true
     })
   }
 
   async verificaVeiculo (
+    auth: DetranSpServiceNowAuth,
     body: VerificaVeiculoBody
   ): Promise<VerificaVeiculoResult> {
     return (await this.axios.post(
       '/api/x_mdpdd_pev/v1/pev/validar-veiculo-vistoria',
-      body
+      body,
+      this.withAuth(auth)
     )).data
   }
 
   async criaQRCode (
+    auth: DetranSpServiceNowAuth,
     body: CriaQRCodeBody
   ): Promise<CriaQRCodeResult> {
     return (await this.axios.post(
       '/api/x_mdpdd_pev/v1/pev/gerar-cobranca',
-      body
+      body,
+      this.withAuth(auth)
     )).data
   }
 
   async verificaQRCode (
+    auth: DetranSpServiceNowAuth,
     paymentId: string
   ): Promise<VerificaQRCodeResult> {
     return (await this.axios.get(
       '/api/x_mdpdd_pev/v1/pev/status-qr-code',
-      { params: { paymentID: paymentId } }
+      { ...this.withAuth(auth), params: { paymentID: paymentId } }
     )).data
   }
 
   async geraDocumento (
+    auth: DetranSpServiceNowAuth,
     body: GeraDocumentoBody
   ): Promise<GeraDocumentoResult> {
     return (await this.axios.post(
       '/api/x_mdpdd_pev/v1/pev/gerar-documento',
-      body
+      body,
+      this.withAuth(auth)
+    )).data
+  }
+
+  async listaPagamentos (
+    auth: DetranSpServiceNowAuth,
+    documento: string,
+    docProprietario: boolean
+  ): Promise<ListaPagamentosResult> {
+    return (await this.axios.get(
+      `/api/x_mdpdd_pev/v1/pev/restituicao/listapagamentos/${documento}`,
+      { ...this.withAuth(auth), params: { docProprietario, pageSize: 100 } }
     )).data
   }
 }

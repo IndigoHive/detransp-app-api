@@ -17,6 +17,16 @@ type ProcessDefinition = {
   serviceName: string
 }
 
+type VerificaVeiculoVistoriaOutput =
+  | VerificaVeiculoResponseData
+  | (VerificaVeiculoResponseData & {
+    showSnackbar: {
+      variant: 'error'
+      title: string
+      description: string
+    }
+  })
+
 const PROCESS_DEFINITIONS = {
   'Classificação de Monta': {
     type: 'ESTRUTURA',
@@ -92,27 +102,34 @@ export function isOtherProcessLabel(value: string): boolean {
 export class VerificaVeiculoVistoriaService {
   constructor (private readonly client: DetranSpServiceNowVistoriasClient) {}
 
-  async run (input: VerificaVistoriaInput): Promise<VerificaVeiculoResponseData> {
+  async run (input: VerificaVistoriaInput): Promise<VerificaVeiculoVistoriaOutput> {
     const definition = this.getProcessDefinition(input)
     let result: VerificaVeiculoResult
     try {
-      result = await this.client.verificaVeiculo({
-        placa: input.placa.toUpperCase(),
-        renavam: input.renavam,
-        tipo: definition.type,
-        subtipo: definition.subtype,
-      })
+      result = await this.client.verificaVeiculo(
+        { token: input.token, cpf: input.cpf },
+        {
+          placa: input.placa.toUpperCase(),
+          renavam: input.renavam,
+          tipo: definition.type,
+          subtipo: definition.subtype,
+        }
+      )
     } catch (error) {
       if (this.isInvalidVehicleResponse(error)) {
-        return EMPTY_RESULT
+        return this.failure(error.message)
       }
       throw error
     }
     const response = result?.result
     const correlationId = response?.correlationID
 
-    if (!response?.success || !response.data.body.elegibilidade.podeVistoriar) {
-      return this.withCorrelationId(EMPTY_RESULT, correlationId)
+    if (!response?.success) {
+      return this.failure(response?.message, correlationId)
+    }
+
+    if (!response.data.body.elegibilidade.podeVistoriar) {
+      return this.failure(response.data.body.elegibilidade.motivo || response.message, correlationId)
     }
 
     return this.mapResponse(
@@ -134,7 +151,9 @@ export class VerificaVeiculoVistoriaService {
     return definition
   }
 
-  private isInvalidVehicleResponse (error: unknown): boolean {
+  private isInvalidVehicleResponse (
+    error: unknown,
+  ): error is DetranSpServiceNowVistoriasError & { statusCode: number } {
     if (!(error instanceof DetranSpServiceNowVistoriasError) || !isHttpError(error)) {
       return false
     }
@@ -174,5 +193,19 @@ export class VerificaVeiculoVistoriaService {
     correlationId: string | undefined,
   ): VerificaVeiculoResponseData {
     return correlationId ? { ...result, correlationId } : result
+  }
+
+  private failure (
+    description?: string,
+    correlationId?: string,
+  ): VerificaVeiculoVistoriaOutput {
+    return {
+      ...this.withCorrelationId(EMPTY_RESULT, correlationId),
+      showSnackbar: {
+        variant: 'error',
+        title: 'Não foi possível verificar o veículo',
+        description: description ?? 'Tente novamente em alguns instantes.',
+      },
+    }
   }
 }

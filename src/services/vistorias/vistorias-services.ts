@@ -1,12 +1,14 @@
 import { asFunction, type NameAndRegistrationPair } from 'awilix'
 import { CriaQRCodeVistoriaService } from './cria-qr-code-service'
 import { GeraAutorizacaoVistoriaService } from './gera-autorizacao-service'
+import { ListaPagamentosVistoriaService } from './lista-pagamentos-service'
 import { VerificaQRCodeVistoriaService } from './verifica-qr-code-service'
 import { VerificaVeiculoVistoriaService } from './verifica-veiculo-service'
 
 export type VistoriasServices = {
   criaQRCodeVistoriaService: CriaQRCodeVistoriaService
   geraAutorizacaoVistoriaService: GeraAutorizacaoVistoriaService
+  listaPagamentosVistoriaService: ListaPagamentosVistoriaService
   verificaQRCodeVistoriaService: VerificaQRCodeVistoriaService
   verificaVeiculoVistoriaService: VerificaVeiculoVistoriaService
 }
@@ -20,6 +22,10 @@ export function getVistoriasRegistrations (): Required<NameAndRegistrationPair<V
     geraAutorizacaoVistoriaService: asFunction(
       ({ detranSpServiceNowVistoriasClient }) =>
         new GeraAutorizacaoVistoriaService(detranSpServiceNowVistoriasClient)
+    ).scoped(),
+    listaPagamentosVistoriaService: asFunction(
+      ({ detranSpServiceNowVistoriasClient }) =>
+        new ListaPagamentosVistoriaService(detranSpServiceNowVistoriasClient)
     ).scoped(),
     verificaQRCodeVistoriaService: asFunction(
       ({ detranSpServiceNowVistoriasClient }) =>
