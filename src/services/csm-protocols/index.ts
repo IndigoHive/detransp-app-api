@@ -1,5 +1,4 @@
 export * from './get-protocol-case-detail-service'
 export * from './_common'
-export * from './available-services'
 export * from './list-protocol-messages-service'
 export * from './csm-protocols-services'
