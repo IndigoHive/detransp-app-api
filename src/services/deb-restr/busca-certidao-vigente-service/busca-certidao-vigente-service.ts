@@ -1,7 +1,7 @@
 import type { DetranSpServiceNowDebRestrClient } from '../../../clients/detran-sp-service-now-deb-restr'
 import { DetranSpServiceNowDebRestrError } from '../../../clients/detran-sp-service-now-deb-restr'
 import type { CertidaoVigenteResult, DebRestrVeiculoAuth } from '../types'
-import { formatDateBr } from '../utils'
+import { formatDateTimeBr } from '../utils'
 
 const CERTIDAO_DESCRICAO = 'Certidão de débitos e restrições do veículo'
 
@@ -17,14 +17,15 @@ export class BuscaCertidaoVigenteService {
   async run (auth: DebRestrVeiculoAuth): Promise<CertidaoVigenteResult> {
     try {
       const certidao = await this.client.buscaCertidao(auth, auth.renavam)
-      if (!certidao?.data) {
+      const certidaoData = certidao?.data?.[0]
+      if (!certidaoData) {
         return { disponivel: false, emissao: null, descricao: null }
       }
 
-      const dataHoraEmissao = certidao.data.attributes?.dataHoraEmissao
+      const dataHoraEmissao = certidaoData.attributes?.dataHoraEmissao
       return {
         disponivel: true,
-        emissao: dataHoraEmissao ? formatDateBr(dataHoraEmissao.slice(0, 10)) : null,
+        emissao: dataHoraEmissao ? formatDateTimeBr(dataHoraEmissao).slice(0, 10) : null,
         descricao: CERTIDAO_DESCRICAO,
       }
     } catch (err) {

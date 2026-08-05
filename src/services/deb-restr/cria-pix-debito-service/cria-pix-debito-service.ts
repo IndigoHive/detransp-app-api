@@ -8,7 +8,7 @@ import type {
 import { CodigoSefaz } from '../../../clients/detran-sp-service-now-pgto'
 import type { CriaPixDebitoResult, DebRestrVeiculoAuth, PixDebitoTipo } from '../types'
 import type { TiposServicoResolverService } from '../tipos-servico-resolver-service'
-import { buildVeiculoPixId } from '../utils'
+import { buildVeiculoPixId, normalizeUtcDateTime } from '../utils'
 
 const CODIGO_SEFAZ_BY_TIPO: Record<PixDebitoTipo, string> = {
   ipva: CodigoSefaz.IPVA,
@@ -90,7 +90,9 @@ export class CriaPixDebitoService {
 
     return {
       qrCode: qrCode?.attributes?.qrCode ?? null,
-      expiresAt: qrCode?.attributes?.dataExpiracaoQRCode ?? null,
+      expiresAt: qrCode?.attributes?.dataExpiracaoQRCode
+        ? normalizeUtcDateTime(qrCode.attributes.dataExpiracaoQRCode)
+        : null,
       idSolServico: qrCode?.attributes?.idSolServico ?? null,
     }
   }

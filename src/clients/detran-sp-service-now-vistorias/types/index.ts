@@ -1,0 +1,6 @@
+export * from './_common'
+export * from './documentos'
+export * from './pagamentos'
+export * from './qr-code'
+export * from './restituicao'
+export * from './verifica-veiculo'

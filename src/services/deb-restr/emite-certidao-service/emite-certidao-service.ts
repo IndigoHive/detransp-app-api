@@ -11,8 +11,8 @@ export class EmiteCertidaoService {
 
   async run (auth: DebRestrVeiculoAuth): Promise<EmiteCertidaoResult> {
     const result = await this.client.criaCertidao(auth, auth.renavam)
-    const attrs = result?.data?.attributes
-    const emitida = Boolean(result?.data)
+    const attrs = result?.data?.[0]?.attributes
+    const emitida = Boolean(attrs)
 
     // The flow renders the PDF right after emitting, so fetch the document in
     // the same call instead of requiring a second round-trip

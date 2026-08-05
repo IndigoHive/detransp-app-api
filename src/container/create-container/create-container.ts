@@ -14,8 +14,8 @@ import { ContainerServices } from '../types/container-services'
 import { Database } from '../../db/pool'
 import { PgFlowRepository } from '../../repositories/pg-flow-repository'
 import { PgSessionRepository } from '../../repositories/pg-session-repository'
-import { getAuthRegistrations, getFlowsRegistrations, getProtocolsRegistrations, getDashboardRegistrations, getLicenciamentoRegistrations, getDebRestrRegistrations, getTdvRegistrations, getPecasRegistrations } from '../../services'
-import { getClientRegistrations, DetranSpServiceNowLicenciamentoClient } from '../../clients'
+import { getAuthRegistrations, getFlowsRegistrations, getProtocolsRegistrations, getDashboardRegistrations, getLicenciamentoRegistrations, getDebRestrRegistrations, getTdvRegistrations, getPecasRegistrations, getVistoriasRegistrations } from '../../services'
+import { getClientRegistrations, DetranSpServiceNowLicenciamentoClient, DetranSpServiceNowVistoriasClient } from '../../clients'
 import { DetranSpServiceNowDebRestrClient } from '../../clients/detran-sp-service-now-deb-restr'
 import { DetranSpServiceNowPgtoClient } from '../../clients/detran-sp-service-now-pgto'
 import { RotaCaixaPostalClient } from '../../clients/rota-caixa-postal'
@@ -37,6 +37,7 @@ export function createContainer (
   container.register({
     config: asValue(config),
     detranSpServiceNowLicenciamentoClient: asClass(DetranSpServiceNowLicenciamentoClient).scoped(),
+    detranSpServiceNowVistoriasClient: asClass(DetranSpServiceNowVistoriasClient).scoped(),
     detranSpServiceNowDebRestrClient: asClass(DetranSpServiceNowDebRestrClient).scoped(),
     detranSpServiceNowPgtoClient: asClass(DetranSpServiceNowPgtoClient).scoped(),
     rotaCaixaPostalClient: asFunction(({ config: cfg, logger }: { config: Config; logger: Logger }) =>
@@ -79,6 +80,7 @@ export function createContainer (
   container.register(getDebRestrRegistrations())
   container.register(getTdvRegistrations())
   container.register(getPecasRegistrations())
+  container.register(getVistoriasRegistrations())
   container.register(getPool(config))
   container.register(getRepositoryRegistrations())
 

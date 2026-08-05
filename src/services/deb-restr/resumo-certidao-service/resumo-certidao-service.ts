@@ -1,6 +1,6 @@
 import type { DetranSpServiceNowDebRestrClient, VeiculoMeta } from '../../../clients/detran-sp-service-now-deb-restr'
 import type { DebRestrVeiculoAuth, ResumoCertidaoResult } from '../types'
-import { formatCurrencyBr, formatDateBr } from '../utils'
+import { formatCurrencyBr, formatDateBr, formatDateTimeBr } from '../utils'
 
 const NO_RESTRICTION_RE = /nada consta|não consta/i
 
@@ -88,8 +88,8 @@ export class ResumoCertidaoService {
   private async buscaDataEmissaoCertidao (auth: DebRestrVeiculoAuth): Promise<string | null> {
     try {
       const certidao = await this.client.buscaCertidao(auth, auth.renavam)
-      const dataHoraEmissao = certidao?.data?.attributes?.dataHoraEmissao
-      return dataHoraEmissao ? formatDateBr(dataHoraEmissao.slice(0, 10)) : null
+      const dataHoraEmissao = certidao?.data?.[0]?.attributes?.dataHoraEmissao
+      return dataHoraEmissao ? formatDateTimeBr(dataHoraEmissao).slice(0, 10) : null
     } catch {
       // lastIssuance is display-only enrichment — never break the resumo over it
       return null

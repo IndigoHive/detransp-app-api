@@ -1,4 +1,5 @@
 import type { DetranSpServiceNowTdvClient } from '../../../clients/detran-sp-service-now/tdv'
+import { formatCityName } from '../../../utils/format-city-name'
 import { extractBearerToken, extractCpfFromToken } from '../../../utils/token'
 
 type Dependencies = {
@@ -45,13 +46,13 @@ export class ValidacaoVendaService {
 
     // Check buyer's municipality from CEP
     const enderecoResult = await this.client.buscaEndereco(auth, input.cepComprador)
-    const buyerMunicipio = enderecoResult?.result?.codigoMunicipio?.toString()
-    const vehicleMunicipio = veiculo.codigoMunicipio
+    const buyerMunicipio = enderecoResult?.result?.municipio
+    const vehicleMunicipio = veiculo.nomeMunicipio
 
     const cidadesDiferentes = !!(
       vehicleMunicipio &&
       buyerMunicipio &&
-      vehicleMunicipio !== buyerMunicipio
+      formatCityName(vehicleMunicipio) !== formatCityName(buyerMunicipio)
     )
 
     return { cidadesDiferentes }

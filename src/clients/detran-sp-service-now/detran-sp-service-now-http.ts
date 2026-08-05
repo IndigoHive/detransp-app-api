@@ -7,6 +7,9 @@ const SERVICE_NAME = 'detran-sp-servicenow'
 export type DetranSpServiceNowHttpParams = {
   baseURL: string
   logger: Logger
+  serviceName?: string
+  userAgent?: string
+  withCredentials?: boolean
 }
 
 export type DetranSpServiceNowAuth = {
@@ -17,16 +20,20 @@ export type DetranSpServiceNowAuth = {
 export class DetranSpServiceNowHttp {
   protected readonly axios: AxiosInstance
   protected readonly logger: Logger
+  private readonly serviceName: string
 
   constructor (params: DetranSpServiceNowHttpParams) {
     this.logger = params.logger
+    this.serviceName = params.serviceName ?? SERVICE_NAME
 
     this.axios = axios.create({
       baseURL: params.baseURL,
       headers: {
         Accept: 'application/json',
-        'Content-Type': 'application/json'
-      }
+        'Content-Type': 'application/json',
+        ...(params.userAgent ? { 'User-Agent': params.userAgent } : {})
+      },
+      ...(params.withCredentials === undefined ? {} : { withCredentials: params.withCredentials })
     })
 
 
@@ -34,17 +41,23 @@ export class DetranSpServiceNowHttp {
   }
 
   protected withAuth (auth: DetranSpServiceNowAuth): AxiosRequestConfig {
-    if (!auth.cpf) {
-      throw createError(401, 'Token de autorização inválido ou expirado.', { expose: true })
+    if (!auth.token || !auth.cpf) {
+      throw createError(401, 'Token de autorização inválido ou expirado, ou CPF ausente.', { expose: true })
     }
 
     return {
       headers: {
         Authorization: `Bearer ${auth.token}`,
         'sn-token': auth.token,
-        'X-CPF-Usuario': auth.cpf,
+        'X-CPF-Usuario': auth.cpf
       }
     }
+  }
+
+  protected createResponseError (error: AxiosError): Error {
+    const data = error.response?.data as { error?: { detail?: string } } | undefined
+    const detail = data?.error?.detail ?? 'Tivemos um problema ao processar sua solicitação.'
+    return createError(error.response?.status ?? 502, detail, { expose: true })
   }
 
   private buildRequestMeta (config?: AxiosRequestConfig) {
@@ -61,14 +74,14 @@ export class DetranSpServiceNowHttp {
     this.axios.interceptors.request.use(
       (config) => {
         this.logger.debug(
-          { method: config.method, service: SERVICE_NAME, url: config.url },
+          { method: config.method, service: this.serviceName, url: config.url },
           'ServiceNow HTTP request'
         )
         return config
       },
       (error: AxiosError) => {
         this.logger.error(
-          { err: error.message, service: SERVICE_NAME },
+          { err: error.message, service: this.serviceName },
           'ServiceNow HTTP request error'
         )
         return Promise.reject(error)
@@ -78,7 +91,7 @@ export class DetranSpServiceNowHttp {
     this.axios.interceptors.response.use(
       (response) => {
         this.logger.debug(
-          { method: response.config.method, service: SERVICE_NAME, status: response.status, url: response.config.url },
+          { method: response.config.method, service: this.serviceName, status: response.status, url: response.config.url },
           'ServiceNow HTTP response'
         )
         return response
@@ -95,7 +108,7 @@ export class DetranSpServiceNowHttp {
             ...meta,
             fullUrl,
             responseData: data,
-            service: SERVICE_NAME,
+            service: this.serviceName,
             status: error.response?.status,
             errorCode: error.code,
             errorMessage: error.message,
@@ -103,10 +116,7 @@ export class DetranSpServiceNowHttp {
           'ServiceNow HTTP error'
         )
 
-        const detail = data?.error?.detail ?? 'Tivemos um problema ao processar sua solicitação.'
-        const code = data?.error?.message
-
-        throw createError(error.response?.status ?? 502, detail, { expose: true, code })
+        throw this.createResponseError(error)
       }
     )
   }
