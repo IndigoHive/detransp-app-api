@@ -1,0 +1,3562 @@
+​openapi: 3.0.1
+info:
+  title: API de Transferência Digital de Veículos (TDV)
+  description: >
+    # Início
+
+    Bem vindo(a) à documentação da API de TDV!
+
+
+    A API de TDV é uma API RESTful que você pode usar para realizar e consultar
+    TDVs.
+
+
+    A API de TDV usa HTTP. Respostas são retornadas no formato JSON.
+
+
+    Para acessar a API de TDV você precisará de um
+    _token_ de acesso de uma conta válida no GOV.BR. Os ambientes de
+    desenvolvimento e homologação utilizam contas do ambiente de homologação
+    (_staging_) do GOV.BR; o ambiente de produção utiliza contas do ambiente
+    de produção do GOV.BR.
+
+
+    As _base URL_ da API de TDV em cada ambiente
+    são listadas a seguir:
+
+    * __Desenvolvimento:__
+    [https://apisndev.detran.sp.gov.br](https://apisndev.detran.sp.gov.br)
+
+    * __Homologação:__
+    [https://apisnqa.detran.sp.gov.br](https://apisnqa.detran.sp.gov.br)
+
+    * __Produção:__
+    [https://apisn.detran.sp.gov.br](https://apisn.detran.sp.gov.br)
+
+
+    # Autenticação
+
+    Você precisará incluir um _token_ de acesso OAuth 2.0 de uma conta válida
+    no GOV.BR obtido através do IDPSP em todas as suas requisições à API de
+    TDV. Qualquer pessoa com o seu _token_ de
+    acesso OAuth 2.0 poderá ter acesso aos seus dados através da nossa API,
+    sendo assim mantenha-o privado. Não compartilhe-o com outros usuários e
+    certifique-se de removê-lo de quaisquer exemplos de código.
+
+
+    Para obter o seu _token_ de acesso você precisará utilizar uma das
+    aplicações autorizadas no IDPSP, pois o _token_ é devolvido para uma
+    *Redirect URL* que precisa estar cadastrada no IDPSP.
+
+
+    _Tokens_ de acesso fornecidos pelo IDPSP expiram a cada 1 (uma) hora. Se o
+    seu _token_ de acesso expirar será necessário obter um novo fazendo um
+    novo login na aplicação autorizada. Atualização (refresh) de _token_ de
+    acesso não é permitida.
+
+
+    Para passar a sua informação de autenticação para as suas requisições à
+    API, use o cabeçalho `Authorization` da requisição com o valor `Bearer` e
+    o _token_ de acesso separados por um espaço.
+
+
+    Para criar uma conta no ambiente de homologação do GOV.BR, acesse
+    [https://sso.staging.acesso.gov.br](https://sso.staging.acesso.gov.br) e
+    informe o seu CPF. Na tela de informação de dados bancários, clique em
+    __Tentar de outra forma__. Responda às perguntas apresentas com os
+    seguintes dados:
+
+    * __Nome da mãe:__ MAMAE
+
+    * __Data de nascimento:__ 01/01/1980
+
+
+    Siga os passos informando seu e-mail e código recebido, crie a senha e
+    sua conta estará pronta para ser usada.
+
+
+    # Fluxos de trabalho
+
+    O diagrama de estados UML do processo da TDV é apresentado a seguir. O
+    processo se desenvolve através da interação de dois papéis: o
+    __proprietário/vendedor__
+    e o __comprador__ do veículo. Os fluxos de trabalho principais de cada um
+    destes papéis são descritos nas próximas seções.
+
+
+    ![](//www.plantuml.com/plantuml/png/TP7FYjim48VlUWgnnq8Wpl_ieMoXbzvwMFPIzp18awseF38ZEpJFqqEWaAVmYrMADI4GxytwvlkDDEENs05tVUDL_Ese1OP6UqVOdLhKRV2dV53gbxEeiMcxaxOO3RksSu6KIkaEzLEbP_eDXulfVQWfeaUJoc33auQeOoNU8dbV4uxQGar790lQqI5ma-4eBqHU9ldBw_Ut6Mh33YoCzQNKLwd-ZJgauJpy3TecBJGjGqqcqC5nSuki9BBEBVikM3GU6Ax1cbAICJex_2FZ9k9hYMzkBqeyEe8yHOi-b9jju36naSJsmqGU7bD0OxwmwSaPa45aDU_8jqTifUKkjNo5Fv07ZiX7Dvn3JIsy5t4duZwB31GFo7UZ6TyF5-cw5xcQJzb01Zs8NCsL-l7ffvxnxFFrfrRbS_6iuGWqd86lq5xhysSzDiXqKTIbg0LEgCkYhaGjS49T5ReMjK1-LDT5tOXQe7zKDuLkHIsmVrItHTtTgxi2z_TmFyAqFnNpicqvg1SaspV-Fm00)
+
+
+    ## Proprietário
+
+    ### Criar uma TDV
+
+    Você possui o veículo de placa BLK7C34 e gostaria de vendê-lo para outra
+    pessoa. Para obter esse resultado você precisa de um _token_ de acesso
+    válido.
+
+
+    O diagrama de sequência UML a seguir apresenta os passos a serem
+    executados.
+
+
+    ![](https://www.plantuml.com/plantuml/png/nP9BZzem58Nt_0fhrgMJnC49B2hIa4wPya20MFIXwiOsoAeVaPEmwAZ_lVOm3CccgjH5LudydUjxxhcUrWtOfbLoKBcleA82tQ2xN0gk6tw7e4PKYZxCDdEqdnsU8LHYu0He-Cx_Jj13iKVtPoveAqqzWCeHXwXqw70v_VAjLx1Pxrn5Oq7NHswvfWBg8UF3wnrFbGGABxKJz7xnASbn_EQhraRn0zUCCsCdw7EHPsYsHhDYlyrM3dC5GjxuJqw1STzcUlBaBJNAgQXXucHkiYYAS1Z4unG7ZXehJbnDKFYhFycbQj_nV3NO7otRvn__DDjzn61K1eoNAIKnIMY9nm4-Hi0I4iCnZ9ykdNAZAWlF1eDH59CuJKWGlcJGWSjiEyzGjdee5lCyGn_MgvsFvL0irhirMXQhMR6xHjCfKs05V5S-X9gGVZwywZQFqWIJq4TJWh2sQ-mHB1CA5LBKW9R-HgUIvkHnsrDkMq2FxPbha6WXhDVfLl6U9ehyUDGTIAwuRheiptOPylWCqbY_kzlpI1ENZaC_rEiHZaWoUbtrnfep78GlkUuSS9oM9KjnwL8FWOwJU1mGKXvnpDCefJwnkd6zdQt_zX2k3l2_JFBtxgTSirR9tm00)
+
+
+    1. (Opcional) Recupere a lista de veículos que você possui. Envie uma
+    requisição para o _endpoint_ `GET`
+    https://apisn.detran.sp.gov.br/api/x_mdpdd_be_tdv/v1/tdv/veiculos.
+
+    Veja a requisição completa a seguir usando cURL:
+
+    ```
+
+    curl --request GET \
+        --url https://apisn.detran.sp.gov.br/api/x_mdpdd_be_tdv/v1/tdv/veiculos \
+        --header 'Authorization: Bearer {seu token de acesso}' \
+        --header 'X-CPF-Usuario: 22231049830'
+    ```
+
+
+    2. Crie uma TDV para o seu veículo. Envie uma requisição para o _endpoint_
+    `POST` https://apisn.detran.sp.gov.br/api/x_mdpdd_be_tdv/v1/tdv/transferencias-de-veiculos
+    contendo a placa do seu veículo e os seus dados. Veja a requisição completa
+    a seguir usando cURL:
+
+    ```
+
+    curl --request POST \
+        --url https://apisn.detran.sp.gov.br/api/x_mdpdd_be_tdv/v1/tdv/transferencias-de-veiculos \
+        --header 'Authorization: Bearer {seu token de acesso}' \
+        --header 'X-CPF-Usuario: 22231049830' \
+        --data '{"placaVeiculo": "BLK7C34", "nomeVendedor": "ZECA DO DETRAN", \
+        "emailVendedor": "zecadetran@gmail.com", "codigoVendedor": "22231049830", \
+        "origem": "1"}'
+    ```
+
+
+    3. A resposta da operação retorna o código da TDV criada
+    2da5b0deb8c6467cb3903f2ad764af14.
+    Tome nota desse código, pois ele será utilizado nas próximas requisições.
+
+
+    4. Realize a prova de vida. Utilize o autenticador recomendado para a
+    plataforma que você está utilizando, e.g. Liveness e obtenha o código da
+    prova de vida a348bbd83b7641ac9749066bf34e828c. Tome nota desse código, pois
+    ele será utilizado nas próximas requisições.
+
+
+    5. Informe os dados da venda. Envie uma requisição para o _endpoint_
+    `PATCH` https://apisn.detran.sp.gov.br/api/x_mdpdd_be_tdv/v1/tdv/transferencias-de-veiculos/2da5b0deb8c6467cb3903f2ad764af14
+    contendo os dados do comprador e da venda. Veja a requisição completa a
+    seguir usando cURL:
+
+    ```
+
+    curl --request PATCH \
+        --url https://apisn.detran.sp.gov.br/api/x_mdpdd_be_tdv/v1/tdv/transferencias-de-veiculos/2da5b0deb8c6467cb3903f2ad764af14 \
+        --header 'Authorization: Bearer {seu token de acesso}' \
+        --header 'X-CPF-Usuario: 22231049830' \
+        --data '{"codigoComprador": "05246487601", "nomeComprador": "MARIA ANGELICA FONSECA VELOSO MENDES", \
+        "emailComprador": "maria_mendes66@gmail.com", "cepComprador": "02873610", "bairroComprador": "Jardim Elisa Maria", \
+        "logradouroComprador": "Rua Juvenal Lira", "numeroComprador": "221", "complementoComprador": "CASA 1", \
+        "codigoProvaVidaVendedor": "a348bbd83b7641ac9749066bf34e828c", "valorVendaVeiculo": "87464", \
+        "kmVeiculo": "32675", "estado": "2"}'
+    ```
+
+    6. Confirme a intenção da venda e crie a Autorização para Transferência de
+
+    Propriedade de Veículo digital (ATPV-e). Envie uma requisição para o
+    _endpoint_ `PATCH`
+    https://apisn.detran.sp.gov.br/api/x_mdpdd_be_tdv/v1/tdv/transferencias-de-veiculos/2da5b0deb8c6467cb3903f2ad764af14
+    informando o novo estado `3` da TDV. Veja a requisição completa a seguir
+    usando cURL:
+
+    ```
+
+    curl --request PATCH \
+        --url https://apisn.detran.sp.gov.br/api/x_mdpdd_be_tdv/v1/tdv/transferencias-de-veiculos/2da5b0deb8c6467cb3903f2ad764af14 \
+        --header 'Authorization: Bearer {seu token de acesso}' \
+        --header 'X-CPF-Usuario: 22231049830' \
+        --data '{"codigoProvaVidaVendedor": "a348bbd83b7641ac9749066bf34e828c", "estado": "3"}'
+    ```
+
+    ### Assinar a Autorização para Transferência de Propriedade de Veículo
+    digital (ATPV-e)
+
+    Você possui a TDV de número TDV1470832 assinada pelo comprador e gostaria de
+    assinar eletronicamente a Autorização para Transferência de Propriedade de
+    Veículo digital (ATPV-e) da transação. Para obter esse resultado você
+    precisa de um _token_ de acesso válido.
+
+
+    O diagrama de sequência UML a seguir apresenta os passos a serem
+    executados.
+
+
+    ![](https:////www.plantuml.com/plantuml/png/LT31JeD0483XEqynwTbDiI1G3gO8QaaFza2G62_3xg2JhBi45fFM-EwkUj7JJFBFuSliPeUJMzvqCFh9aaSq3bQbPZAELe0pICt_Ot6ieQdQduWZ1_u0nFNtciEnQCezhDs4PXve8YCPPw58l1FBHTlrHk5L7ohgCvd4IIhxQ1j6mmPLciGuNCOVv4NAvf1UF9jE58jxjHEVqR4rehIASdWeHHHdQPW93kzkQidxssttLDtNLNi-uQFJX-xGO2PEmsVWKI0ypXjpa5RnYst-sjfVLh0Ze_mNlW00)
+
+
+    1. Usando uma aplicação homologada pelo ITI, acesse a página de autenticação
+    do ITI, e insira o código recebido via SMS no seu telefone celular. Para
+    autenticação
+    no ambiente de homologação você pode usar o código `12345`. O ITI devolve o
+    código `OC-348708-i0FBIciHE9XZDGIDVzyaWtlKXKTa8-yf`na _querystring_ da
+    _Redirect URL_ da aplicação cadastrada no ITI. Tome nota do _authorization
+    code_,
+    pois ele será utilizado na próxima requisição.
+
+
+    2. Assine o documento eletronicamente. Envie uma requisição para o
+    _endpoint_ `PATCH`
+    https://apisn.detran.sp.gov.br/api/x_mdpdd_be_tdv/v1/tdv/transferencias-de-veiculos/2da5b0deb8c6467cb3903f2ad764af14
+    informando o _authorization code_ e o novo estado `7` da TDV. Veja a
+    requisição completa a seguir usando cURL:
+
+    ```
+
+    curl --request PATCH \
+        --url https://apisn.detran.sp.gov.br/api/x_mdpdd_be_tdv/v1/tdv/transferencias-de-veiculos/2da5b0deb8c6467cb3903f2ad764af14 \
+        --header 'Authorization: Bearer {seu token de acesso}' \
+        --header 'X-CPF-Usuario: 22231049830' \
+        --header 'X-Authorization-Code: OC-348708-i0FBIciHE9XZDGIDVzyaWtlKXKTa8-yf' \
+        --data '{"estado": "7"}'
+    ```
+
+
+    ## Comprador
+
+    ### Assinar a Autorização para Transferência de Propriedade de Veículo
+    digital (ATPV-e)
+
+    Você está comprando o veículo de placa BLK7C34 para o qual o proprietário
+    criou a TDV de número TDV1470832 e gostaria de assinar eletronicamente a
+    Autorização para Transferência de Propriedade de Veículo digital (ATPV-e) da
+    transação. Para obter esse resultado você precisa de um _token_ de acesso
+    válido.
+
+
+    O diagrama de sequência UML a seguir apresenta os passos a serem
+    executados.
+
+
+    ![](https://www.plantuml.com/plantuml/png/rPDF2zCm6CRl-nHX1tSnh7-oj2jCrrNP175JInceXxT9wW9jKfAqXudVtNG3sIxYnOEdDdd3y_n-WMoj0-E6hftr_YkPx44vD2zQAPGJSmGMiLO-3_FJErI-gMv3wENC7q3urVIReVtR4YsT0MKROOHY4Ypc0ez2ig7LzZNJN7xNXUvw0roRJR2A22LfGeFm1JWvmiQPGSny5i8-qqTdKzUNRqyjfxmi3d_gMKOSLdN0HPqoIcZ2wdWTn4q4FA44cf3y45wSwmoHbr_L7Ufaz0YLvF2RpayZmUCqhIbB10b5267Ame2bGUHtW3G_dqdlGUKZLdKd-bVugnk-QgJfW87E1wUvO2sOQVL9MCcdz4UbnNJ1Y__RcdhyC_Qo5sta5PpK2XTUF4F70iSafIJ2tILqEnjSSxB-S5uVTxOiuFE-6ld7ONSet-k_bzWAnVqB-GK0)
+
+
+    1. Liste as TDVs ativas nas quais você foi citado como comprador. Envie uma
+    requisição para o _endpoint_ `GET`
+    https://apisn.detran.sp.gov.br/api/x_mdpdd_be_tdv/v1/tdv/transferencias-de-veiculos.
+    Veja a requisição completa a seguir usando cURL:
+
+    ```
+
+    curl --request GET \
+        --url https://apisn.detran.sp.gov.br/api/x_mdpdd_be_tdv/v1/tdv/transferencias-de-veiculos?codigoComprador=05246487601&ativa=true \
+        --header 'Authorization: Bearer {seu token de acesso}' \
+        --header 'X-CPF-Usuario: 05246487601'
+    ```
+
+
+    2. A resposta da operação retorna a lista de TDVs ativas nas quais você foi
+    é o vendedor ou o comprador. Localize a TDV criada para o veículo de placa
+    BLK7C34
+    cujo código é 2da5b0deb8c6467cb3903f2ad764af14. Tome nota desse código,
+    pois ele será utilizado nas próximas requisições.
+
+
+    3. Realize a prova de vida. Utilize o autenticador recomendado para a
+    plataforma que você está utilizando, e.g. Liveness e obtenha o código da
+    prova de vida 42ed388b6c7e41e1a18c10c8026c7a4f. Tome nota desse código, pois
+    ele será utilizado nas próximas requisições.
+
+
+    4. Confirme a intenção de compra. Envie uma requisição para o _endpoint_
+    `PATCH`
+    https://apisn.detran.sp.gov.br/api/x_mdpdd_be_tdv/v1/tdv/transferencias-de-veiculos/2da5b0deb8c6467cb3903f2ad764af14
+    informando o código da prova de vida realizado e o novo estado `4` da TDV.
+    Veja a requisição completa a seguir usando cURL:
+
+    ```
+
+    curl --request PATCH \
+        --url https://apisn.detran.sp.gov.br/api/x_mdpdd_be_tdv/v1/tdv/transferencias-de-veiculos/2da5b0deb8c6467cb3903f2ad764af14 \
+        --header 'Authorization: Bearer {seu token de acesso}' \
+        --header 'X-CPF-Usuario: 05246487601' \
+        --data '{"codigoProvaVidaComprador": "42ed388b6c7e41e1a18c10c8026c7a4f", "estado": "4"}'
+    ```
+
+
+    5. Confirme a autodeclaração de residência. Envie uma requisição para o
+    _endpoint_
+    `PATCH`
+    https://apisn.detran.sp.gov.br/api/x_mdpdd_be_tdv/v1/tdv/transferencias-de-veiculos/2da5b0deb8c6467cb3903f2ad764af14
+    informando o código da prova de vida realizado, a confirmação da
+    autodeclaração
+    de residência e o novo estado `5` da TDV. Veja a requisição completa a
+    seguir usando cURL:
+
+    ```
+
+    curl --request PATCH \
+        --url https://apisn.detran.sp.gov.br/api/x_mdpdd_be_tdv/v1/tdv/transferencias-de-veiculos/2da5b0deb8c6467cb3903f2ad764af14 \
+        --header 'Authorization: Bearer {seu token de acesso}' \
+        --header 'X-CPF-Usuario: 05246487601' \
+        --data '{"codigoProvaVidaComprador": "42ed388b6c7e41e1a18c10c8026c7a4f", "estado": "5", \
+        "confirmacaoAutodeclaracaoResidenciaComprador": "true"}'
+    ```
+
+
+    6. Usando uma aplicação homologada pelo ITI, acesse a página de autenticação
+    do ITI, e insira o código recebido via SMS no seu telefone celular. Para
+    autenticação
+    no ambiente de homologação você pode usar o código `12345`. O ITI devolve o
+    código `OC-348642-mh1tBs0zA49NX9OBsTCaSGVvdQuBHTLo`na _querystring_ da
+    _Redirect URL_ da aplicação cadastrada no ITI. Tome nota do _authorization
+    code_,
+    pois ele será utilizado na próxima requisição.
+
+
+    7. Assine o documento eletronicamente. Envie uma requisição para o
+    _endpoint_
+    `PATCH`
+    https://apisn.detran.sp.gov.br/api/x_mdpdd_be_tdv/v1/tdv/transferencias-de-veiculos/2da5b0deb8c6467cb3903f2ad764af14
+    informando o _authorization code_ e o novo estado `6` da TDV. Veja a
+    requisição completa a
+    seguir usando cURL:
+
+    ```
+
+    curl --request PATCH \
+        --url https://apisn.detran.sp.gov.br/api/x_mdpdd_be_tdv/v1/tdv/transferencias-de-veiculos/2da5b0deb8c6467cb3903f2ad764af14 \
+        --header 'Authorization: Bearer {seu token de acesso}' \
+        --header 'X-CPF-Usuario: 05246487601' \
+        --header 'X-Authorization-Code: OC-348642-mh1tBs0zA49NX9OBsTCaSGVvdQuBHTLo' \
+        --data '{"estado": "6"}'
+    ```
+
+
+    ### Pagar os débitos do veículo via PIX
+
+    Você está comprando o veículo de placa BLK7C34, o proprietário assinou
+    eletronicamente a TDV de número TDV1470832 e você gostaria de pagar os
+    débitos da TDV. Para obter esse resultado você precisa de um _token_ de
+    acesso válido.
+
+
+    O diagrama de sequência UML a seguir apresenta os passos a serem
+    executados.
+
+
+    ![](https://www.plantuml.com/plantuml/png/hP31QeGm443lViNWFMZLQkj1B5fARssHNaeFOpB2G3PcaxZVlyQRzptDyDx0W-bzG1UsYqxiFbcoHHCW7JIJ2PG2Uf2Qp_BjwnEcyVUGQ3dP3q1qSMtXuts2B3WqVY57HZ9weKZSYEMcLvyL2f_dND7y8kkgRkHSlkRbKg1gwWgNfohR5OVL9sWPXEXYlONnW7__ZqrTdP2hedFg-sU8h2UZubVk)
+
+
+    1. (Opcional) Liste os débitos da TDV. Envie uma requisição para o
+    _endpoint_ `GET`
+    https://apisn.detran.sp.gov.br/api/x_mdpdd_be_tdv/v1/tdv/transferencias-de-veiculos/2da5b0deb8c6467cb3903f2ad764af14/debitos.
+
+    Veja a requisição completa a seguir usando cURL:
+
+    ```
+
+    curl --request GET \
+        --url https://apisn.detran.sp.gov.br/api/x_mdpdd_be_tdv/v1/tdv/transferencias-de-veiculos/2da5b0deb8c6467cb3903f2ad764af14/debitos \
+        --header 'Authorization: Bearer {seu token de acesso}' \
+        --header 'X-CPF-Usuario: 05246487601'
+    ```
+
+
+    2. Obtenha o _QR code_ para pagamento dos débitos da TDV. Envie uma
+    requisição para o _endpoint_ `GET`
+    https://apisn.detran.sp.gov.br/api/x_mdpdd_be_tdv/v1/tdv/transferencias-de-veiculos/2da5b0deb8c6467cb3903f2ad764af14/qr-code.
+    Veja a requisição completa a seguir usando cURL:
+
+    ```
+
+    curl --request GET \
+        --url https://apisn.detran.sp.gov.br/api/x_mdpdd_be_tdv/v1/tdv/transferencias-de-veiculos/2da5b0deb8c6467cb3903f2ad764af14/debitos \
+        --header 'Authorization: Bearer {seu token de acesso}' \
+        --header 'X-CPF-Usuario: 05246487601'
+    ```
+
+
+    3. Realize o pagamento do PIX usando o aplicativo do seu banco. Assim que o
+    sistema identificar o pagamento ele atualizará o estado da TDV para `8`,
+    __Taxa de serviço paga__.
+    O sistema iniciará a criação do documento e assim que o veículo estiver no
+    seu nome o sistema atualizará o estado da TDV para `9`, __Transferência
+    concluída__.
+
+
+    ## Proprietário/Comprador
+
+    ### Cancelar TDV
+
+    Você está negociando o veículo de placa BLK7C34 para o qual a TDV de número
+    TDV1470832 foi criada e você gostaria de cancelar a transação. A TDV só
+    pode ser cancelada enquanto não há comunicação de venda gerada para ela, ou
+    seja,
+    até o estado `6`, __ATPV-e assinada pelo comprador__ (vide digrama de
+    estados UML
+    do processo). Para obter esse resultado você precisa de um _token_ de acesso
+    válido.
+
+
+    O diagrama de sequência UML a seguir apresenta os passos a serem
+    executados.
+
+
+    ![](https://www.plantuml.com/plantuml/png/VP2nJiCm48RtF8NLWIsgaxfEYLHe5H2mTOYw88QBVK4dkRPbErqGxuvB5h8mtKd_wVjE_o4c26cwcCBdIOeysCHMdI6q2LSC8bE6bk7nzCRwf_Dl29wAVC3AXzlQifVddgrJ01j736WLGImrbbSaDHaN7vNJzEawT_41j0jxlgs55Bj6ykeE4brXdyA41VYCpCoCRc-kzu-5vNJikzV_FEjQmtRW6eUTaa8sQjZSyyrOWswaWB4INnWJQDUoYdylRVE7_L_qUQOM1xGwL_K3)
+
+
+    1. Liste as TDVs ativas às quais você está associado. Envie uma requisição
+    para o _endpoint_ `GET`
+    https://apisn.detran.sp.gov.br/api/x_mdpdd_be_tdv/v1/tdv/transferencias-de-veiculos.
+    Veja a requisição completa a seguir usando cURL:
+
+    ```
+
+    curl --request GET \
+        --url https://apisn.detran.sp.gov.br/api/x_mdpdd_be_tdv/v1/tdv/transferencias-de-veiculos?codigoComprador=05246487601&ativa=true \
+        --header 'Authorization: Bearer {seu token de acesso}' \
+        --header 'X-CPF-Usuario: 05246487601'
+    ```
+
+
+    2. A resposta da operação retorna a lista de TDVs ativas nas quais você foi
+    é o vendedor ou o comprador. Localize a TDV criada para o veículo de placa
+    BLK7C34
+    cujo código é 2da5b0deb8c6467cb3903f2ad764af14. Tome nota desse código,
+    pois ele será utilizado na próxima requisição.
+
+
+    3. Cancele a TDV. Envie uma requisição para o _endpoint_ `PATCH`
+    https://apisn.detran.sp.gov.br/api/x_mdpdd_be_tdv/v1/tdv/transferencias-de-veiculos/2da5b0deb8c6467cb3903f2ad764af14
+    informando o estado `10`, __Transferência cancelada__. Veja a requisição
+    completa a seguir usando cURL:
+
+    ```
+
+    curl --request PATCH \
+        --url https://apisn.detran.sp.gov.br/api/x_mdpdd_be_tdv/v1/tdv/transferencias-de-veiculos/2da5b0deb8c6467cb3903f2ad764af14 \
+        --header 'Authorization: Bearer {seu token de acesso}' \
+        --header 'X-CPF-Usuario: 22231049830' \
+        --data '{"estado": "10"}'
+    ```
+
+
+    # Exemplos de código
+
+
+    ## ServiceNow Server Script
+
+    ```
+
+    var request = new sn_ws.RESTMessageV2();
+
+    request.setHttpMehtod('GET');
+
+    request.setEndpoint('https://apisn.detran.sp.gov.br/api/x_mdpdd_be_tdv/v1/tdv/veiculos');
+
+    request.setRequestHeader('Authorization', 'Bearer {seu token de acesso}');
+
+    var response = request.execute();
+
+    gs.info(response.getBody());
+
+    ```
+
+
+    ## ServiceNow Client Script
+
+    ```
+
+    $http({
+        method: 'GET',
+        url: '/api/x_mdpdd_be_tdv/v1/tdv/veiculos'
+    }).then(function(response){
+        console.log(response)
+    });
+
+    ```
+
+
+    # Referência OpenAPI
+  version: v1
+externalDocs:
+  url: ''
+servers:
+- url: https://apisndev.detran.sp.gov.br
+  description: Servidor de desenvolvimento
+- url: https://apisnqa.detran.sp.gov.br
+  description: Servidor de homologação
+- url: https://apisn.detran.sp.gov.br
+  description: Servidor de produção
+paths:
+  "/api/x_mdpdd_be_tdv/v1/tdv/cidadaos/{cpf}":
+    get:
+      description: Retorna os dados do cidadão identificado pelo CPF informado.
+      responses:
+        '200':
+          description: Operação executada com sucesso.
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/CidadaoResponse"
+              examples:
+                Cidadao encontrado:
+                  "$ref": "#/components/examples/CidadaoEncontradoResponse"
+        '401':
+          "$ref": "#/components/responses/Unauthorized"
+        '403':
+          "$ref": "#/components/responses/Forbidden"
+        '404':
+          description: O CPF procurado não foi encontrado.
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+              examples:
+                CPF não encontrado:
+                  "$ref": "#/components/examples/CPFNaoEncontradoError"
+        '500':
+          "$ref": "#/components/responses/FalhaNaOperacao"
+        '503':
+          "$ref": "#/components/responses/ServiceUnavailable"
+      summary: Consulta um cidadão pelo número do CPF.
+      operationId: getCidadao
+      tags:
+      - tdv
+      parameters:
+      - "$ref": "#/components/parameters/cpf"
+      - "$ref": "#/components/parameters/campos"
+      - "$ref": "#/components/parameters/userAgent"
+      - "$ref": "#/components/parameters/xIntegrityToken"
+      - "$ref": "#/components/parameters/xCPFUsuario"
+  "/api/x_mdpdd_be_tdv/v1/tdv/enderecos/{cep}":
+    get:
+      description: Retorna os dados do CEP informado.
+      responses:
+        '200':
+          description: Operação executada com sucesso.
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/CEPResponse"
+              examples:
+                CEP encontrado:
+                  "$ref": "#/components/examples/CEPEncontradoResponse"
+        '401':
+          "$ref": "#/components/responses/Unauthorized"
+        '403':
+          "$ref": "#/components/responses/Forbidden"
+        '404':
+          description: O CEP procurado não foi encontrado.
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+              examples:
+                CPF não encontrado:
+                  "$ref": "#/components/examples/CEPNaoEncontradoError"
+        '500':
+          "$ref": "#/components/responses/FalhaNaOperacao"
+        '503':
+          "$ref": "#/components/responses/ServiceUnavailable"
+      summary: Consulta o CEP informado.
+      operationId: getCEP
+      tags:
+      - tdv
+      parameters:
+      - "$ref": "#/components/parameters/cep"
+      - "$ref": "#/components/parameters/campos"
+      - "$ref": "#/components/parameters/userAgent"
+      - "$ref": "#/components/parameters/xIntegrityToken"
+      - "$ref": "#/components/parameters/xCPFUsuario"
+  "/api/x_mdpdd_be_tdv/v1/tdv/provas-de-vida":
+    post:
+      summary: Solicita a prova de vida do usuário para a realização da TDV.
+      description: Solicita a prova de vida do usuário para a realização da TDV.
+      operationId: createProvaVidaTDV
+      tags:
+      - tdv
+      responses:
+        '200':
+          description: Prova de vida solicitada.
+          content:
+            application/vnd.api+json:
+              schema:
+                "$ref": "#/components/schemas/ProvaVidaDocument"
+              examples:
+                Prova de vida solicitada:
+                  "$ref": "#/components/examples/ProvaVidaSolicitadaDocument"
+        '401':
+          "$ref": "#/components/responses/Unauthorized"
+        '403':
+          "$ref": "#/components/responses/Forbidden"
+        '500':
+          "$ref": "#/components/responses/InternalServerError"
+        '503':
+          "$ref": "#/components/responses/ServiceUnavailable"
+  "/api/x_mdpdd_be_tdv/v1/tdv/provas-de-vida/{id}":
+    get:
+      summary: Consulta a prova de vida do usuário para a realização da TDV.
+      description: Retorna a prova de vida do usuário para a realização da TDV. Se
+        o usuário não tomou nenhuma ação na prova de vida, a resposta não conterá
+        nenhum atributo da prova de vida. Se o usuário autorizou a prova de vida,
+        a resposta conterá o atributo `autorizada` com o valor `true`. Se o usuário
+        negou a prova de vida, a resposta conterá o atributo `autorizada` com o valor
+        `false`, além do atributo `motivoNegacao` com os detalhes do motivo da negação
+        da prova de vida.
+      operationId: getProvaVidaTDV
+      tags:
+      - tdv
+      parameters:
+      - "$ref": "#/components/parameters/idProvaVida"
+      responses:
+        '200':
+          description: Operação executada com sucesso.
+          content:
+            application/vnd.api+json:
+              schema:
+                "$ref": "#/components/schemas/ProvaVidaDocument"
+              examples:
+                Prova de vida não realizada:
+                  "$ref": "#/components/examples/ProvaVidaNaoRealizadaDocument"
+                Prova de vida autorizada:
+                  "$ref": "#/components/examples/ProvaVidaAutorizadaDocument"
+                Prova de vida negada:
+                  "$ref": "#/components/examples/ProvaVidaNegadaDocument"
+        '401':
+          "$ref": "#/components/responses/Unauthorized"
+        '403':
+          "$ref": "#/components/responses/Forbidden"
+        '404':
+          "$ref": "#/components/responses/NotFound"
+        '500':
+          "$ref": "#/components/responses/InternalServerError"
+        '503':
+          "$ref": "#/components/responses/ServiceUnavailable"
+  "/api/x_mdpdd_be_tdv/v1/tdv/transferencias-de-veiculos":
+    get:
+      description: Retorna uma lista de TDVs de acordo com parâmetros informados.
+      responses:
+        '200':
+          description: Operação executada com sucesso.
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/TDVListResponse"
+              examples:
+                TDVs encontradas:
+                  "$ref": "#/components/examples/TDVsEncontradasResponse"
+        '204':
+          "$ref": "#/components/responses/NoContent"
+        '401':
+          "$ref": "#/components/responses/Unauthorized"
+        '403':
+          "$ref": "#/components/responses/Forbidden"
+        '500':
+          "$ref": "#/components/responses/FalhaNaOperacao"
+        '503':
+          "$ref": "#/components/responses/ServiceUnavailable"
+      summary: Lista TDVs.
+      operationId: listTDV
+      tags:
+      - tdv
+      parameters:
+      - "$ref": "#/components/parameters/campos"
+      - "$ref": "#/components/parameters/userAgent"
+      - "$ref": "#/components/parameters/xIntegrityToken"
+      - "$ref": "#/components/parameters/xCPFUsuario"
+    post:
+      description: Cria uma TDV com os dados informados.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/TDV"
+            examples:
+              Criar TDV:
+                description: Cria uma TDV a partir do início do processo.
+                value:
+                  placaVeiculo: BLK7C34
+                  nomeVendedor: ZECA DO DETRAN
+                  emailVendedor: zecadetran@gmail.com
+                  codigoVendedor: '22231049830'
+                  origem: '1'
+              Criar TDV (e-Notariado):
+                description: Cria uma TDV com origem numa comunicação de venda registrada
+                  através do sistema e-Notariado.
+              Criar TDV (CDT):
+                description: Cria uma TDV com origem numa comunicação de venda registrada
+                  através do aplicativo da Carteira Digital de Trânsito (CDT).
+              Criar TDV (Renave):
+                description: Cria uma TDV com origem numa comunicação de venda registrada
+                  através do sistema Renave seminovos.
+      responses:
+        '201':
+          description: Operação executada com sucesso.
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/TDVResponse"
+              examples:
+                TDV criada:
+                  "$ref": "#/components/examples/TDVCriadaResponse"
+        '400':
+          description: A requisição enviada não é válida.
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+              examples:
+                Parâmetro obrigatório não informado:
+                  "$ref": "#/components/examples/ParametroObrigatorioNaoInformadoError"
+                Estado inválido:
+                  "$ref": "#/components/examples/EstadoInvalidoError"
+                CPF do comprador inválido:
+                  "$ref": "#/components/examples/CPFInvalidoError"
+                CNPJ do comprador inválido:
+                  "$ref": "#/components/examples/CNPJInvalido"
+        '401':
+          "$ref": "#/components/responses/Unauthorized"
+        '403':
+          "$ref": "#/components/responses/Forbidden"
+        '404':
+          description: A TDV procurada não foi encontrada.
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+              examples:
+                TDV não encontrada:
+                  "$ref": "#/components/examples/TDVNaoEncontradaError"
+        '406':
+          description: O servidor não pode executar a requisição.
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+              examples:
+                Veiculo não encontrado:
+                  "$ref": "#/components/examples/VeiculoNaoEncontradoError"
+                Veiculo sem CRV digital:
+                  "$ref": "#/components/examples/VeiculoSemCRVDigitalError"
+                ATPV-e existente:
+                  "$ref": "#/components/examples/ATPVeExistenteError"
+                Veículo com restrição financeira:
+                  "$ref": "#/components/examples/VeiculoComRestricaoFinanceiraError"
+                Restrição encontrada:
+                  "$ref": "#/components/examples/RestricaoEncontradaError"
+                Vistoria não encontrada:
+                  "$ref": "#/components/examples/VistoriaNaoEncontradaError"
+                Vistoria com apontamentos:
+                  "$ref": "#/components/examples/VistoriaComApontamentosError"
+                Prova de vida inválida:
+                  "$ref": "#/components/examples/ProvaDeVidaInvalidaError"
+                Comprador e proprietário são a mesma pessoa:
+                  "$ref": "#/components/examples/CPFCNPJInvalidoError"
+                Email do comprador inválido:
+                  "$ref": "#/components/examples/EmailInvalidoError"
+                Complemento do comprador inválido:
+                  "$ref": "#/components/examples/ComplementoInvalidoError"
+                Quilometragem acima do limite:
+                  "$ref": "#/components/examples/QuilometragemAcimaDoLimiteError"
+                Quilometragem menor do que a da vistoria:
+                  "$ref": "#/components/examples/QuilometragemMenorQueVistoriaError"
+                CPF do comprador não encontrado:
+                  "$ref": "#/components/examples/CPFNaoEncontradoError"
+                CPF de cidadão falecido:
+                  "$ref": "#/components/examples/CidadaoFalecidoError"
+                CEP do comprador não encontrado:
+                  "$ref": "#/components/examples/CEPNaoEncontradoError"
+                CEP do comprador não é de SP:
+                  "$ref": "#/components/examples/CEPInvalidoError"
+                Comprador de outro município e veículo sem placa padrão Mercosul:
+                  "$ref": "#/components/examples/VeiculoSemPlacaMercosulError"
+                ATPV-e não encontrada:
+                  "$ref": "#/components/examples/ATPVeNaoEncontradaError"
+                Autodeclaração de residência não confirmada:
+                  "$ref": "#/components/examples/AutodeclaracaoResidenciaNaoConfirmadaError"
+        '500':
+          "$ref": "#/components/responses/FalhaNaOperacao"
+        '503':
+          "$ref": "#/components/responses/ServiceUnavailable"
+      summary: Cria uma TDV.
+      operationId: createTDV
+      tags:
+      - tdv
+      parameters:
+      - "$ref": "#/components/parameters/userAgent"
+      - "$ref": "#/components/parameters/xIntegrityToken"
+      - "$ref": "#/components/parameters/xCPFUsuario"
+  "/api/x_mdpdd_be_tdv/v1/tdv/transferencias-de-veiculos/{codigoTransferenciaVeiculo}":
+    get:
+      description: Retorna a TDV identificada pelo código informado.
+      responses:
+        '200':
+          description: Operação executada com sucesso.
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/TDVResponse"
+              examples:
+                TDV encontrada:
+                  "$ref": "#/components/examples/TDVEncontradaResponse"
+        '401':
+          "$ref": "#/components/responses/Unauthorized"
+        '403':
+          "$ref": "#/components/responses/Forbidden"
+        '404':
+          description: A TDV procurada não foi encontrada.
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+              examples:
+                TDV não encontrada:
+                  "$ref": "#/components/examples/TDVNaoEncontradaError"
+        '500':
+          "$ref": "#/components/responses/FalhaNaOperacao"
+        '503':
+          "$ref": "#/components/responses/ServiceUnavailable"
+      summary: Consulta uma TDV.
+      operationId: getTDV
+      tags:
+      - tdv
+      parameters:
+      - "$ref": "#/components/parameters/codigoTransferenciaVeiculo"
+      - "$ref": "#/components/parameters/campos"
+      - "$ref": "#/components/parameters/userAgent"
+      - "$ref": "#/components/parameters/xIntegrityToken"
+      - "$ref": "#/components/parameters/xCPFUsuario"
+    patch:
+      description: Atualiza a TDV informada.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/TDV"
+            examples:
+              Salvar dados da venda:
+                description: Salva os dados da TDV sem alterar o seu estado.
+                value:
+                  codigoComprador: '05246487601'
+                  nomeComprador: MARIA ANGELICA FONSECA VELOSO MENDES
+                  emailComprador: maria_mendes66@gmail.com
+                  cepComprador: '02873610'
+                  bairroComprador: Jardim Elisa Maria
+                  logradouroComprador: Rua Juvenal Lira
+                  numeroComprador: '221'
+                  complementoComprador: CASA 1
+                  codigoProvaVidaVendedor: a348bbd83b7641ac9749066bf34e828c
+              Atualizar dados da venda:
+                description: Atualiza o estado da TDV para __Dados da venda informados__.
+                value:
+                  valorVendaVeiculo: '87464'
+                  kmVeiculo: '32675'
+                  codigoProvaVidaVendedor: a348bbd83b7641ac9749066bf34e828c
+                  estado: '2'
+              Criar ATPV-e:
+                description: Atualiza o estado da TDV para __ATPV-e criada__.
+                value:
+                  codigoProvaVidaVendedor: a348bbd83b7641ac9749066bf34e828c
+                  estado: '3'
+              Confirmar intenção de compra:
+                description: Atualiza o estado da TDV para __Intenção de compra confirmada__.
+                value:
+                  codigoProvaVidaComprador: 42ed388b6c7e41e1a18c10c8026c7a4f
+                  estado: '4'
+              Confirmar autodeclaração de residência:
+                description: Atualiza o estado da TDV para __Autodeclaração de residência
+                  confirmada__.
+                value:
+                  codigoProvaVidaComprador: 42ed388b6c7e41e1a18c10c8026c7a4f
+                  estado: '5'
+                  confirmacaoAutodeclaracaoResidenciaComprador: 'true'
+              Atualizar assinatura do comprador:
+                description: Atualiza o estado da TDV para __ATPV-e assinada pelo
+                  comprador__.
+                value:
+                  estado: '6'
+              Atualizar assinatura do vendedor:
+                description: Atualiza o estado da TDV para __ATPV-e assinada pelo
+                  vendedor e comunicação de venda gerada__.
+                value:
+                  estado: '7'
+              Cancelar TDV:
+                description: Atualiza o estado da TDV para __Transferência cancelada__.
+                value:
+                  estado: '10'
+      responses:
+        '200':
+          description: Operação executada com sucesso.
+          content:
+            application/json:
+              schema:
+                description: Resposta de sucesso da operação de atualização de TDV.
+                type: object
+                properties:
+                  result:
+                    "$ref": "#/components/schemas/TDV"
+              examples:
+                TDV atualizada com sucesso:
+                  description: A TDV foi atualizada com sucesso.
+                  value:
+                    result:
+                      codigoTransferenciaVeiculo: 2da5b0deb8c6467cb3903f2ad764af14
+        '400':
+          description: A requisição enviada não é válida.
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+              examples:
+                Parâmetro obrigatório não informado:
+                  "$ref": "#/components/examples/ParametroObrigatorioNaoInformadoError"
+                Estado inválido:
+                  "$ref": "#/components/examples/EstadoInvalidoError"
+                CPF do comprador inválido:
+                  "$ref": "#/components/examples/CPFInvalidoError"
+                CNPJ do comprador inválido:
+                  "$ref": "#/components/examples/CNPJInvalido"
+        '401':
+          "$ref": "#/components/responses/Unauthorized"
+        '403':
+          "$ref": "#/components/responses/Forbidden"
+        '404':
+          description: A TDV procurada não foi encontrada.
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+              examples:
+                TDV não encontrada:
+                  "$ref": "#/components/examples/TDVNaoEncontradaError"
+        '406':
+          description: O servidor não pode executar a requisição.
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+              examples:
+                Restrição encontrada:
+                  "$ref": "#/components/examples/RestricaoEncontradaError"
+                Prova de vida inválida:
+                  "$ref": "#/components/examples/ProvaDeVidaInvalidaError"
+                Comprador e proprietário são a mesma pessoa:
+                  "$ref": "#/components/examples/CPFCNPJInvalidoError"
+                Email do comprador inválido:
+                  "$ref": "#/components/examples/EmailInvalidoError"
+                Complemento do comprador inválido:
+                  "$ref": "#/components/examples/ComplementoInvalidoError"
+                Quilometragem acima do limite:
+                  "$ref": "#/components/examples/QuilometragemAcimaDoLimiteError"
+                Quilometragem menor do que a da vistoria:
+                  "$ref": "#/components/examples/QuilometragemMenorQueVistoriaError"
+                CPF do comprador não encontrado:
+                  "$ref": "#/components/examples/CPFNaoEncontradoError"
+                CPF de cidadão falecido:
+                  "$ref": "#/components/examples/CidadaoFalecidoError"
+                CEP do comprador não encontrado:
+                  "$ref": "#/components/examples/CEPNaoEncontradoError"
+                CEP do comprador não é de SP:
+                  "$ref": "#/components/examples/CEPInvalidoError"
+                Comprador de outro município e veículo sem placa padrão Mercosul:
+                  "$ref": "#/components/examples/VeiculoSemPlacaMercosulError"
+                ATPV-e não encontrada:
+                  "$ref": "#/components/examples/ATPVeNaoEncontradaError"
+                Autodeclaração de residência não confirmada:
+                  "$ref": "#/components/examples/AutodeclaracaoResidenciaNaoConfirmadaError"
+        '500':
+          "$ref": "#/components/responses/FalhaNaOperacao"
+        '503':
+          "$ref": "#/components/responses/ServiceUnavailable"
+      summary: Atualiza uma TDV.
+      operationId: updateTDV
+      tags:
+      - tdv
+      parameters:
+      - "$ref": "#/components/parameters/codigoTransferenciaVeiculo"
+      - "$ref": "#/components/parameters/userAgent"
+      - "$ref": "#/components/parameters/xIntegrityToken"
+      - "$ref": "#/components/parameters/xCPFUsuario"
+      - "$ref": "#/components/parameters/xAuthorizationCode"
+  "/api/x_mdpdd_be_tdv/v1/tdv/transferencias-de-veiculos/{codigoTransferenciaVeiculo}/debitos":
+    get:
+      description: Retorna a lista de débitos do veículo associado à TDV.
+      responses:
+        '200':
+          description: Operação executada com sucesso.
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/DebitoListResponse"
+              examples:
+                Débitos encontrados:
+                  "$ref": "#/components/examples/DebitosEncontradosResponse"
+        '204':
+          "$ref": "#/components/responses/NoContent"
+        '401':
+          "$ref": "#/components/responses/Unauthorized"
+        '403':
+          "$ref": "#/components/responses/Forbidden"
+        '500':
+          "$ref": "#/components/responses/FalhaNaOperacao"
+        '503':
+          "$ref": "#/components/responses/ServiceUnavailable"
+      summary: Consulta débitos para realização da TDV.
+      operationId: listDebitosTDV
+      tags:
+      - tdv
+      parameters:
+      - "$ref": "#/components/parameters/codigoTransferenciaVeiculo"
+      - "$ref": "#/components/parameters/userAgent"
+      - "$ref": "#/components/parameters/xIntegrityToken"
+      - "$ref": "#/components/parameters/xCPFUsuario"
+  "/api/x_mdpdd_be_tdv/v1/tdv/transferencias-de-veiculos/{codigoTransferenciaVeiculo}/qr-code":
+    get:
+      description: Retorna o _QR code_ para pagamento dos débitos do veículo via PIX.
+      responses:
+        '200':
+          description: Operação executada com sucesso.
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/QRCodeResponse"
+              examples:
+                QR code gerado:
+                  "$ref": "#/components/examples/QRCodeResponse"
+        '401':
+          "$ref": "#/components/responses/Unauthorized"
+        '403':
+          "$ref": "#/components/responses/Forbidden"
+        '404':
+          description: A TDV procurada não foi encontrada.
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorResponse"
+              examples:
+                TDV não encontrada:
+                  "$ref": "#/components/examples/TDVNaoEncontradaError"
+        '500':
+          "$ref": "#/components/responses/FalhaNaOperacao"
+        '503':
+          "$ref": "#/components/responses/ServiceUnavailable"
+      summary: Consulta o QR code para pagamento dos débitos do veículo via PIX.
+      operationId: getQRCodeTDV
+      tags:
+      - tdv
+      parameters:
+      - "$ref": "#/components/parameters/codigoTransferenciaVeiculo"
+      - "$ref": "#/components/parameters/userAgent"
+      - "$ref": "#/components/parameters/xIntegrityToken"
+      - "$ref": "#/components/parameters/xCPFUsuario"
+  "/api/x_mdpdd_be_tdv/v1/tdv/veiculos":
+    get:
+      description: Retorna uma lista de veículos do proprietário informado.
+      responses:
+        '200':
+          description: Operação executada com sucesso.
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/VeiculoListResponse"
+              examples:
+                Veículos encontrados:
+                  "$ref": "#/components/examples/VeiculosEncontradosResponse"
+        '204':
+          "$ref": "#/components/responses/NoContent"
+        '401':
+          "$ref": "#/components/responses/Unauthorized"
+        '403':
+          "$ref": "#/components/responses/Forbidden"
+        '500':
+          "$ref": "#/components/responses/FalhaNaOperacao"
+        '503':
+          "$ref": "#/components/responses/ServiceUnavailable"
+      summary: Lista os veículos do proprietário.
+      operationId: listVeiculosTDV
+      tags:
+      - tdv
+      parameters:
+      - "$ref": "#/components/parameters/campos"
+      - "$ref": "#/components/parameters/userAgent"
+      - "$ref": "#/components/parameters/xIntegrityToken"
+      - "$ref": "#/components/parameters/xCPFUsuario"
+tags:
+- name: tdv
+  description: operações para realização de transferências digitais de veículos.
+components:
+  parameters:
+    include:
+      description: Lista de recursos relacionados a serem retornados.
+      in: query
+      name: include
+      required: false
+      schema:
+        type: string
+    idProvaVida:
+      description: ID da prova de vida.
+      in: path
+      name: id
+      required: true
+      schema:
+        type: string
+        format: uuid
+    campos:
+      name: campos
+      in: query
+      description: Lista de nomes dos campos a serem apresentados no resultado.
+      required: false
+      schema:
+        type: string
+    userAgent:
+      name: User-Agent
+      in: header
+      description: User Agent.
+      required: false
+      schema:
+        type: string
+    xIntegrityToken:
+      name: X-Integrity-Token
+      in: header
+      description: Token de integridade do app.
+      required: false
+      schema:
+        type: string
+    xCPFUsuario:
+      name: X-CPF-Usuario
+      in: header
+      description: Número do Cadastro de Pessoa Física (CPF) do usuário.
+      required: true
+      schema:
+        type: string
+        pattern: "^[0-9]{11}$"
+    codigoTransferenciaVeiculo:
+      name: codigoTransferenciaVeiculo
+      in: path
+      description: Código da TDV.
+      required: true
+      schema:
+        type: string
+        format: uuid
+    cpf:
+      name: cpf
+      in: path
+      description: Número do Cadastro de Pessoa Física (CPF) do cidadão procurado.
+      required: true
+      schema:
+        type: string
+        pattern: "^[0-9]{11}$"
+    cep:
+      name: cep
+      in: path
+      description: Código de Endereçamento Postal (CEP) procurado.
+      required: true
+      schema:
+        type: string
+        pattern: "^[0-9]{8}$"
+    xAuthorizationCode:
+      name: X-Authorization-Code
+      in: header
+      description: "_Authorization code_ do ITI para assinatura eletrônica da ATPV-e.
+        \nObrigatório somente nas etapas de assinatura.\n"
+      required: false
+      schema:
+        type: string
+  schemas:
+    Document:
+      description: Documento JSON:API.
+      type: object
+      properties:
+        jsonapi:
+          "$ref": "#/components/schemas/JSONAPI"
+        links:
+          description: Objeto _links_ relacionado aos dados primários.
+          type: object
+          properties:
+            self:
+              description: _Link_ que gerou a resposta do documento atual.
+              oneOf:
+              - type: string
+                format: uri
+              - "$ref": "#/components/schemas/Link"
+              - nullable: true
+            related:
+              description: _Link_ de recurso relacionado quando o dado primário representa
+                um relacionamento.
+              oneOf:
+              - type: string
+                format: uri
+              - "$ref": "#/components/schemas/Link"
+              - nullable: true
+            describedby:
+              description: _Link_ para um documento de descrição (ex. OpenAPI ou JSON
+                Schema) do documento atual.
+              oneOf:
+              - type: string
+                format: uri
+              - "$ref": "#/components/schemas/Link"
+              - nullable: true
+            first:
+              description: Primeira página de dados.
+              oneOf:
+              - type: string
+                format: uri
+              - "$ref": "#/components/schemas/Link"
+              - nullable: true
+            last:
+              description: Última página de dados.
+              oneOf:
+              - type: string
+                format: uri
+              - "$ref": "#/components/schemas/Link"
+              - nullable: true
+            prev:
+              description: Página de dados anterior.
+              oneOf:
+              - type: string
+                format: uri
+              - "$ref": "#/components/schemas/Link"
+              - nullable: true
+            next:
+              description: Próxima página de dados.
+              oneOf:
+              - type: string
+                format: uri
+              - "$ref": "#/components/schemas/Link"
+              - nullable: true
+          additionalProperties:
+            oneOf:
+            - type: string
+              format: uri
+            - "$ref": "#/components/schemas/Link"
+            - nullable: true
+      oneOf:
+      - allOf:
+        - type: object
+          properties:
+            data:
+              nullable: true
+              description: \"Dados primários\" do documento.
+              oneOf:
+              - "$ref": "#/components/schemas/Resource"
+              - "$ref": "#/components/schemas/ResourceIdentifier"
+              - type: array
+                items:
+                  "$ref": "#/components/schemas/Resource"
+              - type: array
+                items:
+                  "$ref": "#/components/schemas/ResourceIdentifier"
+            included:
+              description: Lista de objetos recurso relacionados aos dados primários.
+              type: array
+              items:
+                "$ref": "#/components/schemas/Resource"
+        - type: object
+          properties:
+            meta:
+              description: Objeto _meta_ contendo metainformação não padronizada.
+              type: object
+              additionalProperties: true
+        - required:
+          - data
+      - allOf:
+        - type: object
+          properties:
+            errors:
+              description: Lista de objetos erro.
+              type: array
+              items:
+                "$ref": "#/components/schemas/Error"
+        - type: object
+          properties:
+            meta:
+              description: Objeto _meta_ contendo metainformação não padronizada.
+              type: object
+              additionalProperties: true
+        - required:
+          - errors
+      - allOf:
+        - type: object
+          properties:
+            meta:
+              description: Objeto _meta_ contendo metainformação não padronizada.
+              type: object
+              additionalProperties: true
+        - required:
+          - meta
+    JSONAPI:
+      description: Informação sobre a implementação JSON:API do documento.
+      type: object
+      properties:
+        version:
+          description: Maior versão JSON:API suportada.
+          type: string
+        ext:
+          description: Lista de URIs de todas as extensões aplicadas.
+          type: array
+          items:
+            type: string
+            format: uri
+        profile:
+          description: Lista de URIs de todos os perfis aplicados.
+          type: array
+          items:
+            type: string
+            format: uri
+        meta:
+          description: Objeto _meta_ contendo metainformação não padronizada.
+          type: object
+          additionalProperties: true
+    Link:
+      description: Objeto que representa um _web link_.
+      type: object
+      properties:
+        href:
+          description: URI-reference apontando para o destino do _link_.
+          type: string
+          format: uri
+        rel:
+          description: Tipo de relação do _link_.
+          type: string
+        describedby:
+          description: _Link_ para um documento de descrição (ex. OpenAPI ou JSON
+            Schema) do destino do _link_.
+          oneOf:
+          - type: string
+            format: uri
+          - "$ref": "#/components/schemas/Link"
+        title:
+          description: Rótulo do destino do _link_.
+          type: string
+        type:
+          description: Tipo de mídia do destino do _link_.
+          type: string
+        hreflang:
+          description: Idioma(s) do destino do _link_.
+          oneOf:
+          - type: string
+          - type: array
+            items:
+              type: string
+        meta:
+          description: Objeto _meta_ contendo metainformação não padronizada sobre
+            o _link_.
+          type: object
+          additionalProperties: true
+      required:
+      - href
+    Error:
+      description: Objetos erro fornecem informação adicional sobre problemas encontrados
+        durante a execução de uma operação.
+      type: object
+      properties:
+        id:
+          description: Identificador único para esta ocorrência particular do problema.
+          type: string
+        links:
+          description: Objeto _links_.
+          type: object
+          properties:
+            about:
+              description: _Link_ que leva a maiores detalhes sobre esta ocorrência
+                particular do problema.
+              oneOf:
+              - type: string
+                format: uri
+              - "$ref": "#/components/schemas/Link"
+              - nullable: true
+            type:
+              description: _Link_ que identifica o tipo de erro do qual esse erro
+                particular é uma instância.
+              oneOf:
+              - type: string
+                format: uri
+              - "$ref": "#/components/schemas/Link"
+              - nullable: true
+        status:
+          description: o código de _status_ HTTP aplicável a esse problema, expresso
+            como uma _string_.
+          type: string
+          pattern: "^[1-5][0-9]{2}$"
+        code:
+          description: Código de erro específico da aplicação, expresso como uma _string_.
+          type: string
+        title:
+          description: Resumo curto e humanamente legível do problema que não deve
+            mudar de ocorrência para ocorrência do problema, exceto por motivo de
+            localização.
+          type: string
+        detail:
+          description: Explicação humanamente legível específica dessa ocorrência
+            do problema.
+          type: string
+        source:
+          description: Objeto contendo referências à fonte primária do erro.
+          type: object
+          properties:
+            pointer:
+              description: JSON Pointer para o valor no documento de requisição que
+                causou o erro.
+              type: string
+            parameter:
+              description: String indicando o _URI query parameter_ que causou o erro.
+              type: string
+            header:
+              description: _String_ indicando o nome de um único _request header_
+                que causou o erro.
+              type: string
+        meta:
+          description: Objeto _meta_ contendo metainformação não padronizada sobre
+            o erro.
+          type: object
+          additionalProperties: true
+    ResourceIdentifier:
+      description: Objeto que identifica um recurso individual.
+      type: object
+      properties:
+        type:
+          description: Tipo do recurso.
+          type: string
+        meta:
+          description: Objeto _meta_ contendo metainformação não padronizada.
+          type: object
+          additionalProperties: true
+      required:
+      - type
+      oneOf:
+      - type: object
+        properties:
+          id:
+            description: Identificador do recurso.
+            type: string
+        required:
+        - id
+      - type: object
+        properties:
+          lid:
+            description: Identificador local do recurso.
+            type: string
+        required:
+        - lid
+    Resource:
+      description: Objeto que representa um recurso.
+      type: object
+      properties:
+        type:
+          description: Tipo do recurso.
+          type: string
+        attributes:
+          description: Objeto atributos representando dados do recurso.
+          type: object
+          additionalProperties: true
+        relationships:
+          description: Objeto relacionamentos descrevendo relacionamentos entre o
+            recurso e outros recursos JSON:API.
+          type: object
+          additionalProperties:
+            "$ref": "#/components/schemas/Relationship"
+        links:
+          description: Objeto _links_ contendo _links_ relacionados ao recurso.
+          type: object
+          additionalProperties:
+            oneOf:
+            - type: string
+              format: uri
+            - "$ref": "#/components/schemas/Link"
+            - nullable: true
+        meta:
+          description: Objeto _meta_ contendo metainformação não padronizada sobre
+            o recurso que pode ser representada como um atributo ou relacionamento.
+          type: object
+          additionalProperties: true
+      required:
+      - type
+      oneOf:
+      - type: object
+        properties:
+          id:
+            description: Identificador do recurso.
+            type: string
+        required:
+        - id
+      - type: object
+        properties:
+          lid:
+            description: Identificador local do recurso.
+            type: string
+        required:
+        - lid
+    Relationship:
+      description: Objeto representando um relacionamento.
+      type: object
+      properties:
+        links:
+          description: Objeto _links_.
+          properties:
+            self:
+              description: _Link_ para o próprio relacionamento.
+              oneOf:
+              - type: string
+                format: uri
+              - "$ref": "#/components/schemas/Link"
+              - nullable: true
+            related:
+              description: _Link_ para um recurso relacionado.
+              oneOf:
+              - type: string
+                format: uri
+              - "$ref": "#/components/schemas/Link"
+              - nullable: true
+            first:
+              description: Primeira página de dados.
+              oneOf:
+              - type: string
+                format: uri
+              - "$ref": "#/components/schemas/Link"
+              - nullable: true
+            last:
+              description: Última página de dados.
+              oneOf:
+              - type: string
+                format: uri
+              - "$ref": "#/components/schemas/Link"
+              - nullable: true
+            prev:
+              description: Página de dados anterior.
+              oneOf:
+              - type: string
+                format: uri
+              - "$ref": "#/components/schemas/Link"
+              - nullable: true
+            next:
+              description: Próxima página de dados.
+              oneOf:
+              - type: string
+                format: uri
+              - "$ref": "#/components/schemas/Link"
+              - nullable: true
+          additionalProperties:
+            oneOf:
+            - type: string
+              format: uri
+            - "$ref": "#/components/schemas/Link"
+            - nullable: true
+        data:
+          description: Ligação de recursos.
+          nullable: true
+          oneOf:
+          - "$ref": "#/components/schemas/ResourceIdentifier"
+          - type: array
+            items:
+              "$ref": "#/components/schemas/ResourceIdentifier"
+        meta:
+          description: Objeto _meta_ contendo metainformação não padronizada sobre
+            o relacionamento.
+          type: object
+          additionalProperties: true
+    ProvaVidaDocument:
+      description: Documento JSON:API que descreve uma prova de vida.
+      allOf:
+      - "$ref": "#/components/schemas/Document"
+      - type: object
+        properties:
+          data:
+            allOf:
+            - "$ref": "#/components/schemas/Resource"
+            - type: object
+              properties:
+                id:
+                  description: Código da prova de vida.
+                  type: string
+                  format: uuid
+                attributes:
+                  description: Atributos da prova de vida.
+                  type: object
+                  properties:
+                    tipo:
+                      description: |
+                        Tipo de prova de vida.
+                        * 1 - GOV.BR
+                        * 2 - Liveness
+                      type: integer
+                      format: int32
+                    estado:
+                      description: Estado da prova de vida.
+                      type: string
+                      enum:
+                      - Não realizada
+                      - Autorizada
+                      - Negada
+                    motivoNegacao:
+                      description: Motivo de negação da prova de vida.
+                      type: string
+                      enum:
+                      - Usuário escolheu não autorizar
+                      - Falha na validação de biometria facial
+                      - Falha na validação de dados biográficos
+                      - Falha na validação de dados biométricos e biográficos
+    TDV:
+      description: Objeto que representa uma Transferência Digital de Veículo (TDV).
+      type: object
+      properties:
+        ativa:
+          description: Indicador de atividade da TDV.
+          type: string
+          enum:
+          - 'true'
+          - 'false'
+        numeroTransferenciaVeiculo:
+          description: Número da TDV.
+          type: string
+          pattern: "^TDV[0-9]{7}$"
+        estado:
+          description: |
+            Estado da TDV.
+            *  1 - Veículo selecionado
+            *  2 - Dados da venda informados
+            *  3 - ATPV-e criada
+            *  4 - Intenção de compra confirmada.
+            *  5 - Autodeclaração de residência confirmada
+            *  6 - ATPV-e assinada pelo comprador
+            *  7 - ATPV-e assinada pelo vendedor e comunicação de venda gerada
+            *  8 - Taxa de serviço paga
+            *  9 - Transferência concluída
+            * 10 - Transferência cancelada
+          type: string
+          enum:
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
+          - '10'
+        codigoTransferenciaVeiculo:
+          description: Código da TDV.
+          type: string
+          format: uuid
+        anoFabricacaoVeiculo:
+          description: Ano de fabricação do veículo.
+          type: string
+          pattern: "^[0-9]{4}$"
+        anoEcrvVeiculo:
+          description: Ano do e-CRV do veículo.
+          type: string
+          pattern: "^[0-9]{4}$"
+        anoExercicioVeiculo:
+          description: Ano de exercício do veículo.
+          type: string
+          pattern: "^[0-9]{4}$"
+        anoModeloVeiculo:
+          description: Ano modelo do veículo.
+          type: string
+          pattern: "^[0-9]{4}$"
+        codigoAnexoAssinaturaComprador:
+          description: Código do arquivo anexo PKCS#7 com a assinatura do comprador.
+          type: string
+          format: uuid
+        codigoAnexoAssinaturaVendedor:
+          description: Código do arquivo anexo PKCS#7 com a assinatura do vendedor.
+          type: string
+          format: uuid
+        codigoAnexoAtpve:
+          description: Código do arquivo anexo PDF da Autorização de Transferência
+            de Propriedade de Veículo digital (ATPV-e).
+          type: string
+          format: uuid
+        codigoAnexoAutodeclaracaoResidenciaComprador:
+          description: Código do arquivo anexo PDF da autodeclaração de residência
+            do comprador.
+          type: string
+          format: uuid
+        autodeclaracaoResidenciaComprador:
+          description: Autodeclaração de residência do comprador.
+          type: string
+        bairroComprador:
+          description: Bairro do comprador.
+          type: string
+        cepComprador:
+          description: CEP do comprador.
+          type: string
+          pattern: "^[0-9]{8}$"
+        chassiVeiculo:
+          description: Chassi do veículo.
+          type: string
+          pattern: "^[A-Z0-9]{17}$"
+        codigoCarroceriaVeiculo:
+          description: Código da carroceria do veículo.
+          type: string
+          pattern: "^[0-9]{3}$"
+        codigoCategoriaVeiculo:
+          description: |
+            Código da categoria do veículo.
+            *  1 - PARTICULAR
+            *  2 - ALUGUEL
+            *  3 - OFICIAL
+            *  4 - EXPERIÊNCIA
+            *  5 - APRENDIZAGEM
+            *  6 - FABRICANTE
+            *  7 - CHEFE DE MISSÃO DIPLOMÁTICA
+            *  8 - CORPO CONSULAR
+            *  9 - ORGANISMO INTERNACIONAL
+            * 10 - CORPO DIPLOMÁTICO
+            * 11 - MISSÃO/REPARTIÇÃO/REPRESENTAÇÃO INTERNACIONAL
+            * 12 - ACORDO DE COOPERAÇÃO INTERNACIONAL
+          type: string
+          enum:
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
+          - '10'
+          - '11'
+          - '12'
+          pattern: "^[0-9]{1,2}$"
+        codigoCorVeiculo:
+          description: |
+            Código da cor do veículo.
+            *  1 - AMARELA
+            *  2 - AZUL
+            *  3 - BEGE
+            *  4 - BRANCA
+            *  5 - CINZA
+            *  6 - DOURADA
+            *  7 - GRENA
+            *  8 - LARANJA
+            *  9 - MARROM
+            * 10 - PRATA
+            * 11 - PRETA
+            * 12 - ROSA
+            * 13 - ROXA
+            * 14 - VERDE
+            * 15 - VERMELHA
+            * 16 - FANTASIA
+          type: string
+          enum:
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
+          - '10'
+          - '11'
+          - '12'
+          - '13'
+          - '14'
+          - '15'
+          - '16'
+        codigoEspecieVeiculo:
+          description: |
+            Código da espécie do veículo.
+            * 01 - PASSAGEIRO
+            * 02 - CARGA
+            * 03 - MISTO
+            * 04 - CORRIDA
+            * 05 - TRACAO
+            * 06 - ESPECIAL
+            * 07 - COLECAO
+          type: string
+          enum:
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+        codigoMarcaVeiculo:
+          description: Código da marca/modelo do veículo.
+          type: string
+          pattern: "^[0-9]+$"
+        codigoProvaVidaComprador:
+          description: Código da prova de vida do comprador.
+          type: string
+          format: uuid
+        codigoProvaVidaVendedor:
+          description: Código da prova de vida do vendedor.
+          type: string
+          format: uuid
+        codigoCombustivelVeiculo:
+          description: |
+            Código do combustível do veículo.
+            *  1 - ALCOOL
+            *  2 - GASOLINA
+            *  3 - DIESEL
+            *  4 - GASOGENIO
+            *  5 - GAS METANO
+            *  6 - ELETRICO/FONTE INTERNA
+            *  7 - ELETRICO/FONTE EXTERNA
+            *  8 - GASOL/GAS NATURAL COMBUSTIVEL
+            *  9 - ALCOOL/GAS NATURAL COMBUSTIVEL
+            * 10 - DIESEL/GAS NATURAL COMBUSTIVEL
+            * 11 - VIDE/CAMPO/OBSERVACAO
+            * 12 - ALCOOL/GAS NATURAL VEICULAR
+            * 13 - GASOLINA/GAS NATURAL VEICULAR
+            * 14 - DIESEL/GAS NATURAL VEICULAR
+            * 15 - GAS NATURAL VEICULAR
+            * 16 - ALCOOL/GASOLINA
+            * 17 - GASOLINA/ALCOOL/GAS NATURAL
+            * 18 - GASOLINA/ELETRICO
+          type: string
+          enum:
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
+          - '10'
+          - '11'
+          - '12'
+          - '13'
+          - '14'
+          - '15'
+          - '16'
+          - '17'
+          - '18'
+        codigoDespachante:
+          description: Código do despachante.
+          type: string
+          pattern: "^[0-9]+$"
+        codigoFinanciadoGravame:
+          description: Código do financiado no gravame.
+          type: string
+          pattern: "^[0-9]+$"
+        codigoMunicipioComprador:
+          description: Código do município do comprador.
+          type: string
+          pattern: "^[0-9]+$"
+        codigoMunicipioVeiculo:
+          description: Código do município do veículo.
+          type: string
+          pattern: "^[0-9]+$"
+        codigoTipoVeiculo:
+          description: |
+            Código do tipo do veículo.
+            *  1 - BICICLETA
+            *  2 - CICLOMOTOR
+            *  3 - MOTONETA
+            *  4 - MOTOCICLETA
+            *  5 - TRICICLO
+            *  6 - AUTOMOVEL
+            *  7 - MICROONIBUS
+            *  8 - ONIBUS
+            *  9 - BONDE
+            * 10 - REBOQUE
+            * 11 - SEMI-REBOQUE
+            * 12 - CHARRETE
+            * 13 - CAMIONETA
+            * 14 - CAMINHAO
+            * 15 - CARROCA
+            * 16 - CARRO DE MAO
+            * 17 - CAMINHAO TRATOR
+            * 18 - TRATOR DE RODAS
+            * 19 - TRATOR DE ESTEIRAS
+            * 20 - TRATOR MISTO
+            * 21 - QUADRICICLO
+            * 22 - CHASSI/PLATAFORMA
+            * 23 - CAMINHONETE
+            * 24 - SIDE-CAR
+            * 25 - UTILITARIO
+            * 26 - MOTOR-CASA
+          type: string
+          enum:
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
+          - '10'
+          - '11'
+          - '12'
+          - '13'
+          - '14'
+          - '15'
+          - '16'
+          - '17'
+          - '18'
+          - '19'
+          - '20'
+          - '21'
+          - '22'
+          - '23'
+          - '24'
+          - '25'
+          - '26'
+        codigoRenavamVeiculo:
+          description: Código Renavam do veículo.
+          type: string
+          pattern: "^[0-9]{11}$"
+        complementoComprador:
+          description: Complemento do endereço do comprador.
+          type: string
+        confirmacaoAutodeclaracaoResidenciaComprador:
+          description: Confirmação da autodeclaração de residência do comprador.
+          type: string
+          enum:
+          - 'true'
+          - 'false'
+        codigoComprador:
+          description: CPF/CNPJ do comprador do veículo.
+          type: string
+          pattern: "^[0-9]{11}|[0-9]{14}$"
+        codigoVendedor:
+          description: CPF/CNPJ do proprietário do veículo.
+          type: string
+          pattern: "^[0-9]{11}|[0-9]{14}$"
+        dataEmissaoCrvVeiculo:
+          description: Data de emissão do CRV do veículo.
+          type: string
+          format: date
+        dataExpiracaoQRCode:
+          description: Data/hora UTC de expiração do _QR code_.
+          type: string
+          format: date-time
+        dataPagamentoQRCode:
+          description: Data/hora UTC de pagamento do _QR code_.
+          type: string
+          format: date-time
+        dataInicialPagamento:
+          description: Data de inclusão da comunicação de venda. É a data de início
+            da contagem dos 30 dias para pagamento dos débitos do veículo sem incidência
+            de multa.
+          type: string
+          format: date
+        descricaoCarroceriaVeiculo:
+          description: Descrição da carroceria do veículo.
+          type: string
+        descricaoCategoriaVeiculo:
+          description: Descrição da categoria do veículo.
+          type: string
+        descricaoCorVeiculo:
+          description: Descrição da cor do veículo.
+          type: string
+        descricaoEspecieVeiculo:
+          description: Descrição da espécie do veículo.
+          type: string
+        descricaoMarcaVeiculo:
+          description: Descrição da marca/modelo do veículo.
+          type: string
+        descricaoCombustivelVeiculo:
+          description: Descrição do combustível do veículo.
+          type: string
+        descricaoTipoVeiculo:
+          description: Descrição do tipo do veículo.
+          type: string
+        codigoAnexoLaudoAuditoria:
+          description: Código do arquivo anexo do laudo de auditoria.
+          type: string
+          format: uuid
+        emailComprador:
+          description: Email do comprador do veículo.
+          type: string
+        emailVendedor:
+          description: Email do proprietário do veículo.
+          type: string
+        estadoComprador:
+          description: Nome por extenso da Unidade Federativa (UF) do comprador.
+          type: string
+        estadoLaudoVistoria:
+          description: Estado do laudo de vistoria.
+          type: string
+        estadoQRCode:
+          description: |
+            Estado do _QR code_.
+            * 1 - Ativo
+            * 2 - Pago
+            * 3 - Expirado
+          type: string
+          enum:
+          - '1'
+          - '2'
+          - '3'
+        idPagamentoQRCode:
+          description: Código de pagamento do _QR code_ (_End-to-end ID_).
+          type: string
+        idQRCode:
+          description: Código de conciliação do _QR code_ (TXID).
+          type: string
+        logradouroComprador:
+          description: Logradouro do endereço do comprador.
+          type: string
+        nomeComprador:
+          description: nome do comprador do veículo.
+          type: string
+        nomeMunicipioComprador:
+          description: nome do município do endereço do comprador.
+          type: string
+        nomeMunicipioVeiculo:
+          description: nome do município do endereço do proprietário.
+          type: string
+        nomeVendedor:
+          description: Nome do proprietário do veículo.
+          type: string
+        numeroAtpveVeiculo:
+          description: Número da Autorização para Transferência de Propriedade de
+            Veículo digital (ATPV-e).
+          type: string
+          pattern: "^[0-9]{15}$"
+        numeroComprador:
+          description: Número do endereço do comprador.
+          type: string
+          pattern: "^[0-9]+$"
+        numeroCrvVeiculo:
+          description: Número do espelho do veículo.
+          type: string
+          pattern: "^[0-9]{12}$"
+        numeroEcrvVeiculo:
+          description: Número da ficha do e-CRV do veículo.
+          type: string
+          pattern: "^[0-9]+$"
+        numeroLaudoVistoria:
+          description: Número do laudo de vistoria do veículo.
+          type: string
+          pattern: "^SP[0-9]{9}-[0-9]{2}/[0-9]{4}$"
+        origem:
+          description: |
+            Origem da TDV.
+            * 1 - TDV
+            * 2 - e-Notariado
+            * 3 - CDT
+            * 4 - Renave
+          type: string
+          enum:
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+        origemComunicacaoVendaVeiculo:
+          description: |
+            Origem da comunicação de venda do veículo.
+            * 1 - GEVER / ECRV
+            * 2 - PORTAL
+            * 3 - DETRAN
+            * 4 - CARTÓRIO
+            * 5 - SEFAZ
+            * 6 - ARQUIVO GRAVAMES 7 - LEILÃO
+            * 8 - VENDA DIGITAL
+            * 9 - eNOTARIADO
+          type: string
+          enum:
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
+        placaVeiculo:
+          description: Placa do veículo.
+          type: string
+          pattern: "^[A-Z]{3}[0-9][A-Z0-9][0-9]{2}$"
+        qrCode:
+          description: Conteúdo do _QR code_.
+          type: string
+        kmVeiculo:
+          description: Quilometragem do veículo.
+          type: string
+          pattern: "^[0-9]+$"
+        kmVistoriadaVeiculo:
+          description: Quilometragem vistoriada do veículo.
+          type: string
+          pattern: "^[0-9]+$"
+        tipoProvaVida:
+          description: |
+            Tipo de prova de vida realizado.
+            * 1 - GOV.BR
+            * 2 - Liveness
+          type: string
+          enum:
+          - '1'
+          - '2'
+        ufComprador:
+          description: |
+            Unidade Federativa (UF) do comprador.
+            * AC - Acre
+            * AL - Alagoas
+            * AP - Amapá
+            * AM - Amazonas
+            * BA - Bahia
+            * CE - Ceará
+            * DF - Distrito Federal
+            * ES - Espírito Santo
+            * GO - Goiás
+            * MA - Maranhão
+            * MG - Minas Gerais
+            * MS - Mato Grosso do Sul
+            * MT - Mato Grosso
+            * PA - Pará
+            * PB - Paraíba
+            * PE - Pernambuco
+            * PI - Piauí
+            * PR - Paraná
+            * RJ - Rio de Janeiro
+            * RN - Rio Grande do Norte
+            * RS - Rio Grande do Sul
+            * RO - Rondônia
+            * RR - Roraima
+            * SC - Santa Catarina
+            * SE - Sergipe
+            * SP - São Paulo
+            * TO - Tocantins
+          type: string
+          enum:
+          - AC
+          - AL
+          - AP
+          - AM
+          - BA
+          - CE
+          - DF
+          - ES
+          - GO
+          - MA
+          - MG
+          - MS
+          - MT
+          - PA
+          - PB
+          - PE
+          - PI
+          - PR
+          - RJ
+          - RN
+          - RS
+          - RO
+          - RR
+          - SC
+          - SE
+          - SP
+          - TO
+        ufVeiculo:
+          description: |
+            Unidade Federativa (UF) de registro do veículo.
+            * AC - Acre
+            * AL - Alagoas
+            * AP - Amapá
+            * AM - Amazonas
+            * BA - Bahia
+            * CE - Ceará
+            * DF - Distrito Federal
+            * ES - Espírito Santo
+            * GO - Goiás
+            * MA - Maranhão
+            * MG - Minas Gerais
+            * MS - Mato Grosso do Sul
+            * MT - Mato Grosso
+            * PA - Pará
+            * PB - Paraíba
+            * PE - Pernambuco
+            * PI - Piauí
+            * PR - Paraná
+            * RJ - Rio de Janeiro
+            * RN - Rio Grande do Norte
+            * RS - Rio Grande do Sul
+            * RO - Rondônia
+            * RR - Roraima
+            * SC - Santa Catarina
+            * SE - Sergipe
+            * SP - São Paulo
+            * TO - Tocantins
+          type: string
+          enum:
+          - AC
+          - AL
+          - AP
+          - AM
+          - BA
+          - CE
+          - DF
+          - ES
+          - GO
+          - MA
+          - MG
+          - MS
+          - MT
+          - PA
+          - PB
+          - PE
+          - PI
+          - PR
+          - RJ
+          - RN
+          - RS
+          - RO
+          - RR
+          - SC
+          - SE
+          - SP
+          - TO
+        valorVendaVeiculo:
+          description: Valor de venda do veículo
+          type: string
+          pattern: "^[0-9]*(.[0-9]{1,2})?$"
+    TDVListResponse:
+      description: Resposta do serviço com lista de TDVs.
+      type: object
+      properties:
+        result:
+          description: Resultado da operação.
+          type: array
+          items:
+            "$ref": "#/components/schemas/TDV"
+    TDVResponse:
+      description: Resposta do serviço com uma única TDV.
+      type: object
+      properties:
+        result:
+          "$ref": "#/components/schemas/TDV"
+    ErrorResponse:
+      description: Resposta de erro do serviço.
+      type: object
+      properties:
+        error:
+          description: Objeto que representa o erro identificado na operação.
+          type: object
+          properties:
+            message:
+              description: Tipo de erro identificado na operação.
+              type: string
+            detail:
+              description: Detalhe do erro identificado na operação.
+              type: string
+        status:
+          description: Estado da operação.
+          type: string
+          enum:
+          - failure
+      required:
+      - error
+      - status
+    DebitoListResponse:
+      description: Resposta da operação de consulta de débitos da TDV.
+      type: object
+      properties:
+        result:
+          description: Resultado da operação.
+          type: array
+          items:
+            description: Objeto que representa um débito da TDV.
+            type: object
+            properties:
+              descricao:
+                description: Descrição do débito da TDV.
+                type: string
+              valor:
+                description: Valor do débito da TDV.
+                type: number
+                format: float
+            required:
+            - descricao
+            - valor
+    QRCodeResponse:
+      description: Resposta da operação de consulta do _QR code_ da TDV.
+      type: object
+      properties:
+        result:
+          description: Resultado da operação
+          type: object
+          properties:
+            idQRCode:
+              description: Código de conciliação do _QR code_ (TXID).
+              type: string
+            qrCode:
+              description: Conteúdo do _QR code_.
+              type: string
+            dataExpiracaoQRCode:
+              description: Data/hora UTC de expiração do _QR code_.
+              type: string
+              format: date-time
+            estadoQRCode:
+              description: |
+                Estado do _QR code_.
+                * 1 - Ativo
+                * 2 - Pago
+                * 3 - Expirado
+              type: string
+              enum:
+              - '1'
+              - '2'
+              - '3'
+            idPagamentoQRCode:
+              description: Código de pagamento do _QR code_ (_End-to-end ID_).
+              type: string
+            dataPagamentoQRCode:
+              description: Data/hora UTC de pagamento do _QR code_.
+              type: string
+              format: date-time
+    CidadaoResponse:
+      description: Resposta da operação de consulta de cidadão.
+      type: object
+      properties:
+        result:
+          description: Resultado da operação.
+          type: object
+          properties:
+            cpf:
+              description: Número do Cadastro de Pessoa Física (CPF) do cidadão.
+              type: string
+              pattern: "^[0-9]{11}$"
+            nome:
+              description: Nome completo do cidadão.
+              type: string
+            nomeMae:
+              description: Nome completo da mãe do cidadão.
+              type: string
+            dataNascimento:
+              description: Data de nascimento do cidadão.
+              type: string
+              format: date
+            sexo:
+              description: |
+                Código do sexo do cidadão.
+                * 1 - Masculino
+                * 2 - Feminino
+              type: string
+              enum:
+              - '1'
+              - '2'
+            logradouro:
+              description: Logradouro do cidadão.
+              type: string
+            tipoLogradouro:
+              description: Tipo do logradouro do cidadão.
+              type: string
+            numeroLogradouro:
+              description: Número do endereço do cidadão.
+              type: string
+              pattern: "^[0-9]+$"
+            complemento:
+              description: Complemento do endereço do cidadão.
+              type: string
+            cep:
+              description: Código de Endereçamento Postal (CEP) do endereço do cidadão.
+              type: string
+              pattern: "^[0-9]{8}$"
+            bairro:
+              description: Bairro do endereço do cidadão.
+              type: string
+            uf:
+              description: |
+                Unidade Federativa (UF) do endereço do cidadão.
+                * AC - Acre
+                * AL - Alagoas
+                * AP - Amapá
+                * AM - Amazonas
+                * BA - Bahia
+                * CE - Ceará
+                * DF - Distrito Federal
+                * ES - Espírito Santo
+                * GO - Goiás
+                * MA - Maranhão
+                * MG - Minas Gerais
+                * MS - Mato Grosso do Sul
+                * MT - Mato Grosso
+                * PA - Pará
+                * PB - Paraíba
+                * PE - Pernambuco
+                * PI - Piauí
+                * PR - Paraná
+                * RJ - Rio de Janeiro
+                * RN - Rio Grande do Norte
+                * RS - Rio Grande do Sul
+                * RO - Rondônia
+                * RR - Roraima
+                * SC - Santa Catarina
+                * SE - Sergipe
+                * SP - São Paulo
+                * TO - Tocantins
+              type: string
+              enum:
+              - AC
+              - AL
+              - AP
+              - AM
+              - BA
+              - CE
+              - DF
+              - ES
+              - GO
+              - MA
+              - MG
+              - MS
+              - MT
+              - PA
+              - PB
+              - PE
+              - PI
+              - PR
+              - RJ
+              - RN
+              - RS
+              - RO
+              - RR
+              - SC
+              - SE
+              - SP
+              - TO
+            telefone:
+              description: Telefone do cidadão.
+              type: string
+              pattern: "^[0-9]{10,}$"
+            anoObito:
+              description: Ano de óbito do cidadão.
+              type: string
+              pattern: "^[0-9]{4}$"
+            codMunicipio:
+              description: Código do município do cidadão.
+              type: string
+              pattern: "^[0-9]+$"
+            estrangeiro:
+              description: |
+                Indicador de nacionalidade estrangeira do cidadão.
+                * 0 - Nacionalidade brasileira
+                * 1 - Nacionalidade estrangeira
+              type: string
+              enum:
+              - '0'
+              - '1'
+            dataAtualizacao:
+              description: Data de atualização do registro do cidadão.
+              type: string
+              format: date
+    CEPResponse:
+      description: Resposta da operação de consulta de endereços.
+      type: object
+      properties:
+        result:
+          description: Resultado da operação.
+          type: object
+          properties:
+            cep:
+              description: Código de Endereçamento Postal (CEP).
+              type: string
+              pattern: "^[0-9]{8}$"
+            bairro:
+              description: Bairro do CEP.
+              type: string
+            tipoLogradouro:
+              description: Tipo do logradouro do CEP.
+              type: string
+            endereco:
+              description: Logradouro do CEP.
+              type: string
+            complemento:
+              description: Complemento do CEP.
+              type: string
+            tipoLogradouroAbrev:
+              description: Tipo de logradouro do CEP abreviado.
+              type: string
+            enderecoAbrev:
+              description: Endereço abreviado.
+              type: string
+            tipoLogradouroAbrevDNE:
+              description: Tipo de logradouro abreviado no Diretório Nacional de Endereços
+                (DNE).
+              type: string
+            localidade:
+              description: Localidade do CEP.
+              type: string
+            estado:
+              description: Nome por extenso do estado do CEP.
+              type: string
+            uf:
+              description: |
+                Unidade Federativa (UF) do CEP.
+                * AC - Acre
+                * AL - Alagoas
+                * AP - Amapá
+                * AM - Amazonas
+                * BA - Bahia
+                * CE - Ceará
+                * DF - Distrito Federal
+                * ES - Espírito Santo
+                * GO - Goiás
+                * MA - Maranhão
+                * MG - Minas Gerais
+                * MS - Mato Grosso do Sul
+                * MT - Mato Grosso
+                * PA - Pará
+                * PB - Paraíba
+                * PE - Pernambuco
+                * PI - Piauí
+                * PR - Paraná
+                * RJ - Rio de Janeiro
+                * RN - Rio Grande do Norte
+                * RS - Rio Grande do Sul
+                * RO - Rondônia
+                * RR - Roraima
+                * SC - Santa Catarina
+                * SE - Sergipe
+                * SP - São Paulo
+                * TO - Tocantins
+              type: string
+              enum:
+              - AC
+              - AL
+              - AP
+              - AM
+              - BA
+              - CE
+              - DF
+              - ES
+              - GO
+              - MA
+              - MG
+              - MS
+              - MT
+              - PA
+              - PB
+              - PE
+              - PI
+              - PR
+              - RJ
+              - RN
+              - RS
+              - RO
+              - RR
+              - SC
+              - SE
+              - SP
+              - TO
+            numeroIBGE:
+              description: Código do município segundo o IBGE.
+              type: integer
+              format: int32
+            logradouro:
+              description: Logradouro do CEP.
+              type: string
+            cdTipoCEP:
+              description: Código do tipo de CEP.
+              type: integer
+              format: int32
+            tipoCEP:
+              description: Descrição do tipo de CEP.
+              type: string
+            municipio:
+              description: Município do CEP.
+              type: string
+            tipoLocalidade:
+              description: Tipo da localidade do CEP.
+              type: string
+            codigoMunicipio:
+              description: Código do município do CEP.
+              type: integer
+              format: int32
+            codigoLocalRel:
+              description: Código da localidade relacionada.
+              type: integer
+              format: int32
+            latitude:
+              description: Latitude do CEP.
+              type: string
+            longitude:
+              description: Longitude do CEP.
+              type: string
+            codigoDne:
+              description: Código do CEP no Diretório Nacional de Endereços (DNE).
+              type: integer
+              format: int32
+            tipoLogradouroDne:
+              description: Código do tipo de logradouro do CEP no Diretório Nacional
+                de Endereços (DNE).
+              type: integer
+              format: int32
+            codigoBairro:
+              description: Código do bairro do CEP.
+              type: integer
+              format: int32
+    VeiculoListResponse:
+      description: Lista de veículos do usuário.
+      type: object
+      properties:
+        result:
+          description: Resultado da operação.
+          type: array
+          items:
+            type: object
+            properties:
+              anoFabricacao:
+                description: Ano de fabricação do veículo.
+                type: string
+                pattern: "^[0-9]{4}$"
+              anoExercicio:
+                description: Ano de exercício do licenciamento do veículo.
+                type: string
+                pattern: "^[0-9]{4}$"
+              anoModelo:
+                description: Ano modelo do veículo.
+                type: string
+                pattern: "^[0-9]{4}$"
+              chassi:
+                description: Chassi do veículo.
+                type: string
+                pattern: "^[A-Z0-9]{17}$"
+              codigoCarroceria:
+                description: Código da carroceria do veículo.
+                type: string
+                pattern: "^[0-9]{3}$"
+              codigoCategoria:
+                description: |
+                  Código da categoria do veículo.
+                  *  1 - PARTICULAR
+                  *  2 - ALUGUEL
+                  *  3 - OFICIAL
+                  *  4 - EXPERIÊNCIA
+                  *  5 - APRENDIZAGEM
+                  *  6 - FABRICANTE
+                  *  7 - CHEFE DE MISSÃO DIPLOMÁTICA
+                  *  8 - CORPO CONSULAR
+                  *  9 - ORGANISMO INTERNACIONAL
+                  * 10 - CORPO DIPLOMÁTICO
+                  * 11 - MISSÃO/REPARTIÇÃO/REPRESENTAÇÃO INTERNACIONAL
+                  * 12 - ACORDO DE COOPERAÇÃO INTERNACIONAL
+                type: string
+                enum:
+                - '1'
+                - '2'
+                - '3'
+                - '4'
+                - '5'
+                - '6'
+                - '7'
+                - '8'
+                - '9'
+                - '10'
+                - '11'
+                - '12'
+                pattern: "^[0-9]{1,2}$"
+              codigoCor:
+                description: |
+                  Código da cor do veículo.
+                  *  1 - AMARELA
+                  *  2 - AZUL
+                  *  3 - BEGE
+                  *  4 - BRANCA
+                  *  5 - CINZA
+                  *  6 - DOURADA
+                  *  7 - GRENA
+                  *  8 - LARANJA
+                  *  9 - MARROM
+                  * 10 - PRATA
+                  * 11 - PRETA
+                  * 12 - ROSA
+                  * 13 - ROXA
+                  * 14 - VERDE
+                  * 15 - VERMELHA
+                  * 16 - FANTASIA
+                type: string
+                enum:
+                - '1'
+                - '2'
+                - '3'
+                - '4'
+                - '5'
+                - '6'
+                - '7'
+                - '8'
+                - '9'
+                - '10'
+                - '11'
+                - '12'
+                - '13'
+                - '14'
+                - '15'
+                - '16'
+              codigoEspecie:
+                description: |
+                  Código da espécie do veículo.
+                  * 01 - PASSAGEIRO
+                  * 02 - CARGA
+                  * 03 - MISTO
+                  * 04 - CORRIDA
+                  * 05 - TRACAO
+                  * 06 - ESPECIAL
+                  * 07 - COLECAO
+                type: string
+                enum:
+                - '1'
+                - '2'
+                - '3'
+                - '4'
+                - '5'
+                - '6'
+                - '7'
+              codigoMarca:
+                description: Código da marca/modelo do veículo.
+                type: string
+                pattern: "^[0-9]+$"
+              codigoCombustivel:
+                description: |
+                  Código do combustível do veículo.
+                  *  1 - ALCOOL
+                  *  2 - GASOLINA
+                  *  3 - DIESEL
+                  *  4 - GASOGENIO
+                  *  5 - GAS METANO
+                  *  6 - ELETRICO/FONTE INTERNA
+                  *  7 - ELETRICO/FONTE EXTERNA
+                  *  8 - GASOL/GAS NATURAL COMBUSTIVEL
+                  *  9 - ALCOOL/GAS NATURAL COMBUSTIVEL
+                  * 10 - DIESEL/GAS NATURAL COMBUSTIVEL
+                  * 11 - VIDE/CAMPO/OBSERVACAO
+                  * 12 - ALCOOL/GAS NATURAL VEICULAR
+                  * 13 - GASOLINA/GAS NATURAL VEICULAR
+                  * 14 - DIESEL/GAS NATURAL VEICULAR
+                  * 15 - GAS NATURAL VEICULAR
+                  * 16 - ALCOOL/GASOLINA
+                  * 17 - GASOLINA/ALCOOL/GAS NATURAL
+                  * 18 - GASOLINA/ELETRICO
+                type: string
+                enum:
+                - '1'
+                - '2'
+                - '3'
+                - '4'
+                - '5'
+                - '6'
+                - '7'
+                - '8'
+                - '9'
+                - '10'
+                - '11'
+                - '12'
+                - '13'
+                - '14'
+                - '15'
+                - '16'
+                - '17'
+                - '18'
+              codigoMunicipio:
+                description: Código do município do veículo.
+                type: string
+                pattern: "^[0-9]+$"
+              codigoTipo:
+                description: |
+                  Código do tipo do veículo.
+                  *  1 - BICICLETA
+                  *  2 - CICLOMOTOR
+                  *  3 - MOTONETA
+                  *  4 - MOTOCICLETA
+                  *  5 - TRICICLO
+                  *  6 - AUTOMOVEL
+                  *  7 - MICROONIBUS
+                  *  8 - ONIBUS
+                  *  9 - BONDE
+                  * 10 - REBOQUE
+                  * 11 - SEMI-REBOQUE
+                  * 12 - CHARRETE
+                  * 13 - CAMIONETA
+                  * 14 - CAMINHAO
+                  * 15 - CARROCA
+                  * 16 - CARRO DE MAO
+                  * 17 - CAMINHAO TRATOR
+                  * 18 - TRATOR DE RODAS
+                  * 19 - TRATOR DE ESTEIRAS
+                  * 20 - TRATOR MISTO
+                  * 21 - QUADRICICLO
+                  * 22 - CHASSI/PLATAFORMA
+                  * 23 - CAMINHONETE
+                  * 24 - SIDE-CAR
+                  * 25 - UTILITARIO
+                  * 26 - MOTOR-CASA
+                type: string
+                enum:
+                - '1'
+                - '2'
+                - '3'
+                - '4'
+                - '5'
+                - '6'
+                - '7'
+                - '8'
+                - '9'
+                - '10'
+                - '11'
+                - '12'
+                - '13'
+                - '14'
+                - '15'
+                - '16'
+                - '17'
+                - '18'
+                - '19'
+                - '20'
+                - '21'
+                - '22'
+                - '23'
+                - '24'
+                - '25'
+                - '26'
+              codigoRenavam:
+                description: Código Renavam do veículo.
+                type: string
+                pattern: "^[0-9]{11}$"
+              dataEmissao:
+                description: Data de emissão do CRV do veículo.
+                type: string
+                format: date
+              descricaoCarroceria:
+                description: Descrição da carroceria do veículo.
+                type: string
+              descricaoCategoria:
+                description: Descrição da categoria do veículo.
+                type: string
+              descricaoCor:
+                description: Descrição da cor do veículo.
+                type: string
+              descricaoEspecie:
+                description: Descrição da espécie do veículo.
+                type: string
+              descricaoMarca:
+                description: Descrição da marca/modelo do veículo.
+                type: string
+              descricaoCombustivel:
+                description: Descrição do combustível do veículo.
+                type: string
+              descricaoTipo:
+                description: Descrição do tipo do veículo.
+                type: string
+              nomeMunicipio:
+                description: Nome do município do endereço do proprietário.
+                type: string
+              nomeProprietario:
+                description: Nome do proprietário do veículo.
+                type: string
+              numeroCrv:
+                description: Número do espelho do veículo.
+                type: string
+                pattern: "^[0-9]{12}$"
+              placa:
+                description: Placa do veículo.
+                type: string
+                pattern: "^[A-Z]{3}[0-9][A-Z0-9][0-9]{2}$"
+              uf:
+                description: |
+                  Unidade Federativa (UF) de registro do veículo.
+                  * AC - Acre
+                  * AL - Alagoas
+                  * AP - Amapá
+                  * AM - Amazonas
+                  * BA - Bahia
+                  * CE - Ceará
+                  * DF - Distrito Federal
+                  * ES - Espírito Santo
+                  * GO - Goiás
+                  * MA - Maranhão
+                  * MG - Minas Gerais
+                  * MS - Mato Grosso do Sul
+                  * MT - Mato Grosso
+                  * PA - Pará
+                  * PB - Paraíba
+                  * PE - Pernambuco
+                  * PI - Piauí
+                  * PR - Paraná
+                  * RJ - Rio de Janeiro
+                  * RN - Rio Grande do Norte
+                  * RS - Rio Grande do Sul
+                  * RO - Rondônia
+                  * RR - Roraima
+                  * SC - Santa Catarina
+                  * SE - Sergipe
+                  * SP - São Paulo
+                  * TO - Tocantins
+                type: string
+                enum:
+                - AC
+                - AL
+                - AP
+                - AM
+                - BA
+                - CE
+                - DF
+                - ES
+                - GO
+                - MA
+                - MG
+                - MS
+                - MT
+                - PA
+                - PB
+                - PE
+                - PI
+                - PR
+                - RJ
+                - RN
+                - RS
+                - RO
+                - RR
+                - SC
+                - SE
+                - SP
+                - TO
+              placaMercosul:
+                description: Indicador de existência de placa padrão Mercosul para
+                  o veículo.
+                type: string
+                enum:
+                - 'true'
+                - 'false'
+              dataEmissaoLicenciamento:
+                description: Data de emissão do licenciamento do veículo.
+                type: string
+                format: date
+              dataMovimento:
+                description: Data de movimento do veículo.
+                type: string
+                format: date
+              dataInclusao:
+                description: Data de inclusão do veículo.
+                type: string
+                format: date
+  responses:
+    NoContent:
+      description: Nenhum recurso encontrado.
+    BadRequest:
+      description: A requisição enviada é inválida.
+      content:
+        application/json:
+          schema:
+            "$ref": "#/components/schemas/ErrorResponse"
+          examples:
+            Requisição inválida:
+              description: A requisição enviada não é válida.
+              value:
+                error:
+                  message: BadRequestError
+                  detail: Requisição inválida
+                status: failure
+    Unauthorized:
+      description: O _token_ de acesso não foi fornecido ou está expirado.
+      content:
+        application/json:
+          schema:
+            "$ref": "#/components/schemas/ErrorResponse"
+          examples:
+            Não autorizado:
+              description: O _token_ de acesso não foi fornecido ou está expirado.
+              value:
+                error:
+                  message: UnauthorizedError
+                  detail: Acesso não autorizado
+                status: failure
+    Forbidden:
+      description: O acesso ao recurso procurado foi negado pelo servidor.
+      content:
+        application/json:
+          schema:
+            "$ref": "#/components/schemas/ErrorResponse"
+          examples:
+            Acesso negado:
+              description: O acesso ao recurso procurado foi negado pelo servidor.
+              value:
+                error:
+                  message: ForbiddenError
+                  detail: Acesso negado
+                status: failure
+    NotFound:
+      description: O recurso procurado não foi encontrado.
+      content:
+        application/json:
+          schema:
+            "$ref": "#/components/schemas/ErrorResponse"
+          examples:
+            Não encontrado:
+              description: O recurso procurado não foi encontrado.
+              value:
+                error:
+                  message: NotFoundError
+                  detail: Recurso não encontrado
+                status: failure
+    NotAcceptable:
+      description: O servidor não pode executar a requisição.
+      content:
+        application/json:
+          schema:
+            "$ref": "#/components/schemas/ErrorResponse"
+          examples:
+            Não aceito:
+              description: O servidor não pode executar a requisição.
+              value:
+                error:
+                  message: NotAcceptableError
+                  detail: Requisição não aceitável
+                status: failure
+    InternalServerError:
+      description: Um erro interno do servidor foi identificado.
+      content:
+        application/json:
+          schema:
+            "$ref": "#/components/schemas/ErrorResponse"
+          examples:
+            Erro interno do servidor:
+              description: Um erro interno do servidor foi identificado.
+              value:
+                error:
+                  message: InternalServerErrorError
+                  detail: Erro interno do servidor
+                status: failure
+    FalhaNaOperacao:
+      description: Ocorreu uma falha inesperada durante a execução da operação.
+      content:
+        application/json:
+          schema:
+            "$ref": "#/components/schemas/ErrorResponse"
+          examples:
+            Falha na operação:
+              description: Ocorreu uma falha inesperada durante a execução da operação.
+              value:
+                error:
+                  message: FalhaNaOperacaoError
+                  detail: Falha na operação de consulta de cidadão
+                status: failure
+    ServiceUnavailable:
+      description: O serviço está indisponível no momento.
+      content:
+        application/json:
+          schema:
+            "$ref": "#/components/schemas/ErrorResponse"
+          examples:
+            Serviço indisponível:
+              description: O serviço está indisponível no momento.
+              value:
+                error:
+                  message: ServicoIndisponivelError
+                  detail: Serviço indisponível das 22h às 6h.
+                status: failure
+  examples:
+    ProvaVidaSolicitadaDocument:
+      description: A prova de vida foi solicitada com sucesso.
+      value:
+        data:
+          type: provas-de-vida
+          id: 113d1f5f-0d8e-4f7d-b26d-11a59c9e83f6
+          attributes:
+            tipo: 1
+        jsonapi:
+          version: '1.1'
+        links:
+          self: "/api/x_mdpdd_tdv/v1/tdv/provas-de-vida/113d1f5f-0d8e-4f7d-b26d-11a59c9e83f6"
+    ProvaVidaNaoRealizadaDocument:
+      description: A prova de vida procurada foi encontrada, mas ainda não foi realizada.
+      value:
+        data:
+          type: provas-de-vida
+          id: 113d1f5f-0d8e-4f7d-b26d-11a59c9e83f6
+          attributes:
+            tipo: 1
+            estado: Não realizada
+        jsonapi:
+          version: '1.1'
+        links:
+          self: "/api/x_mdpdd_tdv/v1/tdv/provas-de-vida/113d1f5f-0d8e-4f7d-b26d-11a59c9e83f6"
+    ProvaVidaAutorizadaDocument:
+      description: A prova de vida procurada foi autorizada.
+      value:
+        data:
+          type: provas-de-vida
+          id: 113d1f5f-0d8e-4f7d-b26d-11a59c9e83f6
+          attributes:
+            tipo: 1
+            estado: Autorizada
+        jsonapi:
+          version: '1.1'
+        links:
+          self: "/api/x_mdpdd_tdv/v1/tdv/provas-de-vida/113d1f5f-0d8e-4f7d-b26d-11a59c9e83f6"
+    ProvaVidaNegadaDocument:
+      description: A prova de vida procurada foi negada.
+      value:
+        data:
+          type: provas-de-vida
+          id: 113d1f5f-0d8e-4f7d-b26d-11a59c9e83f6
+          attributes:
+            tipo: 1
+            estado: Negada
+            motivoNegacao: Falha na validação de biometria facial
+        jsonapi:
+          version: '1.1'
+        links:
+          self: "/api/x_mdpdd_tdv/v1/tdv/provas-de-vida/113d1f5f-0d8e-4f7d-b26d-11a59c9e83f6"
+    TDVsEncontradasResponse:
+      description: O usuário possui TDVs associadas ao seu nome.
+      value:
+        result:
+        - ativa: 'true'
+          numeroTransferenciaVeiculo: TDV1470832
+          estado: '9'
+          codigoTransferenciaVeiculo: 2da5b0deb8c6467cb3903f2ad764af14
+          anoFabricacaoVeiculo: '2022'
+          anoEcrvVeiculo: '2024'
+          anoExercicioVeiculo: '2024'
+          anoModeloVeiculo: '2022'
+          codigoAnexoAssinaturaComprador: 9c45fb88c3cc4676a2a1cfe83ca19dcd
+          codigoAnexoAssinaturaVendedor: b58e3ee6e9d14a1aafc9078bdc031080
+          codigoAnexoAtpve: 01304e4dab23450281f9cc84d4c7cdc6
+          codigoAnexoAutodeclaracaoResidenciaComprador: 8e9d7e11558c499e9ab1b1666cebe887
+          autodeclaracaoResidenciaComprador: Eu, MARIA ANGELICA FONSECA VELOSO MENDES,
+            inscrito no CPF sob o nº 549.504.418-50, declaro para os devidos fins
+            que resido em Rua Juvenal Lira nº 221 CASA 2, Bairro Jardim Elisa Maria,
+            no município de São Paulo, no estado de São Paulo.\nSob pena da lei, estou
+            ciente de que a falsidade destas informações implicará em penalidades.
+          bairroComprador: Jardim Elisa Maria
+          cepComprador: '02873610'
+          chassiVeiculo: 1HNRYNPS36KJP6477
+          codigoCarroceriaVeiculo: '999'
+          codigoCategoriaVeiculo: '1'
+          codigoCorVeiculo: '13'
+          codigoEspecieVeiculo: '3'
+          codigoMarcaVeiculo: '2002750'
+          codigoProvaVidaComprador: 42ed388b6c7e41e1a18c10c8026c7a4f
+          codigoProvaVidaVendedor: a348bbd83b7641ac9749066bf34e828c
+          codigoCombustivelVeiculo: '16'
+          codigoDespachante:
+          codigoFinanciadoGravame: '05246487601'
+          codigoMunicipioComprador: '7107'
+          codigoMunicipioVeiculo: '7107'
+          codigoTipoVeiculo: '13'
+          codigoRenavamVeiculo: '43833099292'
+          complementoComprador: CASA 1
+          confirmacaoAutodeclaracaoResidenciaComprador: 'true'
+          codigoComprador: '05246487601'
+          codigoVendedor: '22231049830'
+          dataEmissaoCrvVeiculo: '2023-10-01T00:00:00.000Z'
+          dataExpiracaoQRCode: '2024-04-02T23:16:00.000Z'
+          dataPagamentoQRCode: '2024-04-02T23:02:02.000Z'
+          dataInicialPagamento: '2024-04-02T21:37:07.000Z'
+          descricaoCarroceriaVeiculo: NAO APLIC
+          descricaoCategoriaVeiculo: PARTICULAR
+          descricaoCorVeiculo: ROXA
+          descricaoEspecieVeiculo: MISTO
+          descricaoMarcaVeiculo: FIAT/FIORINO ALT AMB
+          descricaoCombustivelVeiculo: ALCOOL/GASOLINA
+          descricaoTipoVeiculo: CAMIONETA
+          codigoAnexoLaudoAuditoria: c77a54dd7ba5462884f9facc34ed14c6
+          emailComprador: maria_mendes66@gmail.com
+          emailVendedor: zecadetran@gmail.com
+          estadoComprador: SAO PAULO
+          estadoLaudoVistoria: Aprovado
+          estadoQRCode: '2'
+          idPagamentoQRCode: E0000000020240402200139464938420
+          idQRCode: RCBMUL20240402API24093170100748132
+          logradouroComprador: Rua Juvenal Lira
+          nomeComprador: MARIA ANGELICA FONSECA VELOSO MENDES
+          nomeMunicipioComprador: SAO PAULO
+          nomeMunicipioVeiculo: SAO PAULO
+          nomeVendedor: ZECA DO DETRAN
+          numeroAtpveVeiculo: '243763996337278'
+          numeroComprador: '38'
+          numeroCrvVeiculo: '246188083377'
+          numeroEcrvVeiculo: '1157'
+          numeroLaudoVistoria: SP676010552-82/2024
+          origem: '1'
+          origemComunicacaoVendaVeiculo: '3'
+          placaVeiculo: BLK7C34
+          qrCode: '00020101021226850014br.gov.bcb.pix2563qrcodepix.bb.com.br/pix/v2/8b7325ae-28e4-4298-8160-d65e3bad086c5204000053039865406272.275802BR5924COORD
+            ADM FINANCEIRA CAF6008Brasilia62070503***63046503'
+          kmVeiculo: '32675'
+          kmVistoriadaVeiculo: '32009'
+          tipoProvaVida: '1'
+          ufComprador: SP
+          ufVeiculo: SP
+          valorVendaVeiculo: '87464'
+    TDVCriadaResponse:
+      description: A TDV foi criada com o sucesso com o código retornado pelo servidor.
+      value:
+        result:
+          codigoTransferenciaVeiculo: 2da5b0deb8c6467cb3903f2ad764af14
+    TDVEncontradaResponse:
+      description: A TDV com o código fornecido foi encontrada.
+      value:
+        result:
+          ativa: 'true'
+          numeroTransferenciaVeiculo: TDV1470832
+          estado: '9'
+          codigoTransferenciaVeiculo: 2da5b0deb8c6467cb3903f2ad764af14
+          anoFabricacaoVeiculo: '2022'
+          anoEcrvVeiculo: '2024'
+          anoExercicioVeiculo: '2024'
+          anoModeloVeiculo: '2022'
+          codigoAnexoAssinaturaComprador: 9c45fb88c3cc4676a2a1cfe83ca19dcd
+          codigoAnexoAssinaturaVendedor: b58e3ee6e9d14a1aafc9078bdc031080
+          codigoAnexoAtpve: 01304e4dab23450281f9cc84d4c7cdc6
+          codigoAnexoAutodeclaracaoResidenciaComprador: 8e9d7e11558c499e9ab1b1666cebe887
+          autodeclaracaoResidenciaComprador: Eu, MARIA ANGELICA FONSECA VELOSO MENDES,
+            inscrito no CPF sob o nº 549.504.418-50, declaro para os devidos fins
+            que resido em Rua Juvenal Lira nº 221 CASA 2, Bairro Jardim Elisa Maria,
+            no município de São Paulo, no estado de São Paulo.\nSob pena da lei, estou
+            ciente de que a falsidade destas informações implicará em penalidades.
+          bairroComprador: Jardim Elisa Maria
+          cepComprador: '02873610'
+          chassiVeiculo: 1HNRYNPS36KJP6477
+          codigoCarroceriaVeiculo: '999'
+          codigoCategoriaVeiculo: '1'
+          codigoCorVeiculo: '13'
+          codigoEspecieVeiculo: '3'
+          codigoMarcaVeiculo: '2002750'
+          codigoProvaVidaComprador: 42ed388b6c7e41e1a18c10c8026c7a4f
+          codigoProvaVidaVendedor: a348bbd83b7641ac9749066bf34e828c
+          codigoCombustivelVeiculo: '16'
+          codigoDespachante:
+          codigoFinanciadoGravame: '05246487601'
+          codigoMunicipioComprador: '7107'
+          codigoMunicipioVeiculo: '7107'
+          codigoTipoVeiculo: '13'
+          codigoRenavamVeiculo: '43833099292'
+          complementoComprador: CASA 1
+          confirmacaoAutodeclaracaoResidenciaComprador: 'true'
+          codigoComprador: '05246487601'
+          codigoVendedor: '22231049830'
+          dataEmissaoCrvVeiculo: '2023-10-01T00:00:00.000Z'
+          dataExpiracaoQRCode: '2024-04-02T23:16:00.000Z'
+          dataPagamentoQRCode: '2024-04-02T23:02:02.000Z'
+          dataInicialPagamento: '2024-04-02T21:37:07.000Z'
+          descricaoCarroceriaVeiculo: NAO APLIC
+          descricaoCategoriaVeiculo: PARTICULAR
+          descricaoCorVeiculo: ROXA
+          descricaoEspecieVeiculo: MISTO
+          descricaoMarcaVeiculo: FIAT/FIORINO ALT AMB
+          descricaoCombustivelVeiculo: ALCOOL/GASOLINA
+          descricaoTipoVeiculo: CAMIONETA
+          codigoAnexoLaudoAuditoria: c77a54dd7ba5462884f9facc34ed14c6
+          emailComprador: maria_mendes66@gmail.com
+          emailVendedor: zecadetran@gmail.com
+          estadoComprador: SAO PAULO
+          estadoLaudoVistoria: Aprovado
+          estadoQRCode: '2'
+          idPagamentoQRCode: E0000000020240402200139464938420
+          idQRCode: RCBMUL20240402API24093170100748132
+          logradouroComprador: Rua Juvenal Lira
+          nomeComprador: MARIA ANGELICA FONSECA VELOSO MENDES
+          nomeMunicipioComprador: SAO PAULO
+          nomeMunicipioVeiculo: SAO PAULO
+          nomeVendedor: ZECA DO DETRAN
+          numeroAtpveVeiculo: '243763996337278'
+          numeroComprador: '38'
+          numeroCrvVeiculo: '246188083377'
+          numeroEcrvVeiculo: '1157'
+          numeroLaudoVistoria: SP676010552-82/2024
+          origem: '1'
+          origemComunicacaoVendaVeiculo: '3'
+          placaVeiculo: BLK7C34
+          qrCode: '00020101021226850014br.gov.bcb.pix2563qrcodepix.bb.com.br/pix/v2/8b7325ae-28e4-4298-8160-d65e3bad086c5204000053039865406272.275802BR5924COORD
+            ADM FINANCEIRA CAF6008Brasilia62070503***63046503'
+          kmVeiculo: '32675'
+          kmVistoriadaVeiculo: '32009'
+          tipoProvaVida: '1'
+          ufComprador: SP
+          ufVeiculo: SP
+          valorVendaVeiculo: '87464'
+    ParametroObrigatorioNaoInformadoError:
+      description: Um ou mais parâmetros obrigatórios para a execução da operação
+        não foram informados.
+      value:
+        error:
+          message: ParametroObrigatorioNaoInformadoError
+          detail: 'Um ou mais parâmetros obrigatórios não foram informados: CPF/CNPJ
+            do proprietário'
+        status: failure
+    VeiculoNaoEncontradoError:
+      description: O veículo procurado não foi encontrado.
+      value:
+        error:
+          message: VeiculoNaoEncontradoError
+          detail: Veículo não encontrado
+        status: failure
+    VeiculoSemCRVDigitalError:
+      description: O veículo não possui CRV digital obrigatório.
+      value:
+        error:
+          message: VeiculoSemCRVDigitalError
+          detail: Veículo sem CRV digital
+        status: failure
+    ATPVeExistenteError:
+      description: O veículo já possui ATPV-e criada para ele.
+      value:
+        error:
+          message: ATPVeExistenteError
+          detail: Já existe uma ATPV-e para o veículo
+        status: failure
+    VeiculoComRestricaoFinanceiraError:
+      description: O veículo possui restrição financeira (gravame).
+      value:
+        error:
+          message: VeiculoComRestricaoFinanceiraError
+          detail: Veículo com restrição financeira
+        status: failure
+    RestricaoEncontradaError:
+      description: O veículo possui restrições que impedem a realização da TDV.
+      value:
+        error:
+          message: RestricaoEncontradaError
+          detail: 'Restrição encontrada: PAGAMENTO DE TAXA DE SERVIÇO NÃO LOCALIZADO'
+        status: failure
+    VistoriaNaoEncontradaError:
+      description: O veículo não passou por vistoria obrigatória para a realização
+        da TDV.
+      value:
+        error:
+          message: VistoriaNaoEncontradaError
+          detail: Vistoria não encontrada
+        status: failure
+    VistoriaComApontamentosError:
+      description: O veículo passou por vistoria, mas foram incluídos apontamentos
+        no laudo.
+      value:
+        error:
+          message: VistoriaComApontamentosError
+          detail: Vistoria com apontamentos
+        status: failure
+    ProvaDeVidaInvalidaError:
+      description: O usuário não realizou prova de vida ou o código da prova de vida
+        informado não é válido.
+      value:
+        error:
+          message: ProvaDeVidaInvalidaError
+          detail: Prova de vida inválida
+        status: failure
+    CPFCNPJInvalidoError:
+      description: O comprador e o proprietário não podem ser a mesma pessoa.
+      value:
+        error:
+          message: CPFCNPJInvalidoError
+          detail: CPF/CNPJ do proprietário não pode ser igual ao do comprador
+        status: failure
+    EmailInvalidoError:
+      description: O email do comprador não é válido.
+      value:
+        error:
+          message: EmailInvalidoError
+          detail: Email do comprador inválido
+        status: failure
+    ComplementoInvalidoError:
+      description: O complemento do comprador só pode conter letras, dígitos e espaços.
+      value:
+        error:
+          message: ComplementoInvalidoError
+          detail: Complemento do comprador só pode conter letras, dígitos e espaços
+        status: failure
+    QuilometragemAcimaDoLimiteError:
+      description: A quilometragem do veículo está acima do limite permitido.
+      value:
+        error:
+          message: QuilometragemAcimaDoLimiteError
+          detail: Quilometragem acima do limite
+        status: failure
+    QuilometragemMenorQueVistoriaError:
+      description: A quilometragem do veículo está com um valor menor do que a registrada
+        na vistoria realizada.
+      value:
+        error:
+          message: QuilometragemMenorQueVistoriaError
+          detail: Quilometragem do veículo é menor que a registrada na vistoria
+        status: failure
+    TDVNaoEncontradaError:
+      description: A TDV procurada não foi encontrada.
+      value:
+        error:
+          message: TDVNaoEncontradaError
+          detail: TDV não encontrada
+        status: failure
+    EstadoInvalidoError:
+      description: O estado informado não é válido.
+      value:
+        error:
+          message: EstadoInvalidoError
+          detail: Estado inválido
+        status: failure
+    CPFInvalidoError:
+      description: O CPF informado não é válido.
+      value:
+        error:
+          message: CPFInvalidoError
+          detail: CPF do comprador inválido
+        status: failure
+    CPFNaoEncontradoError:
+      description: O CPF procurado não foi encontrado.
+      value:
+        error:
+          message: CPFNaoEncontradoError
+          detail: CPF não encontrado
+        status: failure
+    CidadaoFalecidoError:
+      description: O CPF informado pertence a um cidadão falecido.
+      value:
+        error:
+          message: CidadaoFalecidoError
+          detail: 'CPF inválido: cidadão falecido'
+        status: failure
+    CNPJInvalido:
+      description: O CNPJ informado não é válido.
+      value:
+        error:
+          message: CNPJInvalido
+          detail: CNPJ do comprador inválido
+        status: failure
+    CEPNaoEncontradoError:
+      description: O CEP procurado não foi encontrado.
+      value:
+        error:
+          message: CEPNaoEncontradoError
+          detail: CEP não encontrado
+        status: failure
+    CEPInvalidoError:
+      description: O CEP não pertence ao estado de São Paulo.
+      value:
+        error:
+          message: CEPInvalidoError
+          detail: CEP do comprador não é de São Paulo
+        status: failure
+    VeiculoSemPlacaMercosulError:
+      description: O comprador é de um município diferente do município de registro
+        do veículo e a placa deste não é do padrão Mercosul.
+      value:
+        error:
+          message: VeiculoSemPlacaMercosulError
+          detail: Veículo sem placa Mercosul
+        status: failure
+    ATPVeNaoEncontradaError:
+      description: A ATPV-e informada na TDV não foi encontrada.
+      value:
+        error:
+          message: ATPVeNaoEncontradaError
+          detail: ATPV-e não encontrada
+        status: failure
+    AutodeclaracaoResidenciaNaoConfirmadaError:
+      description: O comprador não confirmou a autodeclaracão de residência.
+      value:
+        error:
+          message: AutodeclaracaoResidenciaNaoConfirmadaError
+          detail: Autodeclaração de residência não confirmada
+        status: failure
+    DebitosEncontradosResponse:
+      description: Lista de débitos da TDV.
+      value:
+      - descricao: Licenciamento
+        valor: 160.22
+    QRCodeResponse:
+      description: Dados do _QR code_ da TDV.
+      value:
+        idQRCode: RCBMUL20240402API24093170100748132
+        qrCode: '00020101021226850014br.gov.bcb.pix2563qrcodepix.bb.com.br/pix/v2/8b7325ae-28e4-4298-8160-d65e3bad086c5204000053039865406272.275802BR5924COORD
+          ADM FINANCEIRA CAF6008Brasilia62070503***63046503'
+        dataExpiracaoQRCode: '2024-04-02T23:16:00.000Z'
+        estadoQRCode: '2'
+        idPagamentoQRCode: E0000000020240402200139464938420
+        dataPagamentoQRCode: '2024-04-02T23:02:02.000Z'
+    CidadaoEncontradoResponse:
+      description: Dados do cidadão procurado.
+      value:
+        result:
+          cpf: '05246487601'
+          nome: MARIA ANGELICA FONSECA VELOSO MENDES
+          nomeMae: MARIA DAS DORES FONSECA
+          dataNascimento: '19660331'
+          sexo: '2'
+          logradouro: JUVENAL LIRA
+          tipoLogradouro: RUA
+          numeroLogradouro: '221'
+          complemento: CASA 1
+          cep: '02873610'
+          bairro: JARDIM ELISA MARIA
+          uf: SP
+          telefone: '11998254741'
+          anoObito:
+          codMunicipio: '7107'
+          estrangeiro: '0'
+          dataAtualizacao: '20200811'
+    CEPEncontradoResponse:
+      description: Dados do CEP procurado.
+      value:
+        result:
+          cep: '02873610'
+          bairro: Jardim Elisa Maria
+          tipoLogradouro: Rua
+          endereco: Juvenal Lira
+          complemento:
+          tipoLogradouroAbrev: R
+          enderecoAbrev: R Juvenal Lira
+          tipoLogradouroAbrevDNE: R
+          localidade: São Paulo
+          estado: São Paulo
+          uf: SP
+          numeroIBGE: 3550308
+          logradouro:
+          cdTipoCEP: 1
+          tipoCEP: CEP Padrão
+          municipio: São Paulo
+          tipoLocalidade:
+          codigoMunicipio: 9668
+          codigoLocalRel: 9668
+          latitude:
+          longitude:
+          codigoDne: 600871
+          tipoLogradouroDne: 81
+          codigoBairro: 25703
+    VeiculosEncontradosResponse:
+      description: Lista de veículos de propriedade do usuário.
+      value:
+        result:
+        - placa: BLK7C34
+          placaMercosul: 'true'
+          nomeProprietario: ZECA DO DETRAN
+          chassi: 1HNRYNPS36KJP6477
+          codigoRenavam: '43833099292'
+          codigoMunicipio: '7107'
+          nomeMunicipio: SAO PAULO
+          codigoMarca: '2002750'
+          descricaoMarca: FIAT/FIORINO ALT AMB
+          codigoCategoria: '1'
+          descricaoCategoria: PARTICULAR
+          codigoTipo: '13'
+          descricaoTipo: CAMIONETA
+          codigoCarroceria: '999'
+          descricaoCarroceria: NAO APLIC
+          codigoCor: '13'
+          descricaoCor: ROXA
+          codigoCombustivel: '16'
+          descricaoCombustivel: ALCOOL/GASOLINA
+          codigoEspecie: '3'
+          descricaoEspecie: MISTO
+          anoFabricacao: '2022'
+          anoModelo: '2022'
+          anoExercicio: '2024'
+          dataEmissao: '2023-10-01T00:00:00.000Z'
+          dataEmissaoLicenciamento: '2024-05-04T00:00:00.000Z'
+          dataMovimento: '2024-05-04T00:00:00.000Z'
+          dataInclusao: '2022-08-27T00:00:00.000Z'
+          numeroCrv: '2400009621'
+          uf: SP
+  securitySchemes:
+    bearerTokenIDPSP:
+      description: _Access token_ obtido através de autenticação no IDPSP usando uma
+        conta válida do GOV.BR.
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+- bearerTokenIDPSP: []
