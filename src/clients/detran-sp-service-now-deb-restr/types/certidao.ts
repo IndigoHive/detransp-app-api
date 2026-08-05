@@ -79,3 +79,45 @@ export type DocumentoCertidaoResponse = {
 }
 
 export type DocumentoCertidaoResult = DocumentoCertidaoResponse | null | undefined
+
+export type CertidaoListagemVeiculoIncluded = {
+  type: string
+  id: string
+  attributes: {
+    placa: string
+    renavam: string
+    criadoPor?: string
+    dataHoraEmissao: DateString
+    nomeDoc: string
+    sysId_cnm: string
+  }
+}
+
+export type CertidaoListagemResponse = {
+  data: {
+    type: string
+    id: string
+    attributes: { cpf: string; nome?: string }
+    relationships: {
+      veiculos: {
+        data: { type: string; id: string } | Array<{ type: string; id: string }>
+      }
+    }
+  }
+  included?: CertidaoListagemVeiculoIncluded[]
+}
+
+export type CertidaoListagemResult = CertidaoListagemResponse | null | undefined
+
+export type DocumentoCertidaoPorIdResponse = {
+  data: {
+    id: string
+    type: string
+    attributes: {
+      conteudo?: string
+      attributes?: DocumentoCertidaoAttributes
+    }
+  }
+}
+
+export type DocumentoCertidaoPorIdResult = DocumentoCertidaoPorIdResponse | null | undefined
