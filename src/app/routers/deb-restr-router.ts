@@ -246,12 +246,13 @@ export function debRestrRouter (): Router {
     const { accessToken, cpf: userCpf } = req.session!
     const renavam = asNonEmptyString(req.params.renavam)
     const placa = asNonEmptyString(req.query.placa)
-    if (!userCpf || !renavam || !placa) {
+    const id = asNonEmptyString(req.query.id)
+    if (!userCpf || !renavam || !placa || !id) {
       throw BadRequest('Requisição inválida.')
     }
-    logRequest(req, 'certidao-documento', { renavam, placa })
+    logRequest(req, 'certidao-documento', { renavam, placa, id })
     const service = req.scope.resolve('buscaDocumentoCertidaoService')
-    const result = await service.run({ accessToken, userCpf, renavam, placa })
+    const result = await service.run({ accessToken, userCpf, renavam, placa, id })
     res.status(200).json(result)
   })
 

@@ -197,11 +197,13 @@ export type VerificaPixDebitoResult = {
   confirmedDate: string | null
 }
 
-export type CertidaoVigenteResult = {
-  disponivel: boolean
-  emissao: string | null
-  descricao: string | null
+export type CertidaoListItem = {
+  id: string
+  title: string
+  description: string
 }
+
+export type CertidaoVigenteResult = CertidaoListItem[]
 
 export type ResumoCertidaoVehicle = {
   id: string | null

@@ -43,12 +43,13 @@ export function deriveIpvaSectionStatus (debitos: DebitoIncluded[]): DebtSection
 }
 
 // ServiceNow emits datetimes as "DD-MM-YYYY HH:MM:SS" (already BRT) in some
-// endpoints and as full ISO in others — normalize both to "dd/mm/yyyy HH:MM".
-export function formatDateTimeBr (value: string): string {
-  const brMatch = value.match(/^(\d{2})-(\d{2})-(\d{4})[ T](\d{2}):(\d{2})/)
+// endpoints and as full ISO in others — normalize both to "dd/mm/yyyy HH:MM"
+// (or "dd/mm/yyyy HH:MM:SS" with withSeconds).
+export function formatDateTimeBr (value: string, withSeconds = false): string {
+  const brMatch = value.match(/^(\d{2})-(\d{2})-(\d{4})[ T](\d{2}):(\d{2}):(\d{2})/)
   if (brMatch) {
-    const [, day, month, year, hour, minute] = brMatch
-    return `${day}/${month}/${year} ${hour}:${minute}`
+    const [, day, month, year, hour, minute, second] = brMatch
+    return `${day}/${month}/${year} ${hour}:${minute}${withSeconds ? `:${second}` : ''}`
   }
   if (/^\d{4}-\d{2}-\d{2}T/.test(value)) {
     const parsed = new Date(value)
@@ -61,6 +62,7 @@ export function formatDateTimeBr (value: string): string {
           year: 'numeric',
           hour: '2-digit',
           minute: '2-digit',
+          ...(withSeconds ? { second: '2-digit' as const } : {}),
         })
         .replace(',', '')
     }

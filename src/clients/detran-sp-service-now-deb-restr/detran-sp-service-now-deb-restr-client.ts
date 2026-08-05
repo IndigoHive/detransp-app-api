@@ -7,7 +7,9 @@ import {
 } from './detran-sp-service-now-deb-restr-http'
 import type {
   BuscaVeiculoResult,
+  CertidaoListagemResult,
   CertidaoResult,
+  DocumentoCertidaoPorIdResult,
   DocumentoCertidaoResult,
   ListaVeiculosResult,
   QRCodeCertidaoResult,
@@ -94,6 +96,21 @@ export class DetranSpServiceNowDebRestrClient extends DetranSpServiceNowDebRestr
         `/${renavam}/placa/${auth.placa}/relationships/certidao/relationships/documento`,
         this.withAuth(auth)
       )
+    ).data
+  }
+
+  async listaCertidoes (auth: DetranSpServiceNowClientAuthWithVeiculo): Promise<CertidaoListagemResult> {
+    return (
+      await this.axios.get(`/relationships/certidao/cpf/${auth.userCpf}`, this.withAuth(auth))
+    ).data
+  }
+
+  async buscaDocumentoCertidaoPorId (
+    auth: DetranSpServiceNowClientAuthWithVeiculo,
+    sysId: string
+  ): Promise<DocumentoCertidaoPorIdResult> {
+    return (
+      await this.axios.get(`/relationships/certidao/${sysId}/relationships/documento`, this.withAuth(auth))
     ).data
   }
 }
