@@ -5,8 +5,6 @@ import { formatDateTimeBr } from '../utils'
 
 const CERTIDAO_DESCRICAO = 'Certidão de débitos e restrições do veículo'
 
-// ServiceNow keeps at most ONE current certidão per vehicle (re-viewable free
-// for 90 days) — this is a single resource, never a list.
 export class BuscaCertidaoVigenteService {
   private readonly client: DetranSpServiceNowDebRestrClient
 
@@ -16,21 +14,19 @@ export class BuscaCertidaoVigenteService {
 
   async run (auth: DebRestrVeiculoAuth): Promise<CertidaoVigenteResult> {
     try {
-      const certidao = await this.client.buscaCertidao(auth, auth.renavam)
-      const certidaoData = certidao?.data?.[0]
-      if (!certidaoData) {
-        return { disponivel: false, emissao: null, descricao: null }
-      }
+      const certidoes = await this.client.listaCertidoes(auth)
+      const included = certidoes?.included ?? []
 
-      const dataHoraEmissao = certidaoData.attributes?.dataHoraEmissao
-      return {
-        disponivel: true,
-        emissao: dataHoraEmissao ? formatDateTimeBr(dataHoraEmissao).slice(0, 10) : null,
-        descricao: CERTIDAO_DESCRICAO,
-      }
+      return included
+        .filter((item) => item.attributes?.renavam === auth.renavam)
+        .map((item) => ({
+          id: item.attributes.sysId_cnm,
+          title: CERTIDAO_DESCRICAO,
+          description: `Emissão: ${formatDateTimeBr(item.attributes.dataHoraEmissao, true)}`,
+        }))
     } catch (err) {
       if (err instanceof DetranSpServiceNowDebRestrError) {
-        return { disponivel: false, emissao: null, descricao: null }
+        return []
       }
       throw err
     }
