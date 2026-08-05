@@ -12,7 +12,7 @@ import type {
 } from '../types'
 import { deriveIpvaSectionStatus, deriveSectionStatus, formatCurrencyBr, sumValores, toSentenceCase } from '../utils'
 
-const LICENCIAMENTO_BLOQUEADO_TEXT = 'Para liberar o pagamento do licenciamento, quite os demais débitos do veículo.'
+const LICENCIAMENTO_BLOQUEADO_TEXT = 'Para liberar o pagamento do licenciamento, é preciso que todos os débitos do veículo tenham sido pagos.'
 
 function ipvaHelperText (parcelCount: number): string | undefined {
   return parcelCount > 1 ? `Parcelamento em até ${parcelCount}x no Pix sem juros` : undefined
