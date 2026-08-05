@@ -48,6 +48,7 @@ export type Config = {
   rotaVida: {
     vidaBaseUrl: string
     arquivosBaseUrl: string
+    bypassMatch: boolean
   }
   rotaCrvPecas: {
     baseUrl: string
