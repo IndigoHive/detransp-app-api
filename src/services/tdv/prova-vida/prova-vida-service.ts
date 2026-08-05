@@ -1,9 +1,13 @@
 import createError from 'http-errors'
+import type { Logger } from 'pino'
 import type { RotaVidaClient } from '../../../clients/rota-vida'
+import type { Config } from '../../../types'
 import { extractBearerToken, extractCpfFromToken } from '../../../utils/token'
 
 type Dependencies = {
   rotaVidaClient: RotaVidaClient
+  config: Config
+  logger: Logger
 }
 
 export type ProvaVidaInput = {
@@ -16,9 +20,13 @@ export type ProvaVidaResult = {
 
 export class ProvaVidaService {
   private readonly client: RotaVidaClient
+  private readonly bypassMatch: boolean
+  private readonly logger: Logger
 
-  constructor ({ rotaVidaClient }: Dependencies) {
+  constructor ({ rotaVidaClient, config, logger }: Dependencies) {
     this.client = rotaVidaClient
+    this.bypassMatch = config.rotaVida.bypassMatch
+    this.logger = logger
   }
 
   async run (authorizationHeader: string | undefined, input: ProvaVidaInput): Promise<ProvaVidaResult> {
@@ -44,6 +52,14 @@ export class ProvaVidaService {
       pushTitulo: null,
       pushMensagem: null
     })
+
+    if (this.bypassMatch) {
+      this.logger.warn(
+        { codigoProvaVida: prova.id },
+        'LIVENESS_BYPASS_MATCH ativo: pulando upload de foto e chamada real a /match/v3, biometria considerada conferida'
+      )
+      return { codigoProvaVida: prova.id }
+    }
 
     const imageBuffer = Buffer.from(input.imageBase64, 'base64')
 

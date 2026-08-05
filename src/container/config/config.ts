@@ -121,6 +121,9 @@ export const config: Config = {
   rotaVida: {
     vidaBaseUrl: env.ROTA_VIDA_BASE_URL || '',
     arquivosBaseUrl: env.ROTA_ARQUIVOS_BASE_URL || '',
+    // Dev/QA-only escape hatch to test downstream TDV flows without a real biometric match.
+    // Never honored in production, regardless of the env var value.
+    bypassMatch: env.LIVENESS_BYPASS_MATCH === 'true' && (env.NODE_ENV || 'development') !== 'production',
   },
   rotaCrvPecas: {
     baseUrl: env.ROTA_CRV_PECAS_BASE_URL || '',
