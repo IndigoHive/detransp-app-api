@@ -24,6 +24,7 @@ export const env = {
   ROTA_CRV_PECAS_BASE_URL: process.env.ROTA_CRV_PECAS_BASE_URL,
   ROTA_VISTORIAS_BASE_URL: process.env.ROTA_VISTORIAS_BASE_URL,
   LOG_LEVEL: process.env.LOG_LEVEL,
+  LIVENESS_BYPASS_MATCH: process.env.LIVENESS_BYPASS_MATCH,
   NODE_ENV: process.env.NODE_ENV,
   PORT: process.env.PORT
 }
