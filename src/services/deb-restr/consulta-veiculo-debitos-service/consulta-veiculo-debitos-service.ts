@@ -118,9 +118,6 @@ export class ConsultaVeiculoDebitosService {
     const hasOtherDebts = ipva.length > 0 || multas.length > 0
 
     const licenciamentoPayable = licenciamento.length > 0 && !hasOtherDebts
-    // pix/total only earns its place when it bundles more than one section —
-    // see the VehicleDebtsPayload.total comment for the full rationale
-    const totalPayable = ipva.length > 0 && multas.length > 0 && !hasMultaForaDoSistema
 
     const ipvaStatus = deriveIpvaSectionStatus(ipva)
     const multasStatus = deriveSectionStatus(multas)
@@ -155,10 +152,6 @@ export class ConsultaVeiculoDebitosService {
         ...(licenciamento.length > 0 && !licenciamentoPayable
           ? { helperText: LICENCIAMENTO_BLOQUEADO_TEXT }
           : {}),
-      },
-      total: {
-        pixButton: totalPayable ? 'visible' : 'hidden',
-        totalLabel: totalPayable ? formatCurrencyBr(sumValores([...ipva, ...multas])) : null,
       },
     }
   }
