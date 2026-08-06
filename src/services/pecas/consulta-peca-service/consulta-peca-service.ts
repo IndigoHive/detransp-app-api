@@ -101,7 +101,7 @@ export class ConsultaPecaService {
             cnpj: peca.cnpj,
             razaoSocial: peca.nomeEmpresa,
             telefone: peca.telefoneDDD && peca.telefoneNumero ? `(${peca.telefoneDDD}) ${peca.telefoneNumero}` : null,
-            email: peca.email?.toLocaleLowerCase() || '',
+            email: peca.email ? peca.email.toLowerCase() : null,
             endereco: this.buildEndereco(peca),
           }
         : null,
