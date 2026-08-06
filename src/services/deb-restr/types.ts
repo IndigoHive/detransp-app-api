@@ -108,10 +108,6 @@ export type VehicleDebtsPayload = {
     pixButton: PixButtonState
     helperText?: string
   }
-  total: {
-    pixButton: Exclude<PixButtonState, 'disabled'>
-    totalLabel: string | null
-  }
 }
 
 export type ConsultaVehicleInfo = {

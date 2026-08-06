@@ -1,3 +1,4 @@
+import type { Logger } from 'pino'
 import type {
   BuscaVeiculoResponse,
   DebitoIncluded,
@@ -12,7 +13,7 @@ import type {
 } from '../types'
 import { deriveIpvaSectionStatus, deriveSectionStatus, formatCurrencyBr, sumValores, toSentenceCase } from '../utils'
 
-const LICENCIAMENTO_BLOQUEADO_TEXT = 'Para liberar o pagamento do licenciamento, quite os demais débitos do veículo.'
+const LICENCIAMENTO_BLOQUEADO_TEXT = 'Para liberar o pagamento do licenciamento, é preciso que todos os débitos do veículo tenham sido pagos.'
 
 function ipvaHelperText (parcelCount: number): string | undefined {
   return parcelCount > 1 ? `Parcelamento em até ${parcelCount}x no Pix sem juros` : undefined
@@ -25,10 +26,12 @@ export type ConsultaVeiculoDebitosParams = DebRestrVeiculoAuth & {
 export class ConsultaVeiculoDebitosService {
   private readonly debRestrClient: DetranSpServiceNowDebRestrClient
   private readonly pgtoClient: DetranSpServiceNowPgtoClient
+  private readonly logger: Logger
 
-  constructor (debRestrClient: DetranSpServiceNowDebRestrClient, pgtoClient: DetranSpServiceNowPgtoClient) {
+  constructor (debRestrClient: DetranSpServiceNowDebRestrClient, pgtoClient: DetranSpServiceNowPgtoClient, logger: Logger) {
     this.debRestrClient = debRestrClient
     this.pgtoClient = pgtoClient
+    this.logger = logger
   }
 
   async run (params: ConsultaVeiculoDebitosParams): Promise<ConsultaVeiculoDebitosResult> {
@@ -41,6 +44,21 @@ export class ConsultaVeiculoDebitosService {
 
     if (veiculoSettled.status === 'rejected') {
       const err = veiculoSettled.reason
+      // Temporary (do not ship): no error handling exists past this service
+      // for a bad renavam — logging every return (success and error) so we
+      // can see exactly what ServiceNow sends back before it propagates.
+      this.logger.info(
+        {
+          action: 'consulta-veiculo-erro',
+          renavam: auth.renavam,
+          representacao,
+          errorName: err?.name,
+          errorType: err?.type,
+          errorMessage: err?.message,
+          errorStatus: err?.status,
+        },
+        'Consulta Veículo — buscaVeiculo rejeitado'
+      )
       if (!(err instanceof DetranSpServiceNowDebRestrError)) throw err
       // Daily query limit (10/day per CPF) on the representação path is a valid
       // flow branch, not an error — exact ServiceNow error type still unconfirmed
@@ -53,14 +71,35 @@ export class ConsultaVeiculoDebitosService {
 
     const veiculo = veiculoSettled.value
     if (!veiculo?.data) {
+      this.logger.info(
+        { action: 'consulta-veiculo-vazio', renavam: auth.renavam, representacao, veiculo },
+        'Consulta Veículo — resposta sem data'
+      )
       return this.emptyResult({ limitReached: false })
     }
 
     // Step 4 (pgto) is best-effort: on failure we still render the vehicle
     // using the deb-restr data, just without the bloqueio signal.
     const debitos = debitosSettled.status === 'fulfilled' ? debitosSettled.value : null
+    if (debitosSettled.status === 'rejected') {
+      this.logger.info(
+        { action: 'consulta-veiculo-pgto-erro', renavam: auth.renavam, errorMessage: (debitosSettled.reason as { message?: string })?.message },
+        'Consulta Veículo — listaDebitos (pgto) rejeitado, seguindo sem bloqueio'
+      )
+    }
 
-    return this.buildResult(veiculo, debitos)
+    const resultado = this.buildResult(veiculo, debitos)
+    this.logger.info(
+      {
+        action: 'consulta-veiculo-sucesso',
+        renavam: auth.renavam,
+        representacao,
+        hasVehicle: Boolean(resultado.vehicle),
+        totalDebits: resultado.totalDebits,
+      },
+      'Consulta Veículo — resultado final'
+    )
+    return resultado
   }
 
   private buildResult (veiculo: BuscaVeiculoResponse, debitos: ListaDebitosResult): ConsultaVeiculoDebitosResult {
@@ -118,9 +157,6 @@ export class ConsultaVeiculoDebitosService {
     const hasOtherDebts = ipva.length > 0 || multas.length > 0
 
     const licenciamentoPayable = licenciamento.length > 0 && !hasOtherDebts
-    // pix/total only earns its place when it bundles more than one section —
-    // see the VehicleDebtsPayload.total comment for the full rationale
-    const totalPayable = ipva.length > 0 && multas.length > 0 && !hasMultaForaDoSistema
 
     const ipvaStatus = deriveIpvaSectionStatus(ipva)
     const multasStatus = deriveSectionStatus(multas)
@@ -155,10 +191,6 @@ export class ConsultaVeiculoDebitosService {
         ...(licenciamento.length > 0 && !licenciamentoPayable
           ? { helperText: LICENCIAMENTO_BLOQUEADO_TEXT }
           : {}),
-      },
-      total: {
-        pixButton: totalPayable ? 'visible' : 'hidden',
-        totalLabel: totalPayable ? formatCurrencyBr(sumValores([...ipva, ...multas])) : null,
       },
     }
   }
