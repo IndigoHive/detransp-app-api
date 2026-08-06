@@ -1,34 +1,28 @@
-import type { Logger } from 'pino'
+import { DetranSpServiceNowDebRestrError } from '../../../clients/detran-sp-service-now-deb-restr'
 import type { DetranSpServiceNowDebRestrClient } from '../../../clients/detran-sp-service-now-deb-restr'
 import type { DebRestrAuth, ListaVeiculosDebRestrResult } from '../types'
 
 export class ListaVeiculosDebRestrService {
   private readonly client: DetranSpServiceNowDebRestrClient
-  private readonly logger: Logger
 
-  constructor (client: DetranSpServiceNowDebRestrClient, logger: Logger) {
+  constructor (client: DetranSpServiceNowDebRestrClient) {
     this.client = client
-    this.logger = logger
   }
 
   async run (auth: DebRestrAuth): Promise<ListaVeiculosDebRestrResult> {
-    // Temporary (do not ship): a known no-vehicle user reports getting logged
-    // out right after "Tipo de veículo" instead of seeing the vehicles list —
-    // logging the raw result/error here to see what's actually happening.
     let result
     try {
       result = await this.client.listaVeiculos(auth)
     } catch (err) {
-      this.logger.info(
-        {
-          action: 'lista-veiculos-erro',
-          errorName: (err as { name?: string })?.name,
-          errorType: (err as { type?: string })?.type,
-          errorMessage: (err as { message?: string })?.message,
-          errorStatus: (err as { status?: number })?.status,
-        },
-        'Lista Veículos — erro ao buscar veículos'
-      )
+      // ServiceNow's deb-restr scope returns its own "User is not
+      // authenticated" 401 for a CPF with no vehicle record there — that
+      // status was propagating verbatim to the app, which treats any 401 as
+      // "your session is dead" and force-logs the user out. This isn't a
+      // real session failure, so degrade to an empty list instead — the
+      // existing "Lista Vazia?" flow branch already handles that correctly.
+      if (err instanceof DetranSpServiceNowDebRestrError && /not authenticated/i.test(err.type)) {
+        return { vehicles: [] }
+      }
       throw err
     }
 
@@ -43,11 +37,6 @@ export class ListaVeiculosDebRestrService {
         brandModel: marcaModelo,
       }
     })
-
-    this.logger.info(
-      { action: 'lista-veiculos-resultado', count: vehicles.length, rawDataPresent: Boolean(result?.data) },
-      'Lista Veículos — resultado'
-    )
 
     return { vehicles }
   }
