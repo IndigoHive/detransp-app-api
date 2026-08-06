@@ -81,6 +81,7 @@ Pontos de atenção:
   - tem pendência financeira? se sim, mostra o total a pagar e oferece pagamento via Pix (QR code ou "linha para copiar").
 - Pago tudo (taxa de transferência + demais pendências), sistema gera RENAVAM, atualiza proprietário, abre processo no e-CRV, libera CRLV-e para download, e notifica vendedor e comprador.
 - **Erros comuns:** nível gov.br insuficiente; nenhuma comunicação de venda/ATPV-e encontrada para o CPF; comprador não reconhece a indicação de compra (cancela e notifica o vendedor).
+- **Implementação neste app (override):** o atalho de **Comprador** para **Origem** `2`/`3`/`4` **não** executa Prova de Vida — após selecionar o veículo, segue direto para `confirmar-compra` / Confirmação dados. Só **Origem** `1` (TDV 1.0) roda liveness no caminho do comprador.
 
 ## TDV 3.0 — Saída Renave usados ("Loja vende para o cidadão")
 📁 `História de usuário/TDV 3.0 - Renave Usado Saída Loja/`
@@ -125,6 +126,7 @@ Pontos de atenção:
 - Passadas as duas validações, segue o mesmo roteiro de TDV 2.0: checa vistoria/restrições/pendências financeiras, paga via Pix o que faltar, gera RENAVAM/e-CRV/CRLV-e.
 - **Resumo da própria HU:** *"Este fluxo segue a mesma regra para e-Notariado e CDT [...]. A sequência da TDV segue o restante do fluxo CDT / e-Notariado."* — ou seja, TDV 6.0 = TDV 2.0 + as duas checagens acima.
 - **Detecção pelo app:** `origemComunicacaoVendaVeiculo` igual a `4` (Cartório) ou `5` (SEFAZ) na Comunicação de Venda — a HU cita o código `5` explicitamente. Os erros de validação (quando as duas checagens acima falham) são `DuasAssinaturasError` e `DuasPessoasFisicasError`.
+- **Implementação neste app:** mesmo override da TDV 2.0 — o atalho de Comprador por Origem `2`/`3`/`4` não roda Prova de Vida (só Origem `1` / TDV 1.0).
 
 ## Próximos passos
 - Levantar a especificação da TDV 3.0 (Saída Renave) — não existe em nenhuma das fontes atuais (nem HU, nem swagger, nem PDF), só o fluxo inverso (TDV 4.0) está documentado.

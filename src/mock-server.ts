@@ -679,6 +679,22 @@ app.get('/api/tdv/compras', (_req, res) => {
         yearFab: '2021',
         yearMod: '2022',
         codigoTransferencia: 'TDV-MOCK001',
+        origem: '1',
+      },
+      {
+        id: '11',
+        title: 'VW/GOL 1.0',
+        plate: 'GHI8J90',
+        licensingStatus: 'REGULAR',
+        licensingExpirationDate: '31/12/2025',
+        type: 'Passeio',
+        brandModel: 'VW/GOL 1.0',
+        renavam: '00010020031',
+        lastLicensing: '10/05/2025',
+        yearFab: '2019',
+        yearMod: '2020',
+        codigoTransferencia: 'TDV-MOCK002',
+        origem: '2',
       },
     ],
   })
@@ -689,6 +705,8 @@ app.post('/api/tdv/confirmar-compra', (req, res) => {
     nomeComprador: 'Maria Oliveira Souza',
     cpfComprador: '987.654.321-00',
     enderecoComprador: 'Rua das Flores, 123, Jardim Paulista, São Paulo - SP',
+    origem: '1',
+    estado: '5',
     vehicle: MOCK_VEHICLES[0] ? {
       id: MOCK_VEHICLES[0].id,
       plate: MOCK_VEHICLES[0].plate,
@@ -701,6 +719,13 @@ app.post('/api/tdv/confirmar-compra', (req, res) => {
       yearFab: MOCK_VEHICLES[0].yearFab,
       yearMod: MOCK_VEHICLES[0].yearMod,
     } : null,
+  })
+})
+
+app.post('/api/tdv/confirmar-endereco', (req, res) => {
+  res.json({
+    proximaAcao: 'aviso_pagamento',
+    estado: '7',
   })
 })
 
@@ -785,6 +810,7 @@ app.listen(PORT, () => {
   console.log('    POST /api/tdv/cancelar')
   console.log('    GET  /api/tdv/compras')
   console.log('    POST /api/tdv/confirmar-compra')
+  console.log('    POST /api/tdv/confirmar-endereco')
   console.log('    POST /api/tdv/valida-assinatura')
   console.log('    POST /api/tdv/prova-vida')
   console.log('    GET  /api/tdv/consulta-debitos')

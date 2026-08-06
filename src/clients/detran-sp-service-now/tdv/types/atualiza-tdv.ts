@@ -50,6 +50,14 @@ export type AtualizaTdvCancelada = {
   ativa: 'false'
 }
 
+export type AtualizaTdvEnderecoComprador = {
+  cepComprador: string
+  bairroComprador: string
+  logradouroComprador: string
+  numeroComprador: string
+  complementoComprador: string
+}
+
 export type AtualizaTdvCommand =
   | AtualizaTdvDadosVendaInformados
   | AtualizaTdvAtpveCriada
@@ -58,6 +66,7 @@ export type AtualizaTdvCommand =
   | AtualizaTdvAtpveAssinadaComprador
   | AtualizaTdvAtpveAssinadaVendedor
   | AtualizaTdvCancelada
+  | AtualizaTdvEnderecoComprador
 
 export type AtualizaTdvResultSuccess = {
   result: {

@@ -6,23 +6,32 @@ type Dependencies = {
   detranSpServiceNowTdv: DetranSpServiceNowTdvClient
 }
 
+type CompraVehicle = {
+  id: string
+  title: string
+  plate: string
+  licensingStatus: string
+  licensingExpirationDate: string
+  type: string
+  brandModel: string
+  renavam: string
+  lastLicensing: string
+  yearFab: string
+  yearMod: string
+  codigoTransferencia: string
+  origem?: CodigoOrigemTDV
+  origemComunicacaoVendaVeiculo?: CodigoOrigemComunicacaoVendaVeiculo
+}
+
 export type ConsultaComprasResult = {
-  vehicles: Array<{
-    id: string
+  vehicles: CompraVehicle[]
+} | {
+  vehicles: []
+  showSnackbar: {
+    variant: string
     title: string
-    plate: string
-    licensingStatus: string
-    licensingExpirationDate: string
-    type: string
-    brandModel: string
-    renavam: string
-    lastLicensing: string
-    yearFab: string
-    yearMod: string
-    codigoTransferencia: string
-    origem?: CodigoOrigemTDV
-    origemComunicacaoVendaVeiculo?: CodigoOrigemComunicacaoVendaVeiculo
-  }>
+    description: string
+  }
 }
 
 export class ConsultaComprasService {
@@ -46,22 +55,39 @@ export class ConsultaComprasService {
       return { vehicles: [] }
     }
 
-    const vehicles = result.result.map((tdv, index) => ({
-      id: String(index + 1),
-      title: tdv.descricaoMarcaVeiculo ?? '',
-      plate: tdv.placaVeiculo ?? '',
-      licensingStatus: 'PENDENTE',
-      licensingExpirationDate: '',
-      type: 'Passeio',
-      brandModel: tdv.descricaoMarcaVeiculo ?? '',
-      renavam: tdv.codigoRenavamVeiculo ?? '',
-      lastLicensing: '',
-      yearFab: '',
-      yearMod: '',
-      codigoTransferencia: tdv.codigoTransferenciaVeiculo ?? '',
-      ...(tdv.origem !== undefined ? { origem: tdv.origem } : {}),
-      ...(tdv.origemComunicacaoVendaVeiculo !== undefined ? { origemComunicacaoVendaVeiculo: tdv.origemComunicacaoVendaVeiculo } : {})
-    }))
+    const withCodigo = result.result.filter((tdv) => !!tdv.codigoTransferenciaVeiculo?.trim())
+    const skippedWithoutCodigo = result.result.length - withCodigo.length
+
+    const vehicles = withCodigo.map((tdv, index) => {
+      const codigoTransferencia = tdv.codigoTransferenciaVeiculo?.trim() ?? ''
+      return {
+        id: String(index + 1),
+        title: tdv.descricaoMarcaVeiculo ?? '',
+        plate: tdv.placaVeiculo ?? '',
+        licensingStatus: 'PENDENTE',
+        licensingExpirationDate: '',
+        type: 'Passeio',
+        brandModel: tdv.descricaoMarcaVeiculo ?? '',
+        renavam: tdv.codigoRenavamVeiculo ?? '',
+        lastLicensing: '',
+        yearFab: '',
+        yearMod: '',
+        codigoTransferencia,
+        ...(tdv.origem !== undefined ? { origem: tdv.origem } : {}),
+        ...(tdv.origemComunicacaoVendaVeiculo !== undefined ? { origemComunicacaoVendaVeiculo: tdv.origemComunicacaoVendaVeiculo } : {})
+      }
+    })
+
+    if (vehicles.length === 0 && skippedWithoutCodigo > 0) {
+      return {
+        vehicles: [],
+        showSnackbar: {
+          variant: 'error',
+          title: 'Erro',
+          description: 'Nenhuma transferência ativa válida encontrada para este CPF'
+        }
+      }
+    }
 
     return { vehicles }
   }

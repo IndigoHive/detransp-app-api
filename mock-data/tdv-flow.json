@@ -1424,7 +1424,7 @@
                 "type": "label_text",
                 "name": null,
                 "data": {
-                  "text": "@{node:n_0a7cda804e6d.enderecoComprador}",
+                  "text": "@{node:n_6c4d8e2a1b90.enderecoComprador ?? node:n_0a7cda804e6d.enderecoComprador}",
                   "label": "Endereço"
                 }
               }
@@ -1462,6 +1462,38 @@
             }
           },
           {
+            "id": "c_e5b0ac826f34",
+            "type": "button",
+            "name": null,
+            "data": {
+              "label": "Editar endereço",
+              "variant": "outline",
+              "visibilityCondition": {
+                "clauses": [
+                  {
+                    "id": "vc-origem-2",
+                    "left": "@{node:n_0a7cda804e6d.origem ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.origem}",
+                    "right": "2",
+                    "operator": "equals"
+                  },
+                  {
+                    "id": "vc-origem-3",
+                    "left": "@{node:n_0a7cda804e6d.origem ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.origem}",
+                    "right": "3",
+                    "operator": "equals"
+                  },
+                  {
+                    "id": "vc-origem-4",
+                    "left": "@{node:n_0a7cda804e6d.origem ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.origem}",
+                    "right": "4",
+                    "operator": "equals"
+                  }
+                ],
+                "combinator": "or"
+              }
+            }
+          },
+          {
             "id": "c_78ed063a4397",
             "type": "button",
             "name": null,
@@ -1484,8 +1516,8 @@
       },
       "data": {
         "position": {
-          "x": 6500,
-          "y": 1780
+          "x": 6348,
+          "y": 1716
         }
       }
     },
@@ -1517,7 +1549,7 @@
             "type": "text_body",
             "name": null,
             "data": {
-              "text": "Eu, @{node:n_0a7cda804e6d.nomeComprador}, inscrito no CPF sob o nº @{node:n_0a7cda804e6d.cpfComprador}, declaro para os devidos fins que resido em @{node:n_0a7cda804e6d.enderecoComprador}.",
+              "text": "Eu, @{node:n_0a7cda804e6d.nomeComprador}, inscrito no CPF sob o nº @{node:n_0a7cda804e6d.cpfComprador}, declaro para os devidos fins que resido em @{node:n_6c4d8e2a1b90.enderecoComprador ?? node:n_0a7cda804e6d.enderecoComprador}.",
               "align": "justify"
             }
           },
@@ -2224,8 +2256,8 @@
       },
       "data": {
         "position": {
-          "x": 7160,
-          "y": 2800
+          "x": 6784,
+          "y": 2572
         }
       }
     },
@@ -2508,6 +2540,62 @@
           "y": 5080
         }
       }
+    },
+    {
+      "id": "s_7e2a1c9b4f08",
+      "name": "[Comprador] Editar CEP",
+      "content": {
+        "id": "c_a1f6c84e2d90",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_d4a9fb715e23",
+            "type": "text_body",
+            "name": null,
+            "data": {
+              "text": "Informe o CEP do endereço do comprador\n"
+            }
+          },
+          {
+            "id": "c_4b8e0d61a2f3",
+            "type": "text_input",
+            "name": "cep",
+            "data": {
+              "label": "CEP",
+              "required": true
+            }
+          }
+        ]
+      },
+      "footer": {
+        "id": "c_b2e7d95f3c01",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_9d3f7a1e5b20",
+            "type": "button",
+            "name": null,
+            "data": {
+              "label": "Continuar"
+            }
+          }
+        ]
+      },
+      "navbar": {
+        "id": "c_c3f8ea604d12",
+        "data": {
+          "title": "Editar endereço",
+          "showReturn": true
+        },
+        "name": null,
+        "type": "nav_bar"
+      },
+      "data": {
+        "position": {
+          "x": 5512,
+          "y": 480
+        }
+      }
     }
   ],
   "drawers": [
@@ -2672,8 +2760,8 @@
       },
       "data": {
         "position": {
-          "x": 7920,
-          "y": 2800
+          "x": 7816,
+          "y": 2892
         }
       }
     }
@@ -2917,8 +3005,8 @@
         "responseExamples": [
           {
             "id": "2eaf52de-b422-48f5-8166-e8ca4ded4630",
-            "name": "Lista 3 veículos",
-            "value": "{\n  \"vehicles\": [\n    {\n      \"id\": \"1\",\n      \"title\": \"VOLKS/GOL GTI 1.0\",\n      \"plate\": \"BXG3U71\",\n      \"status\": \"REGULAR\",\n      \"licensingExpirationDate\": \"31/12/2025\",\n      \"type\": \"Utilitario\",\n      \"brandModel\": \"VOLKS/GOL GTI 1.0\",\n      \"renavam\": \"00001002003\",\n      \"lastLicensing\": \"03/12/2025\",\n      \"yearFab\": \"2014\",\n      \"yearMod\": \"2015\",\n      \"codigoTransferencia\": \"TDV-000001\"\n    },\n    {\n      \"id\": \"2\",\n      \"title\": \"ONIX LT - GM\",\n      \"plate\": \"CED3J65\",\n      \"status\": \"A VENCER\",\n      \"licensingExpirationDate\": \"31/12/2024\",\n      \"type\": \"Passeio\",\n      \"brandModel\": \"ONIX LT - GM\",\n      \"renavam\": \"00002003004\",\n      \"lastLicensing\": \"15/01/2024\",\n      \"yearFab\": \"2021\",\n      \"yearMod\": \"2022\",\n      \"codigoTransferencia\": \"TDV-000002\"\n    },\n    {\n      \"id\": \"3\",\n      \"title\": \"FIAT/UNO MILLE\",\n      \"plate\": \"RNI4Z30\",\n      \"status\": \"VENCIDO\",\n      \"licensingExpirationDate\": \"31/07/2023\",\n      \"type\": \"Utilitario\",\n      \"brandModel\": \"FIAT/UNO MILLE\",\n      \"renavam\": \"00003004005\",\n      \"lastLicensing\": \"20/08/2022\",\n      \"yearFab\": \"2008\",\n      \"yearMod\": \"2009\",\n      \"codigoTransferencia\": \"TDV-000003\"\n    }\n  ]\n}\n"
+            "name": "Lista 3 veículos (origens 1/2/3)",
+            "value": "{\n  \"vehicles\": [\n    {\n      \"id\": \"1\",\n      \"title\": \"VOLKS/GOL GTI 1.0\",\n      \"plate\": \"BXG3U71\",\n      \"status\": \"REGULAR\",\n      \"licensingExpirationDate\": \"31/12/2025\",\n      \"type\": \"Utilitario\",\n      \"brandModel\": \"VOLKS/GOL GTI 1.0\",\n      \"renavam\": \"00001002003\",\n      \"lastLicensing\": \"03/12/2025\",\n      \"yearFab\": \"2014\",\n      \"yearMod\": \"2015\",\n      \"codigoTransferencia\": \"TDV-000001\",\n      \"origem\": \"1\"\n    },\n    {\n      \"id\": \"2\",\n      \"title\": \"ONIX LT - GM\",\n      \"plate\": \"CED3J65\",\n      \"status\": \"A VENCER\",\n      \"licensingExpirationDate\": \"31/12/2024\",\n      \"type\": \"Passeio\",\n      \"brandModel\": \"ONIX LT - GM\",\n      \"renavam\": \"00002003004\",\n      \"lastLicensing\": \"15/01/2024\",\n      \"yearFab\": \"2021\",\n      \"yearMod\": \"2022\",\n      \"codigoTransferencia\": \"TDV-000002\",\n      \"origem\": \"2\"\n    },\n    {\n      \"id\": \"3\",\n      \"title\": \"FIAT/UNO MILLE\",\n      \"plate\": \"RNI4Z30\",\n      \"status\": \"VENCIDO\",\n      \"licensingExpirationDate\": \"31/07/2023\",\n      \"type\": \"Utilitario\",\n      \"brandModel\": \"FIAT/UNO MILLE\",\n      \"renavam\": \"00003004005\",\n      \"lastLicensing\": \"20/08/2022\",\n      \"yearFab\": \"2008\",\n      \"yearMod\": \"2009\",\n      \"codigoTransferencia\": \"TDV-000003\",\n      \"origem\": \"3\"\n    }\n  ]\n}"
           },
           {
             "id": "6b7ae0d4-fed7-4944-ab40-8aaeb8b2ea30",
@@ -2943,8 +3031,13 @@
         "responseExamples": [
           {
             "id": "13ca35ee-ca27-4e9f-b5f2-21dd6e91360c",
-            "name": "Confirma compra",
-            "value": "{\n  \"nomeComprador\": \"Carlos da Silva\",\n  \"cpfComprador\": \"721.169.550-17\",\n  \"enderecoComprador\": \"Rua Aulide Carini, 345, Vila Jacuí, São Paulo - SP\",\n  \"vehicle\": {\n    \"id\": \"1\",\n    \"plate\": \"ABC1D23\",\n    \"title\": \"Toyota Corolla 2.0\",\n    \"status\": \"REGULAR\",\n    \"brandModel\": \"Toyota Corolla 2.0\",\n    \"licensingExpirationDate\": \"31/12/2025\",\n    \"renavam\": \"00001002003\",\n    \"lastLicensing\": \"03/12/2025\",\n    \"yearFab\": \"2022\",\n    \"yearMod\": \"2023\"\n  }\n}"
+            "name": "Origem 1 (estado 5)",
+            "value": "{\n  \"nomeComprador\": \"Carlos da Silva\",\n  \"cpfComprador\": \"721.169.550-17\",\n  \"enderecoComprador\": \"Rua Aulide Carini, 345, Vila Jacuí, São Paulo - SP\",\n  \"origem\": \"1\",\n  \"estado\": \"5\",\n  \"vehicle\": {\n    \"id\": \"1\",\n    \"plate\": \"ABC1D23\",\n    \"title\": \"Toyota Corolla 2.0\",\n    \"status\": \"REGULAR\",\n    \"brandModel\": \"Toyota Corolla 2.0\",\n    \"licensingExpirationDate\": \"31/12/2025\",\n    \"renavam\": \"00001002003\",\n    \"lastLicensing\": \"03/12/2025\",\n    \"yearFab\": \"2022\",\n    \"yearMod\": \"2023\"\n  }\n}"
+          },
+          {
+            "id": "ex-origem-2-estado-7",
+            "name": "Origem 2 (estado 7)",
+            "value": "{\n  \"nomeComprador\": \"Carlos da Silva\",\n  \"cpfComprador\": \"721.169.550-17\",\n  \"enderecoComprador\": \"Rua Aulide Carini, 345, Vila Jacuí, São Paulo - SP\",\n  \"origem\": \"2\",\n  \"estado\": \"7\",\n  \"vehicle\": {\n    \"id\": \"1\",\n    \"plate\": \"ABC1D23\",\n    \"title\": \"Toyota Corolla 2.0\",\n    \"status\": \"REGULAR\",\n    \"brandModel\": \"Toyota Corolla 2.0\",\n    \"licensingExpirationDate\": \"31/12/2025\",\n    \"renavam\": \"00001002003\",\n    \"lastLicensing\": \"03/12/2025\",\n    \"yearFab\": \"2022\",\n    \"yearMod\": \"2023\"\n  }\n}"
           }
         ]
       }
@@ -2990,19 +3083,6 @@
           "x": 10900,
           "y": -620
         }
-      }
-    },
-    {
-      "id": "n_3bad58f20fff",
-      "type": "iti_signature_screen",
-      "name": "Documento",
-      "data": {
-        "position": {
-          "x": 8520,
-          "y": 2160
-        },
-        "url": "https://cas.iti.br/oauth2.0/authorize?response_type=code&redirect_uri=spgovbr://localhost/appspgovbr/iti/oauth_redirect.html&scope=sign&client_id=spgovbrprod",
-        "callbackPrefix": "spgovbr://"
       }
     },
     {
@@ -3083,6 +3163,40 @@
         "position": {
           "x": 8180,
           "y": 2660
+        }
+      }
+    },
+    {
+      "id": "n_c3f8a2e9b147",
+      "type": "if_node",
+      "name": "Origem 2|3|4? (skip liveness)",
+      "data": {
+        "position": {
+          "x": 5708,
+          "y": 1952
+        },
+        "condition": {
+          "clauses": [
+            {
+              "id": "skip-pv-origem-eq-2",
+              "left": "@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.origem}",
+              "right": "2",
+              "operator": "equals"
+            },
+            {
+              "id": "skip-pv-origem-eq-3",
+              "left": "@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.origem}",
+              "right": "3",
+              "operator": "equals"
+            },
+            {
+              "id": "skip-pv-origem-eq-4",
+              "left": "@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.origem}",
+              "right": "4",
+              "operator": "equals"
+            }
+          ],
+          "combinator": "or"
         }
       }
     },
@@ -3223,19 +3337,6 @@
       }
     },
     {
-      "id": "n_54e1a65041fa",
-      "type": "iti_signature_screen",
-      "name": "Documento",
-      "data": {
-        "position": {
-          "x": 320,
-          "y": 2820
-        },
-        "url": "https://cas.iti.br/oauth2.0/authorize?response_type=code&redirect_uri=spgovbr://localhost/appspgovbr/iti/oauth_redirect.html&scope=sign&client_id=spgovbrprod",
-        "callbackPrefix": "spgovbr://"
-      }
-    },
-    {
       "id": "n_be558ba59c69",
       "type": "http_node",
       "name": "Valida Assinatura",
@@ -3311,8 +3412,8 @@
       "name": "Consulta Débitos",
       "data": {
         "position": {
-          "x": 260,
-          "y": 4080
+          "x": 244,
+          "y": 4212
         },
         "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/consulta-debitos?codigoTransferencia=@{node:n_90a9d6db5f4b.codigoTransferencia}",
         "responseExamples": [
@@ -3330,8 +3431,8 @@
       "name": "Pagamento PIX",
       "data": {
         "position": {
-          "x": 1260,
-          "y": 4100
+          "x": 1252,
+          "y": 4196
         },
         "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/consulta-debitos?codigoTransferencia=@{node:n_90a9d6db5f4b.codigoTransferencia}"
       }
@@ -3364,8 +3465,8 @@
       "name": "Cancela TDV",
       "data": {
         "position": {
-          "x": 7720,
-          "y": 3100
+          "x": 7376,
+          "y": 3168
         },
         "method": "POST",
         "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/cancelar",
@@ -3385,8 +3486,8 @@
       "name": "End",
       "data": {
         "position": {
-          "x": 8600,
-          "y": 3180
+          "x": 8328,
+          "y": 3208
         }
       }
     },
@@ -3664,6 +3765,182 @@
           "y": 4
         }
       }
+    },
+    {
+      "id": "n_6c4d8e2a1b90",
+      "type": "http_node",
+      "name": "Validação CEP editado",
+      "data": {
+        "position": {
+          "x": 6028,
+          "y": 1364
+        },
+        "method": "POST",
+        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/validacao-comprador",
+        "body": "{\n  \"cpfComprador\": \"@{node:n_0a7cda804e6d.cpfComprador}\",\n  \"cepComprador\": \"@{screen:s_7e2a1c9b4f08.comp:c_4b8e0d61a2f3.value}\"\n}",
+        "responseExamples": [
+          {
+            "id": "ex-validacao-cep-edit",
+            "name": "Endereço atualizado",
+            "value": "{\n  \"nomeComprador\": \"Carlos da Silva\",\n  \"cpfComprador\": \"721.169.550-17\",\n  \"enderecoComprador\": \"Av. Paulista, 1000, Bela Vista, São Paulo - SP\"\n}"
+          }
+        ]
+      }
+    },
+    {
+      "id": "n_8f1a3c5e7b29",
+      "type": "if_node",
+      "name": "Origem 2|3|4?",
+      "data": {
+        "position": {
+          "x": 7564,
+          "y": 2660
+        },
+        "condition": {
+          "clauses": [
+            {
+              "id": "origem-eq-2",
+              "left": "@{node:n_0a7cda804e6d.origem ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.origem}",
+              "right": "2",
+              "operator": "equals"
+            },
+            {
+              "id": "origem-eq-3",
+              "left": "@{node:n_0a7cda804e6d.origem ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.origem}",
+              "right": "3",
+              "operator": "equals"
+            },
+            {
+              "id": "origem-eq-4",
+              "left": "@{node:n_0a7cda804e6d.origem ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.origem}",
+              "right": "4",
+              "operator": "equals"
+            }
+          ],
+          "combinator": "or"
+        }
+      }
+    },
+    {
+      "id": "n_2d9e4b6a8c17",
+      "type": "http_node",
+      "name": "Confirmar Endereço",
+      "data": {
+        "position": {
+          "x": 7276,
+          "y": 3436
+        },
+        "method": "POST",
+        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/confirmar-endereco",
+        "body": "{\n  \"codigoTransferencia\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoTransferencia}\",\n  \"cepComprador\": \"@{screen:s_7e2a1c9b4f08.comp:c_4b8e0d61a2f3.value}\"\n}",
+        "responseExamples": [
+          {
+            "id": "ex-conf-end-7",
+            "name": "Estado 7 — aviso pagamento",
+            "value": "{\n  \"proximaAcao\": \"aviso_pagamento\",\n  \"estado\": \"7\"\n}"
+          },
+          {
+            "id": "ex-conf-end-8",
+            "name": "Estado 8 — pagamento confirmado",
+            "value": "{\n  \"proximaAcao\": \"pagamento_confirmado\",\n  \"estado\": \"8\"\n}"
+          },
+          {
+            "id": "ex-conf-end-9",
+            "name": "Estado 9 — concluído",
+            "value": "{\n  \"proximaAcao\": \"concluido\",\n  \"estado\": \"9\"\n}"
+          },
+          {
+            "id": "ex-conf-end-err",
+            "name": "Estado inesperado",
+            "value": "{\n  \"showSnackbar\": {\n    \"variant\": \"error\",\n    \"title\": \"Erro\",\n    \"description\": \"Estado da transferência inválido para continuar\"\n  }\n}"
+          }
+        ],
+        "showSnackbar": true
+      }
+    },
+    {
+      "id": "n_5a7c9e1b3d46",
+      "type": "case_node",
+      "name": "Rotear pós endereço",
+      "data": {
+        "position": {
+          "x": 6108,
+          "y": 4012
+        },
+        "value": "@{node:n_2d9e4b6a8c17.proximaAcao}",
+        "routes": [
+          {
+            "id": "r_aviso_pagamento_01",
+            "label": "Aviso pagamento",
+            "value": "aviso_pagamento"
+          },
+          {
+            "id": "r_pagamento_confirmado_01",
+            "label": "Pagamento confirmado",
+            "value": "pagamento_confirmado"
+          },
+          {
+            "id": "r_concluido_01",
+            "label": "Concluído",
+            "value": "concluido"
+          }
+        ]
+      }
+    },
+    {
+      "id": "n_wp_aviso_pg_01",
+      "type": "waypoint_node",
+      "name": null,
+      "data": {
+        "position": {
+          "x": 2992,
+          "y": 4132
+        }
+      }
+    },
+    {
+      "id": "n_wp_pago_conf_01",
+      "type": "waypoint_node",
+      "name": null,
+      "data": {
+        "position": {
+          "x": 2800,
+          "y": 4600
+        }
+      }
+    },
+    {
+      "id": "n_wp_concluido_01",
+      "type": "waypoint_node",
+      "name": null,
+      "data": {
+        "position": {
+          "x": 2800,
+          "y": 5400
+        }
+      }
+    },
+    {
+      "id": "n_6025a000407c",
+      "type": "waypoint_node",
+      "name": null,
+      "data": {
+        "position": {
+          "x": 6852,
+          "y": 1656
+        }
+      }
+    },
+    {
+      "id": "n_f64cda3a22b6",
+      "type": "waypoint_node",
+      "name": null,
+      "data": {
+        "position": {
+          "x": 5476,
+          "y": 904
+        }
+      }
     }
   ],
   "edges": [
@@ -3939,8 +4216,20 @@
     },
     {
       "sourceId": "s_52363926e91c",
-      "targetId": "n_32b7a4b7dfc4",
+      "targetId": "n_c3f8a2e9b147",
       "sourceHandle": "c_ebf361a4035f",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_c3f8a2e9b147",
+      "targetId": "n_0a7cda804e6d",
+      "sourceHandle": "true",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_c3f8a2e9b147",
+      "targetId": "n_32b7a4b7dfc4",
+      "sourceHandle": "false",
       "targetHandle": "input"
     },
     {
@@ -4336,6 +4625,96 @@
     {
       "sourceId": "n_acb9e7f8d196",
       "targetId": "n_4a9529e3107c",
+      "sourceHandle": "right-source",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_c482ac86f650",
+      "targetId": "n_8f1a3c5e7b29",
+      "sourceHandle": "c_5d63b6199d05",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_8f1a3c5e7b29",
+      "targetId": "s_24b45fd19f30",
+      "sourceHandle": "false",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_8f1a3c5e7b29",
+      "targetId": "n_2d9e4b6a8c17",
+      "sourceHandle": "true",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_2d9e4b6a8c17",
+      "targetId": "n_5a7c9e1b3d46",
+      "sourceHandle": "output",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_5a7c9e1b3d46",
+      "targetId": "n_wp_aviso_pg_01",
+      "sourceHandle": "r_aviso_pagamento_01",
+      "targetHandle": "left-target"
+    },
+    {
+      "sourceId": "n_wp_aviso_pg_01",
+      "targetId": "s_fb22aac48147",
+      "sourceHandle": "right-source",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_5a7c9e1b3d46",
+      "targetId": "n_wp_pago_conf_01",
+      "sourceHandle": "r_pagamento_confirmado_01",
+      "targetHandle": "left-target"
+    },
+    {
+      "sourceId": "n_wp_pago_conf_01",
+      "targetId": "s_c8758a377d35",
+      "sourceHandle": "right-source",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_5a7c9e1b3d46",
+      "targetId": "n_wp_concluido_01",
+      "sourceHandle": "r_concluido_01",
+      "targetHandle": "left-target"
+    },
+    {
+      "sourceId": "n_wp_concluido_01",
+      "targetId": "s_db3a8a326b6e",
+      "sourceHandle": "right-source",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_7e2a1c9b4f08",
+      "targetId": "n_6c4d8e2a1b90",
+      "sourceHandle": "c_9d3f7a1e5b20",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_6c4d8e2a1b90",
+      "targetId": "s_31f3e90bbdcc",
+      "sourceHandle": "output",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_31f3e90bbdcc",
+      "targetId": "n_6025a000407c",
+      "sourceHandle": "c_e5b0ac826f34",
+      "targetHandle": "left-target"
+    },
+    {
+      "sourceId": "n_6025a000407c",
+      "targetId": "n_f64cda3a22b6",
+      "sourceHandle": "right-source",
+      "targetHandle": "left-target"
+    },
+    {
+      "sourceId": "n_f64cda3a22b6",
+      "targetId": "s_7e2a1c9b4f08",
       "sourceHandle": "right-source",
       "targetHandle": "input"
     }
