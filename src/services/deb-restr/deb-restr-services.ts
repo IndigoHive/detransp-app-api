@@ -54,20 +54,20 @@ export function getDebRestrRegistrations (): Required<NameAndRegistrationPair<De
         new VerificaQRCodeCertidaoService(detranSpServiceNowDebRestrClient)
     ).scoped(),
     emiteCertidaoService: asFunction(
-      ({ detranSpServiceNowDebRestrClient }) =>
-        new EmiteCertidaoService(detranSpServiceNowDebRestrClient)
+      ({ detranSpServiceNowDebRestrClient, logger }) =>
+        new EmiteCertidaoService(detranSpServiceNowDebRestrClient, logger)
     ).scoped(),
     buscaDocumentoCertidaoService: asFunction(
       ({ detranSpServiceNowDebRestrClient }) =>
         new BuscaDocumentoCertidaoService(detranSpServiceNowDebRestrClient)
     ).scoped(),
     listaVeiculosDebRestrService: asFunction(
-      ({ detranSpServiceNowDebRestrClient }) =>
-        new ListaVeiculosDebRestrService(detranSpServiceNowDebRestrClient)
+      ({ detranSpServiceNowDebRestrClient, logger }) =>
+        new ListaVeiculosDebRestrService(detranSpServiceNowDebRestrClient, logger)
     ).scoped(),
     consultaVeiculoDebitosService: asFunction(
-      ({ detranSpServiceNowDebRestrClient, detranSpServiceNowPgtoClient }) =>
-        new ConsultaVeiculoDebitosService(detranSpServiceNowDebRestrClient, detranSpServiceNowPgtoClient)
+      ({ detranSpServiceNowDebRestrClient, detranSpServiceNowPgtoClient, logger }) =>
+        new ConsultaVeiculoDebitosService(detranSpServiceNowDebRestrClient, detranSpServiceNowPgtoClient, logger)
     ).scoped(),
     consultaVeiculoImpressaoService: asFunction(
       ({ consultaVeiculoDebitosService }) =>
