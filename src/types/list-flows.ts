@@ -4,6 +4,7 @@ export type ListFlowsResultData = {
   name: string
   description: string | null
   iconName: string | null
+  categories: string[]
 }
 
 export type ListFlowsResult = {

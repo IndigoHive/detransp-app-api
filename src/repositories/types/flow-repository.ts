@@ -9,11 +9,12 @@ type Flow = {
   authorId: string
   publishedFlowVersionId: string | null
   iconName: string | null
+  categories: string[]
   createdAt: Date
   updatedAt: Date
 }
 
-export type ListFlowResultData = Pick<Flow, 'id' | 'slug' | 'name' | 'description' | 'iconName'>
+export type ListFlowResultData = Pick<Flow, 'id' | 'slug' | 'name' | 'description' | 'iconName' | 'categories'>
 
 export type GetPublishedFlowVersionByFlowIdResultData = {
   flowVersionId: string

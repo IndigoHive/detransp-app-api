@@ -17,6 +17,7 @@ type FlowRow = {
   name: string
   description: string | null
   icon_name: string | null
+  categories: string[]
 }
 
 type PublishedFlowVersionByFlowIdRow = {
@@ -30,7 +31,8 @@ function mapRowToFlow (row: FlowRow): ListFlowResultData {
     slug: row.slug,
     name: row.name,
     description: row.description,
-    iconName: row.icon_name
+    iconName: row.icon_name,
+    categories: row.categories
   }
 }
 
@@ -52,7 +54,7 @@ export class PgFlowRepository implements IFlowRepository {
   async list (): Promise<ListFlowResultData[]> {
     const { rows } = await this.db
       .query<FlowRow>(
-        SELECT`id, slug, name, description, icon_name`
+        SELECT`id, slug, name, description, icon_name, categories`
           .FROM`flow`
           .WHERE`status = 'published'`
           .ORDER_BY`created_at DESC`

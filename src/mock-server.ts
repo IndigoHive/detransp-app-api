@@ -165,6 +165,8 @@ const MOCK_MULTAS = [
 // Flow IDs — use the same UUIDs as production so cached app data still works
 const FLOW_ID_LICENCIAMENTO = 'c0c69366-6ca0-4af8-9662-216179e06ec3'
 const FLOW_ID_TDV = '7e1761e2-bace-4c2f-b1eb-a4bf6459d9d4'
+const FLOW_ID_CURSO_PRATICO = '2f8a1d64-5f0c-4f3e-9a7b-8c1d2e3f4a5b'
+const FLOW_ID_DESISTIR_CATEGORIA = '9b3c5d71-4e2a-4c8d-b6f1-0a7e9d2c3b4f'
 
 const LICENCIAMENTO_FLOW_JSON = loadFlowJson('licenciamento-flow.json')
 const TDV_FLOW_JSON = loadFlowJson('tdv-flow.json')
@@ -175,12 +177,28 @@ const MOCK_FLOWS = [
     name: 'Licenciamento',
     description: 'Realize o licenciamento do seu veículo',
     iconName: 'directions-car',
+    categories: ['populares', 'veiculos'],
   },
   {
     id: FLOW_ID_TDV,
     name: 'Transferência de Veículo',
     description: 'Transfira a propriedade do seu veículo',
     iconName: 'swap-horiz',
+    categories: ['veiculos'],
+  },
+  {
+    id: FLOW_ID_CURSO_PRATICO,
+    name: 'Validar Curso Prático da CNH',
+    description: 'Valide no Detran-SP o curso prático feito em outro estado',
+    iconName: 'card-membership',
+    categories: ['populares', 'habilitacao', 'educacional'],
+  },
+  {
+    id: FLOW_ID_DESISTIR_CATEGORIA,
+    name: 'Desistir de Categoria no Processo de Habilitação',
+    description: 'Cancele uma categoria do seu processo de habilitação',
+    iconName: 'cancel',
+    categories: [],
   },
 ]
 
