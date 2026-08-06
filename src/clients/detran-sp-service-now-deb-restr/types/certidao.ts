@@ -66,6 +66,19 @@ export type CertidaoResponse = {
 
 export type CertidaoResult = CertidaoResponse | null | undefined
 
+// criaCertidao (POST, create) returns data as a single object, unlike
+// buscaCertidao (GET, list) — confirmed via live log 2026-08-06: `data` came
+// back as {type, id, attributes}, not an array.
+export type CriaCertidaoResponse = {
+  data: {
+    id: string | null
+    type: string
+    attributes: CertidaoAttributes
+  }
+}
+
+export type CriaCertidaoResult = CriaCertidaoResponse | null | undefined
+
 export type DocumentoCertidaoAttributes = {
   conteudo: string
 }

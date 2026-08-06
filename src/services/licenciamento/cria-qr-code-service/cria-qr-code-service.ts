@@ -32,7 +32,8 @@ export class CriaQRCodeLicenciamentoService {
       const data = result?.result
       // Temporary (do not ship): raw payload exposes the txid for mock-paying
       // via the SEFAZ homolog webhook (field name unverified on this client)
-      this.logger.info(
+      // — warn level on purpose, just to stand out in the log list
+      this.logger.warn(
         { action: 'mock-pay-txid', renavam: auth.renavam, valor: emvAmount(data?.qrCode), qrRawResponse: result },
         'QR licenciamento criado — resposta ServiceNow completa'
       )

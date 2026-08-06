@@ -97,8 +97,16 @@ export class DetranSpServiceNowPgtoHttp {
           'ServiceNow pgto response error'
         )
 
-        const userMessage = detail || 'Tivemos um problema ao processar sua solicitação.'
-        const status = error.response?.status ?? 422
+        // Generic on purpose: ServiceNow's raw status/detail must never reach
+        // the app directly — a status like 401 gets misread by the app as
+        // "your session is dead" and force-logs the user out, and detail is
+        // internal ServiceNow wording never meant for an end user. Callers
+        // that need to react to a *specific* known ServiceNow error still can
+        // — `type`/`message` below carry the raw values for that — this only
+        // genericizes what actually reaches the HTTP response for anything
+        // not already special-cased upstream.
+        const userMessage = 'Tivemos um problema ao processar sua solicitação.'
+        const status = 422
 
         throw createError(
           status,
