@@ -1,8 +1,30 @@
+export type PagamentoVistoriaKnownStatus =
+  | 'ATIVO'
+  | 'EM_ANDAMENTO'
+  | 'FINALIZADO'
+  | 'EXPIRADO'
+  | 'RESTITUICAO_EM_ANALISE'
+  | 'RESTITUICAO_EM_PROCESSO'
+  | 'RESTITUIDO'
+
+export type PagamentoVistoriaStatus =
+  | PagamentoVistoriaKnownStatus
+  | (string & Record<never, never>)
+
+export type PagamentoVistoriaStatusPublico =
+  | 'EM ABERTO'
+  | 'EM USO'
+  | 'UTILIZADO'
+  | 'VENCIDO'
+  | 'RESTITUIÇÃO EM ANÁLISE'
+  | 'RESTITUÍDO'
+  | (string & Record<never, never>)
+
 export type PagamentoVistoria = {
   id: string
   placa: string
   token: string
-  status: string
+  status: PagamentoVistoriaStatus
   modeloAuto: string | null
   paymentDate: string
   tipo: string
@@ -24,7 +46,7 @@ export type PagamentoVistoriaPublico = Omit<
   vistoriaToken: string
   vistoriaPaymentDate: string
   vistoriaSubtypeDescription: string
-  vistoriaStatus: string
+  vistoriaStatus: PagamentoVistoriaStatusPublico
 }
 
 export type ListaPagamentosResult =

@@ -359,11 +359,20 @@ describe('vistorias services', () => {
   })
 
   it('returns only the first 100 payments with a PEV number', async () => {
+    const statuses = [
+      'ATIVO',
+      'EM_ANDAMENTO',
+      'FINALIZADO',
+      'EXPIRADO',
+      'RESTITUICAO_EM_ANALISE',
+      'RESTITUICAO_EM_PROCESSO',
+      'RESTITUIDO'
+    ] as const
     const payments = Array.from({ length: 102 }, (_, index) => ({
       id: `payment-${index}`,
       placa: 'ABC1D23',
       token: `token-${index}`,
-      status: 'ATIVO',
+      status: statuses[index % statuses.length],
       modeloAuto: 'FIAT/PALIO',
       paymentDate: '2026-07-30T21:01:14.047Z',
       tipo: 'IDENTIFICACAO',
@@ -399,8 +408,17 @@ describe('vistorias services', () => {
       vistoriaToken: 'token-2',
       vistoriaPaymentDate: '30/07/2026 18:01',
       vistoriaSubtypeDescription: 'Preparação para leilão',
-      vistoriaStatus: 'ATIVO'
+      vistoriaStatus: 'UTILIZADO'
     })
+    expect(result.slice(0, 7).map(({ vistoriaStatus }) => vistoriaStatus)).toEqual([
+      'UTILIZADO',
+      'VENCIDO',
+      'RESTITUIÇÃO EM ANÁLISE',
+      'RESTITUIÇÃO EM ANÁLISE',
+      'RESTITUÍDO',
+      'EM ABERTO',
+      'EM USO'
+    ])
     expect(result[0]).not.toHaveProperty('placa')
     expect(result[0]).not.toHaveProperty('modeloAuto')
     expect(result[0]).not.toHaveProperty('token')

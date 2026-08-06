@@ -1,9 +1,29 @@
 import type { DetranSpServiceNowVistoriasClient } from '../../../clients/detran-sp-service-now-vistorias'
-import type { PagamentoVistoriaPublico } from '../../../clients/detran-sp-service-now-vistorias/types'
+import type {
+  PagamentoVistoriaKnownStatus,
+  PagamentoVistoriaPublico,
+  PagamentoVistoriaStatus,
+  PagamentoVistoriaStatusPublico
+} from '../../../clients/detran-sp-service-now-vistorias/types'
 import { formatDateTimeBr } from '../../deb-restr/utils'
 import type { VistoriasAuth } from '../types'
 
 const PAGE_SIZE = 100
+const STATUS_LABELS = {
+  ATIVO: 'EM ABERTO',
+  EM_ANDAMENTO: 'EM USO',
+  FINALIZADO: 'UTILIZADO',
+  EXPIRADO: 'VENCIDO',
+  RESTITUICAO_EM_ANALISE: 'RESTITUIÇÃO EM ANÁLISE',
+  RESTITUICAO_EM_PROCESSO: 'RESTITUIÇÃO EM ANÁLISE',
+  RESTITUIDO: 'RESTITUÍDO'
+} as const satisfies Record<PagamentoVistoriaKnownStatus, PagamentoVistoriaStatusPublico>
+
+function getStatusLabel (status: PagamentoVistoriaStatus): PagamentoVistoriaStatusPublico {
+  return status in STATUS_LABELS
+    ? STATUS_LABELS[status as PagamentoVistoriaKnownStatus]
+    : status
+}
 
 export type ListaPagamentosVistoriaOutput =
   | PagamentoVistoriaPublico[]
@@ -42,7 +62,7 @@ export class ListaPagamentosVistoriaService {
           vistoriaToken: token,
           vistoriaPaymentDate: formatDateTimeBr(paymentDate),
           vistoriaSubtypeDescription: subtipoDescricao,
-          vistoriaStatus: status
+          vistoriaStatus: getStatusLabel(status)
         }))
     } catch (error) {
       return this.failure(error instanceof Error ? error.message : undefined)
