@@ -101,7 +101,7 @@ export class ConsultaPecaService {
             cnpj: peca.cnpj,
             razaoSocial: peca.nomeEmpresa,
             telefone: peca.telefoneDDD && peca.telefoneNumero ? `(${peca.telefoneDDD}) ${peca.telefoneNumero}` : null,
-            email: peca.email,
+            email: peca.email ? peca.email.toLowerCase() : null,
             endereco: this.buildEndereco(peca),
           }
         : null,
@@ -109,17 +109,17 @@ export class ConsultaPecaService {
         numeroIdentificacao: peca.numeroPeca,
         tipo: peca.tipoPeca,
         numeroMotor,
-        classificacao: peca.classificacao,
+        classificacao: this.capitalizeWords(peca.classificacao || ''),
       },
       veiculo: {
         placa: peca.placa,
         chassi: peca.chassi,
         renavam: peca.renavam,
         marcaModelo: peca.modelo,
-        cor: peca.cor,
+        cor: this.capitalizeWords(peca.cor || ''),
         anoFabricacao: peca.anoFabricacao,
         anoModelo: peca.anoModelo,
-        combustivel: peca.combustivel,
+        combustivel: this.capitalizeWords(peca.combustivel || ''),
       },
       imagens,
       documentos,
@@ -142,5 +142,9 @@ export class ConsultaPecaService {
     const cidadeEstado = [peca.cidade, peca.estado].filter(Boolean).join(' - ')
     const partes = [linha, peca.bairro, cidadeEstado, peca.cep].filter(Boolean)
     return partes.length > 0 ? partes.join(', ') : null
+  }
+
+  private capitalizeWords(text: string): string {
+    return text.replace(/\S+/g, (word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
   }
 }
