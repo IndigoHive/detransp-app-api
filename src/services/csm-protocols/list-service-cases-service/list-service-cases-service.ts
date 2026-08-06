@@ -31,7 +31,7 @@ export class ListServiceCasesService {
       return { result: [] }
     }
 
-    const sysparmQuery = `opened_by.user_name=${cpf}^ORinternal_user.user_name=${cpf}^ORDERBYDESCsys_updated_on`
+    const sysparmQuery = `form_cpf=${cpf}^ORDERBYDESCsys_updated_on`
     const sysparmFields = 'sys_id,number,state,active,short_description,opened_at,sys_updated_on,x_mdpdd_detran_csm_reopen_count,contact_type, public_resolution_code'
 
     return await this.serviceNowCsm.getProtocols<ListServiceCasesResult>({
