@@ -28,6 +28,7 @@ export class DetalhesIpvaService {
           : { id: '1', label: 'A VENCER', color: 'warning' }
 
         return {
+          id: d.id,
           exercicio: d.attributes.exercicio ?? null,
           valor: d.attributes.valor,
           valorLabel: formatCurrencyBr(d.attributes.valor),

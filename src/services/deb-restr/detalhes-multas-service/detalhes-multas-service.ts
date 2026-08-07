@@ -27,6 +27,8 @@ export class DetalhesMultasService {
         const attrs = d.attributes
         const dataInfracao = attrs.dataInfracao ?? attrs.dataHora ?? null
         return {
+          id: d.id,
+          autoInfracao: attrs.autoInfracao ?? null,
           descricao: attrs.descricao ?? attrs.autoInfracao ?? attrs.nomeServico ?? '',
           valor: attrs.valor,
           valorLabel: formatCurrencyBr(attrs.valor),

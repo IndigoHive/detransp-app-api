@@ -148,6 +148,7 @@ export type DetalhesIpvaChip = {
 }
 
 export type DetalhesIpvaItem = {
+  id: string
   exercicio: number | null
   valor: number
   valorLabel: string
@@ -164,6 +165,8 @@ export type DetalhesIpvaResult = {
 }
 
 export type DetalhesMultaInfracao = {
+  id: string
+  autoInfracao: string | null
   descricao: string
   valor: number
   valorLabel: string
