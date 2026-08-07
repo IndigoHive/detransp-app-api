@@ -41,13 +41,21 @@ export class SubmitCsmProtocolService {
         // registro existente em vez de retornar erro HTTP — sys_id '-1' + esse redirect_to é a assinatura.
         const isDuplicateProtocolBlocked = recordSysId === '-1' && redirectTo === 'generated_record'
 
+        if (isDuplicateProtocolBlocked) {
+          this.logger.warn(
+            { result: result.result },
+            'ServiceNow CSM bloqueou criação de protocolo duplicado — já existe um protocolo aberto para este serviço'
+          )
+          return {
+            isDuplicateProtocolBlocked: true,
+          }
+        }
+
         return {
           showSnackbar: {
             variant: 'error',
-            title: isDuplicateProtocolBlocked ? 'Solicitação já existe' : 'Não foi possível enviar',
-            description: isDuplicateProtocolBlocked
-              ? 'Você já possui uma solicitação em andamento para este serviço. Aguarde a finalização para abrir uma nova.'
-              : 'Não foi possível confirmar a criação do protocolo. Tente novamente.',
+            title: 'Não foi possível enviar',
+            description: 'Não foi possível confirmar a criação do protocolo. Tente novamente.',
           },
         }
       }
