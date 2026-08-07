@@ -213,9 +213,11 @@ export class ServiceNowCsmClient {
     try {
       const response = await this.axios.get<GetProtocolMessagesResult>('/api/now/table/sys_journal_field', {
         params: {
-          sysparm_query: `element_id=${protocolId}`,
-          sysparm_order_by_desc: 'sys_created_on',
+          sysparm_query: 'ORDERBYDESCsys_created_on',
+          sysparm_fields: 'sys_id,sys_created_on,value,sys_created_by',
           sysparm_limit: 1,
+          element_id: protocolId,
+          element: 'comments',
         },
       })
 
