@@ -1,7 +1,7 @@
 import { BadRequest, isHttpError } from 'http-errors'
 import type { ArquivoPecaRaw, PecaRaw, RotaCrvPecasClient } from '../../../clients/rota-crv-pecas'
 import type { RotaVistoriasClient } from '../../../clients/rota-vistorias'
-import { extractNumeroFromQrUrl } from '../utils'
+import { ensureSpPrefix, extractNumeroFromQrUrl } from '../utils'
 import type { ConsultaPecaResult } from '../types'
 
 // Fotos do veículo às vezes chegam do upstream embrulhadas em PDF em vez de
@@ -28,6 +28,7 @@ export class ConsultaPecaService {
 
   async run(accessToken: string, numero: string): Promise<ConsultaPecaResult | undefined> {
     if (!numero?.trim()) throw BadRequest('Número da etiqueta é obrigatório.')
+    numero = ensureSpPrefix(numero.trim())
 
     // Chamada principal — não é best-effort. Erros nos 4 status já tratados pelo interceptor do
     // client (403/500/400/404) são normalizados em `isError` (ver ERROR_STATUS_CODES acima);
