@@ -1,6 +1,6 @@
 import type { DetranSpServiceNowDebRestrClient } from '../../../clients/detran-sp-service-now-deb-restr'
 import type { DebRestrVeiculoAuth, DetalhesIpvaChip, DetalhesIpvaResult } from '../types'
-import { debtVencimento, formatCurrencyBr, formatDateBr, isIpvaVencido, sumValores } from '../utils'
+import { NAO_CONSTA, debtVencimento, formatCurrencyBr, formatDateBr, isIpvaVencido, sumValores } from '../utils'
 
 export type DetalhesIpvaParams = DebRestrVeiculoAuth & {
   pixUrl: string
@@ -32,7 +32,7 @@ export class DetalhesIpvaService {
           exercicio: d.attributes.exercicio ?? null,
           valor: d.attributes.valor,
           valorLabel: formatCurrencyBr(d.attributes.valor),
-          vencimento: vencimento ? formatDateBr(vencimento) : null,
+          vencimento: vencimento ? formatDateBr(vencimento) : NAO_CONSTA,
           chips: [
             statusChip,
             { id: '2', label: 'PARCELA ÚNICA', color: 'info' },

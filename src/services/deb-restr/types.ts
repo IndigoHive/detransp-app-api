@@ -152,7 +152,7 @@ export type DetalhesIpvaItem = {
   exercicio: number | null
   valor: number
   valorLabel: string
-  vencimento: string | null
+  vencimento: string
   chips: DetalhesIpvaChip[]
   parcels: IpvaParcelsInfo | null
 }
@@ -166,13 +166,13 @@ export type DetalhesIpvaResult = {
 
 export type DetalhesMultaInfracao = {
   id: string
-  autoInfracao: string | null
+  autoInfracao: string
   descricao: string
   valor: number
   valorLabel: string
-  data: string | null
-  municipio: string | null
-  orgaoAutuador: string | null
+  data: string
+  municipio: string
+  orgaoAutuador: string
 }
 
 export type DetalhesMultasResult = {

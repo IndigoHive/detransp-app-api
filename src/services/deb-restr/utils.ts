@@ -1,6 +1,8 @@
 import type { DebitoIncluded } from '../../clients/detran-sp-service-now-deb-restr'
 import type { DebtSectionStatus } from './types'
 
+export const NAO_CONSTA = 'Não consta'
+
 export function formatCurrencyBr (value: number): string {
   return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
 }
