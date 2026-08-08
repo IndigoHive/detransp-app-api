@@ -698,6 +698,7 @@ app.get('/api/tdv/compras', (_req, res) => {
         origem: '2',
         origemComunicacaoVendaVeiculo: '9',
         descricaoMarcaVeiculo: 'VW/GOL 1.0',
+        descricaoCorVeiculo: 'Branco',
         nomeVendedor: 'João Vendedor',
         codigoVendedor: '11122233344',
         nomeMunicipioVeiculo: 'SAO PAULO',
@@ -729,16 +730,128 @@ app.post('/api/tdv/confirmar-compra', (req, res) => {
 })
 
 app.post('/api/tdv/confirmar-endereco', (req, res) => {
+  const body = req.body ?? {}
+  const simularPendencia = body.simularPendencia
+  if (typeof simularPendencia === 'string' && simularPendencia) {
+    const pendencias: Record<string, { proximaAcao: string, detail: string }> = {
+      pagamento_pendente: {
+        proximaAcao: 'pagamento_pendente',
+        detail: 'Pagamento de taxa não localizado'
+      },
+      vistoria_pagamento_pendentes: {
+        proximaAcao: 'vistoria_pagamento_pendentes',
+        detail: 'Pagamento de taxa não localizado,Laudo de vistoria não localizado'
+      },
+      administrativa_pendente: {
+        proximaAcao: 'administrativa_pendente',
+        detail: 'Veículo com bloqueio - Baixa permanente'
+      },
+      judicial_pendente: {
+        proximaAcao: 'judicial_pendente',
+        detail: 'Veículo com Restrição Judicial'
+      },
+      administrativa_judicial_pendentes: {
+        proximaAcao: 'administrativa_judicial_pendentes',
+        detail: 'Veículo com bloqueio - Baixa permanente,Veículo com Restrição Judicial'
+      }
+    }
+    const mapped = pendencias[simularPendencia]
+    if (mapped) {
+      return res.json({
+        ...mapped,
+        codigoTransferencia: body.codigoTransferencia || 'TDV-MOCK-NEW'
+      })
+    }
+  }
+
+  const logradouro = body.logradouroComprador || 'Av. Paulista'
+  const numero = body.numeroComprador || '1000'
+  const complemento = body.complementoComprador || ''
+  const bairro = body.bairroComprador || 'Bela Vista'
+  const cep = String(body.cepComprador || '01310100').replace(/\D/g, '')
   res.json({
-    proximaAcao: 'aviso_pagamento',
+    enderecoComprador: [logradouro, numero, complemento, bairro, cep].filter(Boolean).join(', '),
+    cepComprador: cep,
+    logradouroComprador: logradouro,
+    numeroComprador: numero,
+    complementoComprador: complemento,
+    bairroComprador: bairro,
     estado: '7',
   })
 })
 
 app.post('/api/tdv/criar-compra', (req, res) => {
+  const body = req.body ?? {}
+  const simularPendencia = body.simularPendencia
+  const plate = body.placaVeiculo || 'GHI8J90'
+  const brandModel = body.descricaoMarcaVeiculo || 'VW/GOL 1.0'
+  const renavam = body.renavamVeiculo || '00010020031'
+  const vehicle = {
+    id: '1',
+    plate,
+    title: brandModel,
+    licensingStatus: 'REGULAR',
+    brandModel,
+    licensingExpirationDate: '',
+    renavam,
+    lastLicensing: '',
+    yearFab: '',
+    yearMod: '',
+  }
+
+  if (typeof simularPendencia === 'string' && simularPendencia) {
+    const pendencias: Record<string, { proximaAcao: string, detail: string }> = {
+      pagamento_pendente: {
+        proximaAcao: 'pagamento_pendente',
+        detail: 'Pagamento de taxa não localizado'
+      },
+      vistoria_pagamento_pendentes: {
+        proximaAcao: 'vistoria_pagamento_pendentes',
+        detail: 'Pagamento de taxa não localizado,Laudo de vistoria não localizado'
+      },
+      administrativa_pendente: {
+        proximaAcao: 'administrativa_pendente',
+        detail: 'Veículo com bloqueio - Baixa permanente'
+      },
+      judicial_pendente: {
+        proximaAcao: 'judicial_pendente',
+        detail: 'Veículo com Restrição Judicial'
+      },
+      administrativa_judicial_pendentes: {
+        proximaAcao: 'administrativa_judicial_pendentes',
+        detail: 'Veículo com bloqueio - Baixa permanente,Veículo com Restrição Judicial'
+      }
+    }
+    const mapped = pendencias[simularPendencia]
+    if (mapped) {
+      return res.json({
+        ...mapped,
+        codigoTransferencia: 'TDV-MOCK-NEW',
+        vehicle,
+        nomeComprador: body.nomeComprador || 'Maria Compradora',
+      })
+    }
+  }
+
   res.json({
     proximaAcao: 'aviso_pagamento',
     estado: '7',
+    codigoTransferencia: 'TDV-MOCK-NEW',
+    vehicle,
+    nomeComprador: body.nomeComprador || 'Maria Compradora',
+  })
+})
+
+app.get('/api/tdv/detalhe-compra', (req, res) => {
+  res.json({
+    enderecoComprador: 'Rua das Flores, 123, Jardim Paulista, 01310100',
+    cepComprador: '01310100',
+    logradouroComprador: 'Rua das Flores',
+    numeroComprador: '123',
+    complementoComprador: '',
+    bairroComprador: 'Jardim Paulista',
+    autodeclaracaoResidenciaComprador: 'Eu, Maria Compradora, inscrito no CPF sob o nº 123.456.789-01, declaro para os devidos fins que resido em Rua das Flores, 123, Jardim Paulista.',
+    nomeComprador: 'Maria Compradora',
   })
 })
 
@@ -757,14 +870,69 @@ app.post('/api/tdv/prova-vida', (req, res) => {
 })
 
 app.get('/api/tdv/consulta-debitos', (req, res) => {
-  const codigoTransferencia = (req.query.codigoTransferencia as string) || 'TDV-MOCK'
   res.json({
     nomeComprador: 'Maria Oliveira Souza',
+    debitos: [
+      { descricao: 'Transferência de Veículo', valor: 243.77, valorFormatado: 'R$ 243,77' },
+      { descricao: 'Licenciamento', valor: 120.50, valorFormatado: 'R$ 120,50' }
+    ],
+    valorTotal: 364.27,
     taxaTransferencia: 'R$ 243,77',
     taxaLicenciamento: 'R$ 120,50',
-    totalDebitos: 'R$ 364,27',
-    qrCode: `00020126580014br.gov.bcb.pix0136mock-tdv-pix-${codigoTransferencia}520400005303986540364.275802BR5925DETRAN SP6009SAO PAULO`,
-    expiresAt: new Date(Date.now() + 30 * 60 * 1000).toISOString(),
+    totalDebitos: 'R$ 364,27'
+  })
+})
+
+const tdvPixPayments: Record<string, {
+  qrCode: string
+  expiresAt: string
+  estado: number
+  idPagamento: string | null
+  dataPagamento: string | null
+  createdAt: number
+}> = {}
+
+app.get('/api/tdv/pix', (req, res) => {
+  const codigoTransferencia = (req.query.codigoTransferencia as string) || 'TDV-MOCK'
+  const forcarNovo = req.query.forcarNovo === 'true'
+
+  if (forcarNovo || !tdvPixPayments[codigoTransferencia]) {
+    const expiresAt = new Date(Date.now() + 15 * 60 * 1000).toISOString()
+    const qrCode = `00020126580014br.gov.bcb.pix0136mock-tdv-pix-${codigoTransferencia}520400005303986540364.275802BR5925DETRAN SP6009SAO PAULO`
+    tdvPixPayments[codigoTransferencia] = {
+      qrCode,
+      expiresAt,
+      estado: 1,
+      idPagamento: null,
+      dataPagamento: null,
+      createdAt: Date.now()
+    }
+
+    setTimeout(() => {
+      const payment = tdvPixPayments[codigoTransferencia]
+      if (payment && payment.estado === 1) {
+        payment.estado = 2
+        payment.idPagamento = `PIX-${codigoTransferencia}-${Date.now()}`
+        const now = new Date()
+        payment.dataPagamento = now.toLocaleString('pt-BR', {
+          timeZone: 'America/Sao_Paulo',
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        }).replace(',', '')
+      }
+    }, 15000)
+  }
+
+  const payment = tdvPixPayments[codigoTransferencia]
+  res.json({
+    qrCode: payment.qrCode,
+    expiresAt: payment.expiresAt,
+    estado: payment.estado,
+    ...(payment.idPagamento ? { idPagamento: payment.idPagamento } : {}),
+    ...(payment.dataPagamento ? { dataPagamento: payment.dataPagamento } : {})
   })
 })
 
@@ -825,8 +993,10 @@ app.listen(PORT, () => {
   console.log('    POST /api/tdv/confirmar-compra')
   console.log('    POST /api/tdv/confirmar-endereco')
   console.log('    POST /api/tdv/criar-compra')
+  console.log('    GET  /api/tdv/detalhe-compra')
   console.log('    POST /api/tdv/valida-assinatura')
   console.log('    POST /api/tdv/prova-vida')
   console.log('    GET  /api/tdv/consulta-debitos')
+  console.log('    GET  /api/tdv/pix')
   console.log('')
 })

@@ -9,13 +9,19 @@ export type ConsultaDebitosInput = {
   codigoTransferencia: string
 }
 
+export type DebitoItem = {
+  descricao: string
+  valor: number
+  valorFormatado: string
+}
+
 export type ConsultaDebitosResult = {
   nomeComprador: string
+  debitos: DebitoItem[]
+  valorTotal: number
   taxaTransferencia: string
   taxaLicenciamento: string
   totalDebitos: string
-  pixQrCode?: string | undefined
-  pixExpiracao?: string | undefined
 }
 
 function formatCurrency (value: number): string {
@@ -34,31 +40,36 @@ export class ConsultaDebitosService {
     const cpf = extractCpfFromToken(token)
     const auth = { token, cpf }
 
-    const [tdvResult, debitosResult, pixResult] = await Promise.all([
+    const [tdvResult, debitosResult] = await Promise.all([
       this.client.buscaTdv(auth, input.codigoTransferencia),
-      this.client.buscaDebitosTdv(auth, input.codigoTransferencia),
-      this.client.buscaPixQrCodeTdv(auth, input.codigoTransferencia)
+      this.client.buscaDebitosTdv(auth, input.codigoTransferencia)
     ])
 
-    const debitos = debitosResult?.result?.debitos ?? []
+    const rawDebitos = debitosResult?.result?.debitos ?? []
 
-    const taxaTransferencia = debitos.find(d =>
+    const debitos = rawDebitos.map((d) => ({
+      descricao: d.descricao,
+      valor: d.valor,
+      valorFormatado: formatCurrency(d.valor)
+    }))
+
+    const taxaTransferencia = rawDebitos.find(d =>
       d.descricao.toLowerCase().includes('transferência') || d.descricao.toLowerCase().includes('transferencia')
     )?.valor ?? 0
 
-    const taxaLicenciamento = debitos.find(d =>
+    const taxaLicenciamento = rawDebitos.find(d =>
       d.descricao.toLowerCase().includes('licenciamento')
     )?.valor ?? 0
 
-    const totalDebitos = debitosResult?.result?.valorTotal ?? 0
+    const valorTotal = debitosResult?.result?.valorTotal ?? 0
 
     return {
       nomeComprador: tdvResult?.result?.nomeComprador ?? '',
+      debitos,
+      valorTotal,
       taxaTransferencia: formatCurrency(taxaTransferencia),
       taxaLicenciamento: formatCurrency(taxaLicenciamento),
-      totalDebitos: formatCurrency(totalDebitos),
-      pixQrCode: pixResult?.result?.qrCode,
-      pixExpiracao: pixResult?.result?.dataExpiracaoQRCode
+      totalDebitos: formatCurrency(valorTotal)
     }
   }
 }

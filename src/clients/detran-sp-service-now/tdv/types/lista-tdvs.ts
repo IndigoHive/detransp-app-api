@@ -5,6 +5,7 @@ export type ListTdvsQuery = {
   codigoComprador?: string
   codigoVendedor?: string
   placaVeiculo?: string
+  campos?: string
 }
 
 export type ListaTdvsResultData = {
@@ -15,6 +16,7 @@ export type ListaTdvsResultData = {
   codigoTransferenciaVeiculo?: string
   placaVeiculo?: string
   descricaoMarcaVeiculo?: string
+  descricaoCorVeiculo?: string
   codigoRenavamVeiculo?: string
   codigoComprador?: string
   codigoVendedor?: string

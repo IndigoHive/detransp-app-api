@@ -56,6 +56,7 @@ export type AtualizaTdvEnderecoComprador = {
   logradouroComprador: string
   numeroComprador: string
   complementoComprador: string
+  estado?: CodigoEstadoTDV.ATPVE_ASSINADA_VENDEDOR_COMUNICACAO_VENDA_GERADA
 }
 
 export type AtualizaTdvCommand =

@@ -80,6 +80,14 @@ export function tdvRouter (): Router {
     res.status(200).json(result)
   })
 
+  router.get('/detalhe-compra', async (req, res) => {
+    const { accessToken } = req.session!
+    const service = req.scope.resolve('buscaDetalheCompraService')
+    const codigoTransferencia = req.query.codigoTransferencia as string
+    const result = await service.run(accessToken, { codigoTransferencia })
+    res.status(200).json(result)
+  })
+
   router.post('/confirmar-intencao-venda', async (req, res) => {
     const { accessToken } = req.session!
     const service = req.scope.resolve('confirmarIntencaoVendaService')
@@ -99,6 +107,23 @@ export function tdvRouter (): Router {
     const service = req.scope.resolve('consultaDebitosService')
     const codigoTransferencia = req.query.codigoTransferencia as string
     const result = await service.run(accessToken, { codigoTransferencia })
+    res.status(200).json(result)
+  })
+
+  router.get('/pix', async (req, res) => {
+    const { accessToken } = req.session!
+    const service = req.scope.resolve('buscaPixService')
+    const codigoTransferencia = req.query.codigoTransferencia as string
+    const forcarNovoRaw = req.query.forcarNovo
+    const forcarNovo = forcarNovoRaw === 'true'
+      ? true
+      : forcarNovoRaw === 'false'
+        ? false
+        : undefined
+    const result = await service.run(accessToken, {
+      codigoTransferencia,
+      ...(forcarNovo !== undefined ? { forcarNovo } : {})
+    })
     res.status(200).json(result)
   })
 

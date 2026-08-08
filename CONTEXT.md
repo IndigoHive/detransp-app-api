@@ -49,19 +49,23 @@ App operation (`POST /api/tdv/confirmar-compra`) on the **Comprador** path for *
 _Avoid_: using confirmar-compra for Origem 2+/stubs
 
 **Criar compra**:
-App operation (`POST /api/tdv/criar-compra`) used on the **Origem** `2`/`3`/`4` **Comprador** path at **Autodeclaração de residência**: creates the **TDV** in ServiceNow from a **pre-TDV stub** (`criaTdv` with that origem), optionally PATCHes **Endereço do comprador** from CEP via `buscaEndereco`, then returns **Estado** so the flow can route to aviso de pagamento (`7`), pagamento confirmado (`8`), or concluído (`9`) — never **Assinatura**. Working assumption: ServiceNow create for external origem lands at `7+`. Any other **Estado** is treated as an error (snackbar) and ends the flow. Restriction handling is out of scope for this slice. Distinct from **Criar TDV** (`POST /api/tdv/criar`, Origem `1` vendedor `1→2→3`).
+App operation (`POST /api/tdv/criar-compra`) used on the **Origem** `2`/`3`/`4` **Comprador** path at **Autodeclaração de residência**: creates the **TDV** in ServiceNow from a **pre-TDV stub** (`criaTdv` with that origem), includes address fields when CEP is present, then returns **Estado** so the flow can route to aviso de pagamento (`7`), pagamento confirmado (`8`), concluído (`9`), or **pendência** screens (pagamento / vistoria / administrativa / judicial). Distinct from **Criar TDV** (`POST /api/tdv/criar`, Origem `1` vendedor `1→2→3`).
 _Avoid_: reusing CriarTdvService, overload of confirmar-endereco / confirmar-compra for create
 
 **Confirmar endereço**:
-Legacy app operation (`POST /api/tdv/confirmar-endereco`) kept in the API for now; the flow no longer calls it. Address persistence + estado routing for Origem `2`/`3`/`4` moved to **Criar compra**.
+Legacy app operation (`POST /api/tdv/confirmar-endereco`) kept in the API for now; the flow no longer calls it for Origem `2`/`3`/`4` create. When `codigoTransferencia` is present it PATCHes address with `estado: '7'`. Address persistence + estado routing for Origem `2`/`3`/`4` happy path moved to **Criar compra**.
 _Avoid_: wiring new flow edges to confirmar-endereco
+
+**Consulta débitos / PIX**:
+After aviso or pendência de pagamento, `GET /api/tdv/consulta-debitos` returns the full SN débito list (`debitos[]`, `valorTotal`) without generating a QR. `GET /api/tdv/pix?codigoTransferencia=&forcarNovo=true|false` generates (`true`) or polls (`false`) the Pix QR; `estado` is numeric `1` (ativo) / `2` (pago) / `3` (expirado). Paid responses expose `idPagamento` / `dataPagamento` for the comprovante screen.
+_Avoid_: bundling QR generation inside consulta-debitos
 
 ## Flagged ambiguities
 
 - **Versão vs Origem**: Product talk of “TDV 2–4” maps to **Origem** `2`/`3`/`4` in this implementation scope. Official HUs for those versions describe different roles/flows (e.g. TDV 4.0 is primarily a **Vendedor** journey); this CONTEXT documents the agreed comprador shortcut for this work, not a rewrite of the HUs.
 - **Estado after Criar compra**: Working assumption is ServiceNow create for Origem `2`/`3`/`4` lands at `7+`; unconfirmed. Tracked in [`docs/tdv/tdv-2-4-open-questions.md`](./docs/tdv/tdv-2-4-open-questions.md). See [`docs/adr/0002-criar-compra-origem-externa.md`](./docs/adr/0002-criar-compra-origem-externa.md).
 - **Prova de Vida on Origem 2–4**: Product override for this app’s comprador shortcut — no liveness (decided; see open-questions §1). Official HUs for TDV 2.0 still mention facial liveness.
-- **Restriction after Autodeclaração**: Deferred; see open-questions §2.
+- **Restriction after Autodeclaração**: Implemented per especificação §4.1.9 pendências (Slice 2) — SN errors map to pendência screens; remaining field-source questions in open-questions §2.
 - **Seller email on stubs**: Stub has no email; **Criar compra** sends `emailVendedor: ''`.
 
 ## Example dialogue

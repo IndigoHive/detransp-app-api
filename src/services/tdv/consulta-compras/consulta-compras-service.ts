@@ -6,6 +6,28 @@ import type {
 } from '../../../clients/detran-sp-service-now/tdv/types'
 import { extractBearerToken, extractCpfFromToken } from '../../../utils/token'
 
+const LISTA_COMPRAS_CAMPOS = [
+  'placaVeiculo',
+  'descricaoMarcaVeiculo',
+  'descricaoCorVeiculo',
+  'nomeComprador',
+  'codigoTransferenciaVeiculo',
+  'origemComunicacaoVendaVeiculo',
+  'origem',
+  'ativa',
+  'estado',
+  'codigoRenavamVeiculo',
+  'codigoComprador',
+  'nomeVendedor',
+  'codigoVendedor',
+  'nomeMunicipioVeiculo',
+  'nomeMunicipioComprador',
+  'chassiVeiculo',
+  'kmVeiculo',
+  'kmVistoriadaVeiculo',
+  'numeroComprador'
+].join(',')
+
 type Dependencies = {
   detranSpServiceNowTdv: DetranSpServiceNowTdvClient
 }
@@ -35,8 +57,10 @@ type CompraVehicle = {
   nomeMunicipioVeiculo?: string
   nomeMunicipioComprador?: string
   chassiVeiculo?: string
+  kmVeiculo?: string
   kmVistoriadaVeiculo?: string
   numeroComprador?: string
+  descricaoCorVeiculo?: string
 }
 
 export type ConsultaComprasResult = {
@@ -57,7 +81,8 @@ export class ConsultaComprasService {
 
     const result = await this.client.listaTdvs(auth, {
       ativa: 'true',
-      codigoComprador: cpf
+      codigoComprador: cpf,
+      campos: LISTA_COMPRAS_CAMPOS
     })
 
     if (!result?.result) {
@@ -103,10 +128,14 @@ export class ConsultaComprasService {
           ? { nomeMunicipioComprador: tdv.nomeMunicipioComprador }
           : {}),
         ...(tdv.chassiVeiculo?.trim() ? { chassiVeiculo: tdv.chassiVeiculo.trim() } : {}),
-        ...(tdv.kmVistoriadaVeiculo?.trim()
-          ? { kmVistoriadaVeiculo: tdv.kmVistoriadaVeiculo.trim() }
+        ...(tdv.kmVeiculo?.trim() ? { kmVeiculo: tdv.kmVeiculo.trim() } : {}),
+        ...((tdv.kmVistoriadaVeiculo?.trim() || tdv.kmVeiculo?.trim())
+          ? { kmVistoriadaVeiculo: (tdv.kmVistoriadaVeiculo?.trim() || tdv.kmVeiculo?.trim())! }
           : {}),
-        ...(tdv.numeroComprador?.trim() ? { numeroComprador: tdv.numeroComprador.trim() } : {})
+        ...(tdv.numeroComprador?.trim() ? { numeroComprador: tdv.numeroComprador.trim() } : {}),
+        ...(tdv.descricaoCorVeiculo?.trim()
+          ? { descricaoCorVeiculo: tdv.descricaoCorVeiculo.trim() }
+          : {})
       }
     })
 

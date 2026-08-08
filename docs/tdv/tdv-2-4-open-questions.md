@@ -27,25 +27,25 @@ Questions that block or risk the comprador path for **Origem** `2` (e-Notariado)
 
 ## 2. Restriction check after Autodeclaração
 
-**Status:** Deferred — not in this implementation slice. Route only by **Estado** `7` / `8` / `9` for now.
+**Status:** Implemented per especificação §4.1.9 (Slice 2) — ServiceNow errors on create/update map to pendência screens (`pagamento_pendente`, vistoria, administrativa, judicial). Remaining field-level questions below are awareness only.
 
-**Working assumption (later):** After `[Comprador] Endereço` / **Criar compra**, if the vehicle has a restriction → error screen (same idea as `[Vendedor] Veículo com restrição`). Else route by estado `7` / `8` / `9`.
+**Working assumption (later refinement):** After `[Comprador] Endereço` / **Criar compra**, if the vehicle has a restriction → error screen (same idea as `[Vendedor] Veículo com restrição`). Else route by estado `7` / `8` / `9`.
 
 **Why it matters:** `analise-requisitos` exposes `hasRestriction` but always returns `false` today. Unclear which ServiceNow field/endpoint is the source of truth for the comprador path (débitos? restrição administrativa? vistoria?).
 
 **Ask:**
-- [ ] Which API/field indicates “veículo com restrição” for Origem `2`/`3`/`4` at this step?
+- [x] Which API/field indicates “veículo com restrição” for Origem `2`/`3`/`4` at this step? — **Implemented via SN error mapping** (`mapPendenciaError`); exact type codes still to confirm with negócio.
 - [ ] Is restriction checked only after Autodeclaração / create, or also earlier (vehicle select)?
 
 **Owner / ask:** _________________  
-**Answer:** _________________  
-**Date:** _________________
+**Answer:** Implemented per especificação (Slice 2); type-code inventory still open.  
+**Date:** 2026-08-08
 
 ---
 
 ## 3. Address update without changing Estado
 
-**Working assumption:** Swagger allows PATCH of `cepComprador` / `bairroComprador` / `logradouroComprador` / etc. **without** sending `estado` (“Salva os dados da TDV sem alterar o seu estado”). **Criar compra** uses that when the user edited CEP (after `criaTdv`).
+**Working assumption (updated):** Swagger allows PATCH of address fields without `estado`. **Criar compra** sends address on `criaTdv` when CEP is present. Legacy **Confirmar endereço** PATCHes with `estado: '7'` when `codigoTransferencia` exists (see ADR 0002 note).
 
 **Ask:**
 - [ ] Confirm ServiceNow accepts address-only PATCH right after create when the TDV is already at estado `7` (or `8`/`9`).
@@ -94,11 +94,10 @@ Estou comprando
   → Origem 1: Assinatura
   → Origem 2|3|4: POST /api/tdv/criar-compra
        (criaTdv with stub origem + seller; optional address PATCH; buscaTdv)
-       → estado 7 → Aviso pagamento
+       → estado 7 → Aviso pagamento → Débitos → PIX (forcarNovo true/false)
        → estado 8 → Pagamento confirmado
        → estado 9 → Concluído
-       → else → snackbar error + end
-       (restriction routing: later)
+       → SN pendência errors → dedicated screens (Slice 2); pagamento_pendente → Débitos
 ```
 
 See also `CONTEXT.md` (glossary), [`docs/adr/0002-criar-compra-origem-externa.md`](../adr/0002-criar-compra-origem-externa.md), and `docs/tdv/tdv-versoes.md` (version reference).

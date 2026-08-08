@@ -24,6 +24,7 @@ export type CriaTdvCommand = {
   chassiVeiculo?: string
   kmVeiculo?: string
   kmVistoriadaVeiculo?: string
+  confirmacaoAutodeclaracaoResidenciaComprador?: 'true'
 }
 
 export type CriaTdvResultSuccess = {

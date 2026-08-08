@@ -1,4 +1,6 @@
+import createError from 'http-errors'
 import { describe, expect, it, vi } from 'vitest'
+import { DetranSpServiceNowError } from '../../../clients/detran-sp-service-now'
 import type { DetranSpServiceNowTdvClient } from '../../../clients/detran-sp-service-now/tdv'
 import { CodigoEstadoTDV } from '../../../clients/detran-sp-service-now/tdv/types'
 import { ConfirmarEnderecoService } from './confirmar-endereco-service'
@@ -12,26 +14,43 @@ function asClient (client: Partial<DetranSpServiceNowTdvClient>): DetranSpServic
 }
 
 describe('ConfirmarEnderecoService', () => {
-  it('maps estado 7/8/9 to proximaAcao without address PATCH when CEP is absent', async () => {
-    const atualizaTdv = vi.fn()
+  it('PATCHes full address with estado 7 without CEP lookup', async () => {
     const buscaEndereco = vi.fn()
-    const buscaTdv = vi.fn().mockResolvedValue({
-      result: { estado: CodigoEstadoTDV.ATPVE_ASSINADA_VENDEDOR_COMUNICACAO_VENDA_GERADA }
-    })
+    const atualizaTdv = vi.fn().mockResolvedValue({ result: { codigoTransferenciaVeiculo: 'TDV-1' } })
 
     const service = new ConfirmarEnderecoService({
-      detranSpServiceNowTdv: asClient({ atualizaTdv, buscaEndereco, buscaTdv })
+      detranSpServiceNowTdv: asClient({ atualizaTdv, buscaEndereco })
     })
 
-    await expect(service.run(authHeader, { codigoTransferencia: 'TDV-1' }))
-      .resolves.toEqual({ proximaAcao: 'aviso_pagamento', estado: CodigoEstadoTDV.ATPVE_ASSINADA_VENDEDOR_COMUNICACAO_VENDA_GERADA })
+    await expect(service.run(authHeader, {
+      codigoTransferencia: 'TDV-1',
+      cepComprador: '01310-100',
+      logradouroComprador: 'Av. Paulista',
+      numeroComprador: '1000',
+      complementoComprador: 'Sala 10',
+      bairroComprador: 'Bela Vista'
+    })).resolves.toEqual({
+      enderecoComprador: 'Av. Paulista, 1000, Sala 10, Bela Vista, 01310100',
+      cepComprador: '01310100',
+      logradouroComprador: 'Av. Paulista',
+      numeroComprador: '1000',
+      complementoComprador: 'Sala 10',
+      bairroComprador: 'Bela Vista',
+      estado: CodigoEstadoTDV.ATPVE_ASSINADA_VENDEDOR_COMUNICACAO_VENDA_GERADA
+    })
 
     expect(buscaEndereco).not.toHaveBeenCalled()
-    expect(atualizaTdv).not.toHaveBeenCalled()
-    expect(buscaTdv).toHaveBeenCalledWith(clientAuth, 'TDV-1')
+    expect(atualizaTdv).toHaveBeenCalledWith(clientAuth, 'TDV-1', {
+      cepComprador: '01310100',
+      logradouroComprador: 'Av. Paulista',
+      numeroComprador: '1000',
+      complementoComprador: 'Sala 10',
+      bairroComprador: 'Bela Vista',
+      estado: CodigoEstadoTDV.ATPVE_ASSINADA_VENDEDOR_COMUNICACAO_VENDA_GERADA
+    })
   })
 
-  it('updates address without changing estado when CEP is provided, then routes by estado', async () => {
+  it('looks up CEP when only CEP is provided and PATCHes with estado 7', async () => {
     const buscaEndereco = vi.fn().mockResolvedValue({
       result: {
         bairro: 'Jardim Paulista',
@@ -41,20 +60,21 @@ describe('ConfirmarEnderecoService', () => {
       }
     })
     const atualizaTdv = vi.fn().mockResolvedValue({ result: { codigoTransferenciaVeiculo: 'TDV-1' } })
-    const buscaTdv = vi.fn().mockResolvedValue({
-      result: { estado: CodigoEstadoTDV.TAXA_SERVICO_PAGA }
-    })
 
     const service = new ConfirmarEnderecoService({
-      detranSpServiceNowTdv: asClient({ atualizaTdv, buscaEndereco, buscaTdv })
+      detranSpServiceNowTdv: asClient({ atualizaTdv, buscaEndereco })
     })
 
     await expect(service.run(authHeader, {
       codigoTransferencia: 'TDV-1',
-      cepComprador: '01310-100'
-    })).resolves.toEqual({
-      proximaAcao: 'pagamento_confirmado',
-      estado: CodigoEstadoTDV.TAXA_SERVICO_PAGA
+      cepComprador: '01310-100',
+      numeroComprador: '100'
+    })).resolves.toMatchObject({
+      cepComprador: '01310100',
+      logradouroComprador: 'Rua das Flores',
+      numeroComprador: '100',
+      bairroComprador: 'Jardim Paulista',
+      estado: CodigoEstadoTDV.ATPVE_ASSINADA_VENDEDOR_COMUNICACAO_VENDA_GERADA
     })
 
     expect(buscaEndereco).toHaveBeenCalledWith(clientAuth, '01310100')
@@ -62,66 +82,108 @@ describe('ConfirmarEnderecoService', () => {
       cepComprador: '01310100',
       bairroComprador: 'Jardim Paulista',
       logradouroComprador: 'Rua das Flores',
-      numeroComprador: '',
-      complementoComprador: 'Apto 12'
+      numeroComprador: '100',
+      complementoComprador: 'Apto 12',
+      estado: CodigoEstadoTDV.ATPVE_ASSINADA_VENDEDOR_COMUNICACAO_VENDA_GERADA
     })
   })
 
-  it('skips address PATCH when CEP is empty or invalid', async () => {
+  it('formats address without PATCH when codigoTransferencia is empty (stub hold)', async () => {
     const atualizaTdv = vi.fn()
     const buscaEndereco = vi.fn()
-    const buscaTdv = vi.fn().mockResolvedValue({
-      result: { estado: CodigoEstadoTDV.ATPVE_ASSINADA_VENDEDOR_COMUNICACAO_VENDA_GERADA }
-    })
 
     const service = new ConfirmarEnderecoService({
-      detranSpServiceNowTdv: asClient({ atualizaTdv, buscaEndereco, buscaTdv })
+      detranSpServiceNowTdv: asClient({ atualizaTdv, buscaEndereco })
     })
 
     await expect(service.run(authHeader, {
-      codigoTransferencia: 'TDV-1',
-      cepComprador: '  '
-    })).resolves.toMatchObject({ proximaAcao: 'aviso_pagamento' })
+      codigoTransferencia: '',
+      cepComprador: '01310-100',
+      logradouroComprador: 'Av. Paulista',
+      numeroComprador: '1000',
+      complementoComprador: 'Sala 10',
+      bairroComprador: 'Bela Vista'
+    })).resolves.toEqual({
+      enderecoComprador: 'Av. Paulista, 1000, Sala 10, Bela Vista, 01310100',
+      cepComprador: '01310100',
+      logradouroComprador: 'Av. Paulista',
+      numeroComprador: '1000',
+      complementoComprador: 'Sala 10',
+      bairroComprador: 'Bela Vista',
+      estado: CodigoEstadoTDV.ATPVE_ASSINADA_VENDEDOR_COMUNICACAO_VENDA_GERADA
+    })
 
-    await expect(service.run(authHeader, {
-      codigoTransferencia: 'TDV-1',
-      cepComprador: '123'
-    })).resolves.toMatchObject({ proximaAcao: 'aviso_pagamento' })
-
-    expect(buscaEndereco).not.toHaveBeenCalled()
     expect(atualizaTdv).not.toHaveBeenCalled()
+    expect(buscaEndereco).not.toHaveBeenCalled()
   })
 
-  it('returns snackbar error for unexpected estado', async () => {
+  it('rejects missing CEP when full address is absent', async () => {
+    const service = new ConfirmarEnderecoService({
+      detranSpServiceNowTdv: asClient({})
+    })
+
+    await expect(service.run(authHeader, { codigoTransferencia: 'TDV-1' }))
+      .rejects.toMatchObject({ status: 400, message: 'cepComprador é obrigatório' })
+  })
+
+  it.each([
+    ['PagamentoPendenteError', 'pagamento_pendente', 'Pagamento de taxa não localizado'],
+    [
+      'PagamentoVistoriaPendentesError',
+      'vistoria_pagamento_pendentes',
+      'Pagamento de taxa não localizado,Laudo de vistoria não localizado'
+    ],
+    [
+      'SituacaoAdministrativaPendenteError',
+      'administrativa_pendente',
+      'Veículo com bloqueio - Baixa permanente'
+    ],
+    ['SituacaoJudicialPendenteError', 'judicial_pendente', 'Veículo com Restrição Judicial'],
+    [
+      'SituacoesAdministrativaJudicialPendentesError',
+      'administrativa_judicial_pendentes',
+      'Veículo com bloqueio - Baixa permanente,Veículo com Restrição Judicial'
+    ]
+  ] as const)('maps PATCH %s to proximaAcao %s', async (type, proximaAcao, detail) => {
+    const atualizaTdv = vi.fn().mockRejectedValue(
+      createError(500, new DetranSpServiceNowError(type, detail), { expose: true })
+    )
+
+    const service = new ConfirmarEnderecoService({
+      detranSpServiceNowTdv: asClient({ atualizaTdv })
+    })
+
+    await expect(service.run(authHeader, {
+      codigoTransferencia: 'TDV-1',
+      cepComprador: '01310-100',
+      logradouroComprador: 'Av. Paulista',
+      numeroComprador: '1000',
+      bairroComprador: 'Bela Vista'
+    })).resolves.toEqual({
+      proximaAcao,
+      detail,
+      codigoTransferencia: 'TDV-1'
+    })
+  })
+
+  it('rethrows unknown ServiceNow errors from atualizaTdv', async () => {
+    const error = createError(
+      500,
+      new DetranSpServiceNowError('SomeUnknownError', 'falha inesperada'),
+      { expose: true }
+    )
     const service = new ConfirmarEnderecoService({
       detranSpServiceNowTdv: asClient({
-        buscaTdv: vi.fn().mockResolvedValue({
-          result: { estado: CodigoEstadoTDV.AUTODECLARACAO_RESIDENCIA_CONFIRMADA }
-        })
+        atualizaTdv: vi.fn().mockRejectedValue(error)
       })
     })
 
-    await expect(service.run(authHeader, { codigoTransferencia: 'TDV-1' })).resolves.toEqual({
-      showSnackbar: {
-        variant: 'error',
-        title: 'Erro',
-        description: 'Estado da transferência inválido para continuar'
-      }
-    })
-  })
-
-  it('maps estado 9 to concluido', async () => {
-    const service = new ConfirmarEnderecoService({
-      detranSpServiceNowTdv: asClient({
-        buscaTdv: vi.fn().mockResolvedValue({
-          result: { estado: CodigoEstadoTDV.TRANSFERENCIA_CONCLUIDA }
-        })
-      })
-    })
-
-    await expect(service.run(authHeader, { codigoTransferencia: 'TDV-1' })).resolves.toEqual({
-      proximaAcao: 'concluido',
-      estado: CodigoEstadoTDV.TRANSFERENCIA_CONCLUIDA
-    })
+    await expect(service.run(authHeader, {
+      codigoTransferencia: 'TDV-1',
+      cepComprador: '01310-100',
+      logradouroComprador: 'Av. Paulista',
+      numeroComprador: '1000',
+      bairroComprador: 'Bela Vista'
+    })).rejects.toBe(error)
   })
 })

@@ -44,16 +44,36 @@ export class DetranSpServiceNowTdvClient extends DetranSpServiceNowHttp {
     ).data
   }
 
-  async buscaTdv (auth: DetranSpServiceNowAuth, codigoTransferenciaVeiculo: string): Promise<BuscaTdvResult> {
+  async buscaTdv (
+    auth: DetranSpServiceNowAuth,
+    codigoTransferenciaVeiculo: string,
+    campos?: string
+  ): Promise<BuscaTdvResult> {
     return (
       await this.axios.get<BuscaTdvResult>(
         `/transferencias-de-veiculos/${codigoTransferenciaVeiculo}`,
-        this.withAuth(auth)
+        {
+          ...(campos ? { params: { campos } } : {}),
+          ...this.withAuth(auth)
+        }
       )
     ).data
   }
 
   async criaTdv (auth: DetranSpServiceNowAuth, data: CriaTdvCommand): Promise<CriaTdvResult> {
+    const url = `${this.axios.defaults.baseURL}/transferencias-de-veiculos`
+    const body = JSON.stringify(data)
+    console.log([
+      'curl -X POST',
+      `'${url}'`,
+      `-H 'Content-Type: application/json'`,
+      `-H 'Accept: application/json'`,
+      `-H 'Authorization: Bearer ...'`,
+      `-H 'sn-token: ...'`,
+      `-H 'X-CPF-Usuario: ${auth.cpf}'`,
+      `-d '${body.replace(/'/g, `'\\''`)}'`
+    ].join(' \\\n  '))
+
     return (
       await this.axios.post<CriaTdvResult>('/transferencias-de-veiculos', data, this.withAuth(auth))
     ).data
@@ -100,11 +120,18 @@ export class DetranSpServiceNowTdvClient extends DetranSpServiceNowHttp {
     ).data
   }
 
-  async buscaPixQrCodeTdv (auth: DetranSpServiceNowAuth, codigoTransferenciaVeiculo: string): Promise<BuscaPixQrCodeTdvResult> {
+  async buscaPixQrCodeTdv (
+    auth: DetranSpServiceNowAuth,
+    codigoTransferenciaVeiculo: string,
+    options?: { forcarNovo?: boolean }
+  ): Promise<BuscaPixQrCodeTdvResult> {
     return (
       await this.axios.get<BuscaPixQrCodeTdvResult>(
         `/transferencias-de-veiculos/${codigoTransferenciaVeiculo}/qr-code`,
-        this.withAuth(auth)
+        {
+          ...(options?.forcarNovo !== undefined ? { params: { forcarNovo: options.forcarNovo } } : {}),
+          ...this.withAuth(auth)
+        }
       )
     ).data
   }

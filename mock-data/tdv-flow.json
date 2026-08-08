@@ -1424,7 +1424,7 @@
                 "type": "label_text",
                 "name": null,
                 "data": {
-                  "text": "@{node:n_6c4d8e2a1b90.enderecoComprador ?? node:n_0a7cda804e6d.enderecoComprador}",
+                  "text": "@{node:n_6c4d8e2a1b90.enderecoComprador ?? node:n_9d4a6e1c3b82.enderecoComprador ?? node:n_0a7cda804e6d.enderecoComprador}",
                   "label": "Endereço"
                 }
               }
@@ -1549,8 +1549,37 @@
             "type": "text_body",
             "name": null,
             "data": {
+              "text": "@{node:n_9d4a6e1c3b82.autodeclaracaoResidenciaComprador}",
+              "align": "justify",
+              "visibilityCondition": {
+                "clauses": [
+                  {
+                    "id": "vc-auto-sn",
+                    "left": "@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoTransferencia}",
+                    "operator": "is_not_empty"
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          },
+          {
+            "id": "c_61aa261b7bc9_stub",
+            "type": "text_body",
+            "name": null,
+            "data": {
               "text": "Eu, @{node:n_0a7cda804e6d.nomeComprador ?? node:n_3f8e1a7c9b20.full_name}, inscrito no CPF sob o nº @{node:n_0a7cda804e6d.cpfComprador ?? node:n_3f8e1a7c9b20.cpf}, declaro para os devidos fins que resido em @{node:n_6c4d8e2a1b90.enderecoComprador ?? node:n_0a7cda804e6d.enderecoComprador}.",
-              "align": "justify"
+              "align": "justify",
+              "visibilityCondition": {
+                "clauses": [
+                  {
+                    "id": "vc-auto-stub",
+                    "left": "@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoTransferencia}",
+                    "operator": "is_empty"
+                  }
+                ],
+                "combinator": "and"
+              }
             }
           },
           {
@@ -1770,7 +1799,7 @@
             "type": "vehicle_info",
             "name": null,
             "data": {
-              "source": "@{node:n_90a9d6db5f4b.vehicle}",
+              "source": "@{node:n_2d9e4b6a8c17.vehicle ?? node:n_90a9d6db5f4b.vehicle}",
               "vehicle": {
                 "id": "1",
                 "plate": "EXC1A22",
@@ -1907,34 +1936,29 @@
                 "data": {}
               },
               {
-                "id": "c_90d48ffc11dd",
-                "type": "label_text",
+                "id": "c_iter_debitos_01",
+                "type": "iterator",
                 "name": null,
+                "children": [
+                  {
+                    "id": "c_iter_debito_label_01",
+                    "type": "label_text",
+                    "name": null,
+                    "data": {
+                      "text": "@{item.valorFormatado}",
+                      "label": "@{item.descricao}"
+                    }
+                  },
+                  {
+                    "id": "c_iter_debito_div_01",
+                    "type": "divider",
+                    "name": null,
+                    "data": {}
+                  }
+                ],
                 "data": {
-                  "text": "@{node:n_b685a31ed52c.taxaTransferencia}",
-                  "label": "Transferência do veículo"
+                  "source": "@{node:n_b685a31ed52c.debitos}"
                 }
-              },
-              {
-                "id": "c_381e0ff4556e",
-                "type": "divider",
-                "name": null,
-                "data": {}
-              },
-              {
-                "id": "c_9db5f315559a",
-                "type": "label_text",
-                "name": null,
-                "data": {
-                  "text": "@{node:n_b685a31ed52c.taxaLicenciamento}",
-                  "label": "Licenciamento"
-                }
-              },
-              {
-                "id": "c_f6b5788ae741",
-                "type": "divider",
-                "name": null,
-                "data": {}
               },
               {
                 "id": "c_161e9c548d0b",
@@ -2022,7 +2046,7 @@
             "type": "vehicle_info",
             "name": null,
             "data": {
-              "source": "@{node:n_90a9d6db5f4b.vehicle}",
+              "source": "@{node:n_2d9e4b6a8c17.vehicle ?? node:n_90a9d6db5f4b.vehicle}",
               "vehicle": {
                 "id": "1",
                 "plate": "EXC1A22",
@@ -2114,7 +2138,7 @@
                 "type": "label_text",
                 "name": null,
                 "data": {
-                  "text": "@{node:n_de17c35410fd.comprovante}",
+                  "text": "@{node:n_de17c35410fd.idPagamento}",
                   "label": "Comprovante do pagamento"
                 }
               },
@@ -2144,7 +2168,7 @@
                 "type": "label_text",
                 "name": null,
                 "data": {
-                  "text": "@{node:n_de17c35410fd.confirmedDate}",
+                  "text": "@{node:n_de17c35410fd.dataPagamento}",
                   "label": "Data e hora da confirmação"
                 }
               }
@@ -2352,7 +2376,7 @@
             "type": "text_body",
             "name": null,
             "data": {
-              "text": "Olá, @{node:n_90a9d6db5f4b.nomeComprador}. \nA transferência do veículo @{node:n_90a9d6db5f4b.vehicle.brandModel}, placa @{node:n_90a9d6db5f4b.vehicle.plate} foi realizada com sucesso e o veículo encontra-se em seu nome.\n\nAcesse o aplicativo da Carteira Digital de Trânsito - CDT para baixar o documento do veículo.\n",
+              "text": "Olá, @{node:n_2d9e4b6a8c17.nomeComprador ?? node:n_90a9d6db5f4b.nomeComprador}. \nA transferência do veículo @{node:n_2d9e4b6a8c17.vehicle.brandModel ?? node:n_90a9d6db5f4b.vehicle.brandModel}, placa @{node:n_2d9e4b6a8c17.vehicle.plate ?? node:n_90a9d6db5f4b.vehicle.plate} foi realizada com sucesso e o veículo encontra-se em seu nome.\n\nAcesse o aplicativo da Carteira Digital de Trânsito - CDT para baixar o documento do veículo.\n",
               "align": "left"
             }
           },
@@ -2420,7 +2444,7 @@
             "type": "text_body",
             "name": null,
             "data": {
-              "text": "Olá, @{node:n_90a9d6db5f4b.nomeComprador}. \n\nFoi confirmado o pagamento da taxa de transferência do veículo @{node:n_90a9d6db5f4b.vehicle.brandModel}, placa @{node:n_90a9d6db5f4b.vehicle.plate}.\n\nAguarde enquanto validamos o processo e registramos o veículo em seu nome.\n",
+              "text": "Olá, @{node:n_2d9e4b6a8c17.nomeComprador ?? node:n_90a9d6db5f4b.nomeComprador}. \n\nFoi confirmado o pagamento da taxa de transferência do veículo @{node:n_2d9e4b6a8c17.vehicle.brandModel ?? node:n_90a9d6db5f4b.vehicle.brandModel}, placa @{node:n_2d9e4b6a8c17.vehicle.plate ?? node:n_90a9d6db5f4b.vehicle.plate}.\n\nAguarde enquanto validamos o processo e registramos o veículo em seu nome.\n",
               "align": "left"
             }
           },
@@ -2488,7 +2512,7 @@
             "type": "text_body",
             "name": null,
             "data": {
-              "text": "Olá, @{node:n_90a9d6db5f4b.nomeComprador}.\n\nA compra do veículo foi cancelada pelo vendedor do veículo. Por isso, encerramos sua solicitação.\n",
+              "text": "Olá, @{node:n_2d9e4b6a8c17.nomeComprador ?? node:n_90a9d6db5f4b.nomeComprador}.\n\nA compra do veículo foi cancelada pelo vendedor do veículo. Por isso, encerramos sua solicitação.\n",
               "align": "left"
             }
           },
@@ -2497,7 +2521,7 @@
             "type": "vehicle_info",
             "name": null,
             "data": {
-              "source": "@{node:n_90a9d6db5f4b.vehicle}",
+              "source": "@{node:n_2d9e4b6a8c17.vehicle ?? node:n_90a9d6db5f4b.vehicle}",
               "vehicle": {
                 "id": "1",
                 "plate": "EXC1A22",
@@ -2543,7 +2567,7 @@
     },
     {
       "id": "s_7e2a1c9b4f08",
-      "name": "[Comprador] Editar CEP",
+      "name": "[Comprador] Editar endereço",
       "content": {
         "id": "c_a1f6c84e2d90",
         "type": "group",
@@ -2553,7 +2577,43 @@
             "type": "text_body",
             "name": null,
             "data": {
-              "text": "Informe o CEP do endereço do comprador\n"
+              "text": "Informe o endereço do comprador\n"
+            }
+          },
+          {
+            "id": "c_a8f3e21b9c40",
+            "type": "text_input",
+            "name": "logradouro",
+            "data": {
+              "label": "Logradouro",
+              "required": true
+            }
+          },
+          {
+            "id": "c_b7d4e12a8f31",
+            "type": "text_input",
+            "name": "numero",
+            "data": {
+              "label": "Número",
+              "required": true
+            }
+          },
+          {
+            "id": "c_c6e5f03b7a22",
+            "type": "text_input",
+            "name": "complemento",
+            "data": {
+              "label": "Complemento",
+              "required": false
+            }
+          },
+          {
+            "id": "c_d5f6a14c6b13",
+            "type": "text_input",
+            "name": "bairro",
+            "data": {
+              "label": "Bairro",
+              "required": true
             }
           },
           {
@@ -2594,6 +2654,405 @@
         "position": {
           "x": 5512,
           "y": 480
+        }
+      }
+    },
+    {
+      "id": "s_p2a1b3c4d5e6",
+      "name": "[Comprador] Pagamento pendente",
+      "content": {
+        "id": "s_p2a1b3c4d5e6_content",
+        "type": "group",
+        "children": [
+          {
+            "id": "s_p2a1b3c4d5e6_icon",
+            "type": "icon_text",
+            "name": null,
+            "data": {
+              "icon": "cancel",
+              "text": "Vistoria regularizada e pagamento pendente",
+              "color": "danger",
+              "variant": "vertical"
+            }
+          },
+          {
+            "id": "s_p2a1b3c4d5e6_alert",
+            "type": "alert",
+            "name": null,
+            "data": {
+              "variant": "warning",
+              "title": "Pendência",
+              "body": "@{node:n_2d9e4b6a8c17.detail ?? node:n_6c4d8e2a1b90.detail}"
+            }
+          }
+        ]
+      },
+      "footer": {
+        "id": "s_p2a1b3c4d5e6_footer",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_pend_item_pag_01",
+            "type": "button",
+            "name": null,
+            "data": {
+              "label": "pagamento pendente",
+              "variant": "outline"
+            }
+          },
+          {
+            "id": "c_pend_pag_voltar",
+            "type": "button",
+            "name": null,
+            "data": {
+              "label": "Voltar",
+              "variant": "outline",
+              "clickAction": "back"
+            }
+          }
+        ]
+      },
+      "navbar": {
+        "id": "s_p2a1b3c4d5e6_navbar",
+        "data": {
+          "title": "Transferir Veículo",
+          "showReturn": true
+        },
+        "name": null,
+        "type": "nav_bar"
+      },
+      "data": {
+        "position": {
+          "x": 6400,
+          "y": 4300
+        }
+      }
+    },
+    {
+      "id": "s_p2b2c3d4e5f7",
+      "name": "[Comprador] Vistoria pendente",
+      "content": {
+        "id": "s_p2b2c3d4e5f7_content",
+        "type": "group",
+        "children": [
+          {
+            "id": "s_p2b2c3d4e5f7_icon",
+            "type": "icon_text",
+            "name": null,
+            "data": {
+              "icon": "cancel",
+              "text": "Vistoria pendente",
+              "color": "danger",
+              "variant": "vertical"
+            }
+          },
+          {
+            "id": "s_p2b2c3d4e5f7_alert",
+            "type": "alert",
+            "name": null,
+            "data": {
+              "variant": "warning",
+              "title": "Pendência",
+              "body": "Laudo de vistoria não localizado. Regularize a vistoria do veículo para continuar a transferência."
+            }
+          }
+        ]
+      },
+      "footer": {
+        "id": "s_p2b2c3d4e5f7_footer",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_pend_vist_voltar",
+            "type": "button",
+            "name": null,
+            "data": {
+              "label": "Voltar",
+              "variant": "outline",
+              "clickAction": "back"
+            }
+          }
+        ]
+      },
+      "navbar": {
+        "id": "s_p2b2c3d4e5f7_navbar",
+        "data": {
+          "title": "Transferir Veículo",
+          "showReturn": true
+        },
+        "name": null,
+        "type": "nav_bar"
+      },
+      "data": {
+        "position": {
+          "x": 6800,
+          "y": 4700
+        }
+      }
+    },
+    {
+      "id": "s_p2c3d4e5f6a8",
+      "name": "[Comprador] Vistoria e pagamento pendentes",
+      "content": {
+        "id": "s_p2c3d4e5f6a8_content",
+        "type": "group",
+        "children": [
+          {
+            "id": "s_p2c3d4e5f6a8_icon",
+            "type": "icon_text",
+            "name": null,
+            "data": {
+              "icon": "cancel",
+              "text": "Vistoria e pagamento pendentes",
+              "color": "danger",
+              "variant": "vertical"
+            }
+          },
+          {
+            "id": "s_p2c3d4e5f6a8_alert",
+            "type": "alert",
+            "name": null,
+            "data": {
+              "variant": "warning",
+              "title": "Pendência",
+              "body": "@{node:n_2d9e4b6a8c17.detail ?? node:n_6c4d8e2a1b90.detail}"
+            }
+          },
+          {
+            "id": "c_pend_item_vist_02",
+            "type": "button",
+            "name": null,
+            "data": {
+              "label": "vistoria pendente",
+              "variant": "outline"
+            }
+          },
+          {
+            "id": "c_pend_item_pag_02",
+            "type": "button",
+            "name": null,
+            "data": {
+              "label": "pagamento pendente",
+              "variant": "outline"
+            }
+          }
+        ]
+      },
+      "footer": {
+        "id": "s_p2c3d4e5f6a8_footer",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_pend_vist_pag_voltar",
+            "type": "button",
+            "name": null,
+            "data": {
+              "label": "Voltar",
+              "variant": "outline",
+              "clickAction": "back"
+            }
+          }
+        ]
+      },
+      "navbar": {
+        "id": "s_p2c3d4e5f6a8_navbar",
+        "data": {
+          "title": "Transferir Veículo",
+          "showReturn": true
+        },
+        "name": null,
+        "type": "nav_bar"
+      },
+      "data": {
+        "position": {
+          "x": 6400,
+          "y": 4700
+        }
+      }
+    },
+    {
+      "id": "s_p2d4e5f6a7b9",
+      "name": "[Comprador] Situação administrativa pendente",
+      "content": {
+        "id": "s_p2d4e5f6a7b9_content",
+        "type": "group",
+        "children": [
+          {
+            "id": "s_p2d4e5f6a7b9_icon",
+            "type": "icon_text",
+            "name": null,
+            "data": {
+              "icon": "cancel",
+              "text": "Situação administrativa pendente e situação judicial regularizada",
+              "color": "danger",
+              "variant": "vertical"
+            }
+          },
+          {
+            "id": "s_p2d4e5f6a7b9_alert",
+            "type": "alert",
+            "name": null,
+            "data": {
+              "variant": "warning",
+              "title": "Pendência",
+              "body": "@{node:n_2d9e4b6a8c17.detail ?? node:n_6c4d8e2a1b90.detail}"
+            }
+          }
+        ]
+      },
+      "footer": {
+        "id": "s_p2d4e5f6a7b9_footer",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_pend_adm_voltar",
+            "type": "button",
+            "name": null,
+            "data": {
+              "label": "Voltar",
+              "variant": "outline",
+              "clickAction": "back"
+            }
+          }
+        ]
+      },
+      "navbar": {
+        "id": "s_p2d4e5f6a7b9_navbar",
+        "data": {
+          "title": "Transferir Veículo",
+          "showReturn": true
+        },
+        "name": null,
+        "type": "nav_bar"
+      },
+      "data": {
+        "position": {
+          "x": 6400,
+          "y": 5100
+        }
+      }
+    },
+    {
+      "id": "s_p2e5f6a7b8c0",
+      "name": "[Comprador] Situação judicial pendente",
+      "content": {
+        "id": "s_p2e5f6a7b8c0_content",
+        "type": "group",
+        "children": [
+          {
+            "id": "s_p2e5f6a7b8c0_icon",
+            "type": "icon_text",
+            "name": null,
+            "data": {
+              "icon": "cancel",
+              "text": "Situação judicial pendente e administrativa regularizada",
+              "color": "danger",
+              "variant": "vertical"
+            }
+          },
+          {
+            "id": "s_p2e5f6a7b8c0_alert",
+            "type": "alert",
+            "name": null,
+            "data": {
+              "variant": "warning",
+              "title": "Pendência",
+              "body": "@{node:n_2d9e4b6a8c17.detail ?? node:n_6c4d8e2a1b90.detail}"
+            }
+          }
+        ]
+      },
+      "footer": {
+        "id": "s_p2e5f6a7b8c0_footer",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_pend_jud_voltar",
+            "type": "button",
+            "name": null,
+            "data": {
+              "label": "Voltar",
+              "variant": "outline",
+              "clickAction": "back"
+            }
+          }
+        ]
+      },
+      "navbar": {
+        "id": "s_p2e5f6a7b8c0_navbar",
+        "data": {
+          "title": "Transferir Veículo",
+          "showReturn": true
+        },
+        "name": null,
+        "type": "nav_bar"
+      },
+      "data": {
+        "position": {
+          "x": 6800,
+          "y": 5100
+        }
+      }
+    },
+    {
+      "id": "s_p2f6a7b8c9d1",
+      "name": "[Comprador] Administrativa e judicial pendentes",
+      "content": {
+        "id": "s_p2f6a7b8c9d1_content",
+        "type": "group",
+        "children": [
+          {
+            "id": "s_p2f6a7b8c9d1_icon",
+            "type": "icon_text",
+            "name": null,
+            "data": {
+              "icon": "cancel",
+              "text": "Situações administrativa e judicial pendentes",
+              "color": "danger",
+              "variant": "vertical"
+            }
+          },
+          {
+            "id": "s_p2f6a7b8c9d1_alert",
+            "type": "alert",
+            "name": null,
+            "data": {
+              "variant": "warning",
+              "title": "Pendência",
+              "body": "@{node:n_2d9e4b6a8c17.detail ?? node:n_6c4d8e2a1b90.detail}"
+            }
+          }
+        ]
+      },
+      "footer": {
+        "id": "s_p2f6a7b8c9d1_footer",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_pend_adm_jud_voltar",
+            "type": "button",
+            "name": null,
+            "data": {
+              "label": "Voltar",
+              "variant": "outline",
+              "clickAction": "back"
+            }
+          }
+        ]
+      },
+      "navbar": {
+        "id": "s_p2f6a7b8c9d1_navbar",
+        "data": {
+          "title": "Transferir Veículo",
+          "showReturn": true
+        },
+        "name": null,
+        "type": "nav_bar"
+      },
+      "data": {
+        "position": {
+          "x": 7200,
+          "y": 5100
         }
       }
     }
@@ -3415,12 +3874,12 @@
           "x": 244,
           "y": 4212
         },
-        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/consulta-debitos?codigoTransferencia=@{node:n_90a9d6db5f4b.codigoTransferencia}",
+        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/consulta-debitos?codigoTransferencia=@{node:n_2d9e4b6a8c17.codigoTransferencia ?? node:n_6c4d8e2a1b90.codigoTransferencia ?? node:n_90a9d6db5f4b.codigoTransferencia}",
         "responseExamples": [
           {
             "id": "662e4b72-b520-47e2-a222-bd21ed66959a",
             "name": "Com débitos",
-            "value": "{\n  \"nomeComprador\": \"Carlos da Silva\",\n  \"taxaTransferencia\": \"R$ 243,77\",\n  \"taxaLicenciamento\": \"R$ 120,50\",\n  \"totalDebitos\": \"R$ 364,27\"\n}"
+            "value": "{\n  \"nomeComprador\": \"Carlos da Silva\",\n  \"debitos\": [\n    { \"descricao\": \"Transferência de Veículo\", \"valor\": 243.77, \"valorFormatado\": \"R$ 243,77\" },\n    { \"descricao\": \"Licenciamento\", \"valor\": 120.50, \"valorFormatado\": \"R$ 120,50\" }\n  ],\n  \"valorTotal\": 364.27,\n  \"taxaTransferencia\": \"R$ 243,77\",\n  \"taxaLicenciamento\": \"R$ 120,50\",\n  \"totalDebitos\": \"R$ 364,27\"\n}"
           }
         ]
       }
@@ -3434,7 +3893,8 @@
           "x": 1252,
           "y": 4196
         },
-        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/consulta-debitos?codigoTransferencia=@{node:n_90a9d6db5f4b.codigoTransferencia}"
+        "method": "GET",
+        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/pix?codigoTransferencia=@{node:n_2d9e4b6a8c17.codigoTransferencia ?? node:n_6c4d8e2a1b90.codigoTransferencia ?? node:n_90a9d6db5f4b.codigoTransferencia}&forcarNovo=true"
       }
     },
     {
@@ -3470,7 +3930,7 @@
         },
         "method": "POST",
         "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/cancelar",
-        "body": "{ \"codigoTransferencia\": \"@{node:n_90a9d6db5f4b.codigoTransferencia}\" }\n",
+        "body": "{ \"codigoTransferencia\": \"@{node:n_2d9e4b6a8c17.codigoTransferencia ?? node:n_90a9d6db5f4b.codigoTransferencia}\" }\n",
         "responseExamples": [
           {
             "id": "5af6911b-58b6-4337-843e-002fa8eb4e6f",
@@ -3769,20 +4229,30 @@
     {
       "id": "n_6c4d8e2a1b90",
       "type": "http_node",
-      "name": "Validação CEP editado",
+      "name": "Atualizar endereço compra",
       "data": {
         "position": {
           "x": 6028,
           "y": 1364
         },
         "method": "POST",
-        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/validacao-comprador",
-        "body": "{\n  \"cpfComprador\": \"@{node:n_0a7cda804e6d.cpfComprador ?? node:n_3f8e1a7c9b20.cpf}\",\n  \"cepComprador\": \"@{screen:s_7e2a1c9b4f08.comp:c_4b8e0d61a2f3.value}\"\n}",
+        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/confirmar-endereco",
+        "body": "{\n  \"codigoTransferencia\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoTransferencia}\",\n  \"cepComprador\": \"@{screen:s_7e2a1c9b4f08.comp:c_4b8e0d61a2f3.value}\",\n  \"logradouroComprador\": \"@{screen:s_7e2a1c9b4f08.comp:c_a8f3e21b9c40.value}\",\n  \"numeroComprador\": \"@{screen:s_7e2a1c9b4f08.comp:c_b7d4e12a8f31.value}\",\n  \"complementoComprador\": \"@{screen:s_7e2a1c9b4f08.comp:c_c6e5f03b7a22.value}\",\n  \"bairroComprador\": \"@{screen:s_7e2a1c9b4f08.comp:c_d5f6a14c6b13.value}\"\n}",
         "responseExamples": [
           {
-            "id": "ex-validacao-cep-edit",
+            "id": "ex-atualizar-endereco",
             "name": "Endereço atualizado",
-            "value": "{\n  \"nomeComprador\": \"Carlos da Silva\",\n  \"cpfComprador\": \"721.169.550-17\",\n  \"enderecoComprador\": \"Av. Paulista, 1000, Bela Vista, São Paulo - SP\"\n}"
+            "value": "{\n  \"enderecoComprador\": \"Av. Paulista, 1000, Bela Vista, 01310100\",\n  \"cepComprador\": \"01310100\",\n  \"logradouroComprador\": \"Av. Paulista\",\n  \"numeroComprador\": \"1000\",\n  \"complementoComprador\": \"\",\n  \"bairroComprador\": \"Bela Vista\",\n  \"estado\": \"7\"\n}"
+          },
+          {
+            "id": "ex-atualizar-endereco-pag-pend",
+            "name": "Pagamento pendente",
+            "value": "{\n  \"proximaAcao\": \"pagamento_pendente\",\n  \"detail\": \"Pagamento de taxa não localizado\",\n  \"codigoTransferencia\": \"TDV-MOCK-NEW\"\n}"
+          },
+          {
+            "id": "ex-atualizar-endereco-adm",
+            "name": "Situação administrativa pendente",
+            "value": "{\n  \"proximaAcao\": \"administrativa_pendente\",\n  \"detail\": \"Veículo com bloqueio - Baixa permanente\",\n  \"codigoTransferencia\": \"TDV-MOCK-NEW\"\n}"
           }
         ]
       }
@@ -3832,27 +4302,52 @@
         },
         "method": "POST",
         "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/criar-compra",
-        "body": "{\n  \"placaVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.plate}\",\n  \"renavamVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.renavam}\",\n  \"origem\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.origem}\",\n  \"nomeVendedor\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeVendedor}\",\n  \"codigoVendedor\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoVendedor}\",\n  \"emailVendedor\": \"\",\n  \"cepComprador\": \"@{screen:s_7e2a1c9b4f08.comp:c_4b8e0d61a2f3.value}\",\n  \"ativa\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.ativa}\",\n  \"estado\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.estado}\",\n  \"origemComunicacaoVendaVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.origemComunicacaoVendaVeiculo}\",\n  \"codigoTransferenciaVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoTransferencia}\",\n  \"descricaoMarcaVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.descricaoMarcaVeiculo}\",\n  \"codigoComprador\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoComprador}\",\n  \"nomeComprador\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}\",\n  \"nomeMunicipioVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeMunicipioVeiculo}\",\n  \"nomeMunicipioComprador\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeMunicipioComprador}\",\n  \"chassiVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.chassiVeiculo}\",\n  \"kmVistoriadaVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.kmVistoriadaVeiculo}\",\n  \"numeroComprador\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.numeroComprador}\"\n}",
+        "body": "{\n  \"placaVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.plate}\",\n  \"renavamVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.renavam}\",\n  \"origem\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.origem}\",\n  \"nomeVendedor\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeVendedor}\",\n  \"codigoVendedor\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoVendedor}\",\n  \"emailVendedor\": \"\",\n  \"cepComprador\": \"@{screen:s_7e2a1c9b4f08.comp:c_4b8e0d61a2f3.value}\",\n  \"logradouroComprador\": \"@{screen:s_7e2a1c9b4f08.comp:c_a8f3e21b9c40.value}\",\n  \"numeroComprador\": \"@{screen:s_7e2a1c9b4f08.comp:c_b7d4e12a8f31.value}\",\n  \"complementoComprador\": \"@{screen:s_7e2a1c9b4f08.comp:c_c6e5f03b7a22.value}\",\n  \"bairroComprador\": \"@{screen:s_7e2a1c9b4f08.comp:c_d5f6a14c6b13.value}\",\n  \"ativa\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.ativa}\",\n  \"estado\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.estado}\",\n  \"origemComunicacaoVendaVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.origemComunicacaoVendaVeiculo}\",\n  \"codigoTransferenciaVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoTransferencia}\",\n  \"descricaoMarcaVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.descricaoMarcaVeiculo}\",\n  \"codigoComprador\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoComprador}\",\n  \"nomeComprador\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}\",\n  \"nomeMunicipioVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeMunicipioVeiculo}\",\n  \"nomeMunicipioComprador\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeMunicipioComprador}\",\n  \"chassiVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.chassiVeiculo}\",\n  \"kmVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.kmVeiculo}\",\n  \"kmVistoriadaVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.kmVistoriadaVeiculo}\"\n}",
         "responseExamples": [
           {
             "id": "ex-criar-compra-7",
             "name": "Estado 7 — aviso pagamento",
-            "value": "{\n  \"proximaAcao\": \"aviso_pagamento\",\n  \"estado\": \"7\"\n}"
+            "value": "{\n  \"proximaAcao\": \"aviso_pagamento\",\n  \"estado\": \"7\",\n  \"codigoTransferencia\": \"TDV-MOCK-NEW\",\n  \"vehicle\": {\n    \"id\": \"1\",\n    \"plate\": \"GHI8J90\",\n    \"title\": \"VW/GOL 1.0\",\n    \"licensingStatus\": \"REGULAR\",\n    \"brandModel\": \"VW/GOL 1.0\",\n    \"licensingExpirationDate\": \"\",\n    \"renavam\": \"00010020031\",\n    \"lastLicensing\": \"\",\n    \"yearFab\": \"\",\n    \"yearMod\": \"\"\n  },\n  \"nomeComprador\": \"Maria Compradora\"\n}"
           },
           {
             "id": "ex-criar-compra-8",
             "name": "Estado 8 — pagamento confirmado",
-            "value": "{\n  \"proximaAcao\": \"pagamento_confirmado\",\n  \"estado\": \"8\"\n}"
+            "value": "{\n  \"proximaAcao\": \"pagamento_confirmado\",\n  \"estado\": \"8\",\n  \"codigoTransferencia\": \"TDV-MOCK-NEW\",\n  \"vehicle\": {\n    \"id\": \"1\",\n    \"plate\": \"GHI8J90\",\n    \"title\": \"VW/GOL 1.0\",\n    \"licensingStatus\": \"REGULAR\",\n    \"brandModel\": \"VW/GOL 1.0\",\n    \"licensingExpirationDate\": \"\",\n    \"renavam\": \"00010020031\",\n    \"lastLicensing\": \"\",\n    \"yearFab\": \"\",\n    \"yearMod\": \"\"\n  },\n  \"nomeComprador\": \"Maria Compradora\"\n}"
           },
           {
             "id": "ex-criar-compra-9",
             "name": "Estado 9 — concluído",
-            "value": "{\n  \"proximaAcao\": \"concluido\",\n  \"estado\": \"9\"\n}"
+            "value": "{\n  \"proximaAcao\": \"concluido\",\n  \"estado\": \"9\",\n  \"codigoTransferencia\": \"TDV-MOCK-NEW\",\n  \"vehicle\": {\n    \"id\": \"1\",\n    \"plate\": \"GHI8J90\",\n    \"title\": \"VW/GOL 1.0\",\n    \"licensingStatus\": \"REGULAR\",\n    \"brandModel\": \"VW/GOL 1.0\",\n    \"licensingExpirationDate\": \"\",\n    \"renavam\": \"00010020031\",\n    \"lastLicensing\": \"\",\n    \"yearFab\": \"\",\n    \"yearMod\": \"\"\n  },\n  \"nomeComprador\": \"Maria Compradora\"\n}"
           },
           {
             "id": "ex-criar-compra-err",
             "name": "Estado inesperado",
             "value": "{\n  \"showSnackbar\": {\n    \"variant\": \"error\",\n    \"title\": \"Erro\",\n    \"description\": \"Estado da transferência inválido para continuar\"\n  }\n}"
+          },
+          {
+            "id": "ex-criar-compra-pag-pend",
+            "name": "Pagamento pendente",
+            "value": "{\n  \"proximaAcao\": \"pagamento_pendente\",\n  \"detail\": \"Pagamento de taxa não localizado\",\n  \"codigoTransferencia\": \"TDV-MOCK-NEW\",\n  \"vehicle\": {\n    \"id\": \"1\",\n    \"plate\": \"GHI8J90\",\n    \"title\": \"VW/GOL 1.0\",\n    \"licensingStatus\": \"REGULAR\",\n    \"brandModel\": \"VW/GOL 1.0\",\n    \"licensingExpirationDate\": \"\",\n    \"renavam\": \"00010020031\",\n    \"lastLicensing\": \"\",\n    \"yearFab\": \"\",\n    \"yearMod\": \"\"\n  },\n  \"nomeComprador\": \"Maria Compradora\"\n}"
+          },
+          {
+            "id": "ex-criar-compra-vist-pag",
+            "name": "Vistoria e pagamento pendentes",
+            "value": "{\n  \"proximaAcao\": \"vistoria_pagamento_pendentes\",\n  \"detail\": \"Pagamento de taxa não localizado,Laudo de vistoria não localizado\",\n  \"codigoTransferencia\": \"TDV-MOCK-NEW\",\n  \"vehicle\": {\n    \"id\": \"1\",\n    \"plate\": \"GHI8J90\",\n    \"title\": \"VW/GOL 1.0\",\n    \"licensingStatus\": \"REGULAR\",\n    \"brandModel\": \"VW/GOL 1.0\",\n    \"licensingExpirationDate\": \"\",\n    \"renavam\": \"00010020031\",\n    \"lastLicensing\": \"\",\n    \"yearFab\": \"\",\n    \"yearMod\": \"\"\n  }\n}"
+          },
+          {
+            "id": "ex-criar-compra-adm",
+            "name": "Situação administrativa pendente",
+            "value": "{\n  \"proximaAcao\": \"administrativa_pendente\",\n  \"detail\": \"Veículo com bloqueio - Baixa permanente\",\n  \"codigoTransferencia\": \"TDV-MOCK-NEW\",\n  \"vehicle\": {\n    \"id\": \"1\",\n    \"plate\": \"GHI8J90\",\n    \"title\": \"VW/GOL 1.0\",\n    \"licensingStatus\": \"REGULAR\",\n    \"brandModel\": \"VW/GOL 1.0\",\n    \"licensingExpirationDate\": \"\",\n    \"renavam\": \"00010020031\",\n    \"lastLicensing\": \"\",\n    \"yearFab\": \"\",\n    \"yearMod\": \"\"\n  }\n}"
+          },
+          {
+            "id": "ex-criar-compra-jud",
+            "name": "Situação judicial pendente",
+            "value": "{\n  \"proximaAcao\": \"judicial_pendente\",\n  \"detail\": \"Veículo com Restrição Judicial\",\n  \"codigoTransferencia\": \"TDV-MOCK-NEW\",\n  \"vehicle\": {\n    \"id\": \"1\",\n    \"plate\": \"GHI8J90\",\n    \"title\": \"VW/GOL 1.0\",\n    \"licensingStatus\": \"REGULAR\",\n    \"brandModel\": \"VW/GOL 1.0\",\n    \"licensingExpirationDate\": \"\",\n    \"renavam\": \"00010020031\",\n    \"lastLicensing\": \"\",\n    \"yearFab\": \"\",\n    \"yearMod\": \"\"\n  }\n}"
+          },
+          {
+            "id": "ex-criar-compra-adm-jud",
+            "name": "Administrativa e judicial pendentes",
+            "value": "{\n  \"proximaAcao\": \"administrativa_judicial_pendentes\",\n  \"detail\": \"Veículo com bloqueio - Baixa permanente,Veículo com Restrição Judicial\",\n  \"codigoTransferencia\": \"TDV-MOCK-NEW\",\n  \"vehicle\": {\n    \"id\": \"1\",\n    \"plate\": \"GHI8J90\",\n    \"title\": \"VW/GOL 1.0\",\n    \"licensingStatus\": \"REGULAR\",\n    \"brandModel\": \"VW/GOL 1.0\",\n    \"licensingExpirationDate\": \"\",\n    \"renavam\": \"00010020031\",\n    \"lastLicensing\": \"\",\n    \"yearFab\": \"\",\n    \"yearMod\": \"\"\n  }\n}"
           }
         ],
         "showSnackbar": true
@@ -3878,7 +4373,7 @@
           "x": 6108,
           "y": 4012
         },
-        "value": "@{node:n_2d9e4b6a8c17.proximaAcao}",
+        "value": "@{node:n_2d9e4b6a8c17.proximaAcao ?? node:n_6c4d8e2a1b90.proximaAcao}",
         "routes": [
           {
             "id": "r_aviso_pagamento_01",
@@ -3894,6 +4389,31 @@
             "id": "r_concluido_01",
             "label": "Concluído",
             "value": "concluido"
+          },
+          {
+            "id": "r_pagamento_pendente_01",
+            "label": "Pagamento pendente",
+            "value": "pagamento_pendente"
+          },
+          {
+            "id": "r_vistoria_pagamento_01",
+            "label": "Vistoria e pagamento pendentes",
+            "value": "vistoria_pagamento_pendentes"
+          },
+          {
+            "id": "r_administrativa_pendente_01",
+            "label": "Situação administrativa pendente",
+            "value": "administrativa_pendente"
+          },
+          {
+            "id": "r_judicial_pendente_01",
+            "label": "Situação judicial pendente",
+            "value": "judicial_pendente"
+          },
+          {
+            "id": "r_adm_jud_pendentes_01",
+            "label": "Administrativa e judicial pendentes",
+            "value": "administrativa_judicial_pendentes"
           }
         ]
       }
@@ -3950,6 +4470,123 @@
         "position": {
           "x": 5476,
           "y": 904
+        }
+      }
+    },
+    {
+      "id": "n_8c3f5d0b2a71",
+      "type": "if_node",
+      "name": "Buscar detalhe (tem codigo)?",
+      "data": {
+        "position": {
+          "x": 6100,
+          "y": 1760
+        },
+        "condition": {
+          "clauses": [
+            {
+              "id": "detalhe-has-codigo",
+              "left": "@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoTransferencia}",
+              "operator": "is_not_empty"
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "n_9d4a6e1c3b82",
+      "type": "http_node",
+      "name": "Detalhe compra",
+      "data": {
+        "position": {
+          "x": 6300,
+          "y": 1560
+        },
+        "method": "GET",
+        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/detalhe-compra?codigoTransferencia=@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoTransferencia}",
+        "responseExamples": [
+          {
+            "id": "ex-detalhe-compra",
+            "name": "Detalhe",
+            "value": "{\n  \"enderecoComprador\": \"Rua das Flores, 123, Jardim Paulista, 01310100\",\n  \"cepComprador\": \"01310100\",\n  \"logradouroComprador\": \"Rua das Flores\",\n  \"numeroComprador\": \"123\",\n  \"complementoComprador\": \"\",\n  \"bairroComprador\": \"Jardim Paulista\",\n  \"autodeclaracaoResidenciaComprador\": \"Eu declaro que resido no endereço informado.\",\n  \"nomeComprador\": \"Maria Compradora\"\n}"
+          }
+        ]
+      }
+    },
+    {
+      "id": "n_if_pend_addr_01",
+      "type": "if_node",
+      "name": "Pendência no endereço?",
+      "data": {
+        "position": {
+          "x": 6200,
+          "y": 1500
+        },
+        "condition": {
+          "clauses": [
+            {
+              "id": "pend-addr-has-acao",
+              "left": "@{node:n_6c4d8e2a1b90.proximaAcao}",
+              "operator": "is_not_empty"
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "n_wp_pend_pag_01",
+      "type": "waypoint_node",
+      "name": null,
+      "data": {
+        "position": {
+          "x": 6200,
+          "y": 4300
+        }
+      }
+    },
+    {
+      "id": "n_wp_pend_vist_pag_01",
+      "type": "waypoint_node",
+      "name": null,
+      "data": {
+        "position": {
+          "x": 6200,
+          "y": 4700
+        }
+      }
+    },
+    {
+      "id": "n_wp_pend_adm_01",
+      "type": "waypoint_node",
+      "name": null,
+      "data": {
+        "position": {
+          "x": 6200,
+          "y": 5100
+        }
+      }
+    },
+    {
+      "id": "n_wp_pend_jud_01",
+      "type": "waypoint_node",
+      "name": null,
+      "data": {
+        "position": {
+          "x": 6600,
+          "y": 5100
+        }
+      }
+    },
+    {
+      "id": "n_wp_pend_adm_jud_01",
+      "type": "waypoint_node",
+      "name": null,
+      "data": {
+        "position": {
+          "x": 7000,
+          "y": 5100
         }
       }
     }
@@ -4229,12 +4866,6 @@
       "sourceId": "n_c3f8a2e9b147",
       "targetId": "n_3f8e1a7c9b20",
       "sourceHandle": "true",
-      "targetHandle": "input"
-    },
-    {
-      "sourceId": "n_3f8e1a7c9b20",
-      "targetId": "s_31f3e90bbdcc",
-      "sourceHandle": "output",
       "targetHandle": "input"
     },
     {
@@ -4700,18 +5331,6 @@
       "targetHandle": "input"
     },
     {
-      "sourceId": "s_7e2a1c9b4f08",
-      "targetId": "n_6c4d8e2a1b90",
-      "sourceHandle": "c_9d3f7a1e5b20",
-      "targetHandle": "input"
-    },
-    {
-      "sourceId": "n_6c4d8e2a1b90",
-      "targetId": "s_31f3e90bbdcc",
-      "sourceHandle": "output",
-      "targetHandle": "input"
-    },
-    {
       "sourceId": "s_31f3e90bbdcc",
       "targetId": "n_6025a000407c",
       "sourceHandle": "c_e5b0ac826f34",
@@ -4727,6 +5346,132 @@
       "sourceId": "n_f64cda3a22b6",
       "targetId": "s_7e2a1c9b4f08",
       "sourceHandle": "right-source",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_7e2a1c9b4f08",
+      "targetId": "n_6c4d8e2a1b90",
+      "sourceHandle": "c_9d3f7a1e5b20",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_3f8e1a7c9b20",
+      "targetId": "n_8c3f5d0b2a71",
+      "sourceHandle": "output",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_8c3f5d0b2a71",
+      "targetId": "n_9d4a6e1c3b82",
+      "sourceHandle": "true",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_8c3f5d0b2a71",
+      "targetId": "s_31f3e90bbdcc",
+      "sourceHandle": "false",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_9d4a6e1c3b82",
+      "targetId": "s_31f3e90bbdcc",
+      "sourceHandle": "output",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_6c4d8e2a1b90",
+      "targetId": "n_if_pend_addr_01",
+      "sourceHandle": "output",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_if_pend_addr_01",
+      "targetId": "n_5a7c9e1b3d46",
+      "sourceHandle": "true",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_if_pend_addr_01",
+      "targetId": "s_31f3e90bbdcc",
+      "sourceHandle": "false",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_5a7c9e1b3d46",
+      "targetId": "n_wp_pend_pag_01",
+      "sourceHandle": "r_pagamento_pendente_01",
+      "targetHandle": "left-target"
+    },
+    {
+      "sourceId": "n_wp_pend_pag_01",
+      "targetId": "s_p2a1b3c4d5e6",
+      "sourceHandle": "right-source",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_5a7c9e1b3d46",
+      "targetId": "n_wp_pend_vist_pag_01",
+      "sourceHandle": "r_vistoria_pagamento_01",
+      "targetHandle": "left-target"
+    },
+    {
+      "sourceId": "n_wp_pend_vist_pag_01",
+      "targetId": "s_p2c3d4e5f6a8",
+      "sourceHandle": "right-source",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_5a7c9e1b3d46",
+      "targetId": "n_wp_pend_adm_01",
+      "sourceHandle": "r_administrativa_pendente_01",
+      "targetHandle": "left-target"
+    },
+    {
+      "sourceId": "n_wp_pend_adm_01",
+      "targetId": "s_p2d4e5f6a7b9",
+      "sourceHandle": "right-source",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_5a7c9e1b3d46",
+      "targetId": "n_wp_pend_jud_01",
+      "sourceHandle": "r_judicial_pendente_01",
+      "targetHandle": "left-target"
+    },
+    {
+      "sourceId": "n_wp_pend_jud_01",
+      "targetId": "s_p2e5f6a7b8c0",
+      "sourceHandle": "right-source",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_5a7c9e1b3d46",
+      "targetId": "n_wp_pend_adm_jud_01",
+      "sourceHandle": "r_adm_jud_pendentes_01",
+      "targetHandle": "left-target"
+    },
+    {
+      "sourceId": "n_wp_pend_adm_jud_01",
+      "targetId": "s_p2f6a7b8c9d1",
+      "sourceHandle": "right-source",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_p2a1b3c4d5e6",
+      "targetId": "n_b685a31ed52c",
+      "sourceHandle": "c_pend_item_pag_01",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_p2c3d4e5f6a8",
+      "targetId": "s_p2b2c3d4e5f7",
+      "sourceHandle": "c_pend_item_vist_02",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_p2c3d4e5f6a8",
+      "targetId": "n_b685a31ed52c",
+      "sourceHandle": "c_pend_item_pag_02",
       "targetHandle": "input"
     }
   ]

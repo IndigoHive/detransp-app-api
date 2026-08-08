@@ -1,15 +1,20 @@
 import { BadRequest } from 'http-errors'
+import { DetranSpServiceNowError } from '../../../clients/detran-sp-service-now'
 import type { DetranSpServiceNowTdvClient } from '../../../clients/detran-sp-service-now/tdv'
 import {
   CodigoEstadoTDV,
+  type BuscaTdvResultData,
   type CodigoOrigemComunicacaoVendaVeiculo,
   type CodigoOrigemTDV
 } from '../../../clients/detran-sp-service-now/tdv/types'
 import { extractBearerToken, extractCpfFromToken, extractEmailFromToken } from '../../../utils/token'
+import { mapPendenciaError, type PendenciaResult } from '../map-pendencia-error'
 
 type Dependencies = {
   detranSpServiceNowTdv: DetranSpServiceNowTdvClient
 }
+
+type Auth = { token: string, cpf: string }
 
 export type CriarCompraInput = {
   placaVeiculo: string
@@ -19,6 +24,9 @@ export type CriarCompraInput = {
   codigoVendedor: string
   emailVendedor?: string
   cepComprador?: string
+  logradouroComprador?: string
+  bairroComprador?: string
+  complementoComprador?: string
   ativa?: 'true' | 'false' | '1' | '0'
   estado?: CodigoEstadoTDV
   origemComunicacaoVendaVeiculo?: CodigoOrigemComunicacaoVendaVeiculo
@@ -34,10 +42,33 @@ export type CriarCompraInput = {
   numeroComprador?: string
 }
 
-export type CriarCompraResult = {
+type VehicleSummary = {
+  id: string
+  plate: string
+  title: string
+  licensingStatus: string
+  brandModel: string
+  licensingExpirationDate: string
+  renavam: string
+  lastLicensing: string
+  yearFab: string
+  yearMod: string
+}
+
+export type CriarCompraSuccessResult = {
   proximaAcao: 'aviso_pagamento' | 'pagamento_confirmado' | 'concluido'
   estado: CodigoEstadoTDV
-} | {
+  codigoTransferencia: string
+  vehicle: VehicleSummary
+  nomeComprador?: string
+}
+
+export type CriarCompraPendenciaResult = PendenciaResult & {
+  vehicle?: VehicleSummary
+  nomeComprador?: string
+}
+
+export type CriarCompraResult = CriarCompraSuccessResult | CriarCompraPendenciaResult | {
   showSnackbar: {
     variant: string
     title: string
@@ -45,15 +76,53 @@ export type CriarCompraResult = {
   }
 }
 
-function mapProximaAcao (estado: CodigoEstadoTDV | undefined): CriarCompraResult {
+const TDV_ATIVA_EXISTENTE = 'TDVAtivaExistenteError'
+
+const STUB_ENRICH_CAMPOS = [
+  'placaVeiculo',
+  'codigoRenavamVeiculo',
+  'chassiVeiculo',
+  'kmVeiculo',
+  'kmVistoriadaVeiculo',
+  'numeroComprador',
+  'codigoTransferenciaVeiculo'
+].join(',')
+
+function mapProximaAcao (
+  estado: CodigoEstadoTDV | undefined,
+  codigoTransferencia: string,
+  data: BuscaTdvResultData | undefined,
+  fallback: CriarCompraInput
+): CriarCompraSuccessResult | Extract<CriarCompraResult, { showSnackbar: unknown }> {
+  const vehicle = buildVehicle(data, fallback)
+  const nomeComprador = data?.nomeComprador?.trim() || fallback.nomeComprador?.trim() || undefined
+
   if (estado === CodigoEstadoTDV.ATPVE_ASSINADA_VENDEDOR_COMUNICACAO_VENDA_GERADA) {
-    return { proximaAcao: 'aviso_pagamento', estado }
+    return {
+      proximaAcao: 'aviso_pagamento',
+      estado,
+      codigoTransferencia,
+      vehicle,
+      ...(nomeComprador ? { nomeComprador } : {})
+    }
   }
   if (estado === CodigoEstadoTDV.TAXA_SERVICO_PAGA) {
-    return { proximaAcao: 'pagamento_confirmado', estado }
+    return {
+      proximaAcao: 'pagamento_confirmado',
+      estado,
+      codigoTransferencia,
+      vehicle,
+      ...(nomeComprador ? { nomeComprador } : {})
+    }
   }
   if (estado === CodigoEstadoTDV.TRANSFERENCIA_CONCLUIDA) {
-    return { proximaAcao: 'concluido', estado }
+    return {
+      proximaAcao: 'concluido',
+      estado,
+      codigoTransferencia,
+      vehicle,
+      ...(nomeComprador ? { nomeComprador } : {})
+    }
   }
 
   return {
@@ -65,14 +134,58 @@ function mapProximaAcao (estado: CodigoEstadoTDV | undefined): CriarCompraResult
   }
 }
 
+function buildVehicle (data: BuscaTdvResultData | undefined, fallback: CriarCompraInput): VehicleSummary {
+  const plate = data?.placaVeiculo ?? fallback.placaVeiculo
+  const brandModel = data?.descricaoMarcaVeiculo ?? fallback.descricaoMarcaVeiculo ?? ''
+  const renavam = data?.codigoRenavamVeiculo ?? fallback.renavamVeiculo
+
+  return {
+    id: '1',
+    plate,
+    title: brandModel,
+    licensingStatus: 'REGULAR',
+    brandModel,
+    licensingExpirationDate: '',
+    renavam,
+    lastLicensing: '',
+    yearFab: '',
+    yearMod: ''
+  }
+}
+
 function normalizeCep (cep: string | undefined): string | undefined {
   const digits = cep?.replace(/\D/g, '')
   return digits && digits.length === 8 ? digits : undefined
 }
 
+function normalizeAtiva (ativa: CriarCompraInput['ativa']): 'true' | 'false' | undefined {
+  if (ativa === '1' || ativa === 'true') return 'true'
+  if (ativa === '0' || ativa === 'false') return 'false'
+  return undefined
+}
+
+function hasFullAddress (input: CriarCompraInput): boolean {
+  return Boolean(
+    normalizeCep(input.cepComprador)
+    && input.logradouroComprador?.trim()
+    && input.bairroComprador?.trim()
+  )
+}
+
+function resolveKmVistoriada (input: Pick<CriarCompraInput, 'kmVistoriadaVeiculo' | 'kmVeiculo'>): string | undefined {
+  const kmVistoriada = input.kmVistoriadaVeiculo?.trim()
+  if (kmVistoriada) return kmVistoriada
+  const kmVeiculo = input.kmVeiculo?.trim()
+  return kmVeiculo || undefined
+}
+
 function pickOptionalListingFields (input: CriarCompraInput) {
-  const kmVistoriada = input.kmVistoriadaVeiculo?.trim() || input.kmVeiculo?.trim()
+  const kmVistoriada = resolveKmVistoriada(input)
+  const kmVeiculo = input.kmVeiculo?.trim()
+  const ativa = normalizeAtiva(input.ativa)
   return {
+    ...(ativa ? { ativa } : {}),
+    ...(input.estado ? { estado: input.estado } : {}),
     ...(input.origemComunicacaoVendaVeiculo
       ? { origemComunicacaoVendaVeiculo: input.origemComunicacaoVendaVeiculo }
       : {}),
@@ -91,9 +204,15 @@ function pickOptionalListingFields (input: CriarCompraInput) {
       ? { nomeMunicipioComprador: input.nomeMunicipioComprador.trim() }
       : {}),
     ...(input.chassiVeiculo?.trim() ? { chassiVeiculo: input.chassiVeiculo.trim() } : {}),
+    ...(kmVeiculo ? { kmVeiculo } : {}),
     ...(kmVistoriada ? { kmVistoriadaVeiculo: kmVistoriada } : {}),
     ...(input.numeroComprador?.trim() ? { numeroComprador: input.numeroComprador.trim() } : {})
   }
+}
+
+function isTdvAtivaExistenteError (error: unknown): boolean {
+  return error instanceof DetranSpServiceNowError
+    && error.type.toLowerCase() === TDV_ATIVA_EXISTENTE.toLowerCase()
 }
 
 export class CriarCompraService {
@@ -126,13 +245,7 @@ export class CriarCompraService {
       renavamVeiculo
     })
 
-    const cep = normalizeCep(enriched.cepComprador)
-    const addressFields = cep
-      ? await this.resolveAddressFields(auth, cep, enriched.numeroComprador)
-      : (enriched.numeroComprador?.trim()
-        ? { numeroComprador: enriched.numeroComprador.trim() }
-        : {})
-
+    const addressFields = await this.resolveAddressFields(auth, enriched)
     const optionalFields = pickOptionalListingFields(enriched)
     const criaTdvPayload = {
       ...optionalFields,
@@ -142,36 +255,102 @@ export class CriarCompraService {
       nomeVendedor,
       emailVendedor,
       codigoVendedor,
-      origem
+      origem,
+      confirmacaoAutodeclaracaoResidenciaComprador: 'true' as const
     }
 
-    const createResult = await this.client.criaTdv(auth, criaTdvPayload)
+    let codigoTransferencia: string | undefined
 
-    const codigoTransferencia = createResult?.result?.codigoTransferenciaVeiculo
+    try {
+      const createResult = await this.client.criaTdv(auth, criaTdvPayload)
+      codigoTransferencia = createResult?.result?.codigoTransferenciaVeiculo
+    } catch (error) {
+      if (isTdvAtivaExistenteError(error)) {
+        codigoTransferencia = await this.resolveExistingCodigo(auth, cpf, placaVeiculo, renavamVeiculo)
+      } else {
+        const pendencia = mapPendenciaError(error)
+        if (!pendencia) throw error
+        return this.buildPendenciaResult(auth, cpf, enriched, pendencia)
+      }
+    }
+
     if (!codigoTransferencia) {
       throw new Error('Falha ao criar transferência')
     }
 
-    const tdv = await this.client.buscaTdv(auth, codigoTransferencia)
-    return mapProximaAcao(tdv?.result?.estado)
+    const tdv = await this.client.buscaTdv(
+      auth,
+      codigoTransferencia,
+      'placaVeiculo,descricaoMarcaVeiculo,descricaoCorVeiculo,nomeComprador,estado,codigoRenavamVeiculo'
+    )
+    return mapProximaAcao(tdv?.result?.estado, codigoTransferencia, tdv?.result, enriched)
+  }
+
+  private async buildPendenciaResult (
+    auth: Auth,
+    cpf: string,
+    input: CriarCompraInput,
+    pendencia: PendenciaResult
+  ): Promise<CriarCompraPendenciaResult> {
+    let codigoTransferencia = input.codigoTransferenciaVeiculo?.trim() || undefined
+    if (!codigoTransferencia) {
+      try {
+        codigoTransferencia = await this.resolveExistingCodigo(
+          auth,
+          cpf,
+          input.placaVeiculo,
+          input.renavamVeiculo
+        )
+      } catch {
+        codigoTransferencia = undefined
+      }
+    }
+
+    return {
+      ...pendencia,
+      ...(codigoTransferencia ? { codigoTransferencia } : {}),
+      vehicle: buildVehicle(undefined, input),
+      ...(input.nomeComprador?.trim() ? { nomeComprador: input.nomeComprador.trim() } : {})
+    }
+  }
+
+  private async resolveExistingCodigo (
+    auth: Auth,
+    cpf: string,
+    placaVeiculo: string,
+    renavamVeiculo: string
+  ): Promise<string | undefined> {
+    const listed = await this.client.listaTdvs(auth, {
+      ativa: 'true',
+      codigoComprador: cpf,
+      placaVeiculo
+    })
+    const match = listed?.result?.find((tdv) =>
+      (tdv.placaVeiculo ?? '') === placaVeiculo
+      && (tdv.codigoRenavamVeiculo ?? '') === renavamVeiculo
+      && Boolean(tdv.codigoTransferenciaVeiculo?.trim())
+    )
+    return match?.codigoTransferenciaVeiculo?.trim()
   }
 
   private async enrichFromStub (
-    auth: { token: string, cpf: string },
+    auth: Auth,
     cpf: string,
     input: CriarCompraInput
   ): Promise<CriarCompraInput> {
     const needsChassi = !input.chassiVeiculo?.trim()
-    const needsKmVistoriada = !input.kmVistoriadaVeiculo?.trim()
+    const needsKmVistoriada = !resolveKmVistoriada(input)
+    const needsKmVeiculo = !input.kmVeiculo?.trim()
     const needsNumero = !input.numeroComprador?.trim()
-    if (!needsChassi && !needsKmVistoriada && !needsNumero) {
+    if (!needsChassi && !needsKmVistoriada && !needsKmVeiculo && !needsNumero) {
       return input
     }
 
     const listed = await this.client.listaTdvs(auth, {
       ativa: 'true',
-      codigoComprador: cpf
-    })
+      codigoComprador: cpf,
+      campos: STUB_ENRICH_CAMPOS
+    }).catch(() => undefined)
     const stub = listed?.result?.find((tdv) =>
       (tdv.placaVeiculo ?? '') === input.placaVeiculo
       && (tdv.codigoRenavamVeiculo ?? '') === input.renavamVeiculo
@@ -179,35 +358,57 @@ export class CriarCompraService {
 
     if (!stub) return input
 
+    const stubKmVistoriada = resolveKmVistoriada(stub)
+
     return {
       ...input,
       ...(needsChassi && stub.chassiVeiculo?.trim()
         ? { chassiVeiculo: stub.chassiVeiculo.trim() }
         : {}),
-      ...(needsKmVistoriada && stub.kmVistoriadaVeiculo?.trim()
-        ? { kmVistoriadaVeiculo: stub.kmVistoriadaVeiculo.trim() }
+      ...(needsKmVeiculo && stub.kmVeiculo?.trim()
+        ? { kmVeiculo: stub.kmVeiculo.trim() }
+        : {}),
+      ...(needsKmVistoriada && stubKmVistoriada
+        ? { kmVistoriadaVeiculo: stubKmVistoriada }
         : {}),
       ...(needsNumero && stub.numeroComprador?.trim()
         ? { numeroComprador: stub.numeroComprador.trim() }
+        : {}),
+      ...(!input.codigoTransferenciaVeiculo?.trim() && stub.codigoTransferenciaVeiculo?.trim()
+        ? { codigoTransferenciaVeiculo: stub.codigoTransferenciaVeiculo.trim() }
         : {})
     }
   }
 
-  private async resolveAddressFields (
-    auth: { token: string, cpf: string },
-    cep: string,
-    numeroComprador?: string
-  ) {
+  private async resolveAddressFields (auth: Auth, input: CriarCompraInput) {
+    if (hasFullAddress(input)) {
+      const cep = normalizeCep(input.cepComprador)!
+      return {
+        cepComprador: cep,
+        bairroComprador: input.bairroComprador!.trim(),
+        logradouroComprador: input.logradouroComprador!.trim(),
+        numeroComprador: input.numeroComprador?.trim() ?? '',
+        complementoComprador: input.complementoComprador?.trim() ?? ''
+      }
+    }
+
+    const cep = normalizeCep(input.cepComprador)
+    if (!cep) {
+      return input.numeroComprador?.trim()
+        ? { numeroComprador: input.numeroComprador.trim() }
+        : {}
+    }
+
     const enderecoResult = await this.client.buscaEndereco(auth, cep)
     const endereco = enderecoResult?.result
-    const numero = numeroComprador?.trim() ?? ''
+    const numero = input.numeroComprador?.trim() ?? ''
 
     return {
       cepComprador: cep,
       bairroComprador: endereco?.bairro ?? '',
       logradouroComprador: endereco?.logradouro ?? endereco?.endereco ?? '',
       ...(numero ? { numeroComprador: numero } : { numeroComprador: '' }),
-      complementoComprador: endereco?.complemento ?? ''
+      complementoComprador: input.complementoComprador?.trim() || endereco?.complemento || ''
     }
   }
 }

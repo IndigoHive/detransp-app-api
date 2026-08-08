@@ -1,8 +1,10 @@
 import axios, { type AxiosError, type AxiosInstance, type AxiosRequestConfig } from 'axios'
 import createError from 'http-errors'
 import type { Logger } from 'pino'
+import { DetranSpServiceNowError } from './errors/detran-sp-service-now-error'
 
 const SERVICE_NAME = 'detran-sp-servicenow'
+const DEFAULT_ERROR_DETAIL = 'Tivemos um problema ao processar sua solicitação.'
 
 export type DetranSpServiceNowHttpParams = {
   baseURL: string
@@ -55,9 +57,14 @@ export class DetranSpServiceNowHttp {
   }
 
   protected createResponseError (error: AxiosError): Error {
-    const data = error.response?.data as { error?: { detail?: string } } | undefined
-    const detail = data?.error?.detail ?? 'Tivemos um problema ao processar sua solicitação.'
-    return createError(error.response?.status ?? 502, detail, { expose: true })
+    const data = error.response?.data as { error?: { message?: string, detail?: string } } | undefined
+    const message = data?.error?.message ?? 'UnknownError'
+    const detail = data?.error?.detail ?? DEFAULT_ERROR_DETAIL
+    return createError(
+      error.response?.status ?? 502,
+      new DetranSpServiceNowError(message, detail, error.response?.data),
+      { expose: true }
+    )
   }
 
   private buildRequestMeta (config?: AxiosRequestConfig) {

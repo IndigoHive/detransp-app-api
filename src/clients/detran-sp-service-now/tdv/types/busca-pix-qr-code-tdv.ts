@@ -5,7 +5,7 @@ export type BuscaPixQrCodeTdvResultSuccess = {
     idQRCode: string
     qrCode: string
     dataExpiracaoQRCode: string
-    estadoQRCode: CodigoEstadoQRCode
+    estadoQRCode: CodigoEstadoQRCode | number
     idPagamentoQRCode?: string
     dataPagamentoQRCode?: string
   }
