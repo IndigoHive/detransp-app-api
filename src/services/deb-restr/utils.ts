@@ -15,7 +15,7 @@ export function formatDateBr (isoDate: string): string {
 }
 
 export function debtVencimento (debito: DebitoIncluded): string | null {
-  return debito.attributes.dataVencimento ?? debito.attributes.vencimento ?? null
+  return debito.attributes.dataVencimento || debito.attributes.vencimento || null
 }
 
 export function deriveSectionStatus (debitos: DebitoIncluded[]): DebtSectionStatus {

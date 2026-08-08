@@ -25,16 +25,16 @@ export class DetalhesMultasService {
     return {
       infracoes: multas.map((d) => {
         const attrs = d.attributes
-        const dataInfracao = attrs.dataInfracao ?? attrs.dataHora ?? null
+        const dataInfracao = attrs.dataInfracao || attrs.dataHora || null
         return {
           id: d.id,
-          autoInfracao: attrs.autoInfracao ?? NAO_CONSTA,
-          descricao: attrs.descricao ?? attrs.autoInfracao ?? attrs.nomeServico ?? NAO_CONSTA,
+          autoInfracao: attrs.autoInfracao || NAO_CONSTA,
+          descricao: attrs.descricao || attrs.autoInfracao || attrs.nomeServico || NAO_CONSTA,
           valor: attrs.valor,
           valorLabel: formatCurrencyBr(attrs.valor),
           data: dataInfracao ? formatDateBr(dataInfracao.slice(0, 10)) : NAO_CONSTA,
-          municipio: attrs.municipio ?? NAO_CONSTA,
-          orgaoAutuador: attrs.orgaoAutuador?.nome ?? attrs.nomeOrgaoAutuador ?? NAO_CONSTA,
+          municipio: attrs.municipio || NAO_CONSTA,
+          orgaoAutuador: attrs.orgaoAutuador?.nome || attrs.nomeOrgaoAutuador || NAO_CONSTA,
         }
       }),
       total,
