@@ -66,8 +66,8 @@ export function getDebRestrRegistrations (): Required<NameAndRegistrationPair<De
         new ListaVeiculosDebRestrService(detranSpServiceNowDebRestrClient)
     ).scoped(),
     consultaVeiculoDebitosService: asFunction(
-      ({ detranSpServiceNowDebRestrClient, detranSpServiceNowPgtoClient }) =>
-        new ConsultaVeiculoDebitosService(detranSpServiceNowDebRestrClient, detranSpServiceNowPgtoClient)
+      ({ detranSpServiceNowDebRestrClient, detranSpServiceNowPgtoClient, logger }) =>
+        new ConsultaVeiculoDebitosService(detranSpServiceNowDebRestrClient, detranSpServiceNowPgtoClient, logger)
     ).scoped(),
     consultaVeiculoImpressaoService: asFunction(
       ({ consultaVeiculoDebitosService }) =>
