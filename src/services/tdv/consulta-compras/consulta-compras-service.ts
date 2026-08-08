@@ -1,5 +1,9 @@
 import type { DetranSpServiceNowTdvClient } from '../../../clients/detran-sp-service-now/tdv'
-import type { CodigoOrigemComunicacaoVendaVeiculo, CodigoOrigemTDV } from '../../../clients/detran-sp-service-now/tdv/types'
+import type {
+  CodigoEstadoTDV,
+  CodigoOrigemComunicacaoVendaVeiculo,
+  CodigoOrigemTDV
+} from '../../../clients/detran-sp-service-now/tdv/types'
 import { extractBearerToken, extractCpfFromToken } from '../../../utils/token'
 
 type Dependencies = {
@@ -19,19 +23,24 @@ type CompraVehicle = {
   yearFab: string
   yearMod: string
   codigoTransferencia: string
+  ativa?: 'true' | 'false' | '1' | '0'
+  estado?: CodigoEstadoTDV
   origem?: CodigoOrigemTDV
   origemComunicacaoVendaVeiculo?: CodigoOrigemComunicacaoVendaVeiculo
+  descricaoMarcaVeiculo?: string
+  codigoComprador?: string
+  nomeComprador?: string
+  nomeVendedor?: string
+  codigoVendedor?: string
+  nomeMunicipioVeiculo?: string
+  nomeMunicipioComprador?: string
+  chassiVeiculo?: string
+  kmVistoriadaVeiculo?: string
+  numeroComprador?: string
 }
 
 export type ConsultaComprasResult = {
   vehicles: CompraVehicle[]
-} | {
-  vehicles: []
-  showSnackbar: {
-    variant: string
-    title: string
-    description: string
-  }
 }
 
 export class ConsultaComprasService {
@@ -55,39 +64,51 @@ export class ConsultaComprasService {
       return { vehicles: [] }
     }
 
-    const withCodigo = result.result.filter((tdv) => !!tdv.codigoTransferenciaVeiculo?.trim())
-    const skippedWithoutCodigo = result.result.length - withCodigo.length
-
-    const vehicles = withCodigo.map((tdv, index) => {
+    const vehicles = result.result.map((tdv, index) => {
       const codigoTransferencia = tdv.codigoTransferenciaVeiculo?.trim() ?? ''
+      const plate = tdv.placaVeiculo ?? ''
+      const renavam = tdv.codigoRenavamVeiculo ?? ''
+      const id = codigoTransferencia || (plate && renavam ? `${plate}-${renavam}` : String(index + 1))
+
       return {
-        id: String(index + 1),
+        id,
         title: tdv.descricaoMarcaVeiculo ?? '',
-        plate: tdv.placaVeiculo ?? '',
+        plate,
         licensingStatus: 'PENDENTE',
         licensingExpirationDate: '',
         type: 'Passeio',
         brandModel: tdv.descricaoMarcaVeiculo ?? '',
-        renavam: tdv.codigoRenavamVeiculo ?? '',
+        renavam,
         lastLicensing: '',
         yearFab: '',
         yearMod: '',
         codigoTransferencia,
+        ...(tdv.ativa !== undefined ? { ativa: tdv.ativa } : {}),
+        ...(tdv.estado !== undefined ? { estado: tdv.estado } : {}),
         ...(tdv.origem !== undefined ? { origem: tdv.origem } : {}),
-        ...(tdv.origemComunicacaoVendaVeiculo !== undefined ? { origemComunicacaoVendaVeiculo: tdv.origemComunicacaoVendaVeiculo } : {})
+        ...(tdv.origemComunicacaoVendaVeiculo !== undefined
+          ? { origemComunicacaoVendaVeiculo: tdv.origemComunicacaoVendaVeiculo }
+          : {}),
+        ...(tdv.descricaoMarcaVeiculo !== undefined
+          ? { descricaoMarcaVeiculo: tdv.descricaoMarcaVeiculo }
+          : {}),
+        ...(tdv.codigoComprador !== undefined ? { codigoComprador: tdv.codigoComprador } : {}),
+        ...(tdv.nomeComprador !== undefined ? { nomeComprador: tdv.nomeComprador } : {}),
+        ...(tdv.nomeVendedor !== undefined ? { nomeVendedor: tdv.nomeVendedor } : {}),
+        ...(tdv.codigoVendedor !== undefined ? { codigoVendedor: tdv.codigoVendedor } : {}),
+        ...(tdv.nomeMunicipioVeiculo !== undefined
+          ? { nomeMunicipioVeiculo: tdv.nomeMunicipioVeiculo }
+          : {}),
+        ...(tdv.nomeMunicipioComprador !== undefined
+          ? { nomeMunicipioComprador: tdv.nomeMunicipioComprador }
+          : {}),
+        ...(tdv.chassiVeiculo?.trim() ? { chassiVeiculo: tdv.chassiVeiculo.trim() } : {}),
+        ...(tdv.kmVistoriadaVeiculo?.trim()
+          ? { kmVistoriadaVeiculo: tdv.kmVistoriadaVeiculo.trim() }
+          : {}),
+        ...(tdv.numeroComprador?.trim() ? { numeroComprador: tdv.numeroComprador.trim() } : {})
       }
     })
-
-    if (vehicles.length === 0 && skippedWithoutCodigo > 0) {
-      return {
-        vehicles: [],
-        showSnackbar: {
-          variant: 'error',
-          title: 'Erro',
-          description: 'Nenhuma transferência ativa válida encontrada para este CPF'
-        }
-      }
-    }
 
     return { vehicles }
   }

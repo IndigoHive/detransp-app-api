@@ -682,7 +682,7 @@ app.get('/api/tdv/compras', (_req, res) => {
         origem: '1',
       },
       {
-        id: '11',
+        id: 'GHI8J90-00010020031',
         title: 'VW/GOL 1.0',
         plate: 'GHI8J90',
         licensingStatus: 'REGULAR',
@@ -693,8 +693,14 @@ app.get('/api/tdv/compras', (_req, res) => {
         lastLicensing: '10/05/2025',
         yearFab: '2019',
         yearMod: '2020',
-        codigoTransferencia: 'TDV-MOCK002',
+        codigoTransferencia: '',
+        ativa: 'true',
         origem: '2',
+        origemComunicacaoVendaVeiculo: '9',
+        descricaoMarcaVeiculo: 'VW/GOL 1.0',
+        nomeVendedor: 'João Vendedor',
+        codigoVendedor: '11122233344',
+        nomeMunicipioVeiculo: 'SAO PAULO',
       },
     ],
   })
@@ -723,6 +729,13 @@ app.post('/api/tdv/confirmar-compra', (req, res) => {
 })
 
 app.post('/api/tdv/confirmar-endereco', (req, res) => {
+  res.json({
+    proximaAcao: 'aviso_pagamento',
+    estado: '7',
+  })
+})
+
+app.post('/api/tdv/criar-compra', (req, res) => {
   res.json({
     proximaAcao: 'aviso_pagamento',
     estado: '7',
@@ -811,6 +824,7 @@ app.listen(PORT, () => {
   console.log('    GET  /api/tdv/compras')
   console.log('    POST /api/tdv/confirmar-compra')
   console.log('    POST /api/tdv/confirmar-endereco')
+  console.log('    POST /api/tdv/criar-compra')
   console.log('    POST /api/tdv/valida-assinatura')
   console.log('    POST /api/tdv/prova-vida')
   console.log('    GET  /api/tdv/consulta-debitos')

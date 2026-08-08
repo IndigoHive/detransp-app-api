@@ -8,7 +8,7 @@ export type ListTdvsQuery = {
 }
 
 export type ListaTdvsResultData = {
-  ativa?: 'true' | 'false'
+  ativa?: 'true' | 'false' | '1' | '0'
   estado?: CodigoEstadoTDV
   origem?: CodigoOrigemTDV
   origemComunicacaoVendaVeiculo?: CodigoOrigemComunicacaoVendaVeiculo
@@ -22,6 +22,10 @@ export type ListaTdvsResultData = {
   nomeVendedor?: string
   nomeMunicipioVeiculo?: string
   nomeMunicipioComprador?: string
+  chassiVeiculo?: string
+  kmVeiculo?: string
+  kmVistoriadaVeiculo?: string
+  numeroComprador?: string
 }
 
 export type ListaTdvsResultSuccess = {
