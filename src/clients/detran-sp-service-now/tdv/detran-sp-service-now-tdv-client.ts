@@ -26,6 +26,7 @@ export class DetranSpServiceNowTdvClient extends DetranSpServiceNowHttp {
     super({
       baseURL: new URL('/api/x_mdpdd_be_tdv/v1/tdv', config.serviceNow.api.baseUrl).toString(),
       logger,
+      userAgent: 'Android/appdt/1.0.0',
     })
   }
 
@@ -65,15 +66,19 @@ export class DetranSpServiceNowTdvClient extends DetranSpServiceNowHttp {
     data: AtualizaTdvCommand
   ): Promise<AtualizaTdvResult> {
     const authConfig = this.withAuth(auth)
+    // The signing authorization code travels only via X-Authorization-Code — ServiceNow
+    // rejects the request if itiCode is also present in the body (see detran-app-kotlin's
+    // assinarAtpveBody, which only ever sends { estado }).
+    const { itiCode, ...body } = data as AtualizaTdvCommand & { itiCode?: string }
     const headers = {
       ...authConfig.headers,
-      ...('itiCode' in data ? { 'X-Authorization-Code': data.itiCode } : {})
+      ...(itiCode ? { 'X-Authorization-Code': itiCode } : {})
     }
 
     return (
       await this.axios.patch<AtualizaTdvResult>(
         `/transferencias-de-veiculos/${codigoTransferenciaVeiculo}`,
-        data,
+        body,
         { headers }
       )
     ).data

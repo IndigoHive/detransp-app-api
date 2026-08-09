@@ -39,8 +39,10 @@ export class AnaliseRequisitosService {
       placaVeiculo: input.selectedVehicle.plate
     })
 
+    // ServiceNow's `ativa` field is the string "1"/"0", not "true"/"false" — the ?ativa=true
+    // query param already filters server-side, so estado is the only client-side check needed.
     const activeTdv = tdvs?.result?.find(
-      tdv => tdv.ativa === 'true' && tdv.estado !== CodigoEstadoTDV.TRANSFERENCIA_CANCELADA
+      tdv => tdv.estado !== CodigoEstadoTDV.TRANSFERENCIA_CANCELADA
     )
 
     if (activeTdv) {

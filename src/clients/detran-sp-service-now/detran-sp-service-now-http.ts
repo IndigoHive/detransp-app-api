@@ -73,8 +73,18 @@ export class DetranSpServiceNowHttp {
   private setupInterceptors () {
     this.axios.interceptors.request.use(
       (config) => {
+        const fullUrl = `${config.baseURL ?? ''}${config.url ?? ''}`
+
         this.logger.debug(
-          { method: config.method, service: this.serviceName, url: config.url },
+          {
+            method: config.method,
+            service: SERVICE_NAME,
+            url: config.url,
+            fullUrl,
+            headers: config.headers,
+            params: config.params,
+            data: config.data,
+          },
           'ServiceNow HTTP request'
         )
         return config
