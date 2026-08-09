@@ -113,6 +113,7 @@ export class VerificarEstadoTdvService {
       if (estado === CodigoEstadoTDV.ATPVE_CRIADA) {
         return {
           proximaAcao: 'comprador',
+          codigoTransferencia: activeBuyer.codigoTransferenciaVeiculo ?? '',
           vehicles: [{
             plate: activeBuyer.placaVeiculo ?? '',
             brandModel: activeBuyer.descricaoMarcaVeiculo ?? '',

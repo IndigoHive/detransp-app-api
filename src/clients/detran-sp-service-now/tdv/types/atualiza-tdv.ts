@@ -38,6 +38,8 @@ export type AtualizaTdvAutodeclaracaoResidenciaConfirmada = {
 export type AtualizaTdvAtpveAssinadaComprador = {
   estado: CodigoEstadoTDV.ATPVE_ASSINADA_COMPRADOR
   itiCode: string
+  // Boolean (not 'true'/'false' string) — see detran-app-kotlin's atualizarAutodeclaracaoRenaveBody.kt
+  confirmacaoTermoCienciaResponsabilidade: boolean
 }
 
 export type AtualizaTdvAtpveAssinadaVendedor = {

@@ -59,7 +59,8 @@ export class ValidaAssinaturaService {
       if (!isSeller && estado === CodigoEstadoTDV.AUTODECLARACAO_RESIDENCIA_CONFIRMADA) {
         await this.client.atualizaTdv(auth, input.codigoTransferencia, {
           estado: CodigoEstadoTDV.ATPVE_ASSINADA_COMPRADOR,
-          itiCode: input.itiCode
+          itiCode: input.itiCode,
+          confirmacaoTermoCienciaResponsabilidade: true
         })
         effectiveEstado = CodigoEstadoTDV.ATPVE_ASSINADA_COMPRADOR
       } else if (isSeller && estado === CodigoEstadoTDV.ATPVE_ASSINADA_COMPRADOR) {
