@@ -4,7 +4,7 @@ import type { Logger } from 'pino'
 import { DetranSpServiceNowPgtoError } from './errors/detran-sp-service-now-pgto-error'
 
 const SERVICE_NAME = 'detran-sp-servicenow-pgto'
-const MAX_TIMEOUT_MS = 30000
+const MAX_TIMEOUT_MS = 28000
 
 export type DetranSpServiceNowPgtoHttpParams = {
   baseURL: string
