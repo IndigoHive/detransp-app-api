@@ -1003,7 +1003,7 @@
             "data": {
               "size": "md",
               "plate": "EXC1A22",
-              "source": "",
+              "source": "@{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle}",
               "variant": "default"
             }
           }
@@ -3277,7 +3277,7 @@
                 "plate",
                 "brand_model"
               ],
-              "source": "@{node:n_2d9e4b6a8c17.vehicle}",
+              "source": "@{node:n_2d9e4b6a8c17.vehicle ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle}",
               "vehicle": {
                 "id": "1",
                 "plate": "EXC1A22",
@@ -3859,47 +3859,24 @@
         "type": "group",
         "children": [
           {
-            "id": "c_7c4761a2b078",
-            "type": "card",
+            "id": "c_d3fff3ee704b",
+            "type": "vehicle_info",
             "name": null,
-            "children": [
-              {
-                "id": "c_d3fff3ee704b",
-                "type": "vehicle_select",
-                "name": null,
-                "data": {
-                  "layout": [
-                    "title",
-                    "plate",
-                    "badge",
-                    "brand_model",
-                    "licensing_expiration"
-                  ],
-                  "source": "@{node:n_2d9e4b6a8c17.vehicle}",
-                  "variant": "full"
-                }
-              },
-              {
-                "id": "c_07cbedf4157d",
-                "type": "vehicle_plate",
-                "name": null,
-                "data": {
-                  "size": "sm",
-                  "plate": "EXC1A22",
-                  "variant": "default"
-                }
-              },
-              {
-                "id": "c_cfe6cd47b605",
-                "type": "label_text",
-                "name": null,
-                "data": {
-                  "text": "Novo texto",
-                  "label": "Marca / Modelo"
-                }
+            "data": {
+              "layout": [
+                "plate",
+                "brand_model"
+              ],
+              "source": "@{node:n_2d9e4b6a8c17.vehicle ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle}",
+              "vehicle": {
+                "id": "1",
+                "plate": "EXC1A22",
+                "title": "Veículo 1",
+                "brandModel": "VOLKS/GOL GTI 1.0",
+                "licensingStatus": "REGULAR",
+                "licensingExpirationDate": "2024-12-31"
               }
-            ],
-            "data": {}
+            }
           },
           {
             "id": "c_8fa3e1e24aaf",
