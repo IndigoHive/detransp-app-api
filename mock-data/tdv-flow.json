@@ -6011,15 +6011,15 @@
           "x": 9536,
           "y": 7164
         },
+        "method": "GET",
+        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/consulta-debitos?codigoTransferencia=@{node:n_2d9e4b6a8c17.codigoTransferencia ?? node:n_6c4d8e2a1b90.codigoTransferencia ?? node:n_90a9d6db5f4b.codigoTransferencia}",
         "responseExamples": [
           {
             "id": "662e4b72-b520-47e2-a222-bd21ed66959a",
             "name": "Com débitos",
             "value": "{\n  \"nomeComprador\": \"Carlos da Silva\",\n  \"debitos\": [\n    { \"descricao\": \"Transferência de Veículo\", \"valor\": 243.77, \"valorFormatado\": \"R$ 243,77\" },\n    { \"descricao\": \"Licenciamento\", \"valor\": 120.50, \"valorFormatado\": \"R$ 120,50\" }\n  ],\n  \"valorTotal\": 364.27,\n  \"taxaTransferencia\": \"R$ 243,77\",\n  \"taxaLicenciamento\": \"R$ 120,50\",\n  \"totalDebitos\": \"R$ 364,27\"\n}"
           }
-        ],
-        "method": "GET",
-        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/consulta-debitos?codigoTransferencia=@{node:n_2d9e4b6a8c17.codigoTransferencia ?? node:n_6c4d8e2a1b90.codigoTransferencia ?? node:n_90a9d6db5f4b.codigoTransferencia}"
+        ]
       }
     },
     {
@@ -6073,15 +6073,15 @@
           "x": 7224,
           "y": 2840
         },
+        "method": "GET",
+        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/enderecos/@{screen:s_85ba93c2e996.comp:c_6a5c088eac53.value}",
         "responseExamples": [
           {
             "id": "fab4f0e4-ffc5-43e2-9eb9-ee7bc9019491",
             "name": "Endereço retornado",
             "value": "{\n  \"result\": {\n    \"cep\": \"08060283\",\n    \"bairro\": \"Vila Jacuí\",\n    \"tipoLogradouro\": \"Rua\",\n    \"endereco\": \"Aulide Carini\",\n    \"complemento\": \"\",\n    \"tipoLogradouroAbrev\": \"R\",\n    \"enderecoAbrev\": \"R Aulide Carini\",\n    \"tipoLogradouroAbrevDNE\": \"R\",\n    \"localidade\": \"São Paulo\",\n    \"estado\": \"São Paulo\",\n    \"uf\": \"SP\",\n    \"numeroIBGE\": 3550308,\n    \"logradouro\": null,\n    \"cdTipoCEP\": 1,\n    \"tipoCEP\": \"CEP Padrão\",\n    \"municipio\": \"São Paulo\",\n    \"tipoLocalidade\": null,\n    \"codigoMunicipio\": 9668,\n    \"codigoLocalRel\": 9668,\n    \"latitude\": null,\n    \"longitude\": null,\n    \"codigoDne\": 580843,\n    \"tipoLogradouroDne\": 81,\n    \"codigoBairro\": 26812\n  }\n}"
           }
-        ],
-        "method": "GET",
-        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/enderecos/@{screen:s_85ba93c2e996.comp:c_6a5c088eac53.value}"
+        ]
       }
     },
     {
