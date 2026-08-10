@@ -89,10 +89,11 @@ export class DetranSpServiceNowDebRestrHttp {
             errorMessage: message,
             errorDetail: detail,
             ...(noResponse ? { networkErrorCode: error.code, networkErrorMessage: error.message } : {}),
-            // message/detail are only populated when the body matches the shape
-            // we know about — log the raw body too, otherwise an unrecognized
-            // ServiceNow error shape leaves nothing to debug from
-            ...(message === undefined && detail === undefined ? { responseData: error.response?.data } : {})
+            // Always log the raw body, not just when message/detail are missing —
+            // ServiceNow sometimes returns a message/detail that parses fine but
+            // is itself garbled (e.g. a nested "Unexpected token" parse error from
+            // its own backend), and the shape check alone hides that raw body.
+            responseData: error.response?.data
           },
           'ServiceNow deb-restr response error'
         )
