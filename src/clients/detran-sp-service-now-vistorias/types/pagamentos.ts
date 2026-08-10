@@ -39,32 +39,32 @@ export type PagamentoVistoria = {
 
 export type PagamentoVistoriaPublico = Omit<
   PagamentoVistoria,
-  'placa' | 'token' | 'status' | 'modeloAuto' | 'paymentDate' | 'subtipoDescricao'
+  'placa' | 'token' | 'status' | 'modeloAuto' | 'paymentDate' | 'tipo' | 'subtipoDescricao'
 > & {
   plate: string
   brandModel: string | null
   vistoriaToken: string
   vistoriaPaymentDate: string
-  vistoriaSubtypeDescription: string
+  vistoriaType: string
   vistoriaStatus: PagamentoVistoriaStatusPublico
 }
 
 export type ListaPagamentosResult =
   | {
-      result?:
-      | {
-          success: true
-          message: string
-          items: PagamentoVistoria[]
-          total: number
-          page: number
-          pageSize: number
-          totalPages: number
-        }
-      | {
-          success: false
-          message: string
-        }
+    result?:
+    | {
+      success: true
+      message: string
+      items: PagamentoVistoria[]
+      total: number
+      page: number
+      pageSize: number
+      totalPages: number
     }
+    | {
+      success: false
+      message: string
+    }
+  }
   | null
   | undefined

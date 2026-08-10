@@ -406,8 +406,8 @@ describe('vistorias services', () => {
       plate: 'ABC1D23',
       brandModel: 'FIAT/PALIO',
       vistoriaToken: 'token-2',
-      vistoriaPaymentDate: '30/07/2026 18:01',
-      vistoriaSubtypeDescription: 'Preparação para leilão',
+      vistoriaPaymentDate: '30/07/2026 às 18:01',
+      vistoriaType: 'IDENTIFICACAO',
       vistoriaStatus: 'UTILIZADO'
     })
     expect(result.slice(0, 7).map(({ vistoriaStatus }) => vistoriaStatus)).toEqual([
@@ -422,6 +422,7 @@ describe('vistorias services', () => {
     expect(result[0]).not.toHaveProperty('placa')
     expect(result[0]).not.toHaveProperty('modeloAuto')
     expect(result[0]).not.toHaveProperty('token')
+    expect(result[0]).not.toHaveProperty('tipo')
     expect(result[0]).not.toHaveProperty('status')
     expect(result[0]).not.toHaveProperty('paymentDate')
     expect(result[0]).not.toHaveProperty('subtipoDescricao')
@@ -464,7 +465,7 @@ describe('vistorias services', () => {
       clientAuth,
       '6557-A8E2-7A2C-6577',
       '12345678901'
-    )).resolves.toEqual({ success: true, idRestituicao: 'restituicao-id' })
+    )).resolves.toEqual({ success: true, status: 'completed', idRestituicao: 'restituicao-id' })
     expect(solicitaRestituicao).toHaveBeenCalledWith(clientAuth, {
       token: '6557-A8E2-7A2C-6577',
       documento: '12345678901'
@@ -498,7 +499,7 @@ describe('vistorias services', () => {
     })
   })
 
-  it('returns feedback when the restitution receipt does not become available', async () => {
+  it('returns processing when the restitution receipt does not become available', async () => {
     const solicitaRestituicao = vi.fn().mockResolvedValue({
       result: {
         success: true,
@@ -518,13 +519,9 @@ describe('vistorias services', () => {
       '6557-A8E2-7A2C-6577',
       '12345678901'
     )).resolves.toEqual({
-      success: false,
-      idRestituicao: null,
-      showSnackbar: {
-        variant: 'error',
-        title: 'Não foi possível solicitar a restituição',
-        description: 'Comprovante em processamento'
-      }
+      success: true,
+      status: 'processing',
+      idRestituicao: 'restituicao-id'
     })
     expect(consultaComprovanteRestituicao).toHaveBeenCalledTimes(2)
   })

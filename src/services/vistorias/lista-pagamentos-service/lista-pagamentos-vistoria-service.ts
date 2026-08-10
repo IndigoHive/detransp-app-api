@@ -54,14 +54,14 @@ export class ListaPagamentosVistoriaService {
       return response.items
         .filter((item) => item.pevNumber.trim().length > 0)
         .slice(0, PAGE_SIZE)
-        .map(({ placa, token, status, modeloAuto, paymentDate, subtipoDescricao, pevNumber, ...item }) => ({
+        .map(({ placa, token, status, modeloAuto, paymentDate, tipo, subtipoDescricao, pevNumber, ...item }) => ({
           ...item,
           pevNumber: pevNumber.trim(),
           plate: placa,
           brandModel: modeloAuto,
           vistoriaToken: token,
           vistoriaPaymentDate: formatDateTimeBr(paymentDate),
-          vistoriaSubtypeDescription: subtipoDescricao,
+          vistoriaType: tipo,
           vistoriaStatus: getStatusLabel(status)
         }))
     } catch (error) {
