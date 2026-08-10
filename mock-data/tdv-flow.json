@@ -5544,6 +5544,7 @@
           "x": 1340,
           "y": 4320
         },
+        "method": "GET",
         "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/pix?codigoTransferencia=@{node:n_2d9e4b6a8c17.codigoTransferencia ?? node:n_6c4d8e2a1b90.codigoTransferencia ?? node:n_90a9d6db5f4b.codigoTransferencia}&forcarNovo=true"
       }
     },
@@ -6050,6 +6051,7 @@
           "x": 11348,
           "y": 7024
         },
+        "method": "GET",
         "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/pix?codigoTransferencia=@{node:n_2d9e4b6a8c17.codigoTransferencia ?? node:n_6c4d8e2a1b90.codigoTransferencia ?? node:n_90a9d6db5f4b.codigoTransferencia}&forcarNovo=true"
       }
     },
