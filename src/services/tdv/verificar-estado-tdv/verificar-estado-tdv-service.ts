@@ -72,8 +72,10 @@ export class VerificarEstadoTdvService {
       codigoVendedor: cpf
     })
 
+    // ServiceNow's `ativa` field is the string "1"/"0", not "true"/"false" — the ?ativa=true
+    // query param already filters server-side, so estado is the only client-side check needed.
     const activeSeller = tdvsAsVendedor?.result?.find(
-      tdv => tdv.ativa === 'true' && tdv.estado !== CodigoEstadoTDV.TRANSFERENCIA_CANCELADA
+      tdv => tdv.estado !== CodigoEstadoTDV.TRANSFERENCIA_CANCELADA
     )
 
     if (activeSeller) {
@@ -101,7 +103,7 @@ export class VerificarEstadoTdvService {
     })
 
     const activeBuyer = tdvsAsComprador?.result?.find(
-      tdv => tdv.ativa === 'true' && tdv.estado !== CodigoEstadoTDV.TRANSFERENCIA_CANCELADA
+      tdv => tdv.estado !== CodigoEstadoTDV.TRANSFERENCIA_CANCELADA
     )
 
     if (activeBuyer) {
@@ -111,6 +113,7 @@ export class VerificarEstadoTdvService {
       if (estado === CodigoEstadoTDV.ATPVE_CRIADA) {
         return {
           proximaAcao: 'comprador',
+          codigoTransferencia: activeBuyer.codigoTransferenciaVeiculo ?? '',
           vehicles: [{
             plate: activeBuyer.placaVeiculo ?? '',
             brandModel: activeBuyer.descricaoMarcaVeiculo ?? '',

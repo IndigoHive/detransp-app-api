@@ -57,6 +57,11 @@ export type Config = {
   rotaVistorias: {
     baseUrl: string
   }
+  iti: {
+    baseUrl: string
+    clientId: string
+    redirectUri: string
+  }
   logging: {
     level: string
   }

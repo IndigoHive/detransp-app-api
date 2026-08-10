@@ -41,21 +41,29 @@ export class ConfirmarCompraService {
     const cpf = extractCpfFromToken(token)
     const auth = { token, cpf }
 
-    // Advance to state 4 (INTENCAO_COMPRA_CONFIRMADA)
-    await this.client.atualizaTdv(auth, input.codigoTransferencia, {
-      estado: CodigoEstadoTDV.INTENCAO_COMPRA_CONFIRMADA,
-      codigoProvaVidaComprador: input.codigoProvaVidaComprador,
-      tipoProvaVidaComprador: '2' // LIVENESS
-    })
+    const tdvAtual = (await this.client.buscaTdv(auth, input.codigoTransferencia))?.result
+    let estadoAtual = tdvAtual?.estado
 
-    // Advance to state 5 (AUTODECLARACAO_RESIDENCIA_CONFIRMADA)
-    // This prepares the TDV for ITI signing (state 5 → 6 by ITI callback)
-    await this.client.atualizaTdv(auth, input.codigoTransferencia, {
-      estado: CodigoEstadoTDV.AUTODECLARACAO_RESIDENCIA_CONFIRMADA,
-      codigoProvaVidaComprador: input.codigoProvaVidaComprador,
-      tipoProvaVidaComprador: '2',
-      confirmacaoAutodeclaracaoResidenciaComprador: 'true'
-    })
+    if (estadoAtual === CodigoEstadoTDV.ATPVE_CRIADA) {
+      // Advance to state 4 (INTENCAO_COMPRA_CONFIRMADA)
+      await this.client.atualizaTdv(auth, input.codigoTransferencia, {
+        estado: CodigoEstadoTDV.INTENCAO_COMPRA_CONFIRMADA,
+        codigoProvaVidaComprador: input.codigoProvaVidaComprador,
+        tipoProvaVidaComprador: '2' // LIVENESS
+      })
+      estadoAtual = CodigoEstadoTDV.INTENCAO_COMPRA_CONFIRMADA
+    }
+
+    if (estadoAtual === CodigoEstadoTDV.INTENCAO_COMPRA_CONFIRMADA) {
+      // Advance to state 5 (AUTODECLARACAO_RESIDENCIA_CONFIRMADA)
+      // This prepares the TDV for ITI signing (state 5 → 6 by ITI callback)
+      await this.client.atualizaTdv(auth, input.codigoTransferencia, {
+        estado: CodigoEstadoTDV.AUTODECLARACAO_RESIDENCIA_CONFIRMADA,
+        codigoProvaVidaComprador: input.codigoProvaVidaComprador,
+        tipoProvaVidaComprador: '2',
+        confirmacaoAutodeclaracaoResidenciaComprador: 'true'
+      })
+    }
 
     // Fetch the updated TDV to get buyer and vehicle data
     const tdv = await this.client.buscaTdv(auth, input.codigoTransferencia)

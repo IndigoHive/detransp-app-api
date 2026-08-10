@@ -8,7 +8,8 @@ export type ListTdvsQuery = {
 }
 
 export type ListaTdvsResultData = {
-  ativa?: 'true' | 'false'
+  // Despite the swagger doc declaring 'true'/'false', the real API returns '1'/'0' here.
+  ativa?: string
   estado?: CodigoEstadoTDV
   codigoTransferenciaVeiculo?: string
   placaVeiculo?: string

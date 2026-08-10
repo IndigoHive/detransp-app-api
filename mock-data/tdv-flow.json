@@ -680,8 +680,7 @@
             "type": "button",
             "name": null,
             "data": {
-              "label": "Sim, continuar",
-              "clickAction": "back"
+              "label": "Sim, continuar"
             }
           },
           {
@@ -872,6 +871,23 @@
             "data": {
               "label": "CEP",
               "required": true
+            }
+          },
+          {
+            "id": "c_1e15a3ceef7b",
+            "type": "text_input",
+            "name": "numero",
+            "data": {
+              "label": "Número",
+              "required": true
+            }
+          },
+          {
+            "id": "c_90a932a96b1f",
+            "type": "text_input",
+            "name": "complemento",
+            "data": {
+              "label": "Complemento"
             }
           }
         ]
@@ -1730,7 +1746,7 @@
             "type": "text_body",
             "name": null,
             "data": {
-              "text": "Olá, Ricardo\n\nO processo de transferência do seu veículo foi confirmado pelo comprador. \n"
+              "text": "Olá, @{node:n_21da615e160d.full_name}\n\nO processo de transferência do seu veículo foi confirmado pelo comprador. \n"
             }
           },
           {
@@ -1971,7 +1987,7 @@
             "type": "text_body",
             "name": null,
             "data": {
-              "text": "Olá, Ricardo.\n\nA transferência do veículo será finalizada após o pagamento da taxa.\n",
+              "text": "Olá, @{node:n_21da615e160d.full_name}.\n\nA transferência do veículo será finalizada após o pagamento da taxa.\n",
               "align": "left"
             }
           },
@@ -2252,7 +2268,7 @@
             "type": "text_body",
             "name": null,
             "data": {
-              "text": "Olá, NOME_VENDEDOR\n\nA compra do veículo foi cancelada pela pessoa que você indicou como compradora. Por isso, encerramos sua solicitação.\n\nCaso precise, você deve iniciar uma nova intenção de venda do veículo.\n",
+              "text": "Olá, @{node:n_21da615e160d.full_name}\n\nA compra do veículo foi cancelada pela pessoa que você indicou como compradora. Por isso, encerramos sua solicitação.\n\nCaso precise, você deve iniciar uma nova intenção de venda do veículo.\n",
               "align": "left"
             }
           }
@@ -2939,7 +2955,7 @@
         },
         "method": "POST",
         "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/confirmar-compra",
-        "body": "{\n  \"codigoTransferencia\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoTransferencia}\",\n  \"codigoProvaVidaComprador\": \"@{node:n_32b7a4b7dfc4.codigoProvaVida}\"\n}",
+        "body": "{\n  \"codigoTransferencia\": \"@{node:n_90a9d6db5f4b.codigoTransferencia ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoTransferencia}\",\n  \"codigoProvaVidaComprador\": \"@{node:n_32b7a4b7dfc4.codigoProvaVida}\"\n}",
         "responseExamples": [
           {
             "id": "13ca35ee-ca27-4e9f-b5f2-21dd6e91360c",
@@ -2993,6 +3009,26 @@
       }
     },
     {
+      "id": "n_02cc2ef9116a",
+      "type": "http_node",
+      "name": "Link Assinatura ITI (Comprador)",
+      "data": {
+        "position": {
+          "x": 8300,
+          "y": 2160
+        },
+        "method": "GET",
+        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/link-assinatura-iti",
+        "responseExamples": [
+          {
+            "id": "b3f4b6a2-2f2b-4e6b-9c1a-6b8f7e2a4d10",
+            "name": "Sucesso",
+            "value": "{ \"link\": \"https://cas.staging.iti.br/oauth2.0/authorize?...\", \"redirectUri\": \"detran.sp://localhost/appdetran/iti/oauth_redirect.html\" }"
+          }
+        ]
+      }
+    },
+    {
       "id": "n_3bad58f20fff",
       "type": "iti_signature_screen",
       "name": "Documento",
@@ -3001,8 +3037,8 @@
           "x": 8520,
           "y": 2160
         },
-        "url": "https://cas.iti.br/oauth2.0/authorize?response_type=code&redirect_uri=spgovbr://localhost/appspgovbr/iti/oauth_redirect.html&scope=sign&client_id=spgovbrprod",
-        "callbackPrefix": "spgovbr://"
+        "url": "@{node:n_02cc2ef9116a.link}",
+        "callbackPrefix": "@{node:n_02cc2ef9116a.redirectUri}"
       }
     },
     {
@@ -3016,7 +3052,7 @@
         },
         "method": "POST",
         "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/valida-assinatura",
-        "body": "{\n  \"codigoTransferencia\": \"@{node:n_90a9d6db5f4b.codigoTransferencia}\",\n  \"itiCode\": \"@{node:n_3bad58f20fff.code}\"\n}\n",
+        "body": "{\n  \"codigoTransferencia\": \"@{node:n_90a9d6db5f4b.codigoTransferencia ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoTransferencia}\",\n  \"itiCode\": \"@{node:n_3bad58f20fff.code}\"\n}\n",
         "responseExamples": [
           {
             "id": "2f26dc5c-5d01-488a-8e76-1ca8f0dd33a7",
@@ -3137,6 +3173,17 @@
       }
     },
     {
+      "id": "n_21da615e160d",
+      "type": "get_user_info_node",
+      "name": "Dados do Usuário Logado",
+      "data": {
+        "position": {
+          "x": -1900,
+          "y": 2060
+        }
+      }
+    },
+    {
       "id": "n_cd7b779a01a0",
       "type": "case_node",
       "name": "Rotear por ação",
@@ -3201,7 +3248,7 @@
         },
         "method": "POST",
         "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/criar",
-        "body": "{\n  \"placaVeiculo\": \"@{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.plate}\",\n  \"renavamVeiculo\": \"@{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.renavam}\",\n  \"cpfComprador\": \"@{screen:s_2909315de67e.comp:c_676202e6fd57.value}\",\n  \"nomeComprador\": \"@{screen:s_2909315de67e.comp:c_eb386ba9d15a.value}\",\n  \"emailComprador\": \"@{screen:s_2909315de67e.comp:c_85fbac00c3aa.value}\",\n  \"cepComprador\": \"@{screen:s_2909315de67e.comp:c_24e94a494019.value}\",\n  \"valorVenda\": \"@{screen:s_8ed2db9cbfd7.comp:c_f0a773241106.value}\",\n  \"quilometragem\": \"@{screen:s_8ed2db9cbfd7.comp:c_95aef308d32f.value}\",\n  \"codigoProvaVidaVendedor\": \"@{node:n_4d4ab6c16ec8.codigoProvaVida}\"\n}",
+        "body": "{\n  \"placaVeiculo\": \"@{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.plate}\",\n  \"renavamVeiculo\": \"@{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.renavam}\",\n  \"cpfComprador\": \"@{screen:s_2909315de67e.comp:c_676202e6fd57.value}\",\n  \"nomeComprador\": \"@{screen:s_2909315de67e.comp:c_eb386ba9d15a.value}\",\n  \"emailComprador\": \"@{screen:s_2909315de67e.comp:c_85fbac00c3aa.value}\",\n  \"cepComprador\": \"@{screen:s_2909315de67e.comp:c_24e94a494019.value}\",\n  \"numeroComprador\": \"@{screen:s_2909315de67e.comp:c_1e15a3ceef7b.value}\",\n  \"complementoComprador\": \"@{screen:s_2909315de67e.comp:c_90a932a96b1f.value}\",\n  \"valorVenda\": \"@{screen:s_8ed2db9cbfd7.comp:c_f0a773241106.value}\",\n  \"quilometragem\": \"@{screen:s_8ed2db9cbfd7.comp:c_95aef308d32f.value}\",\n  \"codigoProvaVidaVendedor\": \"@{node:n_4d4ab6c16ec8.codigoProvaVida}\"\n}",
         "responseExamples": [
           {
             "id": "f0c3aea6-736b-4662-a6ff-a468f5c7fa53",
@@ -3223,6 +3270,26 @@
       }
     },
     {
+      "id": "n_ec80ea40ca78",
+      "type": "http_node",
+      "name": "Link Assinatura ITI (Vendedor)",
+      "data": {
+        "position": {
+          "x": 100,
+          "y": 2820
+        },
+        "method": "GET",
+        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/link-assinatura-iti",
+        "responseExamples": [
+          {
+            "id": "e9d4d9a0-6b39-4f92-8d1a-6f6b1c2a7e21",
+            "name": "Sucesso",
+            "value": "{ \"link\": \"https://cas.staging.iti.br/oauth2.0/authorize?...\", \"redirectUri\": \"detran.sp://localhost/appdetran/iti/oauth_redirect.html\" }"
+          }
+        ]
+      }
+    },
+    {
       "id": "n_54e1a65041fa",
       "type": "iti_signature_screen",
       "name": "Documento",
@@ -3231,8 +3298,8 @@
           "x": 320,
           "y": 2820
         },
-        "url": "https://cas.iti.br/oauth2.0/authorize?response_type=code&redirect_uri=spgovbr://localhost/appspgovbr/iti/oauth_redirect.html&scope=sign&client_id=spgovbrprod",
-        "callbackPrefix": "spgovbr://"
+        "url": "@{node:n_ec80ea40ca78.link}",
+        "callbackPrefix": "@{node:n_ec80ea40ca78.redirectUri}"
       }
     },
     {
@@ -3333,7 +3400,8 @@
           "x": 1260,
           "y": 4100
         },
-        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/consulta-debitos?codigoTransferencia=@{node:n_90a9d6db5f4b.codigoTransferencia}"
+        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/consulta-debitos?codigoTransferencia=@{node:n_90a9d6db5f4b.codigoTransferencia}",
+        "method": "GET"
       }
     },
     {
@@ -3800,6 +3868,12 @@
       "targetHandle": "input"
     },
     {
+      "sourceId": "s_62e905fb199e",
+      "targetId": "s_8fefaaacf3d9",
+      "sourceHandle": "c_70ffc7dac521",
+      "targetHandle": "input"
+    },
+    {
       "sourceId": "s_2909315de67e",
       "targetId": "n_02ec1db459dc",
       "sourceHandle": "c_9f7abbd72413",
@@ -3849,8 +3923,14 @@
     },
     {
       "sourceId": "s_24b45fd19f30",
-      "targetId": "n_3bad58f20fff",
+      "targetId": "n_02cc2ef9116a",
       "sourceHandle": "c_f95e240f9b02",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_02cc2ef9116a",
+      "targetId": "n_3bad58f20fff",
+      "sourceHandle": "output",
       "targetHandle": "input"
     },
     {
@@ -3951,6 +4031,12 @@
     },
     {
       "sourceId": "n_90a9d6db5f4b",
+      "targetId": "n_21da615e160d",
+      "sourceHandle": "output",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_21da615e160d",
       "targetId": "n_cd7b779a01a0",
       "sourceHandle": "output",
       "targetHandle": "input"
@@ -3987,8 +4073,14 @@
     },
     {
       "sourceId": "s_f0ef50595f87",
-      "targetId": "n_54e1a65041fa",
+      "targetId": "n_ec80ea40ca78",
       "sourceHandle": "c_44fe592f850b",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_ec80ea40ca78",
+      "targetId": "n_54e1a65041fa",
+      "sourceHandle": "output",
       "targetHandle": "input"
     },
     {
