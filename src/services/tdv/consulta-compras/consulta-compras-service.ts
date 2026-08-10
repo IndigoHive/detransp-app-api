@@ -61,6 +61,7 @@ type CompraVehicle = {
   kmVistoriadaVeiculo?: string
   numeroComprador?: string
   descricaoCorVeiculo?: string
+  enderecoComprador?: string
 }
 
 export type ConsultaComprasResult = {
@@ -94,6 +95,10 @@ export class ConsultaComprasService {
       const plate = tdv.placaVeiculo ?? ''
       const renavam = tdv.codigoRenavamVeiculo ?? ''
       const id = codigoTransferencia || (plate && renavam ? `${plate}-${renavam}` : String(index + 1))
+      const enderecoComprador = [
+        tdv.numeroComprador?.trim(),
+        tdv.nomeMunicipioComprador?.trim()
+      ].filter(Boolean).join(', ')
 
       return {
         id,
@@ -135,7 +140,8 @@ export class ConsultaComprasService {
         ...(tdv.numeroComprador?.trim() ? { numeroComprador: tdv.numeroComprador.trim() } : {}),
         ...(tdv.descricaoCorVeiculo?.trim()
           ? { descricaoCorVeiculo: tdv.descricaoCorVeiculo.trim() }
-          : {})
+          : {}),
+        ...(enderecoComprador ? { enderecoComprador } : {})
       }
     })
 

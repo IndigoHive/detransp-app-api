@@ -1406,7 +1406,7 @@
                 "type": "label_text",
                 "name": null,
                 "data": {
-                  "text": "",
+                  "text": "@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoComprador}",
                   "label": "CPF"
                 }
               },
@@ -1415,7 +1415,7 @@
                 "type": "label_text",
                 "name": null,
                 "data": {
-                  "text": "@{node:n_0a7cda804e6d.nomeComprador ?? node:n_3f8e1a7c9b20.full_name}",
+                  "text": "@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}",
                   "label": "Nome"
                 }
               },
@@ -1424,7 +1424,7 @@
                 "type": "label_text",
                 "name": null,
                 "data": {
-                  "text": "@{node:n_6c4d8e2a1b90.enderecoComprador ?? node:n_0a7cda804e6d.enderecoComprador}",
+                  "text": "@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.enderecoComprador}",
                   "label": "Endereço"
                 }
               },
@@ -1576,7 +1576,7 @@
             "type": "text_body",
             "name": null,
             "data": {
-              "text": "Eu, @{node:n_0a7cda804e6d.nomeComprador ?? node:n_3f8e1a7c9b20.full_name}, inscrito no CPF sob o nº @{node:n_0a7cda804e6d.cpfComprador ?? node:n_3f8e1a7c9b20.cpf}, declaro para os devidos fins que resido em @{node:n_6c4d8e2a1b90.enderecoComprador ?? node:n_0a7cda804e6d.enderecoComprador}.",
+              "text": "Eu, @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}, inscrito no CPF sob o nº @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoComprador}, declaro para os devidos fins que resido em @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.enderecoComprador}.",
               "align": "justify"
             }
           },
