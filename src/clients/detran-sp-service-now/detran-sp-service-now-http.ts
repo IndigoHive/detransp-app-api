@@ -101,7 +101,14 @@ export class DetranSpServiceNowHttp {
     this.axios.interceptors.response.use(
       (response) => {
         this.logger.debug(
-          { method: response.config.method, service: this.serviceName, status: response.status, url: response.config.url },
+          {
+            method: response.config.method,
+            service: this.serviceName,
+            status: response.status,
+            url: response.config.url,
+            headers: response.headers,
+            data: response.data,
+          },
           'ServiceNow HTTP response'
         )
         return response

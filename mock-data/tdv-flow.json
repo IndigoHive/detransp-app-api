@@ -680,8 +680,7 @@
             "type": "button",
             "name": null,
             "data": {
-              "label": "Sim, continuar",
-              "clickAction": "back"
+              "label": "Sim, continuar"
             }
           },
           {
@@ -3401,7 +3400,8 @@
           "x": 1260,
           "y": 4100
         },
-        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/consulta-debitos?codigoTransferencia=@{node:n_90a9d6db5f4b.codigoTransferencia}"
+        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/consulta-debitos?codigoTransferencia=@{node:n_90a9d6db5f4b.codigoTransferencia}",
+        "method": "GET"
       }
     },
     {
@@ -3865,6 +3865,12 @@
       "sourceId": "s_62e905fb199e",
       "targetId": "d_2d7cb6069d63",
       "sourceHandle": "c_d3576283536b",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_62e905fb199e",
+      "targetId": "s_8fefaaacf3d9",
+      "sourceHandle": "c_70ffc7dac521",
       "targetHandle": "input"
     },
     {

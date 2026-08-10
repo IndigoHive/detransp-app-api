@@ -105,11 +105,12 @@ export class DetranSpServiceNowTdvClient extends DetranSpServiceNowHttp {
     ).data
   }
 
-  async buscaPixQrCodeTdv (auth: DetranSpServiceNowAuth, codigoTransferenciaVeiculo: string): Promise<BuscaPixQrCodeTdvResult> {
+  async buscaPixQrCodeTdv (auth: DetranSpServiceNowAuth, codigoTransferenciaVeiculo: string, forcarNovo: boolean): Promise<BuscaPixQrCodeTdvResult> {
+    const authConfig = this.withAuth(auth)
     return (
       await this.axios.get<BuscaPixQrCodeTdvResult>(
         `/transferencias-de-veiculos/${codigoTransferenciaVeiculo}/qr-code`,
-        this.withAuth(auth)
+        { ...authConfig, params: { forcarNovo } }
       )
     ).data
   }
