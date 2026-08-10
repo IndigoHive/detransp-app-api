@@ -3,13 +3,6 @@ import { Router } from 'express'
 export function tdvRouter (): Router {
   const router = Router()
 
-  router.get('/verificar-estado', async (req, res) => {
-    const { accessToken } = req.session!
-    const service = req.scope.resolve('verificarEstadoTdvService')
-    const result = await service.run(accessToken)
-    res.status(200).json(result)
-  })
-
   router.get('/veiculos', async (req, res) => {
     const { accessToken } = req.session!
     const service = req.scope.resolve('consultaVeiculosTdvService')
@@ -43,6 +36,20 @@ export function tdvRouter (): Router {
     const service = req.scope.resolve('criarTdvService')
     const result = await service.run(accessToken, req.body)
     res.status(201).json(result)
+  })
+
+  router.post('/informar-dados-venda', async (req, res) => {
+    const { accessToken } = req.session!
+    const service = req.scope.resolve('informarDadosVendaService')
+    const result = await service.run(accessToken, req.body)
+    res.status(200).json(result)
+  })
+
+  router.post('/confirmar-intencao-venda', async (req, res) => {
+    const { accessToken } = req.session!
+    const service = req.scope.resolve('confirmarIntencaoVendaService')
+    const result = await service.run(accessToken, req.body)
+    res.status(200).json(result)
   })
 
   router.post('/cancelar', async (req, res) => {

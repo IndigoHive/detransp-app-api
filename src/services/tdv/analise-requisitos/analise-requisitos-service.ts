@@ -18,6 +18,28 @@ export type AnaliseRequisitosResult = {
   hasRestriction: boolean
   hasActiveTDV: boolean
   codigoTransferencia?: string | undefined
+  // Raw ServiceNow estado of the active TDV, if any — lets the flow branch resume
+  // behavior (e.g. skip straight to the final confirmation once sale data is already in).
+  estado?: string | undefined
+  // Set only when the picked vehicle is ready to move straight into a specific step —
+  // 'vendedor_2' when the buyer already signed and it's the seller's turn, 'continuar_venda'
+  // when there's an active TDV still in the seller's own part of the flow (resume instead of
+  // restarting), 'nova_tdv' when there's nothing blocking a brand new sale. Left unset when
+  // there's an active TDV waiting on the buyer (handled by the existing "TDV aberta?" prompt)
+  // or a restriction.
+  proximaAcao?: 'vendedor_2' | 'continuar_venda' | 'nova_tdv' | undefined
+}
+
+// The seller only has something to do at these states: freshly created (still filling in
+// buyer/sale data) or sale data already informed (still needs to confirm and generate the
+// ATPV-e). Every other active state is the buyer's turn — nothing for the seller to resume.
+function proximaAcaoParaVendedor (estado: CodigoEstadoTDV | undefined): AnaliseRequisitosResult['proximaAcao'] {
+  switch (estado) {
+    case CodigoEstadoTDV.ATPVE_ASSINADA_COMPRADOR: return 'vendedor_2'
+    case CodigoEstadoTDV.VEICULO_SELECIONADO: return 'continuar_venda'
+    case CodigoEstadoTDV.DADOS_VENDA_INFORMADOS: return 'continuar_venda'
+    default: return undefined
+  }
 }
 
 export class AnaliseRequisitosService {
@@ -49,13 +71,18 @@ export class AnaliseRequisitosService {
       return {
         hasRestriction: false,
         hasActiveTDV: true,
-        codigoTransferencia: activeTdv.codigoTransferenciaVeiculo
+        codigoTransferencia: activeTdv.codigoTransferenciaVeiculo,
+        estado: activeTdv.estado,
+        proximaAcao: proximaAcaoParaVendedor(activeTdv.estado)
       }
     }
 
+    const hasRestriction = false // TODO: real restriction check not implemented yet
+
     return {
-      hasRestriction: false,
-      hasActiveTDV: false
+      hasRestriction,
+      hasActiveTDV: false,
+      proximaAcao: hasRestriction ? undefined : 'nova_tdv'
     }
   }
 }

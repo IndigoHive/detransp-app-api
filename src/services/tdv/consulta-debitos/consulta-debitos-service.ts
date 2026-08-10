@@ -14,11 +14,18 @@ export type ConsultaDebitosResult = {
   taxaTransferencia: string
   taxaLicenciamento: string
   totalDebitos: string
-  pixQrCode?: string | undefined
-  pixExpiracao?: string | undefined
+  // Named to match the flow runtime's generic pix_screen contract (see
+  // CriaQRCodeLicenciamentoService, the other working pix flow) — the app reads
+  // `qrCode`/`expiresAt` off the pix node's own response, not TDV-specific names.
+  qrCode?: string | undefined
+  expiresAt?: string | undefined
   // Numeric CodigoEstadoQRCode ('2' = pago) — polled by the app every 5s (useFlowRuntime.ts)
   // to detect when the PIX has been paid and advance the flow.
   estado?: number | undefined
+  // Read by useFlowRuntime.ts's poll handler and by the "[Comprador] Pagamento concluído"
+  // screen (@{node:...comprovante}/@{node:...confirmedDate}) once estado reaches PAGO.
+  comprovante?: string | undefined
+  confirmedDate?: string | undefined
 }
 
 function formatCurrency (value: number): string {
@@ -44,18 +51,13 @@ export class ConsultaDebitosService {
     const cpf = extractCpfFromToken(token)
     const auth = { token, cpf }
 
-    const tdvResult = await this.client.buscaTdv(auth, input.codigoTransferencia)
-
-    // Only force a new QR code the first time (no qrCode on the TDV yet). The app polls this
-    // same endpoint every 5s (useFlowRuntime.ts) to check payment status — forcing again on
-    // every poll would generate a brand new QR/PIX charge each time, invalidating the one the
-    // buyer already scanned. See detran-app-kotlin's PagamentoPixTdvScreen.kt, which forces
-    // once via getQrCode then only checks status via getQrCodeStatus(forcarNovo=false).
-    const forcarNovo = !tdvResult?.result?.qrCode
-
-    const [initialDebitosResult, initialPixResult] = await Promise.all([
+    // ServiceNow's forcarNovo is idempotent on its end — it only actually issues a new QR/PIX
+    // charge if the existing one is expired, otherwise it just returns the current one. So this
+    // is always safe to pass as true, whether this is the first fetch or a later poll.
+    const [tdvResult, initialDebitosResult, initialPixResult] = await Promise.all([
+      this.client.buscaTdv(auth, input.codigoTransferencia),
       this.client.buscaDebitosTdv(auth, input.codigoTransferencia),
-      this.client.buscaPixQrCodeTdv(auth, input.codigoTransferencia, forcarNovo)
+      this.client.buscaPixQrCodeTdv(auth, input.codigoTransferencia, true)
     ])
 
     let debitosResult = initialDebitosResult
@@ -65,7 +67,7 @@ export class ConsultaDebitosService {
       await sleep(POLL_INTERVAL_MS)
       const [polledDebitos, polledPix] = await Promise.all([
         debitosResult ?? this.client.buscaDebitosTdv(auth, input.codigoTransferencia),
-        pixResult ?? this.client.buscaPixQrCodeTdv(auth, input.codigoTransferencia, false)
+        pixResult ?? this.client.buscaPixQrCodeTdv(auth, input.codigoTransferencia, true)
       ])
       debitosResult = polledDebitos
       pixResult = polledPix
@@ -89,9 +91,11 @@ export class ConsultaDebitosService {
       taxaTransferencia: formatCurrency(taxaTransferencia),
       taxaLicenciamento: formatCurrency(taxaLicenciamento),
       totalDebitos: formatCurrency(totalDebitos),
-      pixQrCode: pixResult?.result?.qrCode,
-      pixExpiracao: pixResult?.result?.dataExpiracaoQRCode,
-      estado: estadoQRCode !== undefined ? Number(estadoQRCode) : undefined
+      qrCode: pixResult?.result?.qrCode,
+      expiresAt: pixResult?.result?.dataExpiracaoQRCode,
+      estado: estadoQRCode !== undefined ? Number(estadoQRCode) : undefined,
+      comprovante: pixResult?.result?.idPagamentoQRCode || undefined,
+      confirmedDate: pixResult?.result?.dataPagamentoQRCode || undefined
     }
   }
 }
