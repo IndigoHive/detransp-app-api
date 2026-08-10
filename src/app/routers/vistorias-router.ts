@@ -10,14 +10,16 @@ const DOCUMENT_PATTERN = /^(?:\d{11}|\d{14})$/
 const VISTORIA_TOKEN_PATTERN = /^[A-Z0-9]{4}(?:-[A-Z0-9]{4}){3}$/
 const DOC_PROPRIETARIO_BY_PAYMENT_LABEL = {
   'Meus pagamentos': false,
-  'Meus veiculos': true
+  'Meus veiculos': true,
+  'Meus Veiculos': true,
+  'Meus Veículos': true
 } as const
 
-function asNonEmptyString(value: unknown): string | undefined {
+function asNonEmptyString (value: unknown): string | undefined {
   return typeof value === 'string' && value.trim() ? value.trim() : undefined
 }
 
-export function getDocProprietarioByPaymentLabel(label: string | undefined): boolean | undefined {
+export function getDocProprietarioByPaymentLabel (label: string | undefined): boolean | undefined {
   if (!label || !(label in DOC_PROPRIETARIO_BY_PAYMENT_LABEL)) {
     return undefined
   }
@@ -144,7 +146,7 @@ export function vistoriasRouter (): Router {
       throw BadRequest('Documento inválido.')
     }
     if (docProprietario === undefined) {
-      throw BadRequest('docProprietario deve ser Meus pagamentos ou Meus veiculos.')
+      throw BadRequest('docProprietario deve ser Meus pagamentos ou Meus Veículos.')
     }
 
     const service = req.scope.resolve('listaPagamentosVistoriaService')
