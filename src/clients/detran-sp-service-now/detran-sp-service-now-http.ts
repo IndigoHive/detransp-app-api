@@ -129,6 +129,7 @@ export class DetranSpServiceNowHttp {
             status: error.response?.status,
             errorCode: error.code,
             errorMessage: error.message,
+            transactionId: error.response?.headers?.['x-transaction-id'],
           },
           'ServiceNow HTTP error'
         )
