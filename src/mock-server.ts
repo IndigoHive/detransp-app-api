@@ -843,13 +843,19 @@ app.post('/api/tdv/criar-compra', (req, res) => {
     }
   }
 
-  res.json({
-    proximaAcao: 'aviso_pagamento',
-    estado: '7',
-    codigoTransferencia: 'TDV-MOCK-NEW',
-    vehicle,
-    nomeComprador: body.nomeComprador || 'Maria Compradora',
-  })
+  const nomeComprador = body.nomeComprador || 'Maria Compradora'
+  const codigoTransferencia = 'TDV-MOCK-NEW'
+
+  // Uncomment one return to test each pós-endereço path:
+  return res.json({ proximaAcao: 'aviso_pagamento', estado: '7', codigoTransferencia, vehicle, nomeComprador })
+  // return res.json({ proximaAcao: 'pagamento_confirmado', estado: '8', codigoTransferencia, vehicle, nomeComprador })
+  // return res.json({ proximaAcao: 'concluido', estado: '9', codigoTransferencia, vehicle, nomeComprador })
+  // return res.json({ proximaAcao: 'pagamento_pendente', detail: 'Pagamento de taxa não localizado', codigoTransferencia, vehicle, nomeComprador })
+  // return res.json({ proximaAcao: 'vistoria_pagamento_pendentes', detail: 'Pagamento de taxa não localizado,Laudo de vistoria não localizado', codigoTransferencia, vehicle })
+  // return res.json({ proximaAcao: 'administrativa_pendente', detail: 'Veículo com bloqueio - Baixa permanente', codigoTransferencia, vehicle })
+  // return res.json({ proximaAcao: 'judicial_pendente', detail: 'Veículo com Restrição Judicial', codigoTransferencia, vehicle })
+  // return res.json({ proximaAcao: 'administrativa_judicial_pendentes', detail: 'Veículo com bloqueio - Baixa permanente,Veículo com Restrição Judicial', codigoTransferencia, vehicle })
+  // return res.json({ showSnackbar: { variant: 'error', title: 'Erro', description: 'Estado da transferência inválido para continuar' } })
 })
 
 app.post('/api/tdv/valida-assinatura', (req, res) => {
