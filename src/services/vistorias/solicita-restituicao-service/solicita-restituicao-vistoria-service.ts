@@ -2,7 +2,7 @@ import type { DetranSpServiceNowVistoriasClient } from '../../../clients/detran-
 import type { VistoriasAuth } from '../types'
 
 export type SolicitaRestituicaoVistoriaOutput =
-  | { success: true, idRestituicao: string }
+  | { success: true, status: 'completed' | 'processing', idRestituicao: string }
   | {
     success: false
     idRestituicao: null
@@ -56,28 +56,22 @@ export class SolicitaRestituicaoVistoriaService {
     auth: VistoriasAuth,
     idRestituicao: string
   ): Promise<SolicitaRestituicaoVistoriaOutput> {
-    let lastMessage: string | undefined
-
     for (let attempt = 1; attempt <= this.maxAttempts; attempt++) {
       try {
         const result = await this.client.consultaComprovanteRestituicao(auth, idRestituicao)
         const response = result?.result
 
         if (response?.success) {
-          return { success: true, idRestituicao }
+          return { success: true, status: 'completed', idRestituicao }
         }
-
-        lastMessage = response?.message
-      } catch (error) {
-        lastMessage = error instanceof Error ? error.message : undefined
-      }
+      } catch {}
 
       if (attempt < this.maxAttempts) {
         await this.wait()
       }
     }
 
-    return this.failure(lastMessage ?? 'O comprovante da restituição não ficou disponível a tempo.')
+    return { success: true, status: 'processing', idRestituicao }
   }
 
   private async wait (): Promise<void> {
