@@ -44,6 +44,9 @@ export class ConsultaVeiculoDebitosService {
 
     // TEMP DEBUG — remove after this session. Always-on (not gated by
     // LOG_LEVEL) per request, to inspect buscaVeiculo's raw response live.
+    // `String(reason)` used to collapse a DetranSpServiceNowDebRestrError down
+    // to just "Name: message", dropping the raw ServiceNow `type`/`responseData`
+    // that are the whole point of this debug log — log them explicitly instead.
     this.logger.warn(
       {
         action: 'temp-debug-consulta-veiculo',
@@ -52,7 +55,18 @@ export class ConsultaVeiculoDebitosService {
         status: veiculoSettled.status,
         ...(veiculoSettled.status === 'fulfilled'
           ? { raw: veiculoSettled.value }
-          : { reason: String(veiculoSettled.reason) })
+          : veiculoSettled.reason instanceof DetranSpServiceNowDebRestrError
+            ? {
+                errorName: veiculoSettled.reason.name,
+                errorType: veiculoSettled.reason.type,
+                errorMessage: veiculoSettled.reason.message,
+                responseData: veiculoSettled.reason.responseData
+              }
+            : {
+                errorName: veiculoSettled.reason?.name,
+                errorMessage: veiculoSettled.reason?.message,
+                errorStack: veiculoSettled.reason?.stack
+              })
       },
       'TEMP DEBUG buscaVeiculo raw response'
     )
