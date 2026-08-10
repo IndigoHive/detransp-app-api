@@ -25,7 +25,7 @@ export function getDocProprietarioByPaymentLabel(label: string | undefined): boo
   return DOC_PROPRIETARIO_BY_PAYMENT_LABEL[label as keyof typeof DOC_PROPRIETARIO_BY_PAYMENT_LABEL]
 }
 
-function getAuth(req: Request): VistoriasAuth {
+function getAuth (req: Request): VistoriasAuth {
   if (!req.session) {
     throw Unauthorized('Sessão não encontrada.')
   }
@@ -40,7 +40,7 @@ function getAuth(req: Request): VistoriasAuth {
   return { token, cpf }
 }
 
-export function vistoriasRouter(): Router {
+export function vistoriasRouter (): Router {
   const router = Router()
 
   router.post('/veiculos/verificar', async (req, res) => {
@@ -48,7 +48,7 @@ export function vistoriasRouter(): Router {
     const placa = asNonEmptyString(req.body?.placa)
     const renavam = asNonEmptyString(req.body?.renavam)
     const tipoProcesso = asNonEmptyString(req.body?.tipoProcesso)
-    const outroProcesso = asNonEmptyString(req.body?.outroProcesso)
+    const outroProcesso = getApplicableOtherProcess(tipoProcesso, asNonEmptyString(req.body?.outroProcesso))
 
     if (!placa || !renavam || !tipoProcesso) {
       throw BadRequest('Campos obrigatórios ausentes: placa, renavam e tipoProcesso.')
@@ -66,10 +66,6 @@ export function vistoriasRouter(): Router {
     if (tipoProcesso === 'Outros' && (!outroProcesso || !isOtherProcessLabel(outroProcesso))) {
       throw BadRequest('Outro processo inválido ou ausente.')
     }
-    if (tipoProcesso !== 'Outros' && outroProcesso) {
-      throw BadRequest('outroProcesso somente pode ser informado para o tipo Outros.')
-    }
-
     const service = req.scope.resolve('verificaVeiculoVistoriaService')
     const result = await service.run({
       ...auth,
@@ -200,4 +196,8 @@ export function vistoriasRouter(): Router {
   })
 
   return router
+}
+
+export function getApplicableOtherProcess (tipoProcesso: string | undefined, outroProcesso: string | undefined) {
+  return tipoProcesso === 'Outros' ? outroProcesso : undefined
 }
