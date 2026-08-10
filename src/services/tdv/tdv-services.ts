@@ -14,6 +14,7 @@ import { ConfirmarIntencaoVendaService } from './confirmar-intencao-venda'
 import { ValidaAssinaturaService } from './valida-assinatura'
 import { ConsultaDebitosService } from './consulta-debitos'
 import { BuscaPixService } from './busca-pix'
+import { BuscaEnderecoService } from './busca-endereco'
 import { ProvaVidaService } from './prova-vida'
 
 export type TdvServices = {
@@ -32,6 +33,7 @@ export type TdvServices = {
   validaAssinaturaService: ValidaAssinaturaService
   consultaDebitosService: ConsultaDebitosService
   buscaPixService: BuscaPixService
+  buscaEnderecoService: BuscaEnderecoService
   provaVidaService: ProvaVidaService
 }
 
@@ -52,6 +54,7 @@ export function getTdvRegistrations (): Required<NameAndRegistrationPair<TdvServ
     validaAssinaturaService: asClass(ValidaAssinaturaService).scoped(),
     consultaDebitosService: asClass(ConsultaDebitosService).scoped(),
     buscaPixService: asClass(BuscaPixService).scoped(),
+    buscaEnderecoService: asClass(BuscaEnderecoService).scoped(),
     provaVidaService: asClass(ProvaVidaService).scoped(),
   }
 }

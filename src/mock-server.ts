@@ -870,6 +870,37 @@ app.get('/api/tdv/consulta-debitos', (req, res) => {
   })
 })
 
+app.get('/api/tdv/enderecos/:cep', (req, res) => {
+  res.json({
+    result: {
+      cep: req.params.cep?.replace(/\D/g, '') || '08060283',
+      bairro: 'Vila Jacuí',
+      tipoLogradouro: 'Rua',
+      endereco: 'Aulide Carini',
+      complemento: '',
+      tipoLogradouroAbrev: 'R',
+      enderecoAbrev: 'R Aulide Carini',
+      tipoLogradouroAbrevDNE: 'R',
+      localidade: 'São Paulo',
+      estado: 'São Paulo',
+      uf: 'SP',
+      numeroIBGE: 3550308,
+      logradouro: null,
+      cdTipoCEP: 1,
+      tipoCEP: 'CEP Padrão',
+      municipio: 'São Paulo',
+      tipoLocalidade: null,
+      codigoMunicipio: 9668,
+      codigoLocalRel: 9668,
+      latitude: null,
+      longitude: null,
+      codigoDne: 580843,
+      tipoLogradouroDne: 81,
+      codigoBairro: 26812
+    }
+  })
+})
+
 const tdvPixPayments: Record<string, {
   qrCode: string
   expiresAt: string
@@ -983,6 +1014,7 @@ app.listen(PORT, () => {
   console.log('    POST /api/tdv/valida-assinatura')
   console.log('    POST /api/tdv/prova-vida')
   console.log('    GET  /api/tdv/consulta-debitos')
+  console.log('    GET  /api/tdv/enderecos/:cep')
   console.log('    GET  /api/tdv/pix')
   console.log('')
 })

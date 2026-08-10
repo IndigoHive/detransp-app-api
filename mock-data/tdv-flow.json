@@ -2603,7 +2603,7 @@
             "name": "cep",
             "data": {
               "label": "CEP",
-              "required": true,
+              "required": false,
               "placeholder": "@{node:n_f5aacdb3ca97.result.cep}"
             }
           },
@@ -2613,7 +2613,7 @@
             "name": null,
             "data": {
               "label": "Cidade",
-              "required": true,
+              "required": false,
               "helperText": "",
               "placeholder": "@{node:n_f5aacdb3ca97.result.localidade}",
               "showClearButton": false
@@ -2625,7 +2625,7 @@
             "name": "bairro",
             "data": {
               "label": "Bairro",
-              "required": true,
+              "required": false,
               "placeholder": "@{node:n_f5aacdb3ca97.result.bairro}"
             }
           },
@@ -2635,7 +2635,7 @@
             "name": "logradouro",
             "data": {
               "label": "Logradouro",
-              "required": true,
+              "required": false,
               "placeholder": "@{node:n_f5aacdb3ca97.result.endereco}"
             }
           },
@@ -2654,7 +2654,7 @@
             "name": "complemento",
             "data": {
               "label": "Complemento",
-              "required": true
+              "required": false
             }
           }
         ]
@@ -3088,229 +3088,6 @@
       }
     },
     {
-      "id": "s_bcde3f7a07cb",
-      "name": "TDV 4.0 (Origem 5)",
-      "content": {
-        "id": "c_e186dad27b84",
-        "type": "group",
-        "children": [
-          {
-            "id": "c_667410091048",
-            "type": "text_body",
-            "name": null,
-            "data": {
-              "text": "Confirme as informações para a venda do veículo"
-            }
-          },
-          {
-            "id": "c_840e1d9a2540",
-            "type": "card",
-            "name": null,
-            "children": [
-              {
-                "id": "c_2697c43dafb9",
-                "type": "text_heading",
-                "name": null,
-                "data": {
-                  "text": "Dados da empresa que está comprando"
-                }
-              },
-              {
-                "id": "c_c19319d5bba9",
-                "type": "label_text",
-                "name": null,
-                "data": {
-                  "text": "",
-                  "label": "CNPJ"
-                }
-              },
-              {
-                "id": "c_4260420c5714",
-                "type": "label_text",
-                "name": null,
-                "data": {
-                  "text": "Novo texto",
-                  "label": "Empresa"
-                }
-              },
-              {
-                "id": "c_b91d42e2a791",
-                "type": "label_text",
-                "name": null,
-                "data": {
-                  "text": "Novo texto",
-                  "label": "E-mail"
-                }
-              },
-              {
-                "id": "c_ab87215e8b60",
-                "type": "label_text",
-                "name": null,
-                "data": {
-                  "text": "Novo texto",
-                  "label": "Endereço"
-                }
-              },
-              {
-                "id": "c_e71f32c1426e",
-                "type": "icon_text",
-                "name": null,
-                "data": {
-                  "icon": "info",
-                  "text": "Se os dados estiverem incorretos, cancele a solicitação e ajuste as informações antes de prosseguir.",
-                  "color": "info",
-                  "variant": "horizontal",
-                  "alignment": "start",
-                  "fontWeight": "normal"
-                }
-              }
-            ],
-            "data": {}
-          },
-          {
-            "id": "c_b5f3c3e5e639",
-            "type": "card",
-            "name": null,
-            "children": [
-              {
-                "id": "c_a38812e4f7be",
-                "type": "text_heading",
-                "name": null,
-                "data": {
-                  "text": "Dados do veículo"
-                }
-              },
-              {
-                "id": "c_9cc03144be4f",
-                "type": "label_text",
-                "name": null,
-                "data": {
-                  "text": "Novo texto",
-                  "label": "RENAVAM"
-                }
-              },
-              {
-                "id": "c_44cb3b33446b",
-                "type": "text_label",
-                "name": null,
-                "data": {
-                  "text": "Placa"
-                }
-              },
-              {
-                "id": "c_7cc13424c2ba",
-                "type": "vehicle_plate",
-                "name": null,
-                "data": {
-                  "size": "sm",
-                  "align": "left",
-                  "plate": "EXC1A22",
-                  "variant": "default"
-                }
-              },
-              {
-                "id": "c_4dc7a1cea9f5",
-                "type": "label_text",
-                "name": null,
-                "data": {
-                  "text": "Novo texto",
-                  "label": "Ano"
-                }
-              },
-              {
-                "id": "c_c3a8c2675bbb",
-                "type": "label_text",
-                "name": null,
-                "data": {
-                  "text": "Novo texto",
-                  "label": "Marca"
-                }
-              },
-              {
-                "id": "c_7df582d0cf58",
-                "type": "label_text",
-                "name": null,
-                "data": {
-                  "text": "Novo texto",
-                  "label": "Modelo"
-                }
-              },
-              {
-                "id": "c_f6b255413557",
-                "type": "label_text",
-                "name": null,
-                "data": {
-                  "text": "Novo texto",
-                  "label": "Cor"
-                }
-              },
-              {
-                "id": "c_352f9cf19e3c",
-                "type": "label_text",
-                "name": null,
-                "data": {
-                  "text": "Novo texto",
-                  "label": "Chassi"
-                }
-              },
-              {
-                "id": "c_ecc1e3aed49d",
-                "type": "icon_text",
-                "name": null,
-                "data": {
-                  "icon": "info",
-                  "text": "Se os dados estiverem incorretos, cancele a solicitação e ajuste as informações antes de prosseguir.",
-                  "color": "info",
-                  "variant": "horizontal",
-                  "alignment": "start",
-                  "fontWeight": "normal"
-                }
-              }
-            ],
-            "data": {}
-          }
-        ]
-      },
-      "footer": {
-        "id": "c_ea1daf246bab",
-        "type": "group",
-        "children": [
-          {
-            "id": "c_0d67464581d2",
-            "type": "button",
-            "name": null,
-            "data": {
-              "label": "Confirmar"
-            }
-          },
-          {
-            "id": "c_5b48714fb19c",
-            "type": "button",
-            "name": null,
-            "data": {
-              "label": "Cancelar venda",
-              "variant": "outline"
-            }
-          }
-        ]
-      },
-      "navbar": {
-        "id": "7b82ee27-4686-4b35-bc54-3cff5cb9a01a",
-        "data": {
-          "title": "Informações sobre a venda",
-          "showReturn": true
-        },
-        "name": null,
-        "type": "nav_bar"
-      },
-      "data": {
-        "position": {
-          "x": 12056,
-          "y": 988
-        }
-      }
-    },
-    {
       "id": "s_800e39d059b5",
       "name": "Termo para venda",
       "content": {
@@ -3718,7 +3495,7 @@
                   }
                 ],
                 "data": {
-                  "source": "@{node:n_5ffab74d65f1.debitos}"
+                  "source": "@{node:n_42d9a1904282.debitos}"
                 }
               },
               {
@@ -3726,7 +3503,7 @@
                 "type": "label_text",
                 "name": null,
                 "data": {
-                  "text": "@{node:n_42d9a1904282.result.stringValorTotal}",
+                  "text": "@{node:n_42d9a1904282.totalDebitos}",
                   "label": "Valor total"
                 }
               }
@@ -3744,7 +3521,7 @@
             "type": "footnote",
             "name": null,
             "data": {
-              "text": "@{node:n_42d9a1904282.result.stringValorTotal}",
+              "text": "@{node:n_42d9a1904282.totalDebitos}",
               "label": "Total de débitos"
             }
           },
@@ -6088,7 +5865,7 @@
         },
         "method": "POST",
         "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/criar-compra",
-        "body": "{\n  \"placaVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.plate}\",\n  \"renavamVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.renavam}\",\n  \"origem\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.origem}\",\n  \"nomeVendedor\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeVendedor}\",\n  \"codigoVendedor\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoVendedor}\",\n  \"emailVendedor\": \"\",\n  \"cepComprador\": \"@{screen:s_7e2a1c9b4f08.comp:c_4b8e0d61a2f3.value}\",\n  \"logradouroComprador\": \"@{screen:s_7e2a1c9b4f08.comp:c_a8f3e21b9c40.value}\",\n  \"numeroComprador\": \"@{screen:s_7e2a1c9b4f08.comp:c_b7d4e12a8f31.value}\",\n  \"complementoComprador\": \"@{screen:s_7e2a1c9b4f08.comp:c_c6e5f03b7a22.value}\",\n  \"bairroComprador\": \"@{screen:s_7e2a1c9b4f08.comp:c_d5f6a14c6b13.value}\",\n  \"ativa\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.ativa}\",\n  \"estado\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.estado}\",\n  \"origemComunicacaoVendaVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.origemComunicacaoVendaVeiculo}\",\n  \"codigoTransferenciaVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoTransferencia}\",\n  \"descricaoMarcaVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.descricaoMarcaVeiculo}\",\n  \"codigoComprador\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoComprador}\",\n  \"nomeComprador\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}\",\n  \"nomeMunicipioVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeMunicipioVeiculo}\",\n  \"nomeMunicipioComprador\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeMunicipioComprador}\",\n  \"chassiVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.chassiVeiculo}\",\n  \"kmVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.kmVeiculo}\",\n  \"kmVistoriadaVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.kmVistoriadaVeiculo}\"\n}",
+        "body": "{\n  \"placaVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.plate}\",\n  \"renavamVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.renavam}\",\n  \"origem\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.origem}\",\n  \"nomeVendedor\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeVendedor}\",\n  \"codigoVendedor\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoVendedor}\",\n  \"emailVendedor\": \"\",\n  \"cepComprador\": \"@{node:n_f5aacdb3ca97.result.cep}\",\n  \"logradouroComprador\": \"@{node:n_f5aacdb3ca97.result.endereco}\",\n  \"numeroComprador\": \"@{screen:s_7e2a1c9b4f08.comp:c_b7d4e12a8f31.value}\",\n  \"complementoComprador\": \"@{screen:s_7e2a1c9b4f08.comp:c_c6e5f03b7a22.value}\",\n  \"bairroComprador\": \"@{node:n_f5aacdb3ca97.result.bairro}\",\n  \"ativa\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.ativa}\",\n  \"estado\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.estado}\",\n  \"origemComunicacaoVendaVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.origemComunicacaoVendaVeiculo}\",\n  \"codigoTransferenciaVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoTransferencia}\",\n  \"descricaoMarcaVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.descricaoMarcaVeiculo}\",\n  \"codigoComprador\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoComprador}\",\n  \"nomeComprador\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}\",\n  \"nomeMunicipioVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeMunicipioVeiculo}\",\n  \"nomeMunicipioComprador\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeMunicipioComprador}\",\n  \"chassiVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.chassiVeiculo}\",\n  \"kmVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.kmVeiculo}\",\n  \"kmVistoriadaVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.kmVistoriadaVeiculo}\"\n}",
         "responseExamples": [
           {
             "id": "ex-criar-compra-7",
@@ -6215,25 +5992,6 @@
       }
     },
     {
-      "id": "n_0b08d7533e40",
-      "type": "http_node",
-      "name": "FAKE REQUEST",
-      "data": {
-        "position": {
-          "x": 7404,
-          "y": 100
-        },
-        "method": "GET",
-        "responseExamples": [
-          {
-            "id": "b1ba07f0-9924-4443-91d3-52deb0e1f704",
-            "name": "Novo exemplo",
-            "value": "{\n  \"result\": {\n    \"codigo\": \"123456\",\n    \"nome\": \"João da Silva\",\n    \"email\": \"joao.silva@email.com\",\n    \"bairro\": \"Centro\",\n    \"logradouro\": \"Rua das Flores\",\n    \"numero\": \"100\",\n    \"complemento\": \"Apto 202\",\n    \"codigoRenavam\": \"987654321\",\n    \"placa\": \"ABC-1234\",\n    \"anoModelo\": \"2022\",\n    \"marca\": \"Toyota\",\n    \"cor\": \"Preto\",\n    \"chassi\": \"9BWZZZ377VT004251\",\n    \"origem\": \"5\"\n  }\n}"
-          }
-        ]
-      }
-    },
-    {
       "id": "n_8626ca63ef8e",
       "type": "waypoint_node",
       "name": null,
@@ -6247,7 +6005,7 @@
     {
       "id": "n_42d9a1904282",
       "type": "http_node",
-      "name": "FAKE REQUEST",
+      "name": "Consulta Débitos",
       "data": {
         "position": {
           "x": 9536,
@@ -6255,11 +6013,13 @@
         },
         "responseExamples": [
           {
-            "id": "d7b3a580-3e66-498c-b9b1-6080c1aca254",
-            "name": "Pagamento",
-            "value": "{\n  \"result\": {\n    \"valorTotal\": 761.1300000000001,\n    \"stringValorTotal\":  \"R$ 761,13\",\n    \"stringTransferencia\":  \"R$ 272,27\",\n    \"stringLicenciamento\": \"R$ 160,22\",\n    \"stringMulta\": \"R$ 131,46\",\n    \"debitos\": [\n      {\n        \"descricao\": \"Transferência de Veículo\",\n        \"valor\": 272.27\n      },\n      {\n        \"descricao\": \"Licenciamento\",\n        \"valor\": 160.22\n      },\n      {\n        \"descricao\": \"Multa MUNICIPAL 2550 de 22/12/2023\",\n        \"valor\": 197.18\n      },\n      {\n        \"descricao\": \"Multa MUNICIPAL 2550 de 22/12/2023\",\n        \"valor\": 131.46\n      }\n    ]\n  }\n}"
+            "id": "662e4b72-b520-47e2-a222-bd21ed66959a",
+            "name": "Com débitos",
+            "value": "{\n  \"nomeComprador\": \"Carlos da Silva\",\n  \"debitos\": [\n    { \"descricao\": \"Transferência de Veículo\", \"valor\": 243.77, \"valorFormatado\": \"R$ 243,77\" },\n    { \"descricao\": \"Licenciamento\", \"valor\": 120.50, \"valorFormatado\": \"R$ 120,50\" }\n  ],\n  \"valorTotal\": 364.27,\n  \"taxaTransferencia\": \"R$ 243,77\",\n  \"taxaLicenciamento\": \"R$ 120,50\",\n  \"totalDebitos\": \"R$ 364,27\"\n}"
           }
-        ]
+        ],
+        "method": "GET",
+        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/consulta-debitos?codigoTransferencia=@{node:n_2d9e4b6a8c17.codigoTransferencia ?? node:n_6c4d8e2a1b90.codigoTransferencia ?? node:n_90a9d6db5f4b.codigoTransferencia}"
       }
     },
     {
@@ -6305,17 +6065,6 @@
       }
     },
     {
-      "id": "n_d2a9200c8ddd",
-      "type": "waypoint_node",
-      "name": null,
-      "data": {
-        "position": {
-          "x": 5824,
-          "y": 3436
-        }
-      }
-    },
-    {
       "id": "n_f5aacdb3ca97",
       "type": "http_node",
       "name": "Busca endereço",
@@ -6330,7 +6079,9 @@
             "name": "Endereço retornado",
             "value": "{\n  \"result\": {\n    \"cep\": \"08060283\",\n    \"bairro\": \"Vila Jacuí\",\n    \"tipoLogradouro\": \"Rua\",\n    \"endereco\": \"Aulide Carini\",\n    \"complemento\": \"\",\n    \"tipoLogradouroAbrev\": \"R\",\n    \"enderecoAbrev\": \"R Aulide Carini\",\n    \"tipoLogradouroAbrevDNE\": \"R\",\n    \"localidade\": \"São Paulo\",\n    \"estado\": \"São Paulo\",\n    \"uf\": \"SP\",\n    \"numeroIBGE\": 3550308,\n    \"logradouro\": null,\n    \"cdTipoCEP\": 1,\n    \"tipoCEP\": \"CEP Padrão\",\n    \"municipio\": \"São Paulo\",\n    \"tipoLocalidade\": null,\n    \"codigoMunicipio\": 9668,\n    \"codigoLocalRel\": 9668,\n    \"latitude\": null,\n    \"longitude\": null,\n    \"codigoDne\": 580843,\n    \"tipoLogradouroDne\": 81,\n    \"codigoBairro\": 26812\n  }\n}"
           }
-        ]
+        ],
+        "method": "GET",
+        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/enderecos/@{screen:s_85ba93c2e996.comp:c_6a5c088eac53.value}"
       }
     },
     {
@@ -7006,12 +6757,6 @@
       "targetHandle": "input"
     },
     {
-      "sourceId": "n_0b08d7533e40",
-      "targetId": "s_bcde3f7a07cb",
-      "sourceHandle": "output",
-      "targetHandle": "input"
-    },
-    {
       "sourceId": "s_d1720681ec27",
       "targetId": "n_4a9529e3107c",
       "sourceHandle": "navbar_back",
@@ -7207,6 +6952,12 @@
       "sourceId": "n_86edd585a829",
       "targetId": "s_c482ac86f650",
       "sourceHandle": "right-source",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_7e2a1c9b4f08",
+      "targetId": "s_c482ac86f650",
+      "sourceHandle": "c_9d3f7a1e5b20",
       "targetHandle": "input"
     }
   ]

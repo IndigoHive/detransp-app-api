@@ -102,6 +102,13 @@ export function tdvRouter (): Router {
     res.status(200).json(result)
   })
 
+  router.get('/enderecos/:cep', async (req, res) => {
+    const { accessToken } = req.session!
+    const service = req.scope.resolve('buscaEnderecoService')
+    const result = await service.run(accessToken, { cep: req.params.cep })
+    res.status(200).json(result)
+  })
+
   router.get('/pix', async (req, res) => {
     const { accessToken } = req.session!
     const service = req.scope.resolve('buscaPixService')
