@@ -1,4 +1,3 @@
-import type { Logger } from 'pino'
 import type {
   BuscaVeiculoResponse,
   DebitoIncluded,
@@ -26,12 +25,10 @@ export type ConsultaVeiculoDebitosParams = DebRestrVeiculoAuth & {
 export class ConsultaVeiculoDebitosService {
   private readonly debRestrClient: DetranSpServiceNowDebRestrClient
   private readonly pgtoClient: DetranSpServiceNowPgtoClient
-  private readonly logger: Logger
 
-  constructor (debRestrClient: DetranSpServiceNowDebRestrClient, pgtoClient: DetranSpServiceNowPgtoClient, logger: Logger) {
+  constructor (debRestrClient: DetranSpServiceNowDebRestrClient, pgtoClient: DetranSpServiceNowPgtoClient) {
     this.debRestrClient = debRestrClient
     this.pgtoClient = pgtoClient
-    this.logger = logger
   }
 
   async run (params: ConsultaVeiculoDebitosParams): Promise<ConsultaVeiculoDebitosResult> {
@@ -41,21 +38,6 @@ export class ConsultaVeiculoDebitosService {
       this.debRestrClient.buscaVeiculo(auth, auth.renavam, { includeProcedencia: representacao }),
       this.pgtoClient.listaDebitos(auth)
     ])
-
-    // TEMP DEBUG — remove after this session. Always-on (not gated by
-    // LOG_LEVEL) per request, to inspect buscaVeiculo's raw response live.
-    this.logger.warn(
-      {
-        action: 'temp-debug-consulta-veiculo',
-        renavam: auth.renavam,
-        placa: auth.placa,
-        status: veiculoSettled.status,
-        ...(veiculoSettled.status === 'fulfilled'
-          ? { raw: veiculoSettled.value }
-          : { reason: String(veiculoSettled.reason) })
-      },
-      'TEMP DEBUG buscaVeiculo raw response'
-    )
 
     if (veiculoSettled.status === 'rejected') {
       const err = veiculoSettled.reason
