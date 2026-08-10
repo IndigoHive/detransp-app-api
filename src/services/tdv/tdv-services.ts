@@ -10,7 +10,6 @@ import { ConsultaComprasService } from './consulta-compras'
 import { ConfirmarCompraService } from './confirmar-compra'
 import { ConfirmarEnderecoService } from './confirmar-endereco'
 import { CriarCompraService } from './criar-compra'
-import { BuscaDetalheCompraService } from './busca-detalhe-compra'
 import { ConfirmarIntencaoVendaService } from './confirmar-intencao-venda'
 import { ValidaAssinaturaService } from './valida-assinatura'
 import { ConsultaDebitosService } from './consulta-debitos'
@@ -29,7 +28,6 @@ export type TdvServices = {
   confirmarCompraService: ConfirmarCompraService
   confirmarEnderecoService: ConfirmarEnderecoService
   criarCompraService: CriarCompraService
-  buscaDetalheCompraService: BuscaDetalheCompraService
   confirmarIntencaoVendaService: ConfirmarIntencaoVendaService
   validaAssinaturaService: ValidaAssinaturaService
   consultaDebitosService: ConsultaDebitosService
@@ -50,7 +48,6 @@ export function getTdvRegistrations (): Required<NameAndRegistrationPair<TdvServ
     confirmarCompraService: asClass(ConfirmarCompraService).scoped(),
     confirmarEnderecoService: asClass(ConfirmarEnderecoService).scoped(),
     criarCompraService: asClass(CriarCompraService).scoped(),
-    buscaDetalheCompraService: asClass(BuscaDetalheCompraService).scoped(),
     confirmarIntencaoVendaService: asClass(ConfirmarIntencaoVendaService).scoped(),
     validaAssinaturaService: asClass(ValidaAssinaturaService).scoped(),
     consultaDebitosService: asClass(ConsultaDebitosService).scoped(),

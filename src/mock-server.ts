@@ -842,19 +842,6 @@ app.post('/api/tdv/criar-compra', (req, res) => {
   })
 })
 
-app.get('/api/tdv/detalhe-compra', (req, res) => {
-  res.json({
-    enderecoComprador: 'Rua das Flores, 123, Jardim Paulista, 01310100',
-    cepComprador: '01310100',
-    logradouroComprador: 'Rua das Flores',
-    numeroComprador: '123',
-    complementoComprador: '',
-    bairroComprador: 'Jardim Paulista',
-    autodeclaracaoResidenciaComprador: 'Eu, Maria Compradora, inscrito no CPF sob o nº 123.456.789-01, declaro para os devidos fins que resido em Rua das Flores, 123, Jardim Paulista.',
-    nomeComprador: 'Maria Compradora',
-  })
-})
-
 app.post('/api/tdv/valida-assinatura', (req, res) => {
   res.json({
     valid: true,
@@ -993,7 +980,6 @@ app.listen(PORT, () => {
   console.log('    POST /api/tdv/confirmar-compra')
   console.log('    POST /api/tdv/confirmar-endereco')
   console.log('    POST /api/tdv/criar-compra')
-  console.log('    GET  /api/tdv/detalhe-compra')
   console.log('    POST /api/tdv/valida-assinatura')
   console.log('    POST /api/tdv/prova-vida')
   console.log('    GET  /api/tdv/consulta-debitos')

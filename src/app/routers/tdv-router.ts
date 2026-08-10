@@ -80,14 +80,6 @@ export function tdvRouter (): Router {
     res.status(200).json(result)
   })
 
-  router.get('/detalhe-compra', async (req, res) => {
-    const { accessToken } = req.session!
-    const service = req.scope.resolve('buscaDetalheCompraService')
-    const codigoTransferencia = req.query.codigoTransferencia as string
-    const result = await service.run(accessToken, { codigoTransferencia })
-    res.status(200).json(result)
-  })
-
   router.post('/confirmar-intencao-venda', async (req, res) => {
     const { accessToken } = req.session!
     const service = req.scope.resolve('confirmarIntencaoVendaService')
