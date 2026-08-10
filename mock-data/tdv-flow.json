@@ -3294,7 +3294,7 @@
         },
         "method": "POST",
         "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/valida-assinatura",
-        "body": "{\n  \"codigoTransferencia\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoTransferencia}\",\n  \"itiCode\": \"@{node:n_54e1a65041fa.code}\"\n}\n",
+        "body": "{\n  \"codigoTransferencia\": \"@{node:n_b824c7dd9350.codigoTransferencia}\",\n  \"itiCode\": \"@{node:n_54e1a65041fa.code}\"\n}\n",
         "responseExamples": [
           {
             "id": "bbf0c143-4114-42fc-b2e2-632fae3bef9d",
