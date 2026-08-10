@@ -576,39 +576,39 @@
                   "type": "Utilitario",
                   "plate": "BXG3U71",
                   "title": "VOLKS/GOL GTI 1.0",
-                  "status": "REGULAR",
                   "renavam": "00001002003",
                   "yearFab": "2014",
                   "yearMod": "2015",
                   "brandModel": "VOLKS/GOL GTI 1.0",
                   "lastLicensing": "03/12/2025",
-                  "licensingExpirationDate": "31/12/2025"
+                  "licensingExpirationDate": "31/12/2025",
+                  "licensingStatus": "REGULAR"
                 },
                 {
                   "id": "2",
                   "type": "Passeio",
                   "plate": "CED3J65",
                   "title": "ONIX LT - GM",
-                  "status": "A VENCER",
                   "renavam": "00002003004",
                   "yearFab": "2021",
                   "yearMod": "2022",
                   "brandModel": "ONIX LT - GM",
                   "lastLicensing": "15/01/2024",
-                  "licensingExpirationDate": "31/12/2024"
+                  "licensingExpirationDate": "31/12/2024",
+                  "licensingStatus": "A VENCER"
                 },
                 {
                   "id": "3",
                   "type": "Utilitario",
                   "plate": "RNI4Z30",
                   "title": "FIAT/UNO MILLE",
-                  "status": "VENCIDO",
                   "renavam": "00003004005",
                   "yearFab": "2008",
                   "yearMod": "2009",
                   "brandModel": "FIAT/UNO MILLE",
                   "lastLicensing": "20/08/2022",
-                  "licensingExpirationDate": "31/07/2023"
+                  "licensingExpirationDate": "31/07/2023",
+                  "licensingStatus": "VENCIDO"
                 }
               ]
             }
@@ -1117,9 +1117,9 @@
                 "id": "1",
                 "plate": "EXC1A22",
                 "title": "Veículo 1",
-                "status": "REGULAR",
                 "brandModel": "VOLKS/GOL GTI 1.0",
-                "licensingExpirationDate": "2024-12-31"
+                "licensingExpirationDate": "2024-12-31",
+                "licensingStatus": "REGULAR"
               }
             }
           }
@@ -1303,39 +1303,39 @@
                   "type": "Utilitario",
                   "plate": "BXG3U71",
                   "title": "VOLKS/GOL GTI 1.0",
-                  "status": "REGULAR",
                   "renavam": "00001002003",
                   "yearFab": "2014",
                   "yearMod": "2015",
                   "brandModel": "VOLKS/GOL GTI 1.0",
                   "lastLicensing": "03/12/2025",
-                  "licensingExpirationDate": "31/12/2025"
+                  "licensingExpirationDate": "31/12/2025",
+                  "licensingStatus": "REGULAR"
                 },
                 {
                   "id": "2",
                   "type": "Passeio",
                   "plate": "CED3J65",
                   "title": "ONIX LT - GM",
-                  "status": "A VENCER",
                   "renavam": "00002003004",
                   "yearFab": "2021",
                   "yearMod": "2022",
                   "brandModel": "ONIX LT - GM",
                   "lastLicensing": "15/01/2024",
-                  "licensingExpirationDate": "31/12/2024"
+                  "licensingExpirationDate": "31/12/2024",
+                  "licensingStatus": "A VENCER"
                 },
                 {
                   "id": "3",
                   "type": "Utilitario",
                   "plate": "RNI4Z30",
                   "title": "FIAT/UNO MILLE",
-                  "status": "VENCIDO",
                   "renavam": "00003004005",
                   "yearFab": "2008",
                   "yearMod": "2009",
                   "brandModel": "FIAT/UNO MILLE",
                   "lastLicensing": "20/08/2022",
-                  "licensingExpirationDate": "31/07/2023"
+                  "licensingExpirationDate": "31/07/2023",
+                  "licensingStatus": "VENCIDO"
                 }
               ]
             }
@@ -1468,9 +1468,9 @@
                 "id": "1",
                 "plate": "EXC1A22",
                 "title": "Veículo 1",
-                "status": "REGULAR",
                 "brandModel": "VOLKS/GOL GTI 1.0",
-                "licensingExpirationDate": "2024-12-31"
+                "licensingExpirationDate": "2024-12-31",
+                "licensingStatus": "REGULAR"
               }
             }
           }
@@ -1789,9 +1789,9 @@
                 "id": "1",
                 "plate": "EXC1A22",
                 "title": "Veículo 1",
-                "status": "REGULAR",
                 "brandModel": "VOLKS/GOL GTI 1.0",
-                "licensingExpirationDate": "2024-12-31"
+                "licensingExpirationDate": "2024-12-31",
+                "licensingStatus": "REGULAR"
               }
             }
           }
@@ -2036,9 +2036,9 @@
                 "id": "1",
                 "plate": "EXC1A22",
                 "title": "Veículo 1",
-                "status": "REGULAR",
                 "brandModel": "VOLKS/GOL GTI 1.0",
-                "licensingExpirationDate": "2024-12-31"
+                "licensingExpirationDate": "2024-12-31",
+                "licensingStatus": "REGULAR"
               }
             }
           },
@@ -2511,9 +2511,9 @@
                 "id": "1",
                 "plate": "EXC1A22",
                 "title": "Veículo 1",
-                "status": "REGULAR",
                 "brandModel": "VOLKS/GOL GTI 1.0",
-                "licensingExpirationDate": "2024-12-31"
+                "licensingExpirationDate": "2024-12-31",
+                "licensingStatus": "REGULAR"
               }
             }
           }
@@ -4138,9 +4138,9 @@
                 "id": "1",
                 "plate": "EXC1A22",
                 "title": "Veículo 1",
-                "status": "REGULAR",
                 "brandModel": "VOLKS/GOL GTI 1.0",
-                "licensingExpirationDate": "2024-12-31"
+                "licensingExpirationDate": "2024-12-31",
+                "licensingStatus": "REGULAR"
               }
             }
           }
@@ -4404,39 +4404,39 @@
                   "type": "Utilitario",
                   "plate": "BXG3U71",
                   "title": "VOLKS/GOL GTI 1.0",
-                  "status": "REGULAR",
                   "renavam": "00001002003",
                   "yearFab": "2014",
                   "yearMod": "2015",
                   "brandModel": "VOLKS/GOL GTI 1.0",
                   "lastLicensing": "03/12/2025",
-                  "licensingExpirationDate": "31/12/2025"
+                  "licensingExpirationDate": "31/12/2025",
+                  "licensingStatus": "REGULAR"
                 },
                 {
                   "id": "2",
                   "type": "Passeio",
                   "plate": "CED3J65",
                   "title": "ONIX LT - GM",
-                  "status": "A VENCER",
                   "renavam": "00002003004",
                   "yearFab": "2021",
                   "yearMod": "2022",
                   "brandModel": "ONIX LT - GM",
                   "lastLicensing": "15/01/2024",
-                  "licensingExpirationDate": "31/12/2024"
+                  "licensingExpirationDate": "31/12/2024",
+                  "licensingStatus": "A VENCER"
                 },
                 {
                   "id": "3",
                   "type": "Utilitario",
                   "plate": "RNI4Z30",
                   "title": "FIAT/UNO MILLE",
-                  "status": "VENCIDO",
                   "renavam": "00003004005",
                   "yearFab": "2008",
                   "yearMod": "2009",
                   "brandModel": "FIAT/UNO MILLE",
                   "lastLicensing": "20/08/2022",
-                  "licensingExpirationDate": "31/07/2023"
+                  "licensingExpirationDate": "31/07/2023",
+                  "licensingStatus": "VENCIDO"
                 }
               ]
             }
@@ -4869,7 +4869,7 @@
           {
             "id": "aec85839-8e5f-43c4-a716-86b9bf8897eb",
             "name": "Lista 3 veículos",
-            "value": "{\n  \"vehicles\": [\n    {\n      \"id\": \"1\",\n      \"title\": \"VOLKS/GOL GTI 1.0\",\n      \"plate\": \"BXG3U71\",\n      \"status\": \"REGULAR\",\n      \"licensingExpirationDate\": \"31/12/2025\",\n      \"type\": \"Utilitario\",\n      \"brandModel\": \"VOLKS/GOL GTI 1.0\",\n      \"renavam\": \"00001002003\",\n      \"lastLicensing\": \"03/12/2025\",\n      \"yearFab\": \"2014\",\n      \"yearMod\": \"2015\"\n    },\n    {\n      \"id\": \"2\",\n      \"title\": \"ONIX LT - GM\",\n      \"plate\": \"CED3J65\",\n      \"status\": \"A VENCER\",\n      \"licensingExpirationDate\": \"31/12/2024\",\n      \"type\": \"Passeio\",\n      \"brandModel\": \"ONIX LT - GM\",\n      \"renavam\": \"00002003004\",\n      \"lastLicensing\": \"15/01/2024\",\n      \"yearFab\": \"2021\",\n      \"yearMod\": \"2022\"\n    },\n    {\n      \"id\": \"3\",\n      \"title\": \"FIAT/UNO MILLE\",\n      \"plate\": \"RNI4Z30\",\n      \"status\": \"VENCIDO\",\n      \"licensingExpirationDate\": \"31/07/2023\",\n      \"type\": \"Utilitario\",\n      \"brandModel\": \"FIAT/UNO MILLE\",\n      \"renavam\": \"00003004005\",\n      \"lastLicensing\": \"20/08/2022\",\n      \"yearFab\": \"2008\",\n      \"yearMod\": \"2009\"\n    }\n  ]\n}"
+            "value": "{\n  \"vehicles\": [\n    {\n      \"id\": \"1\",\n      \"title\": \"VOLKS/GOL GTI 1.0\",\n      \"plate\": \"BXG3U71\",\n      \"licensingExpirationDate\": \"31/12/2025\",\n      \"type\": \"Utilitario\",\n      \"brandModel\": \"VOLKS/GOL GTI 1.0\",\n      \"renavam\": \"00001002003\",\n      \"lastLicensing\": \"03/12/2025\",\n      \"yearFab\": \"2014\",\n      \"yearMod\": \"2015\",\n      \"licensingStatus\": \"REGULAR\"\n    },\n    {\n      \"id\": \"2\",\n      \"title\": \"ONIX LT - GM\",\n      \"plate\": \"CED3J65\",\n      \"licensingExpirationDate\": \"31/12/2024\",\n      \"type\": \"Passeio\",\n      \"brandModel\": \"ONIX LT - GM\",\n      \"renavam\": \"00002003004\",\n      \"lastLicensing\": \"15/01/2024\",\n      \"yearFab\": \"2021\",\n      \"yearMod\": \"2022\",\n      \"licensingStatus\": \"A VENCER\"\n    },\n    {\n      \"id\": \"3\",\n      \"title\": \"FIAT/UNO MILLE\",\n      \"plate\": \"RNI4Z30\",\n      \"licensingExpirationDate\": \"31/07/2023\",\n      \"type\": \"Utilitario\",\n      \"brandModel\": \"FIAT/UNO MILLE\",\n      \"renavam\": \"00003004005\",\n      \"lastLicensing\": \"20/08/2022\",\n      \"yearFab\": \"2008\",\n      \"yearMod\": \"2009\",\n      \"licensingStatus\": \"VENCIDO\"\n    }\n  ]\n}"
           },
           {
             "id": "f35db1c4-5587-4c79-a239-6551c1a6b6cf",
@@ -4896,17 +4896,17 @@
           {
             "id": "00ed0db0-44a2-4311-a651-64e4ce12975e",
             "name": "Aprovado",
-            "value": "{ \"hasRestriction\": false, \"hasActiveTDV\": false }"
+            "value": "{\n  \"hasRestriction\": false,\n  \"hasActiveTDV\": false\n}"
           },
           {
             "id": "0ad95ca6-eb99-4379-8363-262961c02efc",
             "name": "TDV em andamento",
-            "value": "{ \"hasRestriction\": false, \"hasActiveTDV\": true, \"codigoTransferencia\": \"TDV-000000\" }"
+            "value": "{\n  \"hasRestriction\": false,\n  \"hasActiveTDV\": true,\n  \"codigoTransferencia\": \"TDV-000000\"\n}"
           },
           {
             "id": "b6f66d6a-af30-4594-b1c0-87a11d2c87be",
             "name": "Veículo com restrição",
-            "value": "{ \"hasRestriction\": true, \"hasActiveTDV\": false }"
+            "value": "{\n  \"hasRestriction\": true,\n  \"hasActiveTDV\": false\n}"
           }
         ]
       }
@@ -4982,7 +4982,7 @@
           {
             "id": "457b9ed8-71de-49cf-8f2d-50acaab7b2ef",
             "name": "CPF invalido",
-            "value": "{ \"showSnackbar\": { \"variant\": \"error\", \"title\": \"Erro\", \"description\": \"CPF do comprador não encontrado\" } }\n"
+            "value": "{\n  \"showSnackbar\": {\n    \"variant\": \"error\",\n    \"title\": \"Erro\",\n    \"description\": \"CPF do comprador não encontrado\"\n  }\n}"
           }
         ],
         "showSnackbar": true
@@ -5004,12 +5004,12 @@
           {
             "id": "5f6ed066-0770-4256-8f82-50ad40f3620e",
             "name": "Mesma cidade",
-            "value": "{ \"cidadesDiferentes\": false }\n"
+            "value": "{\n  \"cidadesDiferentes\": false\n}"
           },
           {
             "id": "e250cf43-f8c9-4739-aa7e-559151c06725",
             "name": "Cidades diferentes — troca de placa necessária",
-            "value": "{ \"cidadesDiferentes\": true }\n"
+            "value": "{\n  \"cidadesDiferentes\": true\n}"
           }
         ]
       }
@@ -5060,15 +5060,16 @@
         "responseExamples": [
           {
             "id": "2eaf52de-b422-48f5-8166-e8ca4ded4630",
-            "name": "Lista 3 veículos (origens 1/2/3)",
-            "value": "{\n  \"vehicles\": [\n    {\n      \"id\": \"1\",\n      \"title\": \"VOLKS/GOL GTI 1.0\",\n      \"plate\": \"BXG3U71\",\n      \"status\": \"REGULAR\",\n      \"licensingExpirationDate\": \"31/12/2025\",\n      \"type\": \"Utilitario\",\n      \"brandModel\": \"VOLKS/GOL GTI 1.0\",\n      \"renavam\": \"00001002003\",\n      \"lastLicensing\": \"03/12/2025\",\n      \"yearFab\": \"2014\",\n      \"yearMod\": \"2015\",\n      \"codigoTransferencia\": \"TDV-000001\",\n      \"origem\": \"1\"\n    },\n    {\n      \"id\": \"CED3J65-00002003004\",\n      \"title\": \"ONIX LT - GM\",\n      \"plate\": \"CED3J65\",\n      \"status\": \"A VENCER\",\n      \"licensingExpirationDate\": \"31/12/2024\",\n      \"type\": \"Passeio\",\n      \"brandModel\": \"ONIX LT - GM\",\n      \"renavam\": \"00002003004\",\n      \"lastLicensing\": \"15/01/2024\",\n      \"yearFab\": \"2021\",\n      \"yearMod\": \"2022\",\n      \"codigoTransferencia\": \"\",\n      \"ativa\": \"true\",\n      \"origem\": \"2\",\n      \"origemComunicacaoVendaVeiculo\": \"9\",\n      \"descricaoMarcaVeiculo\": \"ONIX LT - GM\",\n      \"nomeVendedor\": \"João Vendedor\",\n      \"codigoVendedor\": \"11122233344\",\n      \"nomeMunicipioVeiculo\": \"SAO PAULO\"\n    },\n    {\n      \"id\": \"RNI4Z30-00003004005\",\n      \"title\": \"FIAT/UNO MILLE\",\n      \"plate\": \"RNI4Z30\",\n      \"status\": \"VENCIDO\",\n      \"licensingExpirationDate\": \"31/07/2023\",\n      \"type\": \"Utilitario\",\n      \"brandModel\": \"FIAT/UNO MILLE\",\n      \"renavam\": \"00003004005\",\n      \"lastLicensing\": \"20/08/2022\",\n      \"yearFab\": \"2008\",\n      \"yearMod\": \"2009\",\n      \"codigoTransferencia\": \"\",\n      \"ativa\": \"true\",\n      \"origem\": \"3\",\n      \"origemComunicacaoVendaVeiculo\": \"8\",\n      \"descricaoMarcaVeiculo\": \"FIAT/UNO MILLE\",\n      \"nomeVendedor\": \"Maria Vendedora\",\n      \"codigoVendedor\": \"55566677788\",\n      \"nomeMunicipioVeiculo\": \"CAMPINAS\"\n    }\n  ]\n}"
+            "name": "Lista veículos (origens 1/2/3/4)",
+            "value": "{\n  \"vehicles\": [\n    {\n      \"id\": \"1\",\n      \"title\": \"VOLKS/GOL GTI 1.0\",\n      \"plate\": \"BXG3U71\",\n      \"licensingExpirationDate\": \"31/12/2025\",\n      \"type\": \"Utilitario\",\n      \"brandModel\": \"VOLKS/GOL GTI 1.0\",\n      \"renavam\": \"00001002003\",\n      \"lastLicensing\": \"03/12/2025\",\n      \"yearFab\": \"2014\",\n      \"yearMod\": \"2015\",\n      \"codigoTransferencia\": \"TDV-000001\",\n      \"origem\": \"1\",\n      \"licensingStatus\": \"REGULAR\"\n    },\n    {\n      \"id\": \"CED3J65-00002003004\",\n      \"title\": \"ONIX LT - GM\",\n      \"plate\": \"CED3J65\",\n      \"licensingExpirationDate\": \"31/12/2024\",\n      \"type\": \"Passeio\",\n      \"brandModel\": \"ONIX LT - GM\",\n      \"renavam\": \"00002003004\",\n      \"lastLicensing\": \"15/01/2024\",\n      \"yearFab\": \"2021\",\n      \"yearMod\": \"2022\",\n      \"codigoTransferencia\": \"\",\n      \"ativa\": \"true\",\n      \"origem\": \"2\",\n      \"origemComunicacaoVendaVeiculo\": \"9\",\n      \"descricaoMarcaVeiculo\": \"ONIX LT - GM\",\n      \"nomeVendedor\": \"João Vendedor\",\n      \"codigoVendedor\": \"11122233344\",\n      \"nomeMunicipioVeiculo\": \"SAO PAULO\",\n      \"licensingStatus\": \"A VENCER\"\n    },\n    {\n      \"id\": \"RNI4Z30-00003004005\",\n      \"title\": \"FIAT/UNO MILLE\",\n      \"plate\": \"RNI4Z30\",\n      \"licensingExpirationDate\": \"31/07/2023\",\n      \"type\": \"Utilitario\",\n      \"brandModel\": \"FIAT/UNO MILLE\",\n      \"renavam\": \"00003004005\",\n      \"lastLicensing\": \"20/08/2022\",\n      \"yearFab\": \"2008\",\n      \"yearMod\": \"2009\",\n      \"codigoTransferencia\": \"\",\n      \"ativa\": \"true\",\n      \"origem\": \"3\",\n      \"origemComunicacaoVendaVeiculo\": \"8\",\n      \"descricaoMarcaVeiculo\": \"FIAT/UNO MILLE\",\n      \"nomeVendedor\": \"Maria Vendedora\",\n      \"codigoVendedor\": \"55566677788\",\n      \"nomeMunicipioVeiculo\": \"CAMPINAS\",\n      \"licensingStatus\": \"VENCIDO\"\n    },\n    {\n      \"id\": \"GHI8J90-00010020031\",\n      \"title\": \"VW/GOL 1.0\",\n      \"plate\": \"GHI8J90\",\n      \"licensingStatus\": \"REGULAR\",\n      \"licensingExpirationDate\": \"31/12/2025\",\n      \"type\": \"Passeio\",\n      \"brandModel\": \"VW/GOL 1.0\",\n      \"renavam\": \"00010020031\",\n      \"lastLicensing\": \"10/05/2025\",\n      \"yearFab\": \"2019\",\n      \"yearMod\": \"2020\",\n      \"codigoTransferencia\": \"\",\n      \"ativa\": \"true\",\n      \"origem\": \"4\",\n      \"origemComunicacaoVendaVeiculo\": \"9\",\n      \"descricaoMarcaVeiculo\": \"VW/GOL 1.0\",\n      \"descricaoCorVeiculo\": \"Branco\",\n      \"nomeVendedor\": \"João Vendedor\",\n      \"codigoVendedor\": \"11122233344\",\n      \"nomeMunicipioVeiculo\": \"SAO PAULO\",\n      \"codigoComprador\": \"123.456.789-00\",\n      \"nomeComprador\": \"João da Silva Santos\",\n      \"numeroComprador\": \"456\",\n      \"nomeMunicipioComprador\": \"São Paulo\",\n      \"enderecoComprador\": \"456, São Paulo\"\n    }\n  ]\n}"
           },
           {
             "id": "6b7ae0d4-fed7-4944-ab40-8aaeb8b2ea30",
             "name": "Sem compras ativas",
-            "value": "{ \"showSnackbar\": { \"variant\": \"error\", \"title\": \"Erro\", \"description\": \"Nenhuma transferência ativa encontrada para este CPF\" } }"
+            "value": "{\n  \"showSnackbar\": {\n    \"variant\": \"error\",\n    \"title\": \"Erro\",\n    \"description\": \"Nenhuma transferência ativa encontrada para este CPF\"\n  }\n}"
           }
-        ]
+        ],
+        "showSnackbar": true
       }
     },
     {
@@ -5087,12 +5088,22 @@
           {
             "id": "13ca35ee-ca27-4e9f-b5f2-21dd6e91360c",
             "name": "Origem 1 (estado 5)",
-            "value": "{\n  \"nomeComprador\": \"Carlos da Silva\",\n  \"cpfComprador\": \"721.169.550-17\",\n  \"enderecoComprador\": \"Rua Aulide Carini, 345, Vila Jacuí, São Paulo - SP\",\n  \"origem\": \"1\",\n  \"estado\": \"5\",\n  \"vehicle\": {\n    \"id\": \"1\",\n    \"plate\": \"ABC1D23\",\n    \"title\": \"Toyota Corolla 2.0\",\n    \"status\": \"REGULAR\",\n    \"brandModel\": \"Toyota Corolla 2.0\",\n    \"licensingExpirationDate\": \"31/12/2025\",\n    \"renavam\": \"00001002003\",\n    \"lastLicensing\": \"03/12/2025\",\n    \"yearFab\": \"2022\",\n    \"yearMod\": \"2023\"\n  }\n}"
+            "value": "{\n  \"nomeComprador\": \"Carlos da Silva\",\n  \"cpfComprador\": \"721.169.550-17\",\n  \"enderecoComprador\": \"Rua Aulide Carini, 345, Vila Jacuí, São Paulo - SP\",\n  \"origem\": \"1\",\n  \"estado\": \"5\",\n  \"vehicle\": {\n    \"id\": \"1\",\n    \"plate\": \"ABC1D23\",\n    \"title\": \"Toyota Corolla 2.0\",\n    \"brandModel\": \"Toyota Corolla 2.0\",\n    \"licensingExpirationDate\": \"31/12/2025\",\n    \"renavam\": \"00001002003\",\n    \"lastLicensing\": \"03/12/2025\",\n    \"yearFab\": \"2022\",\n    \"yearMod\": \"2023\",\n    \"licensingStatus\": \"REGULAR\"\n  }\n}"
           },
           {
             "id": "ex-origem-2-estado-7",
             "name": "Origem 2 (estado 7)",
-            "value": "{\n  \"nomeComprador\": \"Carlos da Silva\",\n  \"cpfComprador\": \"721.169.550-17\",\n  \"enderecoComprador\": \"Rua Aulide Carini, 345, Vila Jacuí, São Paulo - SP\",\n  \"origem\": \"2\",\n  \"estado\": \"7\",\n  \"vehicle\": {\n    \"id\": \"1\",\n    \"plate\": \"ABC1D23\",\n    \"title\": \"Toyota Corolla 2.0\",\n    \"status\": \"REGULAR\",\n    \"brandModel\": \"Toyota Corolla 2.0\",\n    \"licensingExpirationDate\": \"31/12/2025\",\n    \"renavam\": \"00001002003\",\n    \"lastLicensing\": \"03/12/2025\",\n    \"yearFab\": \"2022\",\n    \"yearMod\": \"2023\"\n  }\n}"
+            "value": "{\n  \"nomeComprador\": \"Carlos da Silva\",\n  \"cpfComprador\": \"721.169.550-17\",\n  \"enderecoComprador\": \"Rua Aulide Carini, 345, Vila Jacuí, São Paulo - SP\",\n  \"origem\": \"2\",\n  \"estado\": \"7\",\n  \"vehicle\": {\n    \"id\": \"1\",\n    \"plate\": \"ABC1D23\",\n    \"title\": \"Toyota Corolla 2.0\",\n    \"brandModel\": \"Toyota Corolla 2.0\",\n    \"licensingExpirationDate\": \"31/12/2025\",\n    \"renavam\": \"00001002003\",\n    \"lastLicensing\": \"03/12/2025\",\n    \"yearFab\": \"2022\",\n    \"yearMod\": \"2023\",\n    \"licensingStatus\": \"REGULAR\"\n  }\n}"
+          },
+          {
+            "id": "ex-confirmar-origem-3",
+            "name": "Origem 3 (estado 7)",
+            "value": "{\n  \"nomeComprador\": \"Carlos da Silva\",\n  \"cpfComprador\": \"721.169.550-17\",\n  \"enderecoComprador\": \"Rua Aulide Carini, 345, Vila Jacuí, São Paulo - SP\",\n  \"origem\": \"3\",\n  \"estado\": \"7\",\n  \"vehicle\": {\n    \"id\": \"1\",\n    \"plate\": \"ABC1D23\",\n    \"title\": \"Toyota Corolla 2.0\",\n    \"licensingStatus\": \"REGULAR\",\n    \"brandModel\": \"Toyota Corolla 2.0\",\n    \"licensingExpirationDate\": \"31/12/2025\",\n    \"renavam\": \"00001002003\",\n    \"lastLicensing\": \"03/12/2025\",\n    \"yearFab\": \"2022\",\n    \"yearMod\": \"2023\"\n  }\n}"
+          },
+          {
+            "id": "ex-confirmar-origem-4",
+            "name": "Origem 4 (estado 7)",
+            "value": "{\n  \"nomeComprador\": \"Carlos da Silva\",\n  \"cpfComprador\": \"721.169.550-17\",\n  \"enderecoComprador\": \"Rua Aulide Carini, 345, Vila Jacuí, São Paulo - SP\",\n  \"origem\": \"4\",\n  \"estado\": \"7\",\n  \"vehicle\": {\n    \"id\": \"1\",\n    \"plate\": \"ABC1D23\",\n    \"title\": \"Toyota Corolla 2.0\",\n    \"licensingStatus\": \"REGULAR\",\n    \"brandModel\": \"Toyota Corolla 2.0\",\n    \"licensingExpirationDate\": \"31/12/2025\",\n    \"renavam\": \"00001002003\",\n    \"lastLicensing\": \"03/12/2025\",\n    \"yearFab\": \"2022\",\n    \"yearMod\": \"2023\"\n  }\n}"
           }
         ]
       }
@@ -5124,7 +5135,7 @@
           {
             "id": "0fef2101-5265-4903-8929-12b62fab554d",
             "name": "Sucesso",
-            "value": "{}"
+            "value": "{\n  \"success\": true,\n  \"message\": \"Transferência cancelada com sucesso.\"\n}"
           }
         ]
       }
@@ -5156,12 +5167,12 @@
           {
             "id": "2f26dc5c-5d01-488a-8e76-1ca8f0dd33a7",
             "name": "Válido",
-            "value": "{ \"valid\": true }"
+            "value": "{\n  \"valid\": true\n}"
           },
           {
             "id": "dccc7ab8-1e2b-47a9-bf23-b435e52ed83c",
             "name": "Inválido",
-            "value": "{ \"valid\": false }"
+            "value": "{\n  \"valid\": false\n}"
           }
         ]
       }
@@ -5280,27 +5291,42 @@
           {
             "id": "324edac1-bfb2-40b4-bf17-7db4f1aa8519",
             "name": "Nova TDV",
-            "value": "{ \"proximaAcao\": \"nova_tdv\" }"
+            "value": "{\n  \"proximaAcao\": \"nova_tdv\"\n}"
           },
           {
             "id": "aa3b6e4e-0632-4c0d-8bd5-91dca5d73026",
             "name": "Comprador",
-            "value": "{ \"proximaAcao\": \"comprador\", \"vehicles\": [{ \"plate\": \"ABC1D23\", \"brandModel\": \"Toyota Corolla\", \"renavam\": \"00000000000\", \"codigoTransferencia\": \"TDV-000000\" }] }"
+            "value": "{\n  \"proximaAcao\": \"comprador\",\n  \"codigoTransferencia\": \"TDV-000000\",\n  \"vehicles\": [\n    {\n      \"plate\": \"ABC1D23\",\n      \"brandModel\": \"Toyota Corolla 2.0\",\n      \"renavam\": \"00001002003\",\n      \"codigoTransferencia\": \"TDV-000000\",\n      \"licensingStatus\": \"REGULAR\"\n    }\n  ]\n}"
           },
           {
             "id": "c267ad04-f8a0-4b68-8054-8153029406fc",
             "name": "Vendedor 2",
-            "value": "{\n  \"proximaAcao\": \"vendedor_2\",\n  \"nomeComprador\": \"João Silva\",\n  \"codigoTransferencia\": \"TDV-000000\",\n  \"vehicle\": {\n    \"id\": \"1\",\n    \"plate\": \"ABC1D23\",\n    \"title\": \"Toyota Corolla 2.0\",\n    \"status\": \"REGULAR\",\n    \"brandModel\": \"Toyota Corolla 2.0\",\n    \"licensingExpirationDate\": \"31/12/2025\",\n    \"renavam\": \"00001002003\",\n    \"lastLicensing\": \"03/12/2025\",\n    \"yearFab\": \"2022\",\n    \"yearMod\": \"2023\"\n  }\n}\n"
+            "value": "{\n  \"proximaAcao\": \"vendedor_2\",\n  \"nomeComprador\": \"João Silva\",\n  \"codigoTransferencia\": \"TDV-000000\",\n  \"vehicle\": {\n    \"id\": \"1\",\n    \"plate\": \"ABC1D23\",\n    \"title\": \"Toyota Corolla 2.0\",\n    \"licensingStatus\": \"REGULAR\",\n    \"brandModel\": \"Toyota Corolla 2.0\",\n    \"licensingExpirationDate\": \"31/12/2025\",\n    \"renavam\": \"00001002003\",\n    \"lastLicensing\": \"03/12/2025\",\n    \"yearFab\": \"2022\",\n    \"yearMod\": \"2023\"\n  }\n}"
           },
           {
             "id": "5da43371-c2ac-41da-9c0c-1ba0959b266d",
             "name": "Comprador 2",
-            "value": "{\n  \"proximaAcao\": \"comprador_2\",\n  \"codigoTransferencia\": \"TDV-000000\",\n  \"vehicle\": {\n    \"id\": \"1\",\n    \"plate\": \"ABC1D23\",\n    \"title\": \"Toyota Corolla 2.0\",\n    \"status\": \"REGULAR\",\n    \"brandModel\": \"Toyota Corolla 2.0\",\n    \"licensingExpirationDate\": \"31/12/2025\",\n    \"renavam\": \"00001002003\",\n    \"lastLicensing\": \"03/12/2025\",\n    \"yearFab\": \"2022\",\n    \"yearMod\": \"2023\"\n  }\n}"
+            "value": "{\n  \"proximaAcao\": \"comprador_2\",\n  \"nomeComprador\": \"Carlos da Silva\",\n  \"codigoTransferencia\": \"TDV-000000\",\n  \"vehicle\": {\n    \"id\": \"1\",\n    \"plate\": \"ABC1D23\",\n    \"title\": \"Toyota Corolla 2.0\",\n    \"licensingStatus\": \"REGULAR\",\n    \"brandModel\": \"Toyota Corolla 2.0\",\n    \"licensingExpirationDate\": \"31/12/2025\",\n    \"renavam\": \"00001002003\",\n    \"lastLicensing\": \"03/12/2025\",\n    \"yearFab\": \"2022\",\n    \"yearMod\": \"2023\"\n  }\n}"
           },
           {
             "id": "1ffd8ef3-080e-418d-9101-2ed2b30bdc5d",
             "name": "Concluído",
-            "value": "{ \"proximaAcao\": \"concluido\" }"
+            "value": "{\n  \"proximaAcao\": \"concluido\",\n  \"nomeComprador\": \"Carlos da Silva\",\n  \"codigoTransferencia\": \"TDV-000000\",\n  \"vehicle\": {\n    \"id\": \"1\",\n    \"plate\": \"ABC1D23\",\n    \"title\": \"Toyota Corolla 2.0\",\n    \"licensingStatus\": \"REGULAR\",\n    \"brandModel\": \"Toyota Corolla 2.0\",\n    \"licensingExpirationDate\": \"31/12/2025\",\n    \"renavam\": \"00001002003\",\n    \"lastLicensing\": \"03/12/2025\",\n    \"yearFab\": \"2022\",\n    \"yearMod\": \"2023\"\n  }\n}"
+          },
+          {
+            "id": "ex-verificar-comprador-cancelou",
+            "name": "Comprador cancelou",
+            "value": "{\n  \"proximaAcao\": \"comprador_cancelou\",\n  \"codigoTransferencia\": \"TDV-000000\",\n  \"vehicle\": {\n    \"id\": \"1\",\n    \"plate\": \"ABC1D23\",\n    \"title\": \"Toyota Corolla 2.0\",\n    \"licensingStatus\": \"REGULAR\",\n    \"brandModel\": \"Toyota Corolla 2.0\",\n    \"licensingExpirationDate\": \"31/12/2025\",\n    \"renavam\": \"00001002003\",\n    \"lastLicensing\": \"03/12/2025\",\n    \"yearFab\": \"2022\",\n    \"yearMod\": \"2023\"\n  }\n}"
+          },
+          {
+            "id": "ex-verificar-vendedor-cancelou",
+            "name": "Vendedor cancelou",
+            "value": "{\n  \"proximaAcao\": \"vendedor_cancelou\",\n  \"nomeComprador\": \"Carlos da Silva\",\n  \"codigoTransferencia\": \"TDV-000000\",\n  \"vehicle\": {\n    \"id\": \"1\",\n    \"plate\": \"ABC1D23\",\n    \"title\": \"Toyota Corolla 2.0\",\n    \"licensingStatus\": \"REGULAR\",\n    \"brandModel\": \"Toyota Corolla 2.0\",\n    \"licensingExpirationDate\": \"31/12/2025\",\n    \"renavam\": \"00001002003\",\n    \"lastLicensing\": \"03/12/2025\",\n    \"yearFab\": \"2022\",\n    \"yearMod\": \"2023\"\n  }\n}"
+          },
+          {
+            "id": "ex-verificar-pagamento-confirmado",
+            "name": "Pagamento confirmado",
+            "value": "{\n  \"proximaAcao\": \"pagamento_confirmado\",\n  \"nomeComprador\": \"Carlos da Silva\",\n  \"codigoTransferencia\": \"TDV-000000\",\n  \"vehicle\": {\n    \"id\": \"1\",\n    \"plate\": \"ABC1D23\",\n    \"title\": \"Toyota Corolla 2.0\",\n    \"licensingStatus\": \"REGULAR\",\n    \"brandModel\": \"Toyota Corolla 2.0\",\n    \"licensingExpirationDate\": \"31/12/2025\",\n    \"renavam\": \"00001002003\",\n    \"lastLicensing\": \"03/12/2025\",\n    \"yearFab\": \"2022\",\n    \"yearMod\": \"2023\"\n  }\n}"
           }
         ]
       }
@@ -5375,7 +5401,7 @@
           {
             "id": "f0c3aea6-736b-4662-a6ff-a468f5c7fa53",
             "name": "Sucesso",
-            "value": "{ \"codigo\": \"TDV-123456\" }"
+            "value": "{\n  \"codigo\": \"TDV-123456\"\n}"
           }
         ]
       }
@@ -5407,12 +5433,12 @@
           {
             "id": "bbf0c143-4114-42fc-b2e2-632fae3bef9d",
             "name": "Válido",
-            "value": "{ \"valid\": true }\n"
+            "value": "{\n  \"valid\": true\n}"
           },
           {
             "id": "a2165852-e67c-4196-93f1-dc545eaaafc4",
             "name": "Inválido",
-            "value": "{ \"valid\": false }\n"
+            "value": "{\n  \"valid\": false\n}"
           }
         ]
       }
@@ -5475,7 +5501,7 @@
           {
             "id": "662e4b72-b520-47e2-a222-bd21ed66959a",
             "name": "Com débitos",
-            "value": "{\n  \"nomeComprador\": \"Carlos da Silva\",\n  \"debitos\": [\n    { \"descricao\": \"Transferência de Veículo\", \"valor\": 243.77, \"valorFormatado\": \"R$ 243,77\" },\n    { \"descricao\": \"Licenciamento\", \"valor\": 120.50, \"valorFormatado\": \"R$ 120,50\" }\n  ],\n  \"valorTotal\": 364.27,\n  \"taxaTransferencia\": \"R$ 243,77\",\n  \"taxaLicenciamento\": \"R$ 120,50\",\n  \"totalDebitos\": \"R$ 364,27\"\n}"
+            "value": "{\n  \"nomeComprador\": \"Carlos da Silva\",\n  \"debitos\": [\n    {\n      \"descricao\": \"Transferência de Veículo\",\n      \"valor\": 243.77,\n      \"valorFormatado\": \"R$ 243,77\"\n    },\n    {\n      \"descricao\": \"Licenciamento\",\n      \"valor\": 120.5,\n      \"valorFormatado\": \"R$ 120,50\"\n    }\n  ],\n  \"valorTotal\": 364.27,\n  \"taxaTransferencia\": \"R$ 243,77\",\n  \"taxaLicenciamento\": \"R$ 120,50\",\n  \"totalDebitos\": \"R$ 364,27\"\n}"
           }
         ]
       }
@@ -5520,7 +5546,7 @@
           {
             "id": "5af6911b-58b6-4337-843e-002fa8eb4e6f",
             "name": "Sucesso",
-            "value": "{}"
+            "value": "{\n  \"success\": true,\n  \"message\": \"Transferência cancelada com sucesso.\"\n}"
           }
         ]
       }
@@ -5841,22 +5867,22 @@
           {
             "id": "ex-criar-compra-vist-pag",
             "name": "Vistoria e pagamento pendentes",
-            "value": "{\n  \"proximaAcao\": \"vistoria_pagamento_pendentes\",\n  \"detail\": \"Pagamento de taxa não localizado,Laudo de vistoria não localizado\",\n  \"codigoTransferencia\": \"TDV-MOCK-NEW\",\n  \"vehicle\": {\n    \"id\": \"1\",\n    \"plate\": \"GHI8J90\",\n    \"title\": \"VW/GOL 1.0\",\n    \"licensingStatus\": \"REGULAR\",\n    \"brandModel\": \"VW/GOL 1.0\",\n    \"licensingExpirationDate\": \"\",\n    \"renavam\": \"00010020031\",\n    \"lastLicensing\": \"\",\n    \"yearFab\": \"\",\n    \"yearMod\": \"\"\n  }\n}"
+            "value": "{\n  \"proximaAcao\": \"vistoria_pagamento_pendentes\",\n  \"detail\": \"Pagamento de taxa não localizado,Laudo de vistoria não localizado\",\n  \"codigoTransferencia\": \"TDV-MOCK-NEW\",\n  \"vehicle\": {\n    \"id\": \"1\",\n    \"plate\": \"GHI8J90\",\n    \"title\": \"VW/GOL 1.0\",\n    \"licensingStatus\": \"REGULAR\",\n    \"brandModel\": \"VW/GOL 1.0\",\n    \"licensingExpirationDate\": \"\",\n    \"renavam\": \"00010020031\",\n    \"lastLicensing\": \"\",\n    \"yearFab\": \"\",\n    \"yearMod\": \"\"\n  },\n  \"nomeComprador\": \"Maria Compradora\"\n}"
           },
           {
             "id": "ex-criar-compra-adm",
             "name": "Situação administrativa pendente",
-            "value": "{\n  \"proximaAcao\": \"administrativa_pendente\",\n  \"detail\": \"Veículo com bloqueio - Baixa permanente\",\n  \"codigoTransferencia\": \"TDV-MOCK-NEW\",\n  \"vehicle\": {\n    \"id\": \"1\",\n    \"plate\": \"GHI8J90\",\n    \"title\": \"VW/GOL 1.0\",\n    \"licensingStatus\": \"REGULAR\",\n    \"brandModel\": \"VW/GOL 1.0\",\n    \"licensingExpirationDate\": \"\",\n    \"renavam\": \"00010020031\",\n    \"lastLicensing\": \"\",\n    \"yearFab\": \"\",\n    \"yearMod\": \"\"\n  }\n}"
+            "value": "{\n  \"proximaAcao\": \"administrativa_pendente\",\n  \"detail\": \"Veículo com bloqueio - Baixa permanente\",\n  \"codigoTransferencia\": \"TDV-MOCK-NEW\",\n  \"vehicle\": {\n    \"id\": \"1\",\n    \"plate\": \"GHI8J90\",\n    \"title\": \"VW/GOL 1.0\",\n    \"licensingStatus\": \"REGULAR\",\n    \"brandModel\": \"VW/GOL 1.0\",\n    \"licensingExpirationDate\": \"\",\n    \"renavam\": \"00010020031\",\n    \"lastLicensing\": \"\",\n    \"yearFab\": \"\",\n    \"yearMod\": \"\"\n  },\n  \"nomeComprador\": \"Maria Compradora\"\n}"
           },
           {
             "id": "ex-criar-compra-jud",
             "name": "Situação judicial pendente",
-            "value": "{\n  \"proximaAcao\": \"judicial_pendente\",\n  \"detail\": \"Veículo com Restrição Judicial\",\n  \"codigoTransferencia\": \"TDV-MOCK-NEW\",\n  \"vehicle\": {\n    \"id\": \"1\",\n    \"plate\": \"GHI8J90\",\n    \"title\": \"VW/GOL 1.0\",\n    \"licensingStatus\": \"REGULAR\",\n    \"brandModel\": \"VW/GOL 1.0\",\n    \"licensingExpirationDate\": \"\",\n    \"renavam\": \"00010020031\",\n    \"lastLicensing\": \"\",\n    \"yearFab\": \"\",\n    \"yearMod\": \"\"\n  }\n}"
+            "value": "{\n  \"proximaAcao\": \"judicial_pendente\",\n  \"detail\": \"Veículo com Restrição Judicial\",\n  \"codigoTransferencia\": \"TDV-MOCK-NEW\",\n  \"vehicle\": {\n    \"id\": \"1\",\n    \"plate\": \"GHI8J90\",\n    \"title\": \"VW/GOL 1.0\",\n    \"licensingStatus\": \"REGULAR\",\n    \"brandModel\": \"VW/GOL 1.0\",\n    \"licensingExpirationDate\": \"\",\n    \"renavam\": \"00010020031\",\n    \"lastLicensing\": \"\",\n    \"yearFab\": \"\",\n    \"yearMod\": \"\"\n  },\n  \"nomeComprador\": \"Maria Compradora\"\n}"
           },
           {
             "id": "ex-criar-compra-adm-jud",
             "name": "Administrativa e judicial pendentes",
-            "value": "{\n  \"proximaAcao\": \"administrativa_judicial_pendentes\",\n  \"detail\": \"Veículo com bloqueio - Baixa permanente,Veículo com Restrição Judicial\",\n  \"codigoTransferencia\": \"TDV-MOCK-NEW\",\n  \"vehicle\": {\n    \"id\": \"1\",\n    \"plate\": \"GHI8J90\",\n    \"title\": \"VW/GOL 1.0\",\n    \"licensingStatus\": \"REGULAR\",\n    \"brandModel\": \"VW/GOL 1.0\",\n    \"licensingExpirationDate\": \"\",\n    \"renavam\": \"00010020031\",\n    \"lastLicensing\": \"\",\n    \"yearFab\": \"\",\n    \"yearMod\": \"\"\n  }\n}"
+            "value": "{\n  \"proximaAcao\": \"administrativa_judicial_pendentes\",\n  \"detail\": \"Veículo com bloqueio - Baixa permanente,Veículo com Restrição Judicial\",\n  \"codigoTransferencia\": \"TDV-MOCK-NEW\",\n  \"vehicle\": {\n    \"id\": \"1\",\n    \"plate\": \"GHI8J90\",\n    \"title\": \"VW/GOL 1.0\",\n    \"licensingStatus\": \"REGULAR\",\n    \"brandModel\": \"VW/GOL 1.0\",\n    \"licensingExpirationDate\": \"\",\n    \"renavam\": \"00010020031\",\n    \"lastLicensing\": \"\",\n    \"yearFab\": \"\",\n    \"yearMod\": \"\"\n  },\n  \"nomeComprador\": \"Maria Compradora\"\n}"
           }
         ],
         "showSnackbar": true
@@ -5963,7 +5989,7 @@
           {
             "id": "662e4b72-b520-47e2-a222-bd21ed66959a",
             "name": "Com débitos",
-            "value": "{\n  \"nomeComprador\": \"Carlos da Silva\",\n  \"debitos\": [\n    { \"descricao\": \"Transferência de Veículo\", \"valor\": 243.77, \"valorFormatado\": \"R$ 243,77\" },\n    { \"descricao\": \"Licenciamento\", \"valor\": 120.50, \"valorFormatado\": \"R$ 120,50\" }\n  ],\n  \"valorTotal\": 364.27,\n  \"taxaTransferencia\": \"R$ 243,77\",\n  \"taxaLicenciamento\": \"R$ 120,50\",\n  \"totalDebitos\": \"R$ 364,27\"\n}"
+            "value": "{\n  \"nomeComprador\": \"Carlos da Silva\",\n  \"debitos\": [\n    {\n      \"descricao\": \"Transferência de Veículo\",\n      \"valor\": 243.77,\n      \"valorFormatado\": \"R$ 243,77\"\n    },\n    {\n      \"descricao\": \"Licenciamento\",\n      \"valor\": 120.5,\n      \"valorFormatado\": \"R$ 120,50\"\n    }\n  ],\n  \"valorTotal\": 364.27,\n  \"taxaTransferencia\": \"R$ 243,77\",\n  \"taxaLicenciamento\": \"R$ 120,50\",\n  \"totalDebitos\": \"R$ 364,27\"\n}"
           }
         ]
       }
@@ -5982,7 +6008,7 @@
           {
             "id": "662e4b72-b520-47e2-a222-bd21ed66959a",
             "name": "Com débitos",
-            "value": "{\n  \"nomeComprador\": \"Carlos da Silva\",\n  \"debitos\": [\n    { \"descricao\": \"Transferência de Veículo\", \"valor\": 243.77, \"valorFormatado\": \"R$ 243,77\" },\n    { \"descricao\": \"Licenciamento\", \"valor\": 120.50, \"valorFormatado\": \"R$ 120,50\" }\n  ],\n  \"valorTotal\": 364.27,\n  \"taxaTransferencia\": \"R$ 243,77\",\n  \"taxaLicenciamento\": \"R$ 120,50\",\n  \"totalDebitos\": \"R$ 364,27\"\n}"
+            "value": "{\n  \"nomeComprador\": \"Carlos da Silva\",\n  \"debitos\": [\n    {\n      \"descricao\": \"Transferência de Veículo\",\n      \"valor\": 243.77,\n      \"valorFormatado\": \"R$ 243,77\"\n    },\n    {\n      \"descricao\": \"Licenciamento\",\n      \"valor\": 120.5,\n      \"valorFormatado\": \"R$ 120,50\"\n    }\n  ],\n  \"valorTotal\": 364.27,\n  \"taxaTransferencia\": \"R$ 243,77\",\n  \"taxaLicenciamento\": \"R$ 120,50\",\n  \"totalDebitos\": \"R$ 364,27\"\n}"
           }
         ]
       }
@@ -6051,6 +6077,46 @@
           "x": 7377.500115708395,
           "y": 3099.0003358621307
         }
+      }
+    },
+    {
+      "id": "n_3bad58f20fff",
+      "type": "web_view_screen",
+      "name": "Assinatura ITI (vendedor)",
+      "data": {
+        "position": {
+          "x": 9000,
+          "y": 1960
+        },
+        "url": "https://example.com/iti-assinatura",
+        "callbackPrefix": "detransp://iti",
+        "responseExamples": [
+          {
+            "id": "ex-iti-vendedor-ok",
+            "name": "Assinado",
+            "value": "{\n  \"code\": \"mock-iti-code-vendedor\"\n}"
+          }
+        ]
+      }
+    },
+    {
+      "id": "n_54e1a65041fa",
+      "type": "web_view_screen",
+      "name": "Assinatura ITI (comprador assinou)",
+      "data": {
+        "position": {
+          "x": 5200,
+          "y": -200
+        },
+        "url": "https://example.com/iti-assinatura",
+        "callbackPrefix": "detransp://iti",
+        "responseExamples": [
+          {
+            "id": "ex-iti-comprador-ok",
+            "name": "Assinado",
+            "value": "{\n  \"code\": \"mock-iti-code-comprador\"\n}"
+          }
+        ]
       }
     }
   ],
