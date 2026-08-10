@@ -605,12 +605,6 @@ app.post('/api/services/solicitar-vistoria-em-transito', (req, res) => {
 // ---------------------------------------------------------------------------
 // TDV (Transferência Digital de Veículo)
 // ---------------------------------------------------------------------------
-app.get('/api/tdv/verificar-estado', (_req, res) => {
-  res.json({
-    proximaAcao: 'nova_tdv',
-  })
-})
-
 app.get('/api/tdv/veiculos', (_req, res) => {
   res.json({
     vehicles: MOCK_VEHICLES.map(v => ({
@@ -654,6 +648,14 @@ app.post('/api/tdv/criar', (req, res) => {
   res.status(201).json({
     codigo: 'TDV-' + Date.now().toString(36).toUpperCase(),
   })
+})
+
+app.post('/api/tdv/informar-dados-venda', (req, res) => {
+  res.json({})
+})
+
+app.post('/api/tdv/confirmar-intencao-venda', (req, res) => {
+  res.json({})
 })
 
 app.post('/api/tdv/cancelar', (req, res) => {
@@ -776,12 +778,13 @@ app.listen(PORT, () => {
   console.log('    GET  /api/services/get-vehicles')
   console.log('    POST /api/services/solicitar-vistoria-em-transito')
   console.log('  TDV:')
-  console.log('    GET  /api/tdv/verificar-estado')
   console.log('    GET  /api/tdv/veiculos')
   console.log('    POST /api/tdv/analise-requisitos')
   console.log('    POST /api/tdv/validacao-comprador')
   console.log('    POST /api/tdv/validacao-venda')
   console.log('    POST /api/tdv/criar')
+  console.log('    POST /api/tdv/informar-dados-venda')
+  console.log('    POST /api/tdv/confirmar-intencao-venda')
   console.log('    POST /api/tdv/cancelar')
   console.log('    GET  /api/tdv/compras')
   console.log('    POST /api/tdv/confirmar-compra')

@@ -1754,7 +1754,7 @@
             "type": "vehicle_info",
             "name": null,
             "data": {
-              "source": "@{node:n_90a9d6db5f4b.vehicle}",
+              "source": "@{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle}",
               "vehicle": {
                 "id": "1",
                 "plate": "EXC1A22",
@@ -2006,7 +2006,7 @@
             "type": "vehicle_info",
             "name": null,
             "data": {
-              "source": "@{node:n_90a9d6db5f4b.vehicle}",
+              "source": "@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle}",
               "vehicle": {
                 "id": "1",
                 "plate": "EXC1A22",
@@ -2336,7 +2336,7 @@
             "type": "text_body",
             "name": null,
             "data": {
-              "text": "Olá, @{node:n_90a9d6db5f4b.nomeComprador}. \nA transferência do veículo @{node:n_90a9d6db5f4b.vehicle.brandModel}, placa @{node:n_90a9d6db5f4b.vehicle.plate} foi realizada com sucesso e o veículo encontra-se em seu nome.\n\nAcesse o aplicativo da Carteira Digital de Trânsito - CDT para baixar o documento do veículo.\n",
+              "text": "Olá, @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}. \nA transferência do veículo @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.brandModel}, placa @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.plate} foi realizada com sucesso e o veículo encontra-se em seu nome.\n\nAcesse o aplicativo da Carteira Digital de Trânsito - CDT para baixar o documento do veículo.\n",
               "align": "left"
             }
           },
@@ -2404,7 +2404,7 @@
             "type": "text_body",
             "name": null,
             "data": {
-              "text": "Olá, @{node:n_90a9d6db5f4b.nomeComprador}. \n\nFoi confirmado o pagamento da taxa de transferência do veículo @{node:n_90a9d6db5f4b.vehicle.brandModel}, placa @{node:n_90a9d6db5f4b.vehicle.plate}.\n\nAguarde enquanto validamos o processo e registramos o veículo em seu nome.\n",
+              "text": "Olá, @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}. \n\nFoi confirmado o pagamento da taxa de transferência do veículo @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.brandModel}, placa @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.plate}.\n\nAguarde enquanto validamos o processo e registramos o veículo em seu nome.\n",
               "align": "left"
             }
           },
@@ -2472,7 +2472,7 @@
             "type": "text_body",
             "name": null,
             "data": {
-              "text": "Olá, @{node:n_90a9d6db5f4b.nomeComprador}.\n\nA compra do veículo foi cancelada pelo vendedor do veículo. Por isso, encerramos sua solicitação.\n",
+              "text": "Olá, @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}.\n\nA compra do veículo foi cancelada pelo vendedor do veículo. Por isso, encerramos sua solicitação.\n",
               "align": "left"
             }
           },
@@ -2481,7 +2481,7 @@
             "type": "vehicle_info",
             "name": null,
             "data": {
-              "source": "@{node:n_90a9d6db5f4b.vehicle}",
+              "source": "@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle}",
               "vehicle": {
                 "id": "1",
                 "plate": "EXC1A22",
@@ -2701,8 +2701,8 @@
       "name": "Start",
       "data": {
         "position": {
-          "x": -2640,
-          "y": 1860
+          "x": 2900,
+          "y": -700
         }
       }
     },
@@ -2768,13 +2768,28 @@
         "responseExamples": [
           {
             "id": "00ed0db0-44a2-4311-a651-64e4ce12975e",
-            "name": "Aprovado",
-            "value": "{ \"hasRestriction\": false, \"hasActiveTDV\": false }"
+            "name": "Aprovado (nova TDV)",
+            "value": "{ \"hasRestriction\": false, \"hasActiveTDV\": false, \"proximaAcao\": \"nova_tdv\" }"
+          },
+          {
+            "id": "c8a1f9d2-3b6e-4a7c-9f0d-1e2b3c4d5e6f",
+            "name": "Comprador já assinou (vendedor_2)",
+            "value": "{ \"hasRestriction\": false, \"hasActiveTDV\": true, \"codigoTransferencia\": \"TDV-000000\", \"estado\": \"6\", \"proximaAcao\": \"vendedor_2\" }"
+          },
+          {
+            "id": "c4e8f2a7-1d05-4b6e-8f2a-100000000001",
+            "name": "Retomar venda (sem dados ainda, estado 1)",
+            "value": "{ \"hasRestriction\": false, \"hasActiveTDV\": true, \"codigoTransferencia\": \"TDV-000000\", \"estado\": \"1\", \"proximaAcao\": \"continuar_venda\" }"
+          },
+          {
+            "id": "c4e8f2a7-1d05-4b6e-8f2a-100000000002",
+            "name": "Retomar venda (dados já informados, estado 2)",
+            "value": "{ \"hasRestriction\": false, \"hasActiveTDV\": true, \"codigoTransferencia\": \"TDV-000000\", \"estado\": \"2\", \"proximaAcao\": \"continuar_venda\" }"
           },
           {
             "id": "0ad95ca6-eb99-4379-8363-262961c02efc",
-            "name": "TDV em andamento",
-            "value": "{ \"hasRestriction\": false, \"hasActiveTDV\": true, \"codigoTransferencia\": \"TDV-000000\" }"
+            "name": "TDV em andamento (outro estado)",
+            "value": "{ \"hasRestriction\": false, \"hasActiveTDV\": true, \"codigoTransferencia\": \"TDV-000000\", \"estado\": \"7\" }"
           },
           {
             "id": "b6f66d6a-af30-4594-b1c0-87a11d2c87be",
@@ -2790,8 +2805,8 @@
       "name": "Possui erros?",
       "data": {
         "position": {
-          "x": 6120,
-          "y": -300
+          "x": 6900,
+          "y": -500
         },
         "condition": {
           "clauses": [
@@ -2933,8 +2948,8 @@
         "responseExamples": [
           {
             "id": "2eaf52de-b422-48f5-8166-e8ca4ded4630",
-            "name": "Lista 3 veículos",
-            "value": "{\n  \"vehicles\": [\n    {\n      \"id\": \"1\",\n      \"title\": \"VOLKS/GOL GTI 1.0\",\n      \"plate\": \"BXG3U71\",\n      \"status\": \"REGULAR\",\n      \"licensingExpirationDate\": \"31/12/2025\",\n      \"type\": \"Utilitario\",\n      \"brandModel\": \"VOLKS/GOL GTI 1.0\",\n      \"renavam\": \"00001002003\",\n      \"lastLicensing\": \"03/12/2025\",\n      \"yearFab\": \"2014\",\n      \"yearMod\": \"2015\",\n      \"codigoTransferencia\": \"TDV-000001\"\n    },\n    {\n      \"id\": \"2\",\n      \"title\": \"ONIX LT - GM\",\n      \"plate\": \"CED3J65\",\n      \"status\": \"A VENCER\",\n      \"licensingExpirationDate\": \"31/12/2024\",\n      \"type\": \"Passeio\",\n      \"brandModel\": \"ONIX LT - GM\",\n      \"renavam\": \"00002003004\",\n      \"lastLicensing\": \"15/01/2024\",\n      \"yearFab\": \"2021\",\n      \"yearMod\": \"2022\",\n      \"codigoTransferencia\": \"TDV-000002\"\n    },\n    {\n      \"id\": \"3\",\n      \"title\": \"FIAT/UNO MILLE\",\n      \"plate\": \"RNI4Z30\",\n      \"status\": \"VENCIDO\",\n      \"licensingExpirationDate\": \"31/07/2023\",\n      \"type\": \"Utilitario\",\n      \"brandModel\": \"FIAT/UNO MILLE\",\n      \"renavam\": \"00003004005\",\n      \"lastLicensing\": \"20/08/2022\",\n      \"yearFab\": \"2008\",\n      \"yearMod\": \"2009\",\n      \"codigoTransferencia\": \"TDV-000003\"\n    }\n  ]\n}\n"
+            "name": "Lista 3 compras pendentes",
+            "value": "{\n  \"vehicles\": [\n    {\n      \"id\": \"1\",\n      \"title\": \"VOLKS/GOL GTI 1.0\",\n      \"plate\": \"BXG3U71\",\n      \"status\": \"REGULAR\",\n      \"licensingExpirationDate\": \"31/12/2025\",\n      \"type\": \"Utilitario\",\n      \"brandModel\": \"VOLKS/GOL GTI 1.0\",\n      \"renavam\": \"00001002003\",\n      \"lastLicensing\": \"03/12/2025\",\n      \"yearFab\": \"2014\",\n      \"yearMod\": \"2015\",\n      \"codigoTransferencia\": \"TDV-000001\",\n      \"proximaAcao\": \"comprador\",\n      \"nomeComprador\": \"\"\n    },\n    {\n      \"id\": \"2\",\n      \"title\": \"ONIX LT - GM\",\n      \"plate\": \"CED3J65\",\n      \"status\": \"A VENCER\",\n      \"licensingExpirationDate\": \"31/12/2024\",\n      \"type\": \"Passeio\",\n      \"brandModel\": \"ONIX LT - GM\",\n      \"renavam\": \"00002003004\",\n      \"lastLicensing\": \"15/01/2024\",\n      \"yearFab\": \"2021\",\n      \"yearMod\": \"2022\",\n      \"codigoTransferencia\": \"TDV-000002\",\n      \"proximaAcao\": \"comprador_2\",\n      \"nomeComprador\": \"\"\n    },\n    {\n      \"id\": \"3\",\n      \"title\": \"FIAT/UNO MILLE\",\n      \"plate\": \"RNI4Z30\",\n      \"status\": \"VENCIDO\",\n      \"licensingExpirationDate\": \"31/07/2023\",\n      \"type\": \"Utilitario\",\n      \"brandModel\": \"FIAT/UNO MILLE\",\n      \"renavam\": \"00003004005\",\n      \"lastLicensing\": \"20/08/2022\",\n      \"yearFab\": \"2008\",\n      \"yearMod\": \"2009\",\n      \"codigoTransferencia\": \"TDV-000003\",\n      \"proximaAcao\": \"pagamento_confirmado\",\n      \"nomeComprador\": \"Carlos da Silva\"\n    }\n  ]\n}\n"
           },
           {
             "id": "6b7ae0d4-fed7-4944-ab40-8aaeb8b2ea30",
@@ -2955,7 +2970,7 @@
         },
         "method": "POST",
         "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/confirmar-compra",
-        "body": "{\n  \"codigoTransferencia\": \"@{node:n_90a9d6db5f4b.codigoTransferencia ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoTransferencia}\",\n  \"codigoProvaVidaComprador\": \"@{node:n_32b7a4b7dfc4.codigoProvaVida}\"\n}",
+        "body": "{\n  \"codigoTransferencia\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoTransferencia}\",\n  \"codigoProvaVidaComprador\": \"@{node:n_32b7a4b7dfc4.codigoProvaVida}\"\n}",
         "responseExamples": [
           {
             "id": "13ca35ee-ca27-4e9f-b5f2-21dd6e91360c",
@@ -3052,7 +3067,7 @@
         },
         "method": "POST",
         "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/valida-assinatura",
-        "body": "{\n  \"codigoTransferencia\": \"@{node:n_90a9d6db5f4b.codigoTransferencia ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoTransferencia}\",\n  \"itiCode\": \"@{node:n_3bad58f20fff.code}\"\n}\n",
+        "body": "{\n  \"codigoTransferencia\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoTransferencia}\",\n  \"itiCode\": \"@{node:n_3bad58f20fff.code}\"\n}\n",
         "responseExamples": [
           {
             "id": "2f26dc5c-5d01-488a-8e76-1ca8f0dd33a7",
@@ -3134,52 +3149,13 @@
       }
     },
     {
-      "id": "n_90a9d6db5f4b",
-      "type": "http_node",
-      "name": "Verificar estado TDV",
-      "data": {
-        "position": {
-          "x": -2200,
-          "y": 2060
-        },
-        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/verificar-estado",
-        "responseExamples": [
-          {
-            "id": "324edac1-bfb2-40b4-bf17-7db4f1aa8519",
-            "name": "Nova TDV",
-            "value": "{ \"proximaAcao\": \"nova_tdv\" }"
-          },
-          {
-            "id": "aa3b6e4e-0632-4c0d-8bd5-91dca5d73026",
-            "name": "Comprador",
-            "value": "{ \"proximaAcao\": \"comprador\", \"vehicles\": [{ \"plate\": \"ABC1D23\", \"brandModel\": \"Toyota Corolla\", \"renavam\": \"00000000000\", \"codigoTransferencia\": \"TDV-000000\" }] }"
-          },
-          {
-            "id": "c267ad04-f8a0-4b68-8054-8153029406fc",
-            "name": "Vendedor 2",
-            "value": "{\n  \"proximaAcao\": \"vendedor_2\",\n  \"nomeComprador\": \"João Silva\",\n  \"codigoTransferencia\": \"TDV-000000\",\n  \"vehicle\": {\n    \"id\": \"1\",\n    \"plate\": \"ABC1D23\",\n    \"title\": \"Toyota Corolla 2.0\",\n    \"status\": \"REGULAR\",\n    \"brandModel\": \"Toyota Corolla 2.0\",\n    \"licensingExpirationDate\": \"31/12/2025\",\n    \"renavam\": \"00001002003\",\n    \"lastLicensing\": \"03/12/2025\",\n    \"yearFab\": \"2022\",\n    \"yearMod\": \"2023\"\n  }\n}\n"
-          },
-          {
-            "id": "5da43371-c2ac-41da-9c0c-1ba0959b266d",
-            "name": "Comprador 2",
-            "value": "{\n  \"proximaAcao\": \"comprador_2\",\n  \"codigoTransferencia\": \"TDV-000000\",\n  \"vehicle\": {\n    \"id\": \"1\",\n    \"plate\": \"ABC1D23\",\n    \"title\": \"Toyota Corolla 2.0\",\n    \"status\": \"REGULAR\",\n    \"brandModel\": \"Toyota Corolla 2.0\",\n    \"licensingExpirationDate\": \"31/12/2025\",\n    \"renavam\": \"00001002003\",\n    \"lastLicensing\": \"03/12/2025\",\n    \"yearFab\": \"2022\",\n    \"yearMod\": \"2023\"\n  }\n}"
-          },
-          {
-            "id": "1ffd8ef3-080e-418d-9101-2ed2b30bdc5d",
-            "name": "Concluído",
-            "value": "{ \"proximaAcao\": \"concluido\" }"
-          }
-        ]
-      }
-    },
-    {
       "id": "n_21da615e160d",
       "type": "get_user_info_node",
       "name": "Dados do Usuário Logado",
       "data": {
         "position": {
-          "x": -1900,
-          "y": 2060
+          "x": 3350,
+          "y": -700
         }
       }
     },
@@ -3189,15 +3165,20 @@
       "name": "Rotear por ação",
       "data": {
         "position": {
-          "x": -1704,
-          "y": 2104
+          "x": 6600,
+          "y": 700
         },
-        "value": "@{node:n_90a9d6db5f4b.proximaAcao}",
+        "value": "@{node:n_b824c7dd9350.proximaAcao ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.proximaAcao}",
         "routes": [
           {
             "id": "b9a984e3-5280-40e3-bd80-bd597df5da89",
             "label": "Nova TDV",
             "value": "nova_tdv"
+          },
+          {
+            "id": "c4e8f2a7-1d05-4b6e-8f2a-000000000001",
+            "label": "Continuar Venda",
+            "value": "continuar_venda"
           },
           {
             "id": "5a63bc3a-59bb-4258-9927-d496147f49a2",
@@ -3243,12 +3224,12 @@
       "name": "Criar TDV",
       "data": {
         "position": {
-          "x": 11360,
-          "y": 360
+          "x": 7060,
+          "y": 400
         },
         "method": "POST",
         "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/criar",
-        "body": "{\n  \"placaVeiculo\": \"@{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.plate}\",\n  \"renavamVeiculo\": \"@{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.renavam}\",\n  \"cpfComprador\": \"@{screen:s_2909315de67e.comp:c_676202e6fd57.value}\",\n  \"nomeComprador\": \"@{screen:s_2909315de67e.comp:c_eb386ba9d15a.value}\",\n  \"emailComprador\": \"@{screen:s_2909315de67e.comp:c_85fbac00c3aa.value}\",\n  \"cepComprador\": \"@{screen:s_2909315de67e.comp:c_24e94a494019.value}\",\n  \"numeroComprador\": \"@{screen:s_2909315de67e.comp:c_1e15a3ceef7b.value}\",\n  \"complementoComprador\": \"@{screen:s_2909315de67e.comp:c_90a932a96b1f.value}\",\n  \"valorVenda\": \"@{screen:s_8ed2db9cbfd7.comp:c_f0a773241106.value}\",\n  \"quilometragem\": \"@{screen:s_8ed2db9cbfd7.comp:c_95aef308d32f.value}\",\n  \"codigoProvaVidaVendedor\": \"@{node:n_4d4ab6c16ec8.codigoProvaVida}\"\n}",
+        "body": "{\n  \"placaVeiculo\": \"@{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.plate}\",\n  \"renavamVeiculo\": \"@{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.renavam}\"\n}",
         "responseExamples": [
           {
             "id": "f0c3aea6-736b-4662-a6ff-a468f5c7fa53",
@@ -3313,7 +3294,7 @@
         },
         "method": "POST",
         "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/valida-assinatura",
-        "body": "{\n  \"codigoTransferencia\": \"@{node:n_90a9d6db5f4b.codigoTransferencia}\",\n  \"itiCode\": \"@{node:n_54e1a65041fa.code}\"\n}\n",
+        "body": "{\n  \"codigoTransferencia\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoTransferencia}\",\n  \"itiCode\": \"@{node:n_54e1a65041fa.code}\"\n}\n",
         "responseExamples": [
           {
             "id": "bbf0c143-4114-42fc-b2e2-632fae3bef9d",
@@ -3381,7 +3362,7 @@
           "x": 260,
           "y": 4080
         },
-        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/consulta-debitos?codigoTransferencia=@{node:n_90a9d6db5f4b.codigoTransferencia}",
+        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/consulta-debitos?codigoTransferencia=@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoTransferencia}",
         "responseExamples": [
           {
             "id": "662e4b72-b520-47e2-a222-bd21ed66959a",
@@ -3400,7 +3381,7 @@
           "x": 1260,
           "y": 4100
         },
-        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/consulta-debitos?codigoTransferencia=@{node:n_90a9d6db5f4b.codigoTransferencia}",
+        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/consulta-debitos?codigoTransferencia=@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoTransferencia}",
         "method": "GET"
       }
     },
@@ -3437,7 +3418,7 @@
         },
         "method": "POST",
         "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/cancelar",
-        "body": "{ \"codigoTransferencia\": \"@{node:n_90a9d6db5f4b.codigoTransferencia}\" }\n",
+        "body": "{ \"codigoTransferencia\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoTransferencia}\" }\n",
         "responseExamples": [
           {
             "id": "5af6911b-58b6-4337-843e-002fa8eb4e6f",
@@ -3554,17 +3535,6 @@
         "position": {
           "x": -564,
           "y": 1532
-        }
-      }
-    },
-    {
-      "id": "n_b17e692471e5",
-      "type": "waypoint_node",
-      "name": null,
-      "data": {
-        "position": {
-          "x": -860,
-          "y": 452
         }
       }
     },
@@ -3732,6 +3702,108 @@
           "y": 4
         }
       }
+    },
+    {
+      "id": "n_5f8e2a91c3d4",
+      "type": "if_node",
+      "name": "Vendedor: TDV pronta para rotear?",
+      "data": {
+        "position": {
+          "x": 6300,
+          "y": -200
+        },
+        "condition": {
+          "clauses": [
+            {
+              "id": "5f8e2a91-c3d4-4b6a-9e1f-000000000001",
+              "left": "@{node:n_b824c7dd9350.proximaAcao}",
+              "operator": "is_not_empty"
+            }
+          ],
+          "combinator": "or"
+        }
+      }
+    },
+    {
+      "id": "n_a3f7c1e92b04",
+      "type": "http_node",
+      "name": "Informar Dados Venda",
+      "data": {
+        "position": {
+          "x": 8890,
+          "y": -80
+        },
+        "method": "POST",
+        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/informar-dados-venda",
+        "body": "{\n  \"codigoTransferencia\": \"@{node:n_d87067e61ebb.codigo ?? node:n_b824c7dd9350.codigoTransferencia}\",\n  \"cpfComprador\": \"@{screen:s_2909315de67e.comp:c_676202e6fd57.value}\",\n  \"nomeComprador\": \"@{screen:s_2909315de67e.comp:c_eb386ba9d15a.value}\",\n  \"emailComprador\": \"@{screen:s_2909315de67e.comp:c_85fbac00c3aa.value}\",\n  \"cepComprador\": \"@{screen:s_2909315de67e.comp:c_24e94a494019.value}\",\n  \"numeroComprador\": \"@{screen:s_2909315de67e.comp:c_1e15a3ceef7b.value}\",\n  \"complementoComprador\": \"@{screen:s_2909315de67e.comp:c_90a932a96b1f.value}\",\n  \"valorVenda\": \"@{screen:s_8ed2db9cbfd7.comp:c_f0a773241106.value}\",\n  \"quilometragem\": \"@{screen:s_8ed2db9cbfd7.comp:c_95aef308d32f.value}\",\n  \"codigoProvaVidaVendedor\": \"@{node:n_4d4ab6c16ec8.codigoProvaVida ?? node:n_c4e8f2a71d05.codigoProvaVida}\"\n}",
+        "responseExamples": [
+          {
+            "id": "a3f7c1e9-2b04-4d6a-8e1f-000000000001",
+            "name": "Sucesso",
+            "value": "{}"
+          },
+          {
+            "id": "a3f7c1e9-2b04-4d6a-8e1f-000000000002",
+            "name": "Quilometragem inválida",
+            "value": "{ \"showSnackbar\": { \"variant\": \"error\", \"title\": \"Erro\", \"description\": \"A quilometragem informada não pode ser menor que a quilometragem vistoriada.\" } }"
+          }
+        ],
+        "showSnackbar": true
+      }
+    },
+    {
+      "id": "n_b8d2e4f61c37",
+      "type": "http_node",
+      "name": "Confirmar Intenção Venda",
+      "data": {
+        "position": {
+          "x": 11200,
+          "y": 40
+        },
+        "method": "POST",
+        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/confirmar-intencao-venda",
+        "body": "{\n  \"codigoTransferencia\": \"@{node:n_d87067e61ebb.codigo ?? node:n_b824c7dd9350.codigoTransferencia}\",\n  \"codigoProvaVidaVendedor\": \"@{node:n_4d4ab6c16ec8.codigoProvaVida ?? node:n_c4e8f2a71d05.codigoProvaVida}\"\n}",
+        "responseExamples": [
+          {
+            "id": "b8d2e4f6-1c37-4a9e-8b2d-000000000001",
+            "name": "Sucesso",
+            "value": "{}"
+          }
+        ]
+      }
+    },
+    {
+      "id": "n_c4e8f2a71d05",
+      "type": "liveness_screen",
+      "name": "Liveness (retomar venda)",
+      "data": {
+        "position": {
+          "x": 7200,
+          "y": 1000
+        }
+      }
+    },
+    {
+      "id": "n_d5f9a3b82e16",
+      "type": "if_node",
+      "name": "Retomar: dados da venda já informados?",
+      "data": {
+        "position": {
+          "x": 7660,
+          "y": 1000
+        },
+        "condition": {
+          "clauses": [
+            {
+              "id": "d5f9a3b8-2e16-4f7a-9c3d-000000000001",
+              "left": "@{node:n_b824c7dd9350.estado}",
+              "right": "2",
+              "operator": "equals"
+            }
+          ],
+          "combinator": "or"
+        }
+      }
     }
   ],
   "edges": [
@@ -3748,12 +3820,6 @@
       "targetHandle": "input"
     },
     {
-      "sourceId": "n_b824c7dd9350",
-      "targetId": "n_b2c6d93e6c54",
-      "sourceHandle": "output",
-      "targetHandle": "input"
-    },
-    {
       "sourceId": "n_2def40605e61",
       "targetId": "s_62e905fb199e",
       "sourceHandle": "true",
@@ -3762,12 +3828,6 @@
     {
       "sourceId": "n_2def40605e61",
       "targetId": "s_37dddfb990e3",
-      "sourceHandle": "false",
-      "targetHandle": "input"
-    },
-    {
-      "sourceId": "n_b2c6d93e6c54",
-      "targetId": "s_8fefaaacf3d9",
       "sourceHandle": "false",
       "targetHandle": "input"
     },
@@ -3856,12 +3916,6 @@
       "targetHandle": "input"
     },
     {
-      "sourceId": "s_95c89379f948",
-      "targetId": "s_d1720681ec27",
-      "sourceHandle": "c_62125e5d5178",
-      "targetHandle": "input"
-    },
-    {
       "sourceId": "s_62e905fb199e",
       "targetId": "d_2d7cb6069d63",
       "sourceHandle": "c_d3576283536b",
@@ -3877,12 +3931,6 @@
       "sourceId": "s_2909315de67e",
       "targetId": "n_02ec1db459dc",
       "sourceHandle": "c_9f7abbd72413",
-      "targetHandle": "input"
-    },
-    {
-      "sourceId": "s_8ed2db9cbfd7",
-      "targetId": "n_4378ea225f58",
-      "sourceHandle": "c_6909006a32c0",
       "targetHandle": "input"
     },
     {
@@ -4015,48 +4063,6 @@
       "sourceId": "n_32b7a4b7dfc4",
       "targetId": "n_0a7cda804e6d",
       "sourceHandle": "output",
-      "targetHandle": "input"
-    },
-    {
-      "sourceId": "s_52363926e91c",
-      "targetId": "n_32b7a4b7dfc4",
-      "sourceHandle": "c_ebf361a4035f",
-      "targetHandle": "input"
-    },
-    {
-      "sourceId": "n_5bd3d687408b",
-      "targetId": "n_90a9d6db5f4b",
-      "sourceHandle": "output",
-      "targetHandle": "input"
-    },
-    {
-      "sourceId": "n_90a9d6db5f4b",
-      "targetId": "n_21da615e160d",
-      "sourceHandle": "output",
-      "targetHandle": "input"
-    },
-    {
-      "sourceId": "n_21da615e160d",
-      "targetId": "n_cd7b779a01a0",
-      "sourceHandle": "output",
-      "targetHandle": "input"
-    },
-    {
-      "sourceId": "s_7d910eaa66ad",
-      "targetId": "n_d87067e61ebb",
-      "sourceHandle": "c_8c410daf9e3e",
-      "targetHandle": "input"
-    },
-    {
-      "sourceId": "n_d87067e61ebb",
-      "targetId": "s_8080e0ac9d2e",
-      "sourceHandle": "output",
-      "targetHandle": "input"
-    },
-    {
-      "sourceId": "s_8fefaaacf3d9",
-      "targetId": "n_4d4ab6c16ec8",
-      "sourceHandle": "c_b1ff1279cc4e",
       "targetHandle": "input"
     },
     {
@@ -4288,18 +4294,6 @@
       "targetHandle": "input"
     },
     {
-      "sourceId": "n_cd7b779a01a0",
-      "targetId": "n_b17e692471e5",
-      "sourceHandle": "b9a984e3-5280-40e3-bd80-bd597df5da89",
-      "targetHandle": "left-target"
-    },
-    {
-      "sourceId": "n_b17e692471e5",
-      "targetId": "s_a95b06ade63c",
-      "sourceHandle": "right-source",
-      "targetHandle": "input"
-    },
-    {
       "sourceId": "s_95c89379f948",
       "targetId": "n_0be79e85fea6",
       "sourceHandle": "navbar_action",
@@ -4429,6 +4423,120 @@
       "sourceId": "n_acb9e7f8d196",
       "targetId": "n_4a9529e3107c",
       "sourceHandle": "right-source",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_5bd3d687408b",
+      "targetId": "n_21da615e160d",
+      "sourceHandle": "output",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_21da615e160d",
+      "targetId": "s_d1720681ec27",
+      "sourceHandle": "output",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_b824c7dd9350",
+      "targetId": "n_5f8e2a91c3d4",
+      "sourceHandle": "output",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_5f8e2a91c3d4",
+      "targetId": "n_cd7b779a01a0",
+      "sourceHandle": "true",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_5f8e2a91c3d4",
+      "targetId": "n_b2c6d93e6c54",
+      "sourceHandle": "false",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_8fefaaacf3d9",
+      "targetId": "s_a95b06ade63c",
+      "sourceHandle": "c_b1ff1279cc4e",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_95c89379f948",
+      "targetId": "n_4d4ab6c16ec8",
+      "sourceHandle": "c_62125e5d5178",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_52363926e91c",
+      "targetId": "n_cd7b779a01a0",
+      "sourceHandle": "c_ebf361a4035f",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_b2c6d93e6c54",
+      "targetId": "s_8fefaaacf3d9",
+      "sourceHandle": "false",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_cd7b779a01a0",
+      "targetId": "n_d87067e61ebb",
+      "sourceHandle": "b9a984e3-5280-40e3-bd80-bd597df5da89",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_d87067e61ebb",
+      "targetId": "s_8fefaaacf3d9",
+      "sourceHandle": "output",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_8ed2db9cbfd7",
+      "targetId": "n_a3f7c1e92b04",
+      "sourceHandle": "c_6909006a32c0",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_a3f7c1e92b04",
+      "targetId": "n_4378ea225f58",
+      "sourceHandle": "output",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_7d910eaa66ad",
+      "targetId": "n_b8d2e4f61c37",
+      "sourceHandle": "c_8c410daf9e3e",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_b8d2e4f61c37",
+      "targetId": "s_8080e0ac9d2e",
+      "sourceHandle": "output",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_cd7b779a01a0",
+      "targetId": "n_c4e8f2a71d05",
+      "sourceHandle": "c4e8f2a7-1d05-4b6e-8f2a-000000000001",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_c4e8f2a71d05",
+      "targetId": "n_d5f9a3b82e16",
+      "sourceHandle": "output",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_d5f9a3b82e16",
+      "targetId": "s_7d910eaa66ad",
+      "sourceHandle": "true",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_d5f9a3b82e16",
+      "targetId": "s_2909315de67e",
+      "sourceHandle": "false",
       "targetHandle": "input"
     }
   ]

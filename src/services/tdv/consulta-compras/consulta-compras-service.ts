@@ -1,5 +1,6 @@
 import type { DetranSpServiceNowTdvClient } from '../../../clients/detran-sp-service-now/tdv'
 import { extractBearerToken, extractCpfFromToken } from '../../../utils/token'
+import { acaoComoComprador, type ProximaAcaoComprador } from '../proxima-acao-comprador'
 
 type Dependencies = {
   detranSpServiceNowTdv: DetranSpServiceNowTdvClient
@@ -19,6 +20,8 @@ export type ConsultaComprasResult = {
     yearFab: string
     yearMod: string
     codigoTransferencia: string
+    proximaAcao: ProximaAcaoComprador
+    nomeComprador: string
   }>
 }
 
@@ -43,20 +46,29 @@ export class ConsultaComprasService {
       return { vehicles: [] }
     }
 
-    const vehicles = result.result.map((tdv, index) => ({
-      id: String(index + 1),
-      title: tdv.descricaoMarcaVeiculo ?? '',
-      plate: tdv.placaVeiculo ?? '',
-      licensingStatus: 'PENDENTE',
-      licensingExpirationDate: '',
-      type: 'Passeio',
-      brandModel: tdv.descricaoMarcaVeiculo ?? '',
-      renavam: tdv.codigoRenavamVeiculo ?? '',
-      lastLicensing: '',
-      yearFab: '',
-      yearMod: '',
-      codigoTransferencia: tdv.codigoTransferenciaVeiculo ?? ''
-    }))
+    // Only list purchases the buyer can actually act on right now — a TDV still waiting on
+    // the seller has nothing for this screen to route into once picked.
+    const vehicles = result.result.flatMap((tdv, index) => {
+      const proximaAcao = acaoComoComprador(tdv.estado)
+      if (!proximaAcao) return []
+
+      return [{
+        id: String(index + 1),
+        title: tdv.descricaoMarcaVeiculo ?? '',
+        plate: tdv.placaVeiculo ?? '',
+        licensingStatus: 'PENDENTE',
+        licensingExpirationDate: '',
+        type: 'Passeio',
+        brandModel: tdv.descricaoMarcaVeiculo ?? '',
+        renavam: tdv.codigoRenavamVeiculo ?? '',
+        lastLicensing: '',
+        yearFab: '',
+        yearMod: '',
+        codigoTransferencia: tdv.codigoTransferenciaVeiculo ?? '',
+        proximaAcao,
+        nomeComprador: tdv.nomeComprador ?? ''
+      }]
+    })
 
     return { vehicles }
   }
