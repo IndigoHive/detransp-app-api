@@ -138,6 +138,7 @@ export class RotaCaixaPostalClient {
       `/mensagens/app/${this.appTopic}`,
       this.withAuthAndCpf(accessToken, cpf),
     )
+    this.logger.info({ data: response.data, service: SERVICE_NAME }, 'Rota Caixa Postal listagem de mensagens')
     if (!Array.isArray(response.data)) return []
     const mensagens = response.data.map(mapMensagem)
     this.logger.debug({ total: mensagens.length }, 'Mensagens retrieved')

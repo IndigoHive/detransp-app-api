@@ -1,8 +1,11 @@
+import type { Logger } from 'pino'
 import type { DetranSpServiceNowTdvClient } from '../../../clients/detran-sp-service-now/tdv'
+import { CodigoEstadoQRCode, CodigoEstadoTDV } from '../../../clients/detran-sp-service-now/tdv/types'
 import { extractBearerToken, extractCpfFromToken } from '../../../utils/token'
 
 type Dependencies = {
   detranSpServiceNowTdv: DetranSpServiceNowTdvClient
+  logger: Logger
 }
 
 export type ConsultaDebitosInput = {
@@ -41,9 +44,11 @@ const POLL_INTERVAL_MS = 1000
 
 export class ConsultaDebitosService {
   private readonly client: DetranSpServiceNowTdvClient
+  private readonly logger: Logger
 
-  constructor ({ detranSpServiceNowTdv }: Dependencies) {
+  constructor ({ detranSpServiceNowTdv, logger }: Dependencies) {
     this.client = detranSpServiceNowTdv
+    this.logger = logger
   }
 
   async run (authorizationHeader: string | undefined, input: ConsultaDebitosInput): Promise<ConsultaDebitosResult> {
@@ -85,6 +90,37 @@ export class ConsultaDebitosService {
 
     const totalDebitos = debitosResult?.result?.valorTotal ?? 0
     const estadoQRCode = pixResult?.result?.estadoQRCode
+
+    // Temporary (do not ship): txid for mock-paying via the SEFAZ homolog
+    // webhook — warn level on purpose, just to stand out in the log list
+    this.logger.warn(
+      { action: 'mock-pay-txid', codigoTransferencia: input.codigoTransferencia, txid: pixResult?.result?.idQRCode, valor: totalDebitos },
+      'QR TDV débitos criado — txid para pagamento mock em homolog'
+    )
+
+    // The DETRAN cron eventually advances a paid TDV to estado 8 (taxa de serviço paga),
+    // but it can be slow — since the app polls this endpoint, we accelerate the transition
+    // here the moment the PIX is detected as paid. Guarded to estado 7 so repeated polls
+    // don't re-issue the call; best-effort, as the cron still completes it if this fails.
+    if (
+      Number(estadoQRCode) === Number(CodigoEstadoQRCode.PAGO) &&
+      tdvResult?.result?.estado === CodigoEstadoTDV.ATPVE_ASSINADA_VENDEDOR_COMUNICACAO_VENDA_GERADA
+    ) {
+      try {
+        await this.client.atualizaTdv(auth, input.codigoTransferencia, {
+          estado: CodigoEstadoTDV.TAXA_SERVICO_PAGA
+        })
+        this.logger.info(
+          { codigoTransferencia: input.codigoTransferencia },
+          'TDV acelerada para o estado TAXA_SERVICO_PAGA'
+        )
+      } catch (error) {
+        this.logger.warn(
+          { err: error, codigoTransferencia: input.codigoTransferencia },
+          'Falha ao acelerar TDV para o estado TAXA_SERVICO_PAGA'
+        )
+      }
+    }
 
     return {
       nomeComprador: tdvResult?.result?.nomeComprador ?? '',

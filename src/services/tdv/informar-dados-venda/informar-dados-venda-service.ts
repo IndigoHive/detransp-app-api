@@ -45,7 +45,7 @@ export class InformarDadosVendaService {
 
     if (Number(tdvAtual.kmVistoriadaVeiculo) > Number(input.quilometragem)) {
       throw new UnprocessableEntity(
-        `A quilometragem do veículo não pode ser menor que a quilometragem vistoriada (${tdvAtual.kmVistoriadaVeiculo}).`
+        'A quilometragem do veículo não pode ser menor que a quilometragem vistoriada.'
       )
     }
 

@@ -499,12 +499,12 @@
                 {
                   "id": "1",
                   "icon": "directions_car",
-                  "label": "Estou vendendo o veículo"
+                  "label": "Sou vendedor"
                 },
                 {
                   "id": "2",
-                  "icon": "pix",
-                  "label": "Estou comprando o veículo"
+                  "icon": "paid",
+                  "label": "Sou comprador"
                 }
               ],
               "required": true
@@ -529,7 +529,8 @@
       "navbar": {
         "id": "379a15e5-304e-4e90-ab7e-946393e578e6",
         "data": {
-          "title": "Tranferir Veículo",
+          "title": "Transferir Veículo",
+          "actionIcon": "info",
           "showReturn": true
         },
         "name": null,
@@ -1970,7 +1971,7 @@
       "stickyFooter": true,
       "data": {
         "position": {
-          "x": 580,
+          "x": 980,
           "y": 3780
         }
       }
@@ -2098,7 +2099,7 @@
                 "type": "label_text",
                 "name": null,
                 "data": {
-                  "text": "@{node:n_de17c35410fd.comprovante}",
+                  "text": "@{node:n_de17c35410fd.comprovante ?? node:n_b685a31ed52c.comprovante}",
                   "label": "Comprovante do pagamento"
                 }
               },
@@ -2128,7 +2129,7 @@
                 "type": "label_text",
                 "name": null,
                 "data": {
-                  "text": "@{node:n_de17c35410fd.confirmedDate}",
+                  "text": "@{node:n_de17c35410fd.confirmedDate ?? node:n_b685a31ed52c.confirmedDate}",
                   "label": "Data e hora da confirmação"
                 }
               }
@@ -2163,7 +2164,7 @@
       },
       "data": {
         "position": {
-          "x": 1640,
+          "x": 2040,
           "y": 3800
         }
       }
@@ -2692,6 +2693,70 @@
           "y": 2800
         }
       }
+    },
+    {
+      "id": "d_9c3e1a7b04f2",
+      "name": "Sobre a transferência",
+      "content": {
+        "id": "c_1a2b3c4d5e60",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_2b3c4d5e6f71",
+            "type": "text_heading",
+            "name": null,
+            "data": {
+              "text": "Transferir Veículo"
+            }
+          },
+          {
+            "id": "c_3c4d5e6f7a82",
+            "type": "icon_text",
+            "name": null,
+            "data": {
+              "icon": "info",
+              "text": "A Transferência Digital de Veículo permite concluir a venda ou a compra de um veículo diretamente pelo aplicativo, com toda a segurança do Detran-SP.\n\nQuer relembrar como funciona? Toque em \"Saiba mais\" para rever o passo a passo.",
+              "color": "info",
+              "variant": "horizontal",
+              "alignment": "start",
+              "fontWeight": "normal"
+            }
+          }
+        ]
+      },
+      "footer": {
+        "id": "c_4d5e6f7a8b93",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_5e6f7a8b9ca4",
+            "type": "button",
+            "name": null,
+            "data": {
+              "label": "Saiba mais",
+              "variant": "primary",
+              "clickAction": "submit"
+            }
+          },
+          {
+            "id": "c_6f7a8b9cadb5",
+            "type": "button",
+            "name": null,
+            "data": {
+              "label": "Fechar",
+              "variant": "outline",
+              "clickAction": "back"
+            }
+          }
+        ]
+      },
+      "showCloseIcon": true,
+      "data": {
+        "position": {
+          "x": 3180,
+          "y": 640
+        }
+      }
     }
   ],
   "actions": [
@@ -2720,7 +2785,7 @@
             {
               "id": "29e7370f-0d95-4441-86ea-d86a7bdaeaee",
               "left": "@{screen:s_d1720681ec27.comp:c_b68bbbc072eb.selectedLabel}",
-              "right": "Estou vendendo o veículo",
+              "right": "Sou vendedor",
               "operator": "equals"
             }
           ],
@@ -3378,11 +3443,11 @@
       "name": "Pagamento PIX",
       "data": {
         "position": {
-          "x": 1260,
+          "x": 1660,
           "y": 4100
         },
-        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/consulta-debitos?codigoTransferencia=@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoTransferencia}",
-        "method": "GET"
+        "method": "GET",
+        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/consulta-debitos?codigoTransferencia=@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoTransferencia}"
       }
     },
     {
@@ -3391,7 +3456,7 @@
       "name": "End",
       "data": {
         "position": {
-          "x": 2320,
+          "x": 2720,
           "y": 4160
         }
       }
@@ -3804,6 +3869,50 @@
           "combinator": "or"
         }
       }
+    },
+    {
+      "id": "n_e7a4c19b3d82",
+      "type": "if_node",
+      "name": "Pagamento já confirmado?",
+      "data": {
+        "position": {
+          "x": 620,
+          "y": 3970
+        },
+        "condition": {
+          "clauses": [
+            {
+              "id": "41a7f382-5b1f-41fa-958c-c1d3c3db2e67",
+              "left": "@{node:n_b685a31ed52c.estado}",
+              "right": "2",
+              "operator": "equals"
+            }
+          ],
+          "combinator": "or"
+        }
+      }
+    },
+    {
+      "id": "n_1f0a7c3e9b52",
+      "type": "if_node",
+      "name": "Já viu onboarding?",
+      "data": {
+        "position": {
+          "x": 3180,
+          "y": -360
+        },
+        "condition": {
+          "clauses": [
+            {
+              "id": "b1a2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+              "left": "@{node:n_5bd3d687408b.flowAlreadyExecuted}",
+              "right": "true",
+              "operator": "not_equals"
+            }
+          ],
+          "combinator": "or"
+        }
+      }
     }
   ],
   "edges": [
@@ -4127,7 +4236,7 @@
     },
     {
       "sourceId": "n_b685a31ed52c",
-      "targetId": "s_4f0a972b5591",
+      "targetId": "n_e7a4c19b3d82",
       "sourceHandle": "output",
       "targetHandle": "input"
     },
@@ -4433,7 +4542,7 @@
     },
     {
       "sourceId": "n_21da615e160d",
-      "targetId": "s_d1720681ec27",
+      "targetId": "n_1f0a7c3e9b52",
       "sourceHandle": "output",
       "targetHandle": "input"
     },
@@ -4457,13 +4566,13 @@
     },
     {
       "sourceId": "s_8fefaaacf3d9",
-      "targetId": "s_a95b06ade63c",
+      "targetId": "n_4d4ab6c16ec8",
       "sourceHandle": "c_b1ff1279cc4e",
       "targetHandle": "input"
     },
     {
       "sourceId": "s_95c89379f948",
-      "targetId": "n_4d4ab6c16ec8",
+      "targetId": "s_d1720681ec27",
       "sourceHandle": "c_62125e5d5178",
       "targetHandle": "input"
     },
@@ -4537,6 +4646,42 @@
       "sourceId": "n_d5f9a3b82e16",
       "targetId": "s_2909315de67e",
       "sourceHandle": "false",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_e7a4c19b3d82",
+      "targetId": "s_4f0a972b5591",
+      "sourceHandle": "false",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_e7a4c19b3d82",
+      "targetId": "s_2b3f4c280a32",
+      "sourceHandle": "true",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_1f0a7c3e9b52",
+      "targetId": "s_a95b06ade63c",
+      "sourceHandle": "true",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_1f0a7c3e9b52",
+      "targetId": "s_d1720681ec27",
+      "sourceHandle": "false",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_d1720681ec27",
+      "targetId": "d_9c3e1a7b04f2",
+      "sourceHandle": "navbar_action",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "d_9c3e1a7b04f2",
+      "targetId": "s_a95b06ade63c",
+      "sourceHandle": "c_5e6f7a8b9ca4",
       "targetHandle": "input"
     }
   ]

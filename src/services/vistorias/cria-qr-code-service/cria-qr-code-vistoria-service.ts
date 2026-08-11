@@ -1,4 +1,5 @@
 import type { DetranSpServiceNowVistoriasClient } from '../../../clients/detran-sp-service-now-vistorias'
+import { normalizeUtcDateTime } from '../../../utils/normalize-utc-datetime'
 import type { VistoriasAuth } from '../types'
 
 export class CriaQRCodeVistoriaService {
@@ -16,7 +17,7 @@ export class CriaQRCodeVistoriaService {
     return {
       idSolServico: qrCode?.id ?? null,
       qrCode: qrCode?.emv ?? null,
-      expiresAt: qrCode?.dtExpiracao ?? null
+      expiresAt: qrCode?.dtExpiracao ? normalizeUtcDateTime(qrCode.dtExpiracao) : null
     }
   }
 }
