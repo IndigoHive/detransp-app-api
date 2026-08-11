@@ -499,6 +499,31 @@ describe('vistorias services', () => {
     })
   })
 
+  it('returns processing immediately for the temporary plate scenario', async () => {
+    const solicitaRestituicao = vi.fn().mockResolvedValue({
+      result: {
+        success: true,
+        data: { id: 'restituicao-id' }
+      }
+    })
+    const consultaComprovanteRestituicao = vi.fn()
+    const service = new SolicitaRestituicaoVistoriaService(
+      asClient({ solicitaRestituicao, consultaComprovanteRestituicao })
+    )
+
+    await expect(service.run(
+      clientAuth,
+      '6557-A8E2-7A2C-6577',
+      '12345678901',
+      'ETU0A10'
+    )).resolves.toEqual({
+      success: true,
+      status: 'processing',
+      idRestituicao: 'restituicao-id'
+    })
+    expect(consultaComprovanteRestituicao).not.toHaveBeenCalled()
+  })
+
   it('returns processing when the restitution receipt does not become available', async () => {
     const solicitaRestituicao = vi.fn().mockResolvedValue({
       result: {

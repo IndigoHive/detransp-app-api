@@ -11,6 +11,7 @@ const VISTORIA_TOKEN_PATTERN = /^[A-Z0-9]{4}(?:-[A-Z0-9]{4}){3}$/
 const DOC_PROPRIETARIO_BY_PAYMENT_LABEL = {
   'Meus pagamentos': false,
   'Meus veiculos': true,
+  'Meus veículos': true,
   'Meus Veiculos': true,
   'Meus Veículos': true
 } as const
@@ -166,8 +167,15 @@ export function vistoriasRouter (): Router {
       throw BadRequest('Documento inválido.')
     }
 
+    //TODO: REMOVE LATER - THIS IS ONLY FOR TESTING IN STAGING
+    const plate = asNonEmptyString(req.body?.placa)?.toUpperCase()
+
+    if (plate && !PLATE_PATTERN.test(plate)) {
+      throw BadRequest('Placa inválida.')
+    }
+
     const service = req.scope.resolve('solicitaRestituicaoVistoriaService')
-    const result = await service.run(auth, token, documento)
+    const result = await service.run(auth, token, documento, plate)
     res.status(200).json(result)
   })
 
