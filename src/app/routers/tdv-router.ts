@@ -73,13 +73,6 @@ export function tdvRouter (): Router {
     res.status(200).json(result)
   })
 
-  router.post('/confirmar-endereco', async (req, res) => {
-    const { accessToken } = req.session!
-    const service = req.scope.resolve('confirmarEnderecoService')
-    const result = await service.run(accessToken, req.body)
-    res.status(200).json(result)
-  })
-
   router.post('/criar-compra', async (req, res) => {
     const { accessToken } = req.session!
     const service = req.scope.resolve('criarCompraService')

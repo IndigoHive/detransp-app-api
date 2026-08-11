@@ -13,7 +13,7 @@
 
 Application code lives in `src/`. `src/app/` holds Express routers and middleware; `src/services/` contains use cases grouped by domain. Put integrations in `src/clients/`, PostgreSQL access in `src/repositories/` and `src/db/`, dependency-injection wiring in `src/container/`, and shared contracts or helpers in `src/types/` and `src/utils/`. Mock fixtures are in `mock-data/`; builds go to `dist/`. Keep tests beside their subject as `*.test.ts` or under `src/test/`.
 
-Any time that you need to understand how TDV is wired on the mobile frontend, look at mock-data/tdv.json. That json is what builds the app in detransp-app. This api is what the API calls defined on that JSON land
+Any time that you need to understand how TDV is wired on the mobile frontend, look at mock-data/tdv-flow.json. That json is what builds the app in detransp-app. This api is what the API calls defined on that JSON land
 
 ## Build, Test, and Development Commands
 

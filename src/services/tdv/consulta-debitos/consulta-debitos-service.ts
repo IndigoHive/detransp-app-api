@@ -98,7 +98,7 @@ export class ConsultaDebitosService {
     // Temporary (do not ship): txid for mock-paying via the SEFAZ homolog
     // webhook — warn level on purpose, just to stand out in the log list
     this.logger.warn(
-      { action: 'mock-pay-txid', codigoTransferencia: input.codigoTransferencia, txid: pixResult?.result?.idQRCode, valor: totalDebitos },
+      { action: 'mock-pay-txid', codigoTransferencia: input.codigoTransferencia, txid: pixResult?.result?.idQRCode, valor: valorTotal },
       'QR TDV débitos criado — txid para pagamento mock em homolog'
     )
 

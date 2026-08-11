@@ -1,5 +1,5 @@
 import type { DetranSpServiceNowTdvClient } from '../../../clients/detran-sp-service-now/tdv'
-import { CodigoEstadoTDV, CodigoOrigemTDV } from '../../../clients/detran-sp-service-now/tdv/types'
+import { CodigoEstadoTDV } from '../../../clients/detran-sp-service-now/tdv/types'
 import { extractBearerToken, extractCpfFromToken } from '../../../utils/token'
 
 type Dependencies = {
@@ -18,27 +18,21 @@ export type AnaliseRequisitosResult = {
   hasRestriction: boolean
   hasActiveTDV: boolean
   codigoTransferencia?: string | undefined
-  origem?: CodigoOrigemTDV
+  // Raw ServiceNow estado of the active TDV, if any — lets the flow branch resume
+  // behavior (e.g. skip straight to the final confirmation once sale data is already in).
   estado?: string | undefined
+  // Set only when the picked vehicle is ready to move straight into a specific step —
+  // 'vendedor_2' when the buyer already signed and it's the seller's turn, 'continuar_venda'
+  // when there's an active TDV still in the seller's own part of the flow (resume instead of
+  // restarting), 'nova_tdv' when there's nothing blocking a brand new sale. Left unset when
+  // there's an active TDV waiting on the buyer (handled by the existing "TDV aberta?" prompt)
+  // or a restriction.
   proximaAcao?: 'vendedor_2' | 'continuar_venda' | 'nova_tdv' | undefined
-  buyer?: {
-    codigo: string
-    nome: string
-    email: string
-    cep: string
-    bairro: string
-    logradouro: string
-    numero: string
-    complemento: string
-    municipio: string
-    uf: string
-  }
-  sale?: {
-    valor: string
-    km: string
-  }
 }
 
+// The seller only has something to do at these states: freshly created (still filling in
+// buyer/sale data) or sale data already informed (still needs to confirm and generate the
+// ATPV-e). Every other active state is the buyer's turn — nothing for the seller to resume.
 function proximaAcaoParaVendedor (estado: CodigoEstadoTDV | undefined): AnaliseRequisitosResult['proximaAcao'] {
   switch (estado) {
     case CodigoEstadoTDV.ATPVE_ASSINADA_COMPRADOR: return 'vendedor_2'
@@ -60,6 +54,7 @@ export class AnaliseRequisitosService {
     const cpf = extractCpfFromToken(token)
     const auth = { token, cpf }
 
+    // Check for existing active TDV on this plate
     const tdvs = await this.client.listaTdvs(auth, {
       ativa: 'true',
       codigoVendedor: cpf,
@@ -72,56 +67,22 @@ export class AnaliseRequisitosService {
       tdv => tdv.estado !== CodigoEstadoTDV.TRANSFERENCIA_CANCELADA
     )
 
-    if (!activeTdv) {
-      return {
-        hasRestriction: false,
-        hasActiveTDV: false,
-        proximaAcao: 'nova_tdv'
-      }
-    }
-
-    const codigoTransferencia = activeTdv.codigoTransferenciaVeiculo
-    const proximaAcao = proximaAcaoParaVendedor(activeTdv.estado)
-
-    if (activeTdv.origem === CodigoOrigemTDV.RENAVE && codigoTransferencia) {
-      const details = await this.client.buscaTdv(auth, codigoTransferencia)
-      const data = details?.result
-
+    if (activeTdv) {
       return {
         hasRestriction: false,
         hasActiveTDV: true,
-        codigoTransferencia,
-        origem: activeTdv.origem,
+        codigoTransferencia: activeTdv.codigoTransferenciaVeiculo ?? undefined,
         estado: activeTdv.estado,
-        proximaAcao,
-        ...(data ? {
-          buyer: {
-            codigo: data.codigoComprador ?? '',
-            nome: data.nomeComprador ?? '',
-            email: data.emailComprador ?? '',
-            cep: data.cepComprador ?? '',
-            bairro: data.bairroComprador ?? '',
-            logradouro: data.logradouroComprador ?? '',
-            numero: data.numeroComprador ?? '',
-            complemento: data.complementoComprador ?? '',
-            municipio: data.nomeMunicipioComprador ?? '',
-            uf: data.ufComprador ?? ''
-          },
-          sale: {
-            valor: data.valorVendaVeiculo ?? '',
-            km: data.kmVeiculo ?? ''
-          }
-        } : {})
+        proximaAcao: proximaAcaoParaVendedor(activeTdv.estado)
       }
     }
 
+    const hasRestriction = false // TODO: real restriction check not implemented yet
+
     return {
-      hasRestriction: false,
-      hasActiveTDV: true,
-      ...(codigoTransferencia != null ? { codigoTransferencia } : {}),
-      ...(activeTdv.origem != null ? { origem: activeTdv.origem } : {}),
-      estado: activeTdv.estado,
-      proximaAcao
+      hasRestriction,
+      hasActiveTDV: false,
+      proximaAcao: hasRestriction ? undefined : 'nova_tdv'
     }
   }
 }

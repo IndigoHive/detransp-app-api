@@ -499,12 +499,12 @@
                 {
                   "id": "1",
                   "icon": "directions_car",
-                  "label": "Estou vendendo o veículo"
+                  "label": "Sou vendedor"
                 },
                 {
                   "id": "2",
-                  "icon": "pix",
-                  "label": "Estou comprando o veículo"
+                  "icon": "paid",
+                  "label": "Sou comprador"
                 }
               ],
               "required": true
@@ -529,7 +529,8 @@
       "navbar": {
         "id": "379a15e5-304e-4e90-ab7e-946393e578e6",
         "data": {
-          "title": "Tranferir Veículo",
+          "title": "Transferir Veículo",
+          "actionIcon": "info",
           "showReturn": true
         },
         "name": null,
@@ -680,8 +681,7 @@
             "type": "button",
             "name": null,
             "data": {
-              "label": "Sim, continuar",
-              "clickAction": "back"
+              "label": "Sim, continuar"
             }
           },
           {
@@ -872,6 +872,23 @@
             "data": {
               "label": "CEP",
               "required": true
+            }
+          },
+          {
+            "id": "c_1e15a3ceef7b",
+            "type": "text_input",
+            "name": "numero",
+            "data": {
+              "label": "Número",
+              "required": true
+            }
+          },
+          {
+            "id": "c_90a932a96b1f",
+            "type": "text_input",
+            "name": "complemento",
+            "data": {
+              "label": "Complemento"
             }
           }
         ]
@@ -1397,7 +1414,7 @@
                 "type": "text_heading",
                 "name": null,
                 "data": {
-                  "text": "Dados de quem está comprando",
+                  "text": "Dados do comprador",
                   "type": "text_heading"
                 }
               },
@@ -1776,7 +1793,7 @@
             "type": "text_body",
             "name": null,
             "data": {
-              "text": "Olá, Ricardo\n\nO processo de transferência do seu veículo foi confirmado pelo comprador. \n"
+              "text": "Olá, @{node:n_21da615e160d.full_name}\n\nO processo de transferência do seu veículo foi confirmado pelo comprador. \n"
             }
           },
           {
@@ -1784,7 +1801,7 @@
             "type": "vehicle_info",
             "name": null,
             "data": {
-              "source": "@{node:n_2d9e4b6a8c17.vehicle}",
+              "source": "@{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle}",
               "vehicle": {
                 "id": "1",
                 "plate": "EXC1A22",
@@ -2012,7 +2029,7 @@
             "type": "text_body",
             "name": null,
             "data": {
-              "text": "Olá, Ricardo.\n\nA transferência do veículo será finalizada após o pagamento da taxa.\n",
+              "text": "Olá, @{node:n_21da615e160d.full_name}.\n\nA transferência do veículo será finalizada após o pagamento da taxa.\n",
               "align": "left"
             }
           },
@@ -2123,7 +2140,7 @@
                 "type": "label_text",
                 "name": null,
                 "data": {
-                  "text": "@{node:n_de17c35410fd.comprovante}",
+                  "text": "@{node:n_de17c35410fd.comprovante ?? node:n_b685a31ed52c.comprovante}",
                   "label": "Comprovante do pagamento"
                 }
               },
@@ -2153,7 +2170,7 @@
                 "type": "label_text",
                 "name": null,
                 "data": {
-                  "text": "@{node:n_de17c35410fd.confirmedDate}",
+                  "text": "@{node:n_de17c35410fd.confirmedDate ?? node:n_b685a31ed52c.confirmedDate}",
                   "label": "Data e hora da confirmação"
                 }
               }
@@ -2293,7 +2310,7 @@
             "type": "text_body",
             "name": null,
             "data": {
-              "text": "Olá, NOME_VENDEDOR\n\nA compra do veículo foi cancelada pela pessoa que você indicou como compradora. Por isso, encerramos sua solicitação.\n\nCaso precise, você deve iniciar uma nova intenção de venda do veículo.\n",
+              "text": "Olá, @{node:n_21da615e160d.full_name}\n\nA compra do veículo foi cancelada pela pessoa que você indicou como compradora. Por isso, encerramos sua solicitação.\n\nCaso precise, você deve iniciar uma nova intenção de venda do veículo.\n",
               "align": "left"
             }
           }
@@ -2361,7 +2378,7 @@
             "type": "text_body",
             "name": null,
             "data": {
-              "text": "Olá, @{node:n_2d9e4b6a8c17.nomeComprador}. \nA transferência do veículo @{node:n_2d9e4b6a8c17.vehicle.brandModel}, placa @{node:n_2d9e4b6a8c17.vehicle.plate} foi realizada com sucesso e o veículo encontra-se em seu nome.\n\nAcesse o aplicativo da Carteira Digital de Trânsito - CDT para baixar o documento do veículo.\n",
+              "text": "Olá, @{node:n_2d9e4b6a8c17.nomeComprador ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}. \nA transferência do veículo @{node:n_2d9e4b6a8c17.vehicle.brandModel ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.brandModel}, placa @{node:n_2d9e4b6a8c17.vehicle.plate ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.plate} foi realizada com sucesso e o veículo encontra-se em seu nome.\n\nAcesse o aplicativo da Carteira Digital de Trânsito - CDT para baixar o documento do veículo.\n",
               "align": "left"
             }
           },
@@ -2429,7 +2446,7 @@
             "type": "text_body",
             "name": null,
             "data": {
-              "text": "Olá, @{node:n_2d9e4b6a8c17.nomeComprador}. \n\nFoi confirmado o pagamento da taxa de transferência do veículo @{node:n_2d9e4b6a8c17.vehicle.brandModel}, placa @{node:n_2d9e4b6a8c17.vehicle.plate}.\n\nAguarde enquanto validamos o processo e registramos o veículo em seu nome.\n",
+              "text": "Olá, @{node:n_2d9e4b6a8c17.nomeComprador ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}. \n\nFoi confirmado o pagamento da taxa de transferência do veículo @{node:n_2d9e4b6a8c17.vehicle.brandModel ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.brandModel}, placa @{node:n_2d9e4b6a8c17.vehicle.plate ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.plate}.\n\nAguarde enquanto validamos o processo e registramos o veículo em seu nome.\n",
               "align": "left"
             }
           },
@@ -2497,7 +2514,7 @@
             "type": "text_body",
             "name": null,
             "data": {
-              "text": "Olá, @{node:n_2d9e4b6a8c17.nomeComprador}.\n\nA compra do veículo foi cancelada pelo vendedor do veículo. Por isso, encerramos sua solicitação.\n",
+              "text": "Olá, @{node:n_2d9e4b6a8c17.nomeComprador ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}.\n\nA compra do veículo foi cancelada pelo vendedor do veículo. Por isso, encerramos sua solicitação.\n",
               "align": "left"
             }
           },
@@ -2506,7 +2523,7 @@
             "type": "vehicle_info",
             "name": null,
             "data": {
-              "source": "@{node:n_2d9e4b6a8c17.vehicle}",
+              "source": "@{node:n_2d9e4b6a8c17.vehicle ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle}",
               "vehicle": {
                 "id": "1",
                 "plate": "EXC1A22",
@@ -2658,77 +2675,6 @@
       }
     },
     {
-      "id": "s_p2a1b3c4d5e6",
-      "name": "[Comprador] Pagamento pendente",
-      "content": {
-        "id": "s_p2a1b3c4d5e6_content",
-        "type": "group",
-        "children": [
-          {
-            "id": "s_p2a1b3c4d5e6_icon",
-            "type": "icon_text",
-            "name": null,
-            "data": {
-              "icon": "cancel",
-              "text": "Vistoria regularizada e pagamento pendente",
-              "color": "danger",
-              "variant": "vertical"
-            }
-          },
-          {
-            "id": "s_p2a1b3c4d5e6_alert",
-            "type": "alert",
-            "name": null,
-            "data": {
-              "body": "@{node:n_2d9e4b6a8c17.detail}",
-              "title": "Pendência",
-              "variant": "warning"
-            }
-          }
-        ]
-      },
-      "footer": {
-        "id": "s_p2a1b3c4d5e6_footer",
-        "type": "group",
-        "children": [
-          {
-            "id": "c_pend_item_pag_01",
-            "type": "button",
-            "name": null,
-            "data": {
-              "label": "pagamento pendente",
-              "variant": "outline"
-            }
-          },
-          {
-            "id": "c_pend_pag_voltar",
-            "type": "button",
-            "name": null,
-            "data": {
-              "label": "Voltar",
-              "variant": "outline",
-              "clickAction": "back"
-            }
-          }
-        ]
-      },
-      "navbar": {
-        "id": "s_p2a1b3c4d5e6_navbar",
-        "data": {
-          "title": "Transferir Veículo",
-          "showReturn": true
-        },
-        "name": null,
-        "type": "nav_bar"
-      },
-      "data": {
-        "position": {
-          "x": 15236,
-          "y": 4340
-        }
-      }
-    },
-    {
       "id": "s_p2b2c3d4e5f7",
       "name": "E-Notariado | Vistoria pendente",
       "content": {
@@ -2786,478 +2732,6 @@
         "position": {
           "x": 10264,
           "y": 5764
-        }
-      }
-    },
-    {
-      "id": "s_p2c3d4e5f6a8",
-      "name": "[Comprador] Vistoria e pagamento pendentes",
-      "content": {
-        "id": "s_p2c3d4e5f6a8_content",
-        "type": "group",
-        "children": [
-          {
-            "id": "s_p2c3d4e5f6a8_icon",
-            "type": "icon_text",
-            "name": null,
-            "data": {
-              "icon": "cancel",
-              "text": "Vistoria e pagamento pendentes",
-              "color": "danger",
-              "variant": "vertical"
-            }
-          },
-          {
-            "id": "s_p2c3d4e5f6a8_alert",
-            "type": "alert",
-            "name": null,
-            "data": {
-              "body": "@{node:n_2d9e4b6a8c17.detail}",
-              "title": "Pendência",
-              "variant": "warning"
-            }
-          },
-          {
-            "id": "c_pend_item_vist_02",
-            "type": "button",
-            "name": null,
-            "data": {
-              "label": "vistoria pendente",
-              "variant": "outline"
-            }
-          },
-          {
-            "id": "c_pend_item_pag_02",
-            "type": "button",
-            "name": null,
-            "data": {
-              "label": "pagamento pendente",
-              "variant": "outline"
-            }
-          }
-        ]
-      },
-      "footer": {
-        "id": "s_p2c3d4e5f6a8_footer",
-        "type": "group",
-        "children": [
-          {
-            "id": "c_pend_vist_pag_voltar",
-            "type": "button",
-            "name": null,
-            "data": {
-              "label": "Voltar",
-              "variant": "outline",
-              "clickAction": "back"
-            }
-          }
-        ]
-      },
-      "navbar": {
-        "id": "s_p2c3d4e5f6a8_navbar",
-        "data": {
-          "title": "Transferir Veículo",
-          "showReturn": true
-        },
-        "name": null,
-        "type": "nav_bar"
-      },
-      "data": {
-        "position": {
-          "x": 14752,
-          "y": 4344
-        }
-      }
-    },
-    {
-      "id": "s_p2d4e5f6a7b9",
-      "name": "[Comprador] Situação administrativa pendente",
-      "content": {
-        "id": "s_p2d4e5f6a7b9_content",
-        "type": "group",
-        "children": [
-          {
-            "id": "s_p2d4e5f6a7b9_icon",
-            "type": "icon_text",
-            "name": null,
-            "data": {
-              "icon": "cancel",
-              "text": "Situação administrativa pendente e situação judicial regularizada",
-              "color": "danger",
-              "variant": "vertical"
-            }
-          },
-          {
-            "id": "s_p2d4e5f6a7b9_alert",
-            "type": "alert",
-            "name": null,
-            "data": {
-              "body": "@{node:n_2d9e4b6a8c17.detail}",
-              "title": "Pendência",
-              "variant": "warning"
-            }
-          }
-        ]
-      },
-      "footer": {
-        "id": "s_p2d4e5f6a7b9_footer",
-        "type": "group",
-        "children": [
-          {
-            "id": "c_pend_adm_voltar",
-            "type": "button",
-            "name": null,
-            "data": {
-              "label": "Voltar",
-              "variant": "outline",
-              "clickAction": "back"
-            }
-          }
-        ]
-      },
-      "navbar": {
-        "id": "s_p2d4e5f6a7b9_navbar",
-        "data": {
-          "title": "Transferir Veículo",
-          "showReturn": true
-        },
-        "name": null,
-        "type": "nav_bar"
-      },
-      "data": {
-        "position": {
-          "x": 14620,
-          "y": 5208
-        }
-      }
-    },
-    {
-      "id": "s_p2e5f6a7b8c0",
-      "name": "[Comprador] Situação judicial pendente",
-      "content": {
-        "id": "s_p2e5f6a7b8c0_content",
-        "type": "group",
-        "children": [
-          {
-            "id": "s_p2e5f6a7b8c0_icon",
-            "type": "icon_text",
-            "name": null,
-            "data": {
-              "icon": "cancel",
-              "text": "Situação judicial pendente e administrativa regularizada",
-              "color": "danger",
-              "variant": "vertical"
-            }
-          },
-          {
-            "id": "s_p2e5f6a7b8c0_alert",
-            "type": "alert",
-            "name": null,
-            "data": {
-              "body": "@{node:n_2d9e4b6a8c17.detail}",
-              "title": "Pendência",
-              "variant": "warning"
-            }
-          }
-        ]
-      },
-      "footer": {
-        "id": "s_p2e5f6a7b8c0_footer",
-        "type": "group",
-        "children": [
-          {
-            "id": "c_pend_jud_voltar",
-            "type": "button",
-            "name": null,
-            "data": {
-              "label": "Voltar",
-              "variant": "outline",
-              "clickAction": "back"
-            }
-          }
-        ]
-      },
-      "navbar": {
-        "id": "s_p2e5f6a7b8c0_navbar",
-        "data": {
-          "title": "Transferir Veículo",
-          "showReturn": true
-        },
-        "name": null,
-        "type": "nav_bar"
-      },
-      "data": {
-        "position": {
-          "x": 15052,
-          "y": 5212
-        }
-      }
-    },
-    {
-      "id": "s_p2f6a7b8c9d1",
-      "name": "[Comprador] Administrativa e judicial pendentes",
-      "content": {
-        "id": "s_p2f6a7b8c9d1_content",
-        "type": "group",
-        "children": [
-          {
-            "id": "s_p2f6a7b8c9d1_icon",
-            "type": "icon_text",
-            "name": null,
-            "data": {
-              "icon": "cancel",
-              "text": "Situações administrativa e judicial pendentes",
-              "color": "danger",
-              "variant": "vertical"
-            }
-          },
-          {
-            "id": "s_p2f6a7b8c9d1_alert",
-            "type": "alert",
-            "name": null,
-            "data": {
-              "body": "@{node:n_2d9e4b6a8c17.detail}",
-              "title": "Pendência",
-              "variant": "warning"
-            }
-          }
-        ]
-      },
-      "footer": {
-        "id": "s_p2f6a7b8c9d1_footer",
-        "type": "group",
-        "children": [
-          {
-            "id": "c_pend_adm_jud_voltar",
-            "type": "button",
-            "name": null,
-            "data": {
-              "label": "Voltar",
-              "variant": "outline",
-              "clickAction": "back"
-            }
-          }
-        ]
-      },
-      "navbar": {
-        "id": "s_p2f6a7b8c9d1_navbar",
-        "data": {
-          "title": "Transferir Veículo",
-          "showReturn": true
-        },
-        "name": null,
-        "type": "nav_bar"
-      },
-      "data": {
-        "position": {
-          "x": 15500,
-          "y": 5212
-        }
-      }
-    },
-    {
-      "id": "s_800e39d059b5",
-      "name": "Termo para venda",
-      "content": {
-        "id": "c_5c4e81934bd5",
-        "type": "group",
-        "children": [
-          {
-            "id": "c_787c01905e3e",
-            "type": "text_body",
-            "name": null,
-            "data": {
-              "text": "Leia atentamente e aceite os termos da venda"
-            }
-          },
-          {
-            "id": "c_882084b629a0",
-            "type": "text_heading",
-            "name": null,
-            "data": {
-              "text": "Termo de ciência e responsabilidade"
-            }
-          },
-          {
-            "id": "c_fe7cbff88d92",
-            "type": "text_body",
-            "name": null,
-            "data": {
-              "text": "Eu, Carlos da Silva, inscrito no CPF sob o nº 721.169.550-17, declaro para os devidos fins que estou transferindo a propriedade do veículo de minha titularidade, de placa BXG3U71, marca/modelo VOLKS/GOL GTI 1.0, ano de fabricação 2015, Renavam 00503712442, para a empresa Pista Automóveis Ltda., inscrita no CNPJ sob o nº 12.345.678/0001-90, localizada na Rua Augusta, 1500, Apto 45, Bairro Consolação, município de São Paulo, estado de São Paulo.\nEstou ciente de que a veracidade das informações fornecidas é de minha total responsabilidade e que a falsidade destas informações poderá acarretar penalidades previstas em lei.",
-              "align": "left"
-            }
-          },
-          {
-            "id": "c_375c9817ebc3",
-            "type": "opt_in",
-            "name": null,
-            "data": {
-              "title": "",
-              "options": [
-                {
-                  "id": "1",
-                  "key": "opcao_1",
-                  "text": "Declaro que li e concordo com os termos e condições acima.",
-                  "required": false
-                }
-              ],
-              "position": "center",
-              "minRequired": 1,
-              "validationMode": "minCount"
-            }
-          }
-        ]
-      },
-      "footer": {
-        "id": "c_c674ec328b30",
-        "type": "group",
-        "children": [
-          {
-            "id": "c_bcbcfed95b18",
-            "type": "button",
-            "name": null,
-            "data": {
-              "label": "Confirmar"
-            }
-          }
-        ]
-      },
-      "navbar": {
-        "id": "343024e7-847f-4f3d-bf43-45c2a91d5176",
-        "data": {
-          "title": "Termo para venda",
-          "showReturn": true
-        },
-        "name": null,
-        "type": "nav_bar"
-      },
-      "data": {
-        "position": {
-          "x": 12496,
-          "y": 1000
-        }
-      }
-    },
-    {
-      "id": "s_0807856fe2c1",
-      "name": "Assinatura",
-      "content": {
-        "id": "c_8aecf57efa30",
-        "type": "group",
-        "children": [
-          {
-            "id": "c_442e3aadf0f3",
-            "type": "icon_text",
-            "name": null,
-            "data": {
-              "icon": "warning",
-              "text": "",
-              "color": "warning",
-              "variant": "vertical",
-              "fontWeight": "semibold"
-            }
-          },
-          {
-            "id": "c_33b7afb1dcdd",
-            "type": "text_body",
-            "name": null,
-            "data": {
-              "text": "Precisamos que *confirme a transferência do veículo com sua assinatura eletrônica.*"
-            }
-          }
-        ]
-      },
-      "footer": {
-        "id": "c_180aced8a091",
-        "type": "group",
-        "children": [
-          {
-            "id": "c_44adce41af68",
-            "type": "button",
-            "name": null,
-            "data": {
-              "label": "Assinar"
-            }
-          },
-          {
-            "id": "c_738a5a523293",
-            "type": "button",
-            "name": null,
-            "data": {
-              "label": "Cancelar",
-              "variant": "outline"
-            }
-          }
-        ]
-      },
-      "navbar": {
-        "id": "118f790a-383f-468e-9cce-bcfdabc3cf83",
-        "data": {
-          "title": "Assinatura do documento",
-          "showReturn": true
-        },
-        "name": null,
-        "type": "nav_bar"
-      },
-      "data": {
-        "position": {
-          "x": 12940,
-          "y": 1028
-        }
-      }
-    },
-    {
-      "id": "s_ae3771c838a8",
-      "name": "Conclusão",
-      "content": {
-        "id": "c_be67129d8319",
-        "type": "group",
-        "children": [
-          {
-            "id": "c_5b02586e1a82",
-            "type": "icon_text",
-            "name": null,
-            "data": {
-              "icon": "check",
-              "text": "Tudo certo!",
-              "color": "success",
-              "variant": "vertical"
-            }
-          },
-          {
-            "id": "c_25a61420a5a6",
-            "type": "text_body",
-            "name": null,
-            "data": {
-              "text": "*Você concluiu a venda do veículo!*\n\nA partir de agora, a responsabilidade do veículo VOLKS/GOL GTI 1.0, cor branca, placa BXG3U71 é do comprador. A empresa já foi notificada e o processo está em andamento.\n\nO veículo está registrado em nome da empresa que está comprando."
-            }
-          }
-        ]
-      },
-      "footer": {
-        "id": "c_39fdc207207b",
-        "type": "group",
-        "children": [
-          {
-            "id": "c_199eae2ef0a3",
-            "type": "button",
-            "name": null,
-            "data": {
-              "label": "Retornar para a tela inicial"
-            }
-          }
-        ]
-      },
-      "navbar": {
-        "id": "0c2faf42-da49-46e6-9fd9-b7f59f96fc9f",
-        "data": {},
-        "name": null,
-        "type": "nav_bar"
-      },
-      "data": {
-        "position": {
-          "x": 13424,
-          "y": 1012
         }
       }
     },
@@ -4094,7 +3568,7 @@
                 "type": "text_heading",
                 "name": null,
                 "data": {
-                  "text": "Dados de quem está comprando",
+                  "text": "Dados do comprador",
                   "type": "text_heading"
                 }
               },
@@ -4537,128 +4011,6 @@
       }
     },
     {
-      "id": "d_11bad30f002b",
-      "name": null,
-      "content": {
-        "id": "c_bd6ba8b5d567",
-        "type": "group",
-        "children": [
-          {
-            "id": "c_5966a588212c",
-            "type": "text_heading",
-            "name": null,
-            "data": {
-              "text": "Transferência digital indisponível: falta de assinatura"
-            }
-          },
-          {
-            "id": "c_86c28f3b94ff",
-            "type": "icon_text",
-            "name": null,
-            "data": {
-              "icon": "warning",
-              "text": "Para este serviço, é obrigatório que o cartório tenha comunicado a assinatura tanto do comprador quanto do vendedor. Não foi localizada uma assinatura. Portanto, para realizar sua transferência o comprador precisa solicitar transferência pelo serviço Transferir Propriedade de Veículo Registrado em São Paulo.",
-              "color": "success",
-              "variant": "horizontal",
-              "alignment": "start",
-              "fontWeight": "normal"
-            }
-          }
-        ]
-      },
-      "footer": {
-        "id": "c_e47b04d6d292",
-        "type": "group",
-        "children": [
-          {
-            "id": "c_e6af153bc14d",
-            "type": "button",
-            "name": null,
-            "data": {
-              "label": "Solicitar serviço"
-            }
-          },
-          {
-            "id": "c_1934362ec350",
-            "type": "button",
-            "name": null,
-            "data": {
-              "icon": "chevron_left",
-              "label": "Retornar para a tela inicial",
-              "variant": "outline"
-            }
-          }
-        ]
-      },
-      "data": {
-        "position": {
-          "x": 12056,
-          "y": 2732
-        }
-      }
-    },
-    {
-      "id": "d_6827239d0b2b",
-      "name": null,
-      "content": {
-        "id": "c_219e16c5a7a4",
-        "type": "group",
-        "children": [
-          {
-            "id": "c_1abdc0b11ffd",
-            "type": "text_heading",
-            "name": null,
-            "data": {
-              "text": "Transferência digital indisponível: requisito de pessoas físicas não atendido"
-            }
-          },
-          {
-            "id": "c_e80c5558fd8d",
-            "type": "icon_text",
-            "name": null,
-            "data": {
-              "icon": "check",
-              "text": "Este serviço é destinada exclusivamente quando o comprador e vendedor são pessoas físicas. Caso uma das partes for uma empresa (pessoa jurídica), solicite a transferência pelo serviço Transferir Propriedade de Veículo Registrado em São Paulo.",
-              "color": "success",
-              "variant": "horizontal",
-              "alignment": "start",
-              "fontWeight": "normal"
-            }
-          }
-        ]
-      },
-      "footer": {
-        "id": "c_8217aff56267",
-        "type": "group",
-        "children": [
-          {
-            "id": "c_919d0c6cb165",
-            "type": "button",
-            "name": null,
-            "data": {
-              "label": "Solicitar serviço"
-            }
-          },
-          {
-            "id": "c_4c338ed840b0",
-            "type": "button",
-            "name": null,
-            "data": {
-              "icon": "chevron_left",
-              "label": "Retornar para a tela inicial",
-              "variant": "outline"
-            }
-          }
-        ]
-      },
-      "data": {
-        "position": {
-          "x": 12676,
-          "y": 2732
-        }
-      }
-    },
-    {
       "id": "d_9c3e1a7b04f2",
       "name": "Sobre a transferência",
       "content": {
@@ -4749,7 +4101,7 @@
             {
               "id": "29e7370f-0d95-4441-86ea-d86a7bdaeaee",
               "left": "@{screen:s_d1720681ec27.comp:c_b68bbbc072eb.selectedLabel}",
-              "right": "Estou vendendo o veículo",
+              "right": "Sou vendedor",
               "operator": "equals"
             }
           ],
@@ -5430,7 +4782,7 @@
         },
         "method": "POST",
         "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/cancelar",
-        "body": "{ \"codigoTransferencia\": \"@{node:n_2d9e4b6a8c17.codigoTransferencia}\" }\n",
+        "body": "{ \"codigoTransferencia\": \"@{node:n_2d9e4b6a8c17.codigoTransferencia ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoTransferencia}\" }\n",
         "responseExamples": [
           {
             "id": "5af6911b-58b6-4337-843e-002fa8eb4e6f",
@@ -6196,17 +5548,6 @@
         "url": "@{node:n_ec80ea40ca78.link}",
         "callbackPrefix": "@{node:n_ec80ea40ca78.redirectUri}"
       }
-    },
-    {
-      "id": "n_f0798c61f005",
-      "type": "waypoint_node",
-      "name": null,
-      "data": {
-        "position": {
-          "x": 5800,
-          "y": 2640
-        }
-      }
     }
   ],
   "edges": [
@@ -6470,7 +5811,7 @@
     },
     {
       "sourceId": "n_c3f8a2e9b147",
-      "targetId": "n_32b7a4b7dfc4",
+      "targetId": "n_cd7b779a01a0",
       "sourceHandle": "false",
       "targetHandle": "input"
     },
@@ -7120,12 +6461,6 @@
       "sourceId": "s_62e905fb199e",
       "targetId": "s_8fefaaacf3d9",
       "sourceHandle": "c_70ffc7dac521",
-      "targetHandle": "input"
-    },
-    {
-      "sourceId": "n_f0798c61f005",
-      "targetId": "n_32b7a4b7dfc4",
-      "sourceHandle": "right-source",
       "targetHandle": "input"
     },
     {

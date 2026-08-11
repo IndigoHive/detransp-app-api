@@ -769,57 +769,6 @@ app.post('/api/tdv/confirmar-compra', (req, res) => {
   })
 })
 
-app.post('/api/tdv/confirmar-endereco', (req, res) => {
-  const body = req.body ?? {}
-  const simularPendencia = body.simularPendencia
-  if (typeof simularPendencia === 'string' && simularPendencia) {
-    const pendencias: Record<string, { proximaAcao: string, detail: string }> = {
-      pagamento_pendente: {
-        proximaAcao: 'pagamento_pendente',
-        detail: 'Pagamento de taxa não localizado'
-      },
-      vistoria_pagamento_pendentes: {
-        proximaAcao: 'vistoria_pagamento_pendentes',
-        detail: 'Pagamento de taxa não localizado,Laudo de vistoria não localizado'
-      },
-      administrativa_pendente: {
-        proximaAcao: 'administrativa_pendente',
-        detail: 'Veículo com bloqueio - Baixa permanente'
-      },
-      judicial_pendente: {
-        proximaAcao: 'judicial_pendente',
-        detail: 'Veículo com Restrição Judicial'
-      },
-      administrativa_judicial_pendentes: {
-        proximaAcao: 'administrativa_judicial_pendentes',
-        detail: 'Veículo com bloqueio - Baixa permanente,Veículo com Restrição Judicial'
-      }
-    }
-    const mapped = pendencias[simularPendencia]
-    if (mapped) {
-      return res.json({
-        ...mapped,
-        codigoTransferencia: body.codigoTransferencia || 'TDV-MOCK-NEW'
-      })
-    }
-  }
-
-  const logradouro = body.logradouroComprador || 'Av. Paulista'
-  const numero = body.numeroComprador || '1000'
-  const complemento = body.complementoComprador || ''
-  const bairro = body.bairroComprador || 'Bela Vista'
-  const cep = String(body.cepComprador || '01310100').replace(/\D/g, '')
-  res.json({
-    enderecoComprador: [logradouro, numero, complemento, bairro, cep].filter(Boolean).join(', '),
-    cepComprador: cep,
-    logradouroComprador: logradouro,
-    numeroComprador: numero,
-    complementoComprador: complemento,
-    bairroComprador: bairro,
-    estado: '7',
-  })
-})
-
 app.post('/api/tdv/criar-compra', (req, res) => {
   const body = req.body ?? {}
   const simularPendencia = body.simularPendencia
@@ -1048,7 +997,6 @@ app.listen(PORT, () => {
   console.log('    POST /api/tdv/cancelar')
   console.log('    GET  /api/tdv/compras')
   console.log('    POST /api/tdv/confirmar-compra')
-  console.log('    POST /api/tdv/confirmar-endereco')
   console.log('    POST /api/tdv/criar-compra')
   console.log('    POST /api/tdv/valida-assinatura')
   console.log('    POST /api/tdv/prova-vida')

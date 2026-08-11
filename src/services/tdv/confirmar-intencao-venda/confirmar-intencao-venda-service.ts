@@ -15,8 +15,6 @@ export type ConfirmarIntencaoVendaResult = Record<string, never>
 
 // Advances the TDV to state 3 (ATPVE_CRIADA) — generating the ATPV-e — only when the seller
 // taps the final confirmation button, matching what that screen tells them will happen.
-// Also used for RENAVE-origin TDVs where ServiceNow already created the record with buyer/sale
-// data from a dealer's SERPRO purchase intention.
 export class ConfirmarIntencaoVendaService {
   private readonly client: DetranSpServiceNowTdvClient
 

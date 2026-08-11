@@ -62,19 +62,6 @@ export class DetranSpServiceNowTdvClient extends DetranSpServiceNowHttp {
   }
 
   async criaTdv (auth: DetranSpServiceNowAuth, data: CriaTdvCommand): Promise<CriaTdvResult> {
-    const url = `${this.axios.defaults.baseURL}/transferencias-de-veiculos`
-    const body = JSON.stringify(data)
-    console.log([
-      'curl -X POST',
-      `'${url}'`,
-      `-H 'Content-Type: application/json'`,
-      `-H 'Accept: application/json'`,
-      `-H 'Authorization: Bearer ...'`,
-      `-H 'sn-token: ...'`,
-      `-H 'X-CPF-Usuario: ${auth.cpf}'`,
-      `-d '${body.replace(/'/g, `'\\''`)}'`
-    ].join(' \\\n  '))
-
     return (
       await this.axios.post<CriaTdvResult>('/transferencias-de-veiculos', data, this.withAuth(auth))
     ).data
