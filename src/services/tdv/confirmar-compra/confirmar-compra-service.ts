@@ -32,12 +32,6 @@ export type ConfirmarCompraResult = {
   }
 }
 
-const ESTADOS_JA_AVANCADOS: ReadonlySet<string> = new Set([
-  CodigoEstadoTDV.ATPVE_ASSINADA_VENDEDOR_COMUNICACAO_VENDA_GERADA,
-  CodigoEstadoTDV.TAXA_SERVICO_PAGA,
-  CodigoEstadoTDV.TRANSFERENCIA_CONCLUIDA
-])
-
 export class ConfirmarCompraService {
   private readonly client: DetranSpServiceNowTdvClient
 
@@ -57,36 +51,38 @@ export class ConfirmarCompraService {
     }
 
     const current = await this.client.buscaTdv(auth, codigoTransferencia)
-    const alreadyAdvanced = !!current?.result?.estado
-      && ESTADOS_JA_AVANCADOS.has(current.result.estado)
+    let estadoAtual = current?.result?.estado
+    const needsAdvance = estadoAtual === CodigoEstadoTDV.ATPVE_CRIADA
+      || estadoAtual === CodigoEstadoTDV.INTENCAO_COMPRA_CONFIRMADA
 
-    if (!alreadyAdvanced) {
+    if (needsAdvance) {
       const codigoProvaVidaComprador = input.codigoProvaVidaComprador?.trim()
       if (!codigoProvaVidaComprador) {
         throw BadRequest('codigoProvaVidaComprador é obrigatório para avançar a compra')
       }
 
-      // Advance to state 4 (INTENCAO_COMPRA_CONFIRMADA)
-      await this.client.atualizaTdv(auth, codigoTransferencia, {
-        estado: CodigoEstadoTDV.INTENCAO_COMPRA_CONFIRMADA,
-        codigoProvaVidaComprador,
-        tipoProvaVidaComprador: '2' // LIVENESS
-      })
+      if (estadoAtual === CodigoEstadoTDV.ATPVE_CRIADA) {
+        await this.client.atualizaTdv(auth, codigoTransferencia, {
+          estado: CodigoEstadoTDV.INTENCAO_COMPRA_CONFIRMADA,
+          codigoProvaVidaComprador,
+          tipoProvaVidaComprador: '2' // LIVENESS
+        })
+        estadoAtual = CodigoEstadoTDV.INTENCAO_COMPRA_CONFIRMADA
+      }
 
-      // Advance to state 5 (AUTODECLARACAO_RESIDENCIA_CONFIRMADA)
-      // This prepares the TDV for ITI signing (state 5 → 6 by ITI callback)
-      await this.client.atualizaTdv(auth, codigoTransferencia, {
-        estado: CodigoEstadoTDV.AUTODECLARACAO_RESIDENCIA_CONFIRMADA,
-        codigoProvaVidaComprador,
-        tipoProvaVidaComprador: '2',
-        confirmacaoAutodeclaracaoResidenciaComprador: 'true'
-      })
+      if (estadoAtual === CodigoEstadoTDV.INTENCAO_COMPRA_CONFIRMADA) {
+        await this.client.atualizaTdv(auth, codigoTransferencia, {
+          estado: CodigoEstadoTDV.AUTODECLARACAO_RESIDENCIA_CONFIRMADA,
+          codigoProvaVidaComprador,
+          tipoProvaVidaComprador: '2',
+          confirmacaoAutodeclaracaoResidenciaComprador: 'true'
+        })
+      }
     }
 
-    // Fetch the updated TDV to get buyer and vehicle data
-    const tdv = alreadyAdvanced
-      ? current
-      : await this.client.buscaTdv(auth, codigoTransferencia)
+    const tdv = needsAdvance
+      ? await this.client.buscaTdv(auth, codigoTransferencia)
+      : current
     const data = tdv?.result
 
     const enderecoComprador = [

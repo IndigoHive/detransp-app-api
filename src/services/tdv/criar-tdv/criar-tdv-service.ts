@@ -9,19 +9,17 @@ type Dependencies = {
 export type CriarTdvInput = {
   placaVeiculo: string
   renavamVeiculo: string
-  cpfComprador: string
-  nomeComprador: string
-  emailComprador: string
-  cepComprador: string
-  valorVenda: string
-  quilometragem: string
-  codigoProvaVidaVendedor: string
 }
 
 export type CriarTdvResult = {
   codigo: string
 }
 
+// Creates the TDV as soon as the seller passes the vehicle eligibility check (state 1,
+// VEICULO_SELECIONADO) — before facial liveness or any buyer/sale data exists. Buyer and
+// sale data are informed later, at their own steps (see InformarDadosVendaService), so a
+// dropped connection here doesn't force the seller to redo the whole form: reopening the
+// app finds the TDV already created and resumes from there.
 export class CriarTdvService {
   private readonly client: DetranSpServiceNowTdvClient
 
@@ -36,11 +34,18 @@ export class CriarTdvService {
     const emailVendedor = extractEmailFromToken(token)
     const auth = { token, cpf: cpfVendedor }
 
-    // Fetch buyer address details from CEP
-    const enderecoResult = await this.client.buscaEndereco(auth, input.cepComprador)
-    const endereco = enderecoResult?.result
+    // Reuse an existing active TDV for this vehicle instead of failing with ATPVeExistenteError
+    const tdvsAtivas = await this.client.listaTdvs(auth, {
+      ativa: 'true',
+      codigoVendedor: cpfVendedor,
+      placaVeiculo: input.placaVeiculo
+    })
+    const tdvAtiva = tdvsAtivas?.result?.find(tdv => tdv.estado !== CodigoEstadoTDV.TRANSFERENCIA_CANCELADA)
 
-    // Step 1: Create the TDV (state 1 - VEICULO_SELECIONADO)
+    if (tdvAtiva?.codigoTransferenciaVeiculo) {
+      return { codigo: tdvAtiva.codigoTransferenciaVeiculo }
+    }
+
     const createResult = await this.client.criaTdv(auth, {
       codigoRenavamVeiculo: input.renavamVeiculo,
       placaVeiculo: input.placaVeiculo,
@@ -50,35 +55,11 @@ export class CriarTdvService {
       origem: CodigoOrigemTDV.TDV
     })
 
-    const codigoTransferencia = createResult?.result?.codigoTransferenciaVeiculo
-    if (!codigoTransferencia) {
+    const codigo = createResult?.result?.codigoTransferenciaVeiculo
+    if (!codigo) {
       throw new Error('Falha ao criar transferência')
     }
 
-    // Step 2: Advance to state 2 (DADOS_VENDA_INFORMADOS)
-    await this.client.atualizaTdv(auth, codigoTransferencia, {
-      estado: CodigoEstadoTDV.DADOS_VENDA_INFORMADOS,
-      codigoComprador: input.cpfComprador,
-      nomeComprador: input.nomeComprador,
-      emailComprador: input.emailComprador,
-      cepComprador: input.cepComprador,
-      bairroComprador: endereco?.bairro ?? '',
-      logradouroComprador: endereco?.logradouro ?? endereco?.endereco ?? '',
-      numeroComprador: '',
-      complementoComprador: endereco?.complemento ?? '',
-      valorVendaVeiculo: input.valorVenda,
-      kmVeiculo: input.quilometragem,
-      codigoProvaVidaVendedor: input.codigoProvaVidaVendedor,
-      tipoProvaVidaVendedor: '2' // LIVENESS
-    })
-
-    // Step 3: Advance to state 3 (ATPVE_CRIADA)
-    await this.client.atualizaTdv(auth, codigoTransferencia, {
-      estado: CodigoEstadoTDV.ATPVE_CRIADA,
-      codigoProvaVidaVendedor: input.codigoProvaVidaVendedor,
-      tipoProvaVidaVendedor: '2' // LIVENESS
-    })
-
-    return { codigo: codigoTransferencia }
+    return { codigo }
   }
 }

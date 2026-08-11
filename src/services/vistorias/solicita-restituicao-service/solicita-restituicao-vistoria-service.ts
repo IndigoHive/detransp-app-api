@@ -2,7 +2,7 @@ import type { DetranSpServiceNowVistoriasClient } from '../../../clients/detran-
 import type { VistoriasAuth } from '../types'
 
 export type SolicitaRestituicaoVistoriaOutput =
-  | { success: true, idRestituicao: string }
+  | { success: true, status: 'completed' | 'processing', idRestituicao: string }
   | {
     success: false
     idRestituicao: null
@@ -20,12 +20,13 @@ type SolicitaRestituicaoVistoriaServiceOptions = {
 
 const DEFAULT_MAX_ATTEMPTS = 10
 const DEFAULT_POLLING_INTERVAL_MS = 2000
+const PROCESSING_SCENARIO_PLATE = 'ETU0A10' // REMOVE LATER
 
 export class SolicitaRestituicaoVistoriaService {
   private readonly maxAttempts: number
   private readonly pollingIntervalMs: number
 
-  constructor (
+  constructor(
     private readonly client: DetranSpServiceNowVistoriasClient,
     options: SolicitaRestituicaoVistoriaServiceOptions = {}
   ) {
@@ -36,7 +37,8 @@ export class SolicitaRestituicaoVistoriaService {
   async run (
     auth: VistoriasAuth,
     token: string,
-    documento: string
+    documento: string,
+    plate?: string
   ): Promise<SolicitaRestituicaoVistoriaOutput> {
     try {
       const result = await this.client.solicitaRestituicao(auth, { token, documento })
@@ -44,6 +46,10 @@ export class SolicitaRestituicaoVistoriaService {
 
       if (!response?.success) {
         return this.failure(response?.message)
+      }
+
+      if (plate === PROCESSING_SCENARIO_PLATE) {
+        return { success: true, status: 'processing', idRestituicao: response.data.id }
       }
 
       return await this.waitForReceipt(auth, response.data.id)
@@ -56,28 +62,22 @@ export class SolicitaRestituicaoVistoriaService {
     auth: VistoriasAuth,
     idRestituicao: string
   ): Promise<SolicitaRestituicaoVistoriaOutput> {
-    let lastMessage: string | undefined
-
     for (let attempt = 1; attempt <= this.maxAttempts; attempt++) {
       try {
         const result = await this.client.consultaComprovanteRestituicao(auth, idRestituicao)
         const response = result?.result
 
         if (response?.success) {
-          return { success: true, idRestituicao }
+          return { success: true, status: 'completed', idRestituicao }
         }
-
-        lastMessage = response?.message
-      } catch (error) {
-        lastMessage = error instanceof Error ? error.message : undefined
-      }
+      } catch {}
 
       if (attempt < this.maxAttempts) {
         await this.wait()
       }
     }
 
-    return this.failure(lastMessage ?? 'O comprovante da restituição não ficou disponível a tempo.')
+    return { success: true, status: 'processing', idRestituicao }
   }
 
   private async wait (): Promise<void> {

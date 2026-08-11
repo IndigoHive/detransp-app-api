@@ -359,11 +359,20 @@ describe('vistorias services', () => {
   })
 
   it('returns only the first 100 payments with a PEV number', async () => {
+    const statuses = [
+      'ATIVO',
+      'EM_ANDAMENTO',
+      'FINALIZADO',
+      'EXPIRADO',
+      'RESTITUICAO_EM_ANALISE',
+      'RESTITUICAO_EM_PROCESSO',
+      'RESTITUIDO'
+    ] as const
     const payments = Array.from({ length: 102 }, (_, index) => ({
       id: `payment-${index}`,
       placa: 'ABC1D23',
       token: `token-${index}`,
-      status: 'ATIVO',
+      status: statuses[index % statuses.length],
       modeloAuto: 'FIAT/PALIO',
       paymentDate: '2026-07-30T21:01:14.047Z',
       tipo: 'IDENTIFICACAO',
@@ -397,13 +406,23 @@ describe('vistorias services', () => {
       plate: 'ABC1D23',
       brandModel: 'FIAT/PALIO',
       vistoriaToken: 'token-2',
-      vistoriaPaymentDate: '30/07/2026 18:01',
-      vistoriaSubtypeDescription: 'Preparação para leilão',
-      vistoriaStatus: 'ATIVO'
+      vistoriaPaymentDate: '30/07/2026 às 18:01',
+      vistoriaType: 'IDENTIFICACAO',
+      vistoriaStatus: 'UTILIZADO'
     })
+    expect(result.slice(0, 7).map(({ vistoriaStatus }) => vistoriaStatus)).toEqual([
+      'UTILIZADO',
+      'VENCIDO',
+      'RESTITUIÇÃO EM ANÁLISE',
+      'RESTITUIÇÃO EM ANÁLISE',
+      'RESTITUÍDO',
+      'EM ABERTO',
+      'EM USO'
+    ])
     expect(result[0]).not.toHaveProperty('placa')
     expect(result[0]).not.toHaveProperty('modeloAuto')
     expect(result[0]).not.toHaveProperty('token')
+    expect(result[0]).not.toHaveProperty('tipo')
     expect(result[0]).not.toHaveProperty('status')
     expect(result[0]).not.toHaveProperty('paymentDate')
     expect(result[0]).not.toHaveProperty('subtipoDescricao')
@@ -446,7 +465,7 @@ describe('vistorias services', () => {
       clientAuth,
       '6557-A8E2-7A2C-6577',
       '12345678901'
-    )).resolves.toEqual({ success: true, idRestituicao: 'restituicao-id' })
+    )).resolves.toEqual({ success: true, status: 'completed', idRestituicao: 'restituicao-id' })
     expect(solicitaRestituicao).toHaveBeenCalledWith(clientAuth, {
       token: '6557-A8E2-7A2C-6577',
       documento: '12345678901'
@@ -480,7 +499,32 @@ describe('vistorias services', () => {
     })
   })
 
-  it('returns feedback when the restitution receipt does not become available', async () => {
+  it('returns processing immediately for the temporary plate scenario', async () => {
+    const solicitaRestituicao = vi.fn().mockResolvedValue({
+      result: {
+        success: true,
+        data: { id: 'restituicao-id' }
+      }
+    })
+    const consultaComprovanteRestituicao = vi.fn()
+    const service = new SolicitaRestituicaoVistoriaService(
+      asClient({ solicitaRestituicao, consultaComprovanteRestituicao })
+    )
+
+    await expect(service.run(
+      clientAuth,
+      '6557-A8E2-7A2C-6577',
+      '12345678901',
+      'ETU0A10'
+    )).resolves.toEqual({
+      success: true,
+      status: 'processing',
+      idRestituicao: 'restituicao-id'
+    })
+    expect(consultaComprovanteRestituicao).not.toHaveBeenCalled()
+  })
+
+  it('returns processing when the restitution receipt does not become available', async () => {
     const solicitaRestituicao = vi.fn().mockResolvedValue({
       result: {
         success: true,
@@ -500,13 +544,9 @@ describe('vistorias services', () => {
       '6557-A8E2-7A2C-6577',
       '12345678901'
     )).resolves.toEqual({
-      success: false,
-      idRestituicao: null,
-      showSnackbar: {
-        variant: 'error',
-        title: 'Não foi possível solicitar a restituição',
-        description: 'Comprovante em processamento'
-      }
+      success: true,
+      status: 'processing',
+      idRestituicao: 'restituicao-id'
     })
     expect(consultaComprovanteRestituicao).toHaveBeenCalledTimes(2)
   })

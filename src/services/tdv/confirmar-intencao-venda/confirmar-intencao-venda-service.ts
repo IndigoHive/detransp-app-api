@@ -11,14 +11,12 @@ export type ConfirmarIntencaoVendaInput = {
   codigoProvaVidaVendedor: string
 }
 
-export type ConfirmarIntencaoVendaResult = {
-  codigo: string
-}
+export type ConfirmarIntencaoVendaResult = Record<string, never>
 
-// Counterpart to CriarTdvService for RENAVE-origin TDVs: ServiceNow already created the
-// record (buyer/sale data included) from a dealer's SERPRO purchase intention, so the
-// seller only needs to complete liveness and advance straight to ATPVE_CRIADA — no criaTdv
-// call, no manual buyer/sale data entry.
+// Advances the TDV to state 3 (ATPVE_CRIADA) — generating the ATPV-e — only when the seller
+// taps the final confirmation button, matching what that screen tells them will happen.
+// Also used for RENAVE-origin TDVs where ServiceNow already created the record with buyer/sale
+// data from a dealer's SERPRO purchase intention.
 export class ConfirmarIntencaoVendaService {
   private readonly client: DetranSpServiceNowTdvClient
 
@@ -31,12 +29,19 @@ export class ConfirmarIntencaoVendaService {
     const cpf = extractCpfFromToken(token)
     const auth = { token, cpf }
 
-    await this.client.atualizaTdv(auth, input.codigoTransferencia, {
-      estado: CodigoEstadoTDV.ATPVE_CRIADA,
-      codigoProvaVidaVendedor: input.codigoProvaVidaVendedor,
-      tipoProvaVidaVendedor: '2' // LIVENESS
-    })
+    // Idempotency guard: only advance from the exact prior state. If the seller (or a
+    // retry/resume) calls this again after the TDV already moved past DADOS_VENDA_INFORMADOS,
+    // skip the mutation instead of re-sending a backward/duplicate transition.
+    const tdvAtual = (await this.client.buscaTdv(auth, input.codigoTransferencia))?.result
 
-    return { codigo: input.codigoTransferencia }
+    if (tdvAtual?.estado === CodigoEstadoTDV.DADOS_VENDA_INFORMADOS) {
+      await this.client.atualizaTdv(auth, input.codigoTransferencia, {
+        estado: CodigoEstadoTDV.ATPVE_CRIADA,
+        codigoProvaVidaVendedor: input.codigoProvaVidaVendedor,
+        tipoProvaVidaVendedor: '2' // LIVENESS
+      })
+    }
+
+    return {}
   }
 }

@@ -119,30 +119,38 @@ const MOCK_DEBTS_MULTA = [
 const MOCK_NOTIFICATIONS = [
   {
     id: 'notif-1',
-    assunto: 'Licenciamento próximo do vencimento',
-    corpo: 'O licenciamento do veículo placa ABC1D23 vence em 30 dias. Regularize para evitar multas.',
-    data: '2026-06-20T14:30:00',
+    codMensagem: 'TDV',
+    titulo: 'Taxa paga',
+    mensagemCurta: 'Recebemos o pagamento da taxa. Clique para mais detalhes sobre a compra.',
+    mensagemLonga: '<p>Recebemos o pagamento da taxa de transferência do veículo placa ABC1D23.</p>',
+    dataEnvio: '20/06/2026 - 14:30',
     lida: false,
   },
   {
     id: 'notif-2',
-    assunto: 'IPVA 2026 disponível para pagamento',
-    corpo: 'O IPVA 2026 do veículo placa XYZ9E87 já está disponível para pagamento. Aproveite o desconto à vista.',
-    data: '2026-06-18T09:15:00',
+    codMensagem: 'TDV',
+    titulo: 'Indicação de comprador',
+    mensagemCurta: 'Uma pessoa deseja transferir um veículo para seu nome.',
+    mensagemLonga: '<p>Uma pessoa indicou você como comprador(a) do veículo placa XYZ9E87.</p>',
+    dataEnvio: '18/06/2026 - 09:15',
     lida: false,
   },
   {
     id: 'notif-3',
-    assunto: 'Multa registrada',
-    corpo: 'Foi registrada uma nova multa no veículo placa ABC1D23. Auto de infração: SP00012345. Acesse o app para mais detalhes.',
-    data: '2026-06-10T11:00:00',
+    codMensagem: 'GERAL',
+    titulo: 'Multa registrada',
+    mensagemCurta: 'Foi registrada uma nova multa no veículo placa ABC1D23.',
+    mensagemLonga: '<p>Auto de infração: SP00012345. Acesse o app para mais detalhes.</p>',
+    dataEnvio: '10/06/2026 - 11:00',
     lida: true,
   },
   {
     id: 'notif-4',
-    assunto: 'Bem-vindo ao DETRAN-SP Digital',
-    corpo: 'Seja bem-vindo ao aplicativo oficial do DETRAN-SP. Aqui você pode consultar veículos, pagar débitos, e acessar diversos serviços.',
-    data: '2026-06-01T08:00:00',
+    codMensagem: 'GERAL',
+    titulo: 'Bem-vindo ao DETRAN-SP Digital',
+    mensagemCurta: 'Seja bem-vindo ao aplicativo oficial do DETRAN-SP.',
+    mensagemLonga: '<p>Aqui você pode consultar veículos, pagar débitos, e acessar diversos serviços.</p>',
+    dataEnvio: '01/06/2026 - 08:00',
     lida: true,
   },
 ]
@@ -566,8 +574,9 @@ app.get('/api/notificacoes/badge', (_req, res) => {
   res.json({ badge: unread })
 })
 
+// A listagem da caixa postal não devolve codMensagem nem mensagemLonga
 app.get('/api/notificacoes/mensagens', (_req, res) => {
-  res.json(MOCK_NOTIFICATIONS)
+  res.json(MOCK_NOTIFICATIONS.map(mensagem => ({ ...mensagem, codMensagem: null, mensagemLonga: null })))
 })
 
 app.get('/api/notificacoes/mensagens/:id', (req, res) => {
@@ -605,12 +614,6 @@ app.post('/api/services/solicitar-vistoria-em-transito', (req, res) => {
 // ---------------------------------------------------------------------------
 // TDV (Transferência Digital de Veículo)
 // ---------------------------------------------------------------------------
-app.get('/api/tdv/verificar-estado', (_req, res) => {
-  res.json({
-    proximaAcao: 'nova_tdv',
-  })
-})
-
 app.get('/api/tdv/veiculos', (_req, res) => {
   res.json({
     vehicles: MOCK_VEHICLES.map(v => ({
@@ -654,6 +657,14 @@ app.post('/api/tdv/criar', (req, res) => {
   res.status(201).json({
     codigo: 'TDV-' + Date.now().toString(36).toUpperCase(),
   })
+})
+
+app.post('/api/tdv/informar-dados-venda', (req, res) => {
+  res.json({})
+})
+
+app.post('/api/tdv/confirmar-intencao-venda', (req, res) => {
+  res.json({})
 })
 
 app.post('/api/tdv/cancelar', (req, res) => {
@@ -1026,12 +1037,13 @@ app.listen(PORT, () => {
   console.log('    GET  /api/services/get-vehicles')
   console.log('    POST /api/services/solicitar-vistoria-em-transito')
   console.log('  TDV:')
-  console.log('    GET  /api/tdv/verificar-estado')
   console.log('    GET  /api/tdv/veiculos')
   console.log('    POST /api/tdv/analise-requisitos')
   console.log('    POST /api/tdv/validacao-comprador')
   console.log('    POST /api/tdv/validacao-venda')
   console.log('    POST /api/tdv/criar')
+  console.log('    POST /api/tdv/informar-dados-venda')
+  console.log('    POST /api/tdv/confirmar-intencao-venda')
   console.log('    POST /api/tdv/cancelar')
   console.log('    GET  /api/tdv/compras')
   console.log('    POST /api/tdv/confirmar-compra')

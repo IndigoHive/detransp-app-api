@@ -19,8 +19,8 @@ export type DashboardServices = {
 
 export function getDashboardRegistrations(): Required<NameAndRegistrationPair<DashboardServices>> {
   return {
-    getMeusVeiculosService: asFunction(({ detranSpServiceNowDashboard }) =>
-      new GetMeusVeiculosService(detranSpServiceNowDashboard),
+    getMeusVeiculosService: asFunction(({ detranSpServiceNowDashboard, logger }) =>
+      new GetMeusVeiculosService(detranSpServiceNowDashboard, logger),
     ).scoped(),
     getDebitosPendentesService: asFunction(({ detranSpServiceNowDashboard }) =>
       new GetDebitosPendentesService(detranSpServiceNowDashboard),

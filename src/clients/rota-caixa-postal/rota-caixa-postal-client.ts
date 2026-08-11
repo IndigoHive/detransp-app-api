@@ -12,14 +12,17 @@ export type CaixaPostalClientParams = {
 
 export type CaixaPostalMensagem = {
   id: string
-  assunto: string | null
-  corpo: string | null
-  data: string
+  codMensagem: string | null
+  titulo: string | null
+  mensagemCurta: string | null
+  mensagemLonga: string | null
+  dataEnvio: string
   lida: boolean
 }
 
 type RotaCaixaPostalMensagemRaw = {
   id: string
+  codMensagem?: string | null
   titulo: string | null
   mensagemCurta: string | null
   mensagemLonga?: string | null
@@ -30,9 +33,11 @@ type RotaCaixaPostalMensagemRaw = {
 function mapMensagem(raw: RotaCaixaPostalMensagemRaw): CaixaPostalMensagem {
   return {
     id: raw.id,
-    assunto: raw.titulo ?? null,
-    corpo: raw.mensagemLonga ?? raw.mensagemCurta ?? null,
-    data: raw.dataEnvio,
+    codMensagem: raw.codMensagem ?? null,
+    titulo: raw.titulo ?? null,
+    mensagemCurta: raw.mensagemCurta ?? null,
+    mensagemLonga: raw.mensagemLonga ?? null,
+    dataEnvio: raw.dataEnvio,
     lida: raw.status === 2,
   }
 }
@@ -63,6 +68,15 @@ export class RotaCaixaPostalClient {
 
   private withAuth(accessToken: string) {
     return { headers: { Authorization: `Bearer ${accessToken}` } }
+  }
+
+  private withAuthAndCpf(accessToken: string, cpf: string) {
+    return {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        CPF: cpf,
+      },
+    }
   }
 
   private buildRequestMeta(config?: AxiosRequestConfig) {
@@ -110,27 +124,34 @@ export class RotaCaixaPostalClient {
     await this.axios.put('/dispositivos/tags', payload, this.withAuth(accessToken))
   }
 
-  async getBadge(accessToken: string): Promise<CaixaPostalBadgeResponse> {
+  async getBadge(accessToken: string, cpf: string): Promise<CaixaPostalBadgeResponse> {
     const response = await this.axios.get<CaixaPostalBadgeResponse>(
       `/mensagens/app/${this.appTopic}/badge`,
-      this.withAuth(accessToken),
+      this.withAuthAndCpf(accessToken, cpf),
     )
+    if (!response.data || typeof response.data !== 'object') return { badge: 0 }
     return response.data
   }
 
-  async listarMensagens(accessToken: string): Promise<CaixaPostalMensagem[]> {
+  async listarMensagens(accessToken: string, cpf: string): Promise<CaixaPostalMensagem[]> {
     const response = await this.axios.get<RotaCaixaPostalMensagemRaw[]>(
       `/mensagens/app/${this.appTopic}`,
-      this.withAuth(accessToken),
+      this.withAuthAndCpf(accessToken, cpf),
     )
-    return response.data.map(mapMensagem)
+    if (!Array.isArray(response.data)) return []
+    const mensagens = response.data.map(mapMensagem)
+    this.logger.debug({ total: mensagens.length }, 'Mensagens retrieved')
+    return mensagens
   }
 
-  async getMensagem(accessToken: string, id: string): Promise<CaixaPostalMensagem> {
+  async getMensagem(accessToken: string, cpf: string, id: string): Promise<CaixaPostalMensagem> {
     const response = await this.axios.get<RotaCaixaPostalMensagemRaw>(
       `/mensagens/app/${this.appTopic}/id/${id}`,
-      this.withAuth(accessToken),
+      this.withAuthAndCpf(accessToken, cpf),
     )
-    return mapMensagem(response.data)
+    const mensagem = mapMensagem(response.data)
+    this.logger.debug({ codMensagem: mensagem.codMensagem, id: mensagem.id }, 'Mensagem retrieved')
+
+    return mensagem
   }
 }

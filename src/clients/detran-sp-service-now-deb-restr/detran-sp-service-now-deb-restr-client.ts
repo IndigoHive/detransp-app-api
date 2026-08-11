@@ -9,6 +9,7 @@ import type {
   BuscaVeiculoResult,
   CertidaoListagemResult,
   CertidaoResult,
+  CriaCertidaoResult,
   DocumentoCertidaoPorIdResult,
   DocumentoCertidaoResult,
   ListaVeiculosResult,
@@ -84,7 +85,7 @@ export class DetranSpServiceNowDebRestrClient extends DetranSpServiceNowDebRestr
     ).data
   }
 
-  async criaCertidao (auth: DetranSpServiceNowClientAuthWithVeiculo, renavam: Renavam): Promise<CertidaoResult> {
+  async criaCertidao (auth: DetranSpServiceNowClientAuthWithVeiculo, renavam: Renavam): Promise<CriaCertidaoResult> {
     return (
       await this.axios.post(`/${renavam}/placa/${auth.placa}/relationships/certidao`, null, this.withAuth(auth))
     ).data

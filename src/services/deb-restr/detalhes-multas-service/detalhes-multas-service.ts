@@ -1,6 +1,6 @@
 import type { DetranSpServiceNowDebRestrClient } from '../../../clients/detran-sp-service-now-deb-restr'
 import type { DebRestrVeiculoAuth, DetalhesMultasResult } from '../types'
-import { formatCurrencyBr, formatDateBr, sumValores } from '../utils'
+import { NAO_CONSTA, formatCurrencyBr, formatDateBr, sumValores } from '../utils'
 
 export type DetalhesMultasParams = DebRestrVeiculoAuth & {
   pixUrl: string
@@ -25,14 +25,16 @@ export class DetalhesMultasService {
     return {
       infracoes: multas.map((d) => {
         const attrs = d.attributes
-        const dataInfracao = attrs.dataInfracao ?? attrs.dataHora ?? null
+        const dataInfracao = attrs.dataInfracao || attrs.dataHora || null
         return {
-          descricao: attrs.descricao ?? attrs.autoInfracao ?? attrs.nomeServico ?? '',
+          id: d.id,
+          autoInfracao: attrs.autoInfracao || NAO_CONSTA,
+          descricao: attrs.descricao || attrs.autoInfracao || attrs.nomeServico || NAO_CONSTA,
           valor: attrs.valor,
           valorLabel: formatCurrencyBr(attrs.valor),
-          data: dataInfracao ? formatDateBr(dataInfracao.slice(0, 10)) : null,
-          municipio: attrs.municipio ?? null,
-          orgaoAutuador: attrs.orgaoAutuador?.nome ?? attrs.nomeOrgaoAutuador ?? null,
+          data: dataInfracao ? formatDateBr(dataInfracao.slice(0, 10)) : NAO_CONSTA,
+          municipio: attrs.municipio || NAO_CONSTA,
+          orgaoAutuador: attrs.orgaoAutuador?.nome || attrs.nomeOrgaoAutuador || NAO_CONSTA,
         }
       }),
       total,

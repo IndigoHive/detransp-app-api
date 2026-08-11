@@ -6,6 +6,7 @@ import type {
   ListaTdvsResultData
 } from '../../../clients/detran-sp-service-now/tdv/types'
 import { extractBearerToken, extractCpfFromToken } from '../../../utils/token'
+import { acaoComoComprador, type ProximaAcaoComprador } from '../proxima-acao-comprador'
 
 const LISTA_COMPRAS_CAMPOS = [
   'placaVeiculo',
@@ -51,6 +52,7 @@ type CompraVehicle = {
   yearFab: string
   yearMod: string
   codigoTransferencia: string
+  proximaAcao: ProximaAcaoComprador
   ativa?: 'true' | 'false' | '1' | '0'
   estado?: CodigoEstadoTDV
   origem?: CodigoOrigemTDV
@@ -125,7 +127,12 @@ export class ConsultaComprasService {
       return { vehicles: [] }
     }
 
-    const vehicles = result.result.map((tdv, index) => {
+    // Only list purchases the buyer can actually act on right now — a TDV still waiting on
+    // the seller has nothing for this screen to route into once picked.
+    const vehicles = result.result.flatMap((tdv, index) => {
+      const proximaAcao = acaoComoComprador(tdv.estado)
+      if (!proximaAcao) return []
+
       const codigoTransferencia = trimField(tdv.codigoTransferenciaVeiculo) ?? ''
       const plate = trimField(tdv.placaVeiculo) ?? ''
       const renavam = trimField(tdv.codigoRenavamVeiculo) ?? ''
@@ -149,7 +156,7 @@ export class ConsultaComprasService {
       const ufComprador = trimField(tdv.ufComprador)
       const cepComprador = trimField(tdv.cepComprador)
 
-      return {
+      return [{
         id,
         title: descricaoMarcaVeiculo ?? '',
         plate,
@@ -162,6 +169,7 @@ export class ConsultaComprasService {
         yearFab: '',
         yearMod: '',
         codigoTransferencia,
+        proximaAcao,
         ...(tdv.ativa != null ? { ativa: tdv.ativa } : {}),
         ...(tdv.estado != null ? { estado: tdv.estado } : {}),
         ...(tdv.origem != null ? { origem: tdv.origem } : {}),
@@ -186,7 +194,7 @@ export class ConsultaComprasService {
         ...(kmVistoriadaVeiculo ? { kmVistoriadaVeiculo } : {}),
         ...(descricaoCorVeiculo ? { descricaoCorVeiculo } : {}),
         ...(enderecoComprador ? { enderecoComprador } : {})
-      }
+      }]
     })
 
     return { vehicles }

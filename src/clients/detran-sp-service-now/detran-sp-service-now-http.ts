@@ -80,8 +80,18 @@ export class DetranSpServiceNowHttp {
   private setupInterceptors () {
     this.axios.interceptors.request.use(
       (config) => {
+        const fullUrl = `${config.baseURL ?? ''}${config.url ?? ''}`
+
         this.logger.debug(
-          { method: config.method, service: this.serviceName, url: config.url },
+          {
+            method: config.method,
+            service: SERVICE_NAME,
+            url: config.url,
+            fullUrl,
+            headers: config.headers,
+            params: config.params,
+            data: config.data,
+          },
           'ServiceNow HTTP request'
         )
         return config
@@ -98,7 +108,14 @@ export class DetranSpServiceNowHttp {
     this.axios.interceptors.response.use(
       (response) => {
         this.logger.debug(
-          { method: response.config.method, service: this.serviceName, status: response.status, url: response.config.url },
+          {
+            method: response.config.method,
+            service: this.serviceName,
+            status: response.status,
+            url: response.config.url,
+            headers: response.headers,
+            data: response.data,
+          },
           'ServiceNow HTTP response'
         )
         return response
@@ -119,6 +136,7 @@ export class DetranSpServiceNowHttp {
             status: error.response?.status,
             errorCode: error.code,
             errorMessage: error.message,
+            transactionId: error.response?.headers?.['x-transaction-id'],
           },
           'ServiceNow HTTP error'
         )

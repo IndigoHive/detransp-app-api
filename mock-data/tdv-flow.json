@@ -2680,7 +2680,7 @@
             "type": "alert",
             "name": null,
             "data": {
-              "body": "@{node:n_2d9e4b6a8c17.detail ?? node:n_6c4d8e2a1b90.detail}",
+              "body": "@{node:n_2d9e4b6a8c17.detail}",
               "title": "Pendência",
               "variant": "warning"
             }
@@ -2812,7 +2812,7 @@
             "type": "alert",
             "name": null,
             "data": {
-              "body": "@{node:n_2d9e4b6a8c17.detail ?? node:n_6c4d8e2a1b90.detail}",
+              "body": "@{node:n_2d9e4b6a8c17.detail}",
               "title": "Pendência",
               "variant": "warning"
             }
@@ -2892,7 +2892,7 @@
             "type": "alert",
             "name": null,
             "data": {
-              "body": "@{node:n_2d9e4b6a8c17.detail ?? node:n_6c4d8e2a1b90.detail}",
+              "body": "@{node:n_2d9e4b6a8c17.detail}",
               "title": "Pendência",
               "variant": "warning"
             }
@@ -2954,7 +2954,7 @@
             "type": "alert",
             "name": null,
             "data": {
-              "body": "@{node:n_2d9e4b6a8c17.detail ?? node:n_6c4d8e2a1b90.detail}",
+              "body": "@{node:n_2d9e4b6a8c17.detail}",
               "title": "Pendência",
               "variant": "warning"
             }
@@ -3016,7 +3016,7 @@
             "type": "alert",
             "name": null,
             "data": {
-              "body": "@{node:n_2d9e4b6a8c17.detail ?? node:n_6c4d8e2a1b90.detail}",
+              "body": "@{node:n_2d9e4b6a8c17.detail}",
               "title": "Pendência",
               "variant": "warning"
             }
@@ -4103,7 +4103,7 @@
                 "type": "label_text",
                 "name": null,
                 "data": {
-                  "text": "@{node:n_0a7cda804e6d.cpfComprador ?? node:n_3f8e1a7c9b20.cpf}",
+                  "text": "@{node:n_0a7cda804e6d.cpfComprador ?? node:n_2d9e4b6a8c17.cpfComprador ?? node:n_90a9d6db5f4b.cpfComprador}",
                   "label": "CPF"
                 }
               },
@@ -4112,7 +4112,7 @@
                 "type": "label_text",
                 "name": null,
                 "data": {
-                  "text": "@{node:n_0a7cda804e6d.nomeComprador ?? node:n_3f8e1a7c9b20.full_name}",
+                  "text": "@{node:n_0a7cda804e6d.nomeComprador ?? node:n_21da615e160d.full_name}",
                   "label": "Nome"
                 }
               },
@@ -4121,7 +4121,7 @@
                 "type": "label_text",
                 "name": null,
                 "data": {
-                  "text": "@{node:n_6c4d8e2a1b90.enderecoComprador ?? node:n_0a7cda804e6d.enderecoComprador}",
+                  "text": "@{node:n_0a7cda804e6d.enderecoComprador}",
                   "label": "Endereço"
                 }
               }
@@ -4895,18 +4895,33 @@
         "responseExamples": [
           {
             "id": "00ed0db0-44a2-4311-a651-64e4ce12975e",
-            "name": "Aprovado",
-            "value": "{\n  \"hasRestriction\": false,\n  \"hasActiveTDV\": false\n}"
+            "name": "Aprovado (nova TDV)",
+            "value": "{ \"hasRestriction\": false, \"hasActiveTDV\": false, \"proximaAcao\": \"nova_tdv\" }"
+          },
+          {
+            "id": "c8a1f9d2-3b6e-4a7c-9f0d-1e2b3c4d5e6f",
+            "name": "Comprador já assinou (vendedor_2)",
+            "value": "{ \"hasRestriction\": false, \"hasActiveTDV\": true, \"codigoTransferencia\": \"TDV-000000\", \"estado\": \"6\", \"proximaAcao\": \"vendedor_2\" }"
+          },
+          {
+            "id": "c4e8f2a7-1d05-4b6e-8f2a-100000000001",
+            "name": "Retomar venda (sem dados ainda, estado 1)",
+            "value": "{ \"hasRestriction\": false, \"hasActiveTDV\": true, \"codigoTransferencia\": \"TDV-000000\", \"estado\": \"1\", \"proximaAcao\": \"continuar_venda\" }"
+          },
+          {
+            "id": "c4e8f2a7-1d05-4b6e-8f2a-100000000002",
+            "name": "Retomar venda (dados já informados, estado 2)",
+            "value": "{ \"hasRestriction\": false, \"hasActiveTDV\": true, \"codigoTransferencia\": \"TDV-000000\", \"estado\": \"2\", \"proximaAcao\": \"continuar_venda\" }"
           },
           {
             "id": "0ad95ca6-eb99-4379-8363-262961c02efc",
-            "name": "TDV em andamento",
-            "value": "{\n  \"hasRestriction\": false,\n  \"hasActiveTDV\": true,\n  \"codigoTransferencia\": \"TDV-000000\"\n}"
+            "name": "TDV em andamento (outro estado)",
+            "value": "{ \"hasRestriction\": false, \"hasActiveTDV\": true, \"codigoTransferencia\": \"TDV-000000\", \"estado\": \"7\" }"
           },
           {
             "id": "b6f66d6a-af30-4594-b1c0-87a11d2c87be",
             "name": "Veículo com restrição",
-            "value": "{\n  \"hasRestriction\": true,\n  \"hasActiveTDV\": false\n}"
+            "value": "{ \"hasRestriction\": true, \"hasActiveTDV\": false }"
           }
         ]
       }
@@ -5162,7 +5177,7 @@
         },
         "method": "POST",
         "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/valida-assinatura",
-        "body": "{\n  \"codigoTransferencia\": \"@{node:n_90a9d6db5f4b.codigoTransferencia}\",\n  \"itiCode\": \"@{node:n_3bad58f20fff.code}\"\n}\n",
+        "body": "{\n  \"codigoTransferencia\": \"@{node:n_2d9e4b6a8c17.codigoTransferencia ?? node:n_90a9d6db5f4b.codigoTransferencia ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoTransferencia}\",\n  \"itiCode\": \"@{node:n_3bad58f20fff.code}\"\n}\n",
         "responseExamples": [
           {
             "id": "2f26dc5c-5d01-488a-8e76-1ca8f0dd33a7",
@@ -5340,12 +5355,17 @@
           "x": -1832,
           "y": 2008
         },
-        "value": "@{node:n_90a9d6db5f4b.proximaAcao}",
+        "value": "@{node:n_b824c7dd9350.proximaAcao ?? node:n_90a9d6db5f4b.proximaAcao ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.proximaAcao}",
         "routes": [
           {
             "id": "b9a984e3-5280-40e3-bd80-bd597df5da89",
             "label": "Nova TDV",
             "value": "nova_tdv"
+          },
+          {
+            "id": "c4e8f2a7-1d05-4b6e-8f2a-000000000001",
+            "label": "Continuar Venda",
+            "value": "continuar_venda"
           },
           {
             "id": "5a63bc3a-59bb-4258-9927-d496147f49a2",
@@ -5396,12 +5416,12 @@
         },
         "method": "POST",
         "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/criar",
-        "body": "{\n  \"placaVeiculo\": \"@{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.plate}\",\n  \"renavamVeiculo\": \"@{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.renavam}\",\n  \"cpfComprador\": \"@{screen:s_2909315de67e.comp:c_676202e6fd57.value}\",\n  \"nomeComprador\": \"@{screen:s_2909315de67e.comp:c_eb386ba9d15a.value}\",\n  \"emailComprador\": \"@{screen:s_2909315de67e.comp:c_85fbac00c3aa.value}\",\n  \"cepComprador\": \"@{screen:s_2909315de67e.comp:c_24e94a494019.value}\",\n  \"valorVenda\": \"@{screen:s_8ed2db9cbfd7.comp:c_f0a773241106.value}\",\n  \"quilometragem\": \"@{screen:s_8ed2db9cbfd7.comp:c_95aef308d32f.value}\",\n  \"codigoProvaVidaVendedor\": \"@{node:n_4d4ab6c16ec8.codigoProvaVida}\"\n}",
+        "body": "{\n  \"placaVeiculo\": \"@{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.plate}\",\n  \"renavamVeiculo\": \"@{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.renavam}\"\n}",
         "responseExamples": [
           {
             "id": "f0c3aea6-736b-4662-a6ff-a468f5c7fa53",
             "name": "Sucesso",
-            "value": "{\n  \"codigo\": \"TDV-123456\"\n}"
+            "value": "{ \"codigo\": \"TDV-123456\" }"
           }
         ]
       }
@@ -5428,7 +5448,7 @@
         },
         "method": "POST",
         "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/valida-assinatura",
-        "body": "{\n  \"codigoTransferencia\": \"@{node:n_90a9d6db5f4b.codigoTransferencia}\",\n  \"itiCode\": \"@{node:n_54e1a65041fa.code}\"\n}\n",
+        "body": "{\n  \"codigoTransferencia\": \"@{node:n_b824c7dd9350.codigoTransferencia ?? node:n_90a9d6db5f4b.codigoTransferencia ?? node:n_d87067e61ebb.codigo}\",\n  \"itiCode\": \"@{node:n_54e1a65041fa.code}\"\n}\n",
         "responseExamples": [
           {
             "id": "bbf0c143-4114-42fc-b2e2-632fae3bef9d",
@@ -5496,7 +5516,7 @@
           "x": 268,
           "y": 4444
         },
-        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/consulta-debitos?codigoTransferencia=@{node:n_2d9e4b6a8c17.codigoTransferencia ?? node:n_6c4d8e2a1b90.codigoTransferencia ?? node:n_90a9d6db5f4b.codigoTransferencia ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoTransferencia}",
+        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/consulta-debitos?codigoTransferencia=@{node:n_2d9e4b6a8c17.codigoTransferencia ?? node:n_90a9d6db5f4b.codigoTransferencia ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoTransferencia}",
         "responseExamples": [
           {
             "id": "662e4b72-b520-47e2-a222-bd21ed66959a",
@@ -5516,7 +5536,7 @@
           "y": 4320
         },
         "method": "GET",
-        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/pix?codigoTransferencia=@{node:n_2d9e4b6a8c17.codigoTransferencia ?? node:n_6c4d8e2a1b90.codigoTransferencia ?? node:n_90a9d6db5f4b.codigoTransferencia ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoTransferencia}&forcarNovo=true"
+        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/pix?codigoTransferencia=@{node:n_2d9e4b6a8c17.codigoTransferencia ?? node:n_90a9d6db5f4b.codigoTransferencia ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoTransferencia}&forcarNovo=true"
       }
     },
     {
@@ -5897,7 +5917,7 @@
           "x": 8580,
           "y": 4008
         },
-        "value": "@{node:n_2d9e4b6a8c17.proximaAcao ?? node:n_6c4d8e2a1b90.proximaAcao}",
+        "value": "@{node:n_2d9e4b6a8c17.proximaAcao}",
         "routes": [
           {
             "id": "r_concluido_01",
@@ -6013,7 +6033,7 @@
           "y": 7164
         },
         "method": "GET",
-        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/consulta-debitos?codigoTransferencia=@{node:n_2d9e4b6a8c17.codigoTransferencia ?? node:n_6c4d8e2a1b90.codigoTransferencia ?? node:n_90a9d6db5f4b.codigoTransferencia}",
+        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/consulta-debitos?codigoTransferencia=@{node:n_2d9e4b6a8c17.codigoTransferencia ?? node:n_90a9d6db5f4b.codigoTransferencia}",
         "responseExamples": [
           {
             "id": "662e4b72-b520-47e2-a222-bd21ed66959a",
@@ -6032,7 +6052,7 @@
           "x": 10376,
           "y": 6852
         },
-        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/consulta-debitos?codigoTransferencia=@{node:n_2d9e4b6a8c17.codigoTransferencia ?? node:n_6c4d8e2a1b90.codigoTransferencia ?? node:n_90a9d6db5f4b.codigoTransferencia}",
+        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/consulta-debitos?codigoTransferencia=@{node:n_2d9e4b6a8c17.codigoTransferencia ?? node:n_90a9d6db5f4b.codigoTransferencia}",
         "responseExamples": [
           {
             "id": "662e4b72-b520-47e2-a222-bd21ed66959a",
@@ -6052,7 +6072,7 @@
           "y": 7024
         },
         "method": "GET",
-        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/pix?codigoTransferencia=@{node:n_2d9e4b6a8c17.codigoTransferencia ?? node:n_6c4d8e2a1b90.codigoTransferencia ?? node:n_90a9d6db5f4b.codigoTransferencia}&forcarNovo=true"
+        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/pix?codigoTransferencia=@{node:n_2d9e4b6a8c17.codigoTransferencia ?? node:n_90a9d6db5f4b.codigoTransferencia}&forcarNovo=true"
       }
     },
     {
@@ -6110,42 +6130,225 @@
     },
     {
       "id": "n_3bad58f20fff",
-      "type": "web_view_screen",
-      "name": "Assinatura ITI (vendedor)",
+      "type": "iti_signature_screen",
+      "name": "Documento",
       "data": {
         "position": {
           "x": 9000,
           "y": 1960
         },
-        "url": "https://example.com/iti-assinatura",
-        "callbackPrefix": "detransp://iti",
-        "responseExamples": [
-          {
-            "id": "ex-iti-vendedor-ok",
-            "name": "Assinado",
-            "value": "{\n  \"code\": \"mock-iti-code-vendedor\"\n}"
-          }
-        ]
+        "url": "@{node:n_02cc2ef9116a.link}",
+        "callbackPrefix": "@{node:n_02cc2ef9116a.redirectUri}"
       }
     },
     {
       "id": "n_54e1a65041fa",
-      "type": "web_view_screen",
-      "name": "Assinatura ITI (comprador assinou)",
+      "type": "iti_signature_screen",
+      "name": "Documento",
       "data": {
         "position": {
           "x": 5200,
           "y": -200
         },
-        "url": "https://example.com/iti-assinatura",
-        "callbackPrefix": "detransp://iti",
+        "url": "@{node:n_ec80ea40ca78.link}",
+        "callbackPrefix": "@{node:n_ec80ea40ca78.redirectUri}"
+      }
+    },
+    {
+      "id": "n_02cc2ef9116a",
+      "type": "http_node",
+      "name": "Link Assinatura ITI (Comprador)",
+      "data": {
+        "position": {
+          "x": 8300,
+          "y": 2160
+        },
+        "method": "GET",
+        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/link-assinatura-iti",
         "responseExamples": [
           {
-            "id": "ex-iti-comprador-ok",
-            "name": "Assinado",
-            "value": "{\n  \"code\": \"mock-iti-code-comprador\"\n}"
+            "id": "b3f4b6a2-2f2b-4e6b-9c1a-6b8f7e2a4d10",
+            "name": "Sucesso",
+            "value": "{ \"link\": \"https://cas.staging.iti.br/oauth2.0/authorize?...\", \"redirectUri\": \"detran.sp://localhost/appdetran/iti/oauth_redirect.html\" }"
           }
         ]
+      }
+    },
+    {
+      "id": "n_21da615e160d",
+      "type": "get_user_info_node",
+      "name": "Dados do Usuário Logado",
+      "data": {
+        "position": {
+          "x": 3350,
+          "y": -700
+        }
+      }
+    },
+    {
+      "id": "n_5f8e2a91c3d4",
+      "type": "if_node",
+      "name": "Vendedor: TDV pronta para rotear?",
+      "data": {
+        "position": {
+          "x": 6300,
+          "y": -200
+        },
+        "condition": {
+          "clauses": [
+            {
+              "id": "5f8e2a91-c3d4-4b6a-9e1f-000000000001",
+              "left": "@{node:n_b824c7dd9350.proximaAcao}",
+              "operator": "is_not_empty"
+            }
+          ],
+          "combinator": "or"
+        }
+      }
+    },
+    {
+      "id": "n_a3f7c1e92b04",
+      "type": "http_node",
+      "name": "Informar Dados Venda",
+      "data": {
+        "position": {
+          "x": 8890,
+          "y": -80
+        },
+        "method": "POST",
+        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/informar-dados-venda",
+        "body": "{\n  \"codigoTransferencia\": \"@{node:n_d87067e61ebb.codigo ?? node:n_b824c7dd9350.codigoTransferencia}\",\n  \"cpfComprador\": \"@{screen:s_2909315de67e.comp:c_676202e6fd57.value}\",\n  \"nomeComprador\": \"@{screen:s_2909315de67e.comp:c_eb386ba9d15a.value}\",\n  \"emailComprador\": \"@{screen:s_2909315de67e.comp:c_85fbac00c3aa.value}\",\n  \"cepComprador\": \"@{screen:s_2909315de67e.comp:c_24e94a494019.value}\",\n  \"numeroComprador\": \"@{screen:s_2909315de67e.comp:c_1e15a3ceef7b.value}\",\n  \"complementoComprador\": \"@{screen:s_2909315de67e.comp:c_90a932a96b1f.value}\",\n  \"valorVenda\": \"@{screen:s_8ed2db9cbfd7.comp:c_f0a773241106.value}\",\n  \"quilometragem\": \"@{screen:s_8ed2db9cbfd7.comp:c_95aef308d32f.value}\",\n  \"codigoProvaVidaVendedor\": \"@{node:n_4d4ab6c16ec8.codigoProvaVida ?? node:n_c4e8f2a71d05.codigoProvaVida}\"\n}",
+        "responseExamples": [
+          {
+            "id": "a3f7c1e9-2b04-4d6a-8e1f-000000000001",
+            "name": "Sucesso",
+            "value": "{}"
+          },
+          {
+            "id": "a3f7c1e9-2b04-4d6a-8e1f-000000000002",
+            "name": "Quilometragem inválida",
+            "value": "{ \"showSnackbar\": { \"variant\": \"error\", \"title\": \"Erro\", \"description\": \"A quilometragem informada não pode ser menor que a quilometragem vistoriada.\" } }"
+          }
+        ],
+        "showSnackbar": true
+      }
+    },
+    {
+      "id": "n_acb9e7f8d196",
+      "type": "waypoint_node",
+      "name": null,
+      "data": {
+        "position": {
+          "x": 3616,
+          "y": 4
+        }
+      }
+    },
+    {
+      "id": "n_b8d2e4f61c37",
+      "type": "http_node",
+      "name": "Confirmar Intenção Venda",
+      "data": {
+        "position": {
+          "x": 11200,
+          "y": 40
+        },
+        "method": "POST",
+        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/confirmar-intencao-venda",
+        "body": "{\n  \"codigoTransferencia\": \"@{node:n_d87067e61ebb.codigo ?? node:n_b824c7dd9350.codigoTransferencia}\",\n  \"codigoProvaVidaVendedor\": \"@{node:n_4d4ab6c16ec8.codigoProvaVida ?? node:n_c4e8f2a71d05.codigoProvaVida}\"\n}",
+        "responseExamples": [
+          {
+            "id": "b8d2e4f6-1c37-4a9e-8b2d-000000000001",
+            "name": "Sucesso",
+            "value": "{}"
+          }
+        ]
+      }
+    },
+    {
+      "id": "n_c4e8f2a71d05",
+      "type": "liveness_screen",
+      "name": "Liveness (retomar venda)",
+      "data": {
+        "position": {
+          "x": 7200,
+          "y": 1000
+        }
+      }
+    },
+    {
+      "id": "n_d5f9a3b82e16",
+      "type": "if_node",
+      "name": "Retomar: dados da venda já informados?",
+      "data": {
+        "position": {
+          "x": 7660,
+          "y": 1000
+        },
+        "condition": {
+          "clauses": [
+            {
+              "id": "d5f9a3b8-2e16-4f7a-9c3d-000000000001",
+              "left": "@{node:n_b824c7dd9350.estado}",
+              "right": "2",
+              "operator": "equals"
+            }
+          ],
+          "combinator": "or"
+        }
+      }
+    },
+    {
+      "id": "n_ec80ea40ca78",
+      "type": "http_node",
+      "name": "Link Assinatura ITI (Vendedor)",
+      "data": {
+        "position": {
+          "x": 100,
+          "y": 2820
+        },
+        "method": "GET",
+        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/link-assinatura-iti",
+        "responseExamples": [
+          {
+            "id": "e9d4d9a0-6b39-4f92-8d1a-6f6b1c2a7e21",
+            "name": "Sucesso",
+            "value": "{ \"link\": \"https://cas.staging.iti.br/oauth2.0/authorize?...\", \"redirectUri\": \"detran.sp://localhost/appdetran/iti/oauth_redirect.html\" }"
+          }
+        ]
+      }
+    },
+    {
+      "id": "n_f0798c61f005",
+      "type": "waypoint_node",
+      "name": null,
+      "data": {
+        "position": {
+          "x": 5800,
+          "y": 2640
+        }
+      }
+    },
+    {
+      "id": "n_e7c1a90b4d25",
+      "type": "if_node",
+      "name": "Cold start: nova TDV?",
+      "data": {
+        "position": {
+          "x": -2500,
+          "y": 2048
+        },
+        "condition": {
+          "clauses": [
+            {
+              "id": "4dfb3c66-266a-4fd9-9b80-77e64746fded",
+              "left": "@{node:n_90a9d6db5f4b.proximaAcao}",
+              "right": "nova_tdv",
+              "operator": "equals"
+            }
+          ],
+          "combinator": "or"
+        }
       }
     }
   ],
@@ -6164,7 +6367,7 @@
     },
     {
       "sourceId": "n_b824c7dd9350",
-      "targetId": "n_b2c6d93e6c54",
+      "targetId": "n_5f8e2a91c3d4",
       "sourceHandle": "output",
       "targetHandle": "input"
     },
@@ -6284,7 +6487,7 @@
     },
     {
       "sourceId": "s_8ed2db9cbfd7",
-      "targetId": "n_4378ea225f58",
+      "targetId": "n_a3f7c1e92b04",
       "sourceHandle": "c_6909006a32c0",
       "targetHandle": "input"
     },
@@ -6314,7 +6517,7 @@
     },
     {
       "sourceId": "s_24b45fd19f30",
-      "targetId": "n_3bad58f20fff",
+      "targetId": "n_02cc2ef9116a",
       "sourceHandle": "c_f95e240f9b02",
       "targetHandle": "input"
     },
@@ -6416,25 +6619,25 @@
     },
     {
       "sourceId": "n_5bd3d687408b",
-      "targetId": "n_90a9d6db5f4b",
+      "targetId": "n_21da615e160d",
       "sourceHandle": "output",
       "targetHandle": "input"
     },
     {
       "sourceId": "n_90a9d6db5f4b",
-      "targetId": "n_cd7b779a01a0",
+      "targetId": "n_e7c1a90b4d25",
       "sourceHandle": "output",
       "targetHandle": "input"
     },
     {
       "sourceId": "s_7d910eaa66ad",
-      "targetId": "n_d87067e61ebb",
+      "targetId": "n_b8d2e4f61c37",
       "sourceHandle": "c_8c410daf9e3e",
       "targetHandle": "input"
     },
     {
       "sourceId": "n_d87067e61ebb",
-      "targetId": "s_8080e0ac9d2e",
+      "targetId": "s_8fefaaacf3d9",
       "sourceHandle": "output",
       "targetHandle": "input"
     },
@@ -6458,7 +6661,7 @@
     },
     {
       "sourceId": "s_f0ef50595f87",
-      "targetId": "n_54e1a65041fa",
+      "targetId": "n_ec80ea40ca78",
       "sourceHandle": "c_44fe592f850b",
       "targetHandle": "input"
     },
@@ -6656,9 +6859,9 @@
     },
     {
       "sourceId": "n_cd7b779a01a0",
-      "targetId": "n_b17e692471e5",
+      "targetId": "n_d87067e61ebb",
       "sourceHandle": "b9a984e3-5280-40e3-bd80-bd597df5da89",
-      "targetHandle": "left-target"
+      "targetHandle": "input"
     },
     {
       "sourceId": "n_b17e692471e5",
@@ -7018,6 +7221,102 @@
       "sourceId": "s_7e2a1c9b4f08",
       "targetId": "s_c482ac86f650",
       "sourceHandle": "c_9d3f7a1e5b20",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_21da615e160d",
+      "targetId": "n_90a9d6db5f4b",
+      "sourceHandle": "output",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_e7c1a90b4d25",
+      "targetId": "n_b17e692471e5",
+      "sourceHandle": "true",
+      "targetHandle": "left-target"
+    },
+    {
+      "sourceId": "n_e7c1a90b4d25",
+      "targetId": "n_cd7b779a01a0",
+      "sourceHandle": "false",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_5f8e2a91c3d4",
+      "targetId": "n_cd7b779a01a0",
+      "sourceHandle": "true",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_5f8e2a91c3d4",
+      "targetId": "n_b2c6d93e6c54",
+      "sourceHandle": "false",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_cd7b779a01a0",
+      "targetId": "n_c4e8f2a71d05",
+      "sourceHandle": "c4e8f2a7-1d05-4b6e-8f2a-000000000001",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_a3f7c1e92b04",
+      "targetId": "n_4378ea225f58",
+      "sourceHandle": "output",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_b8d2e4f61c37",
+      "targetId": "s_8080e0ac9d2e",
+      "sourceHandle": "output",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_c4e8f2a71d05",
+      "targetId": "n_d5f9a3b82e16",
+      "sourceHandle": "output",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_d5f9a3b82e16",
+      "targetId": "s_7d910eaa66ad",
+      "sourceHandle": "true",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_d5f9a3b82e16",
+      "targetId": "s_2909315de67e",
+      "sourceHandle": "false",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_02cc2ef9116a",
+      "targetId": "n_3bad58f20fff",
+      "sourceHandle": "output",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_ec80ea40ca78",
+      "targetId": "n_54e1a65041fa",
+      "sourceHandle": "output",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_62e905fb199e",
+      "targetId": "s_8fefaaacf3d9",
+      "sourceHandle": "c_70ffc7dac521",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_f0798c61f005",
+      "targetId": "n_32b7a4b7dfc4",
+      "sourceHandle": "right-source",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_acb9e7f8d196",
+      "targetId": "n_4a9529e3107c",
+      "sourceHandle": "right-source",
       "targetHandle": "input"
     }
   ]

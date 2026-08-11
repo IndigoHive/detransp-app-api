@@ -108,10 +108,6 @@ export type VehicleDebtsPayload = {
     pixButton: PixButtonState
     helperText?: string
   }
-  total: {
-    pixButton: Exclude<PixButtonState, 'disabled'>
-    totalLabel: string | null
-  }
 }
 
 export type ConsultaVehicleInfo = {
@@ -152,10 +148,11 @@ export type DetalhesIpvaChip = {
 }
 
 export type DetalhesIpvaItem = {
+  id: string
   exercicio: number | null
   valor: number
   valorLabel: string
-  vencimento: string | null
+  vencimento: string
   chips: DetalhesIpvaChip[]
   parcels: IpvaParcelsInfo | null
 }
@@ -168,12 +165,14 @@ export type DetalhesIpvaResult = {
 }
 
 export type DetalhesMultaInfracao = {
+  id: string
+  autoInfracao: string
   descricao: string
   valor: number
   valorLabel: string
-  data: string | null
-  municipio: string | null
-  orgaoAutuador: string | null
+  data: string
+  municipio: string
+  orgaoAutuador: string
 }
 
 export type DetalhesMultasResult = {

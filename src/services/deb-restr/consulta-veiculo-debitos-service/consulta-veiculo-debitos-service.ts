@@ -1,3 +1,4 @@
+import type { Logger } from 'pino'
 import type {
   BuscaVeiculoResponse,
   DebitoIncluded,
@@ -12,7 +13,7 @@ import type {
 } from '../types'
 import { deriveIpvaSectionStatus, deriveSectionStatus, formatCurrencyBr, sumValores, toSentenceCase } from '../utils'
 
-const LICENCIAMENTO_BLOQUEADO_TEXT = 'Para liberar o pagamento do licenciamento, quite os demais débitos do veículo.'
+const LICENCIAMENTO_BLOQUEADO_TEXT = 'Para liberar o pagamento do licenciamento, é preciso que todos os débitos do veículo tenham sido pagos.'
 
 function ipvaHelperText (parcelCount: number): string | undefined {
   return parcelCount > 1 ? `Parcelamento em até ${parcelCount}x no Pix sem juros` : undefined
@@ -25,10 +26,12 @@ export type ConsultaVeiculoDebitosParams = DebRestrVeiculoAuth & {
 export class ConsultaVeiculoDebitosService {
   private readonly debRestrClient: DetranSpServiceNowDebRestrClient
   private readonly pgtoClient: DetranSpServiceNowPgtoClient
+  private readonly logger: Logger
 
-  constructor (debRestrClient: DetranSpServiceNowDebRestrClient, pgtoClient: DetranSpServiceNowPgtoClient) {
+  constructor (debRestrClient: DetranSpServiceNowDebRestrClient, pgtoClient: DetranSpServiceNowPgtoClient, logger: Logger) {
     this.debRestrClient = debRestrClient
     this.pgtoClient = pgtoClient
+    this.logger = logger
   }
 
   async run (params: ConsultaVeiculoDebitosParams): Promise<ConsultaVeiculoDebitosResult> {
@@ -38,6 +41,35 @@ export class ConsultaVeiculoDebitosService {
       this.debRestrClient.buscaVeiculo(auth, auth.renavam, { includeProcedencia: representacao }),
       this.pgtoClient.listaDebitos(auth)
     ])
+
+    // TEMP DEBUG — remove after this session. Always-on (not gated by
+    // LOG_LEVEL) per request, to inspect buscaVeiculo's raw response live.
+    // `String(reason)` used to collapse a DetranSpServiceNowDebRestrError down
+    // to just "Name: message", dropping the raw ServiceNow `type`/`responseData`
+    // that are the whole point of this debug log — log them explicitly instead.
+    this.logger.warn(
+      {
+        action: 'temp-debug-consulta-veiculo',
+        renavam: auth.renavam,
+        placa: auth.placa,
+        status: veiculoSettled.status,
+        ...(veiculoSettled.status === 'fulfilled'
+          ? { raw: veiculoSettled.value }
+          : veiculoSettled.reason instanceof DetranSpServiceNowDebRestrError
+            ? {
+                errorName: veiculoSettled.reason.name,
+                errorType: veiculoSettled.reason.type,
+                errorMessage: veiculoSettled.reason.message,
+                responseData: veiculoSettled.reason.responseData
+              }
+            : {
+                errorName: veiculoSettled.reason?.name,
+                errorMessage: veiculoSettled.reason?.message,
+                errorStack: veiculoSettled.reason?.stack
+              })
+      },
+      'TEMP DEBUG buscaVeiculo raw response'
+    )
 
     if (veiculoSettled.status === 'rejected') {
       const err = veiculoSettled.reason
@@ -118,9 +150,6 @@ export class ConsultaVeiculoDebitosService {
     const hasOtherDebts = ipva.length > 0 || multas.length > 0
 
     const licenciamentoPayable = licenciamento.length > 0 && !hasOtherDebts
-    // pix/total only earns its place when it bundles more than one section —
-    // see the VehicleDebtsPayload.total comment for the full rationale
-    const totalPayable = ipva.length > 0 && multas.length > 0 && !hasMultaForaDoSistema
 
     const ipvaStatus = deriveIpvaSectionStatus(ipva)
     const multasStatus = deriveSectionStatus(multas)
@@ -155,10 +184,6 @@ export class ConsultaVeiculoDebitosService {
         ...(licenciamento.length > 0 && !licenciamentoPayable
           ? { helperText: LICENCIAMENTO_BLOQUEADO_TEXT }
           : {}),
-      },
-      total: {
-        pixButton: totalPayable ? 'visible' : 'hidden',
-        totalLabel: totalPayable ? formatCurrencyBr(sumValores([...ipva, ...multas])) : null,
       },
     }
   }

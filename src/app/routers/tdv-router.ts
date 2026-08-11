@@ -45,6 +45,20 @@ export function tdvRouter (): Router {
     res.status(201).json(result)
   })
 
+  router.post('/informar-dados-venda', async (req, res) => {
+    const { accessToken } = req.session!
+    const service = req.scope.resolve('informarDadosVendaService')
+    const result = await service.run(accessToken, req.body)
+    res.status(200).json(result)
+  })
+
+  router.post('/confirmar-intencao-venda', async (req, res) => {
+    const { accessToken } = req.session!
+    const service = req.scope.resolve('confirmarIntencaoVendaService')
+    const result = await service.run(accessToken, req.body)
+    res.status(200).json(result)
+  })
+
   router.post('/cancelar', async (req, res) => {
     const { accessToken } = req.session!
     const service = req.scope.resolve('cancelarTdvService')
@@ -76,13 +90,6 @@ export function tdvRouter (): Router {
   router.post('/criar-compra', async (req, res) => {
     const { accessToken } = req.session!
     const service = req.scope.resolve('criarCompraService')
-    const result = await service.run(accessToken, req.body)
-    res.status(200).json(result)
-  })
-
-  router.post('/confirmar-intencao-venda', async (req, res) => {
-    const { accessToken } = req.session!
-    const service = req.scope.resolve('confirmarIntencaoVendaService')
     const result = await service.run(accessToken, req.body)
     res.status(200).json(result)
   })
@@ -130,6 +137,12 @@ export function tdvRouter (): Router {
     const { accessToken } = req.session!
     const service = req.scope.resolve('provaVidaService')
     const result = await service.run(accessToken, req.body)
+    res.status(200).json(result)
+  })
+
+  router.get('/link-assinatura-iti', async (req, res) => {
+    const service = req.scope.resolve('gerarLinkAssinaturaItiService')
+    const result = service.run()
     res.status(200).json(result)
   })
 

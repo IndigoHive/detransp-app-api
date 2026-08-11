@@ -1,7 +1,7 @@
 import { BadRequest, isHttpError } from 'http-errors'
 import type { ArquivoPecaRaw, PecaRaw, RotaCrvPecasClient } from '../../../clients/rota-crv-pecas'
 import type { RotaVistoriasClient } from '../../../clients/rota-vistorias'
-import { extractNumeroFromQrUrl } from '../utils'
+import { ensureSpPrefix, extractNumeroFromQrUrl } from '../utils'
 import type { ConsultaPecaResult } from '../types'
 
 // Fotos do veículo às vezes chegam do upstream embrulhadas em PDF em vez de
@@ -28,6 +28,7 @@ export class ConsultaPecaService {
 
   async run(accessToken: string, numero: string): Promise<ConsultaPecaResult | undefined> {
     if (!numero?.trim()) throw BadRequest('Número da etiqueta é obrigatório.')
+    numero = ensureSpPrefix(numero.trim())
 
     // Chamada principal — não é best-effort. Erros nos 4 status já tratados pelo interceptor do
     // client (403/500/400/404) são normalizados em `isError` (ver ERROR_STATUS_CODES acima);
@@ -101,7 +102,7 @@ export class ConsultaPecaService {
             cnpj: peca.cnpj,
             razaoSocial: peca.nomeEmpresa,
             telefone: peca.telefoneDDD && peca.telefoneNumero ? `(${peca.telefoneDDD}) ${peca.telefoneNumero}` : null,
-            email: peca.email,
+            email: peca.email ? peca.email.toLowerCase() : null,
             endereco: this.buildEndereco(peca),
           }
         : null,
@@ -109,17 +110,17 @@ export class ConsultaPecaService {
         numeroIdentificacao: peca.numeroPeca,
         tipo: peca.tipoPeca,
         numeroMotor,
-        classificacao: peca.classificacao,
+        classificacao: this.capitalizeWords(peca.classificacao || ''),
       },
       veiculo: {
         placa: peca.placa,
         chassi: peca.chassi,
         renavam: peca.renavam,
         marcaModelo: peca.modelo,
-        cor: peca.cor,
+        cor: this.capitalizeWords(peca.cor || ''),
         anoFabricacao: peca.anoFabricacao,
         anoModelo: peca.anoModelo,
-        combustivel: peca.combustivel,
+        combustivel: this.capitalizeWords(peca.combustivel || ''),
       },
       imagens,
       documentos,
@@ -142,5 +143,9 @@ export class ConsultaPecaService {
     const cidadeEstado = [peca.cidade, peca.estado].filter(Boolean).join(' - ')
     const partes = [linha, peca.bairro, cidadeEstado, peca.cep].filter(Boolean)
     return partes.length > 0 ? partes.join(', ') : null
+  }
+
+  private capitalizeWords(text: string): string {
+    return text.replace(/\S+/g, (word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
   }
 }

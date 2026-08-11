@@ -11,7 +11,9 @@ export class EmiteCertidaoService {
 
   async run (auth: DebRestrVeiculoAuth): Promise<EmiteCertidaoResult> {
     const result = await this.client.criaCertidao(auth, auth.renavam)
-    const attrs = result?.data?.[0]?.attributes
+    // criaCertidao (POST, create) returns data as a single object, unlike
+    // buscaCertidao (GET, list) — confirmed via live log 2026-08-06.
+    const attrs = result?.data?.attributes
     const emitida = Boolean(attrs)
 
     // The flow renders the PDF right after emitting, so fetch the document in

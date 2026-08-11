@@ -75,8 +75,9 @@ export class CriaPixDebitoService {
     const qrCode = result?.included?.find((item) => item.type === 'qr-code')
 
     // Temporary (do not ship): txid for mock-paying the QR via the SEFAZ
-    // homolog webhook — only present in the raw ServiceNow payload.
-    this.logger.info(
+    // homolog webhook — only present in the raw ServiceNow payload. warn
+    // level on purpose, just to stand out in the log list.
+    this.logger.warn(
       {
         action: 'mock-pay-txid',
         tipo,

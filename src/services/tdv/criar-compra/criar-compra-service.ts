@@ -389,6 +389,7 @@ export class CriarCompraService {
     if (!stub) return input
 
     const stubKmVistoriada = resolveKmVistoriada(stub)
+    const stubCep = normalizeCep(stub.cepComprador ?? undefined)
 
     return {
       ...input,
@@ -401,8 +402,8 @@ export class CriarCompraService {
       ...(needsKmVistoriada && stubKmVistoriada
         ? { kmVistoriadaVeiculo: stubKmVistoriada }
         : {}),
-      ...(needsCep && normalizeCep(stub.cepComprador ?? undefined)
-        ? { cepComprador: normalizeCep(stub.cepComprador ?? undefined) }
+      ...(needsCep && stubCep
+        ? { cepComprador: stubCep }
         : {}),
       ...(needsLogradouro && stub.logradouroComprador?.trim()
         ? { logradouroComprador: stub.logradouroComprador.trim() }

@@ -31,8 +31,9 @@ export class CriaQRCodeCertidaoService {
     try {
       const result = await this.client.criaQRCodeCertidao(auth, auth.renavam)
       const data = result?.data
-      // Temporary (do not ship): txid for mock-paying via the SEFAZ homolog webhook
-      this.logger.info(
+      // Temporary (do not ship): txid for mock-paying via the SEFAZ homolog
+      // webhook — warn level on purpose, just to stand out in the log list
+      this.logger.warn(
         { action: 'mock-pay-txid', renavam: auth.renavam, txid: data?.id, valor: emvAmount(data?.attributes?.dados) },
         'QR certidão criado — txid para pagamento mock em homolog'
       )

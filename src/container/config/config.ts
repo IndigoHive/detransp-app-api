@@ -132,6 +132,11 @@ export const config: Config = {
   rotaVistorias: {
     baseUrl: env.ROTA_VISTORIAS_BASE_URL || '',
   },
+  iti: {
+    baseUrl: env.ITI_BASE_URL || '',
+    clientId: env.ITI_CLIENT_ID || '',
+    redirectUri: env.ITI_REDIRECT_URI || '',
+  },
   logging: {
     level: env.LOG_LEVEL || DEFAULT_LOG_LEVEL
   }

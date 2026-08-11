@@ -19,6 +19,8 @@ export type AnaliseRequisitosResult = {
   hasActiveTDV: boolean
   codigoTransferencia?: string | undefined
   origem?: CodigoOrigemTDV
+  estado?: string | undefined
+  proximaAcao?: 'vendedor_2' | 'continuar_venda' | 'nova_tdv' | undefined
   buyer?: {
     codigo: string
     nome: string
@@ -37,6 +39,15 @@ export type AnaliseRequisitosResult = {
   }
 }
 
+function proximaAcaoParaVendedor (estado: CodigoEstadoTDV | undefined): AnaliseRequisitosResult['proximaAcao'] {
+  switch (estado) {
+    case CodigoEstadoTDV.ATPVE_ASSINADA_COMPRADOR: return 'vendedor_2'
+    case CodigoEstadoTDV.VEICULO_SELECIONADO: return 'continuar_venda'
+    case CodigoEstadoTDV.DADOS_VENDA_INFORMADOS: return 'continuar_venda'
+    default: return undefined
+  }
+}
+
 export class AnaliseRequisitosService {
   private readonly client: DetranSpServiceNowTdvClient
 
@@ -49,25 +60,28 @@ export class AnaliseRequisitosService {
     const cpf = extractCpfFromToken(token)
     const auth = { token, cpf }
 
-    // Check for existing active TDV on this plate
     const tdvs = await this.client.listaTdvs(auth, {
       ativa: 'true',
       codigoVendedor: cpf,
       placaVeiculo: input.selectedVehicle.plate
     })
 
+    // ServiceNow's `ativa` field is the string "1"/"0", not "true"/"false" — the ?ativa=true
+    // query param already filters server-side, so estado is the only client-side check needed.
     const activeTdv = tdvs?.result?.find(
-      tdv => tdv.ativa === 'true' && tdv.estado !== CodigoEstadoTDV.TRANSFERENCIA_CANCELADA
+      tdv => tdv.estado !== CodigoEstadoTDV.TRANSFERENCIA_CANCELADA
     )
 
     if (!activeTdv) {
       return {
         hasRestriction: false,
-        hasActiveTDV: false
+        hasActiveTDV: false,
+        proximaAcao: 'nova_tdv'
       }
     }
 
     const codigoTransferencia = activeTdv.codigoTransferenciaVeiculo
+    const proximaAcao = proximaAcaoParaVendedor(activeTdv.estado)
 
     if (activeTdv.origem === CodigoOrigemTDV.RENAVE && codigoTransferencia) {
       const details = await this.client.buscaTdv(auth, codigoTransferencia)
@@ -78,6 +92,8 @@ export class AnaliseRequisitosService {
         hasActiveTDV: true,
         codigoTransferencia,
         origem: activeTdv.origem,
+        estado: activeTdv.estado,
+        proximaAcao,
         ...(data ? {
           buyer: {
             codigo: data.codigoComprador ?? '',
@@ -103,7 +119,9 @@ export class AnaliseRequisitosService {
       hasRestriction: false,
       hasActiveTDV: true,
       ...(codigoTransferencia != null ? { codigoTransferencia } : {}),
-      ...(activeTdv.origem != null ? { origem: activeTdv.origem } : {})
+      ...(activeTdv.origem != null ? { origem: activeTdv.origem } : {}),
+      estado: activeTdv.estado,
+      proximaAcao
     }
   }
 }

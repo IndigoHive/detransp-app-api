@@ -1,6 +1,8 @@
 import type { DebitoIncluded } from '../../clients/detran-sp-service-now-deb-restr'
 import type { DebtSectionStatus } from './types'
 
+export const NAO_CONSTA = 'Não consta'
+
 export function formatCurrencyBr (value: number): string {
   return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
 }
@@ -13,7 +15,7 @@ export function formatDateBr (isoDate: string): string {
 }
 
 export function debtVencimento (debito: DebitoIncluded): string | null {
-  return debito.attributes.dataVencimento ?? debito.attributes.vencimento ?? null
+  return debito.attributes.dataVencimento || debito.attributes.vencimento || null
 }
 
 export function deriveSectionStatus (debitos: DebitoIncluded[]): DebtSectionStatus {
@@ -49,7 +51,7 @@ export function formatDateTimeBr (value: string, withSeconds = false): string {
   const brMatch = value.match(/^(\d{2})-(\d{2})-(\d{4})[ T](\d{2}):(\d{2}):(\d{2})/)
   if (brMatch) {
     const [, day, month, year, hour, minute, second] = brMatch
-    return `${day}/${month}/${year} ${hour}:${minute}${withSeconds ? `:${second}` : ''}`
+    return `${day}/${month}/${year} às ${hour}:${minute}${withSeconds ? `:${second}` : ''}`
   }
   if (/^\d{4}-\d{2}-\d{2}T/.test(value)) {
     const parsed = new Date(value)
@@ -64,7 +66,7 @@ export function formatDateTimeBr (value: string, withSeconds = false): string {
           minute: '2-digit',
           ...(withSeconds ? { second: '2-digit' as const } : {}),
         })
-        .replace(',', '')
+        .replace(', ', ' às ')
     }
   }
   return value

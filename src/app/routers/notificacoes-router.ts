@@ -33,21 +33,21 @@ export function notificacoesRouter(): Router {
   })
 
   router.get('/badge', async (req, res) => {
-    const { accessToken } = req.session!
+    const { accessToken, cpf } = req.session!
     const client: RotaCaixaPostalClient = req.scope.resolve('rotaCaixaPostalClient')
-    const data = await client.getBadge(accessToken)
+    const data = await client.getBadge(accessToken, cpf)
     res.status(200).json(data)
   })
 
   router.get('/mensagens', async (req, res) => {
-    const { accessToken } = req.session!
+    const { accessToken, cpf } = req.session!
     const client: RotaCaixaPostalClient = req.scope.resolve('rotaCaixaPostalClient')
-    const data = await client.listarMensagens(accessToken)
+    const data = await client.listarMensagens(accessToken, cpf)
     res.status(200).json(data)
   })
 
   router.get('/mensagens/:id', async (req, res) => {
-    const { accessToken } = req.session!
+    const { accessToken, cpf } = req.session!
     const { id } = req.params
 
     if (!id) {
@@ -56,7 +56,7 @@ export function notificacoesRouter(): Router {
     }
 
     const client: RotaCaixaPostalClient = req.scope.resolve('rotaCaixaPostalClient')
-    const data = await client.getMensagem(accessToken, id)
+    const data = await client.getMensagem(accessToken, cpf, id)
     res.status(200).json(data)
   })
 

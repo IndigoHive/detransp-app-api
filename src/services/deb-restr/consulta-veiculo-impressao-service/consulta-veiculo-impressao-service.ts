@@ -34,10 +34,6 @@ export class ConsultaVeiculoImpressaoService {
         items: debts.licenciamento.items,
         pixButton: 'hidden',
       },
-      total: {
-        pixButton: 'hidden',
-        totalLabel: debts.total.totalLabel,
-      },
     }
   }
 }
