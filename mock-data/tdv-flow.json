@@ -2031,7 +2031,7 @@
             "type": "vehicle_info",
             "name": null,
             "data": {
-              "source": "@{node:n_2d9e4b6a8c17.vehicle ?? node:n_90a9d6db5f4b.vehicle}",
+              "source": "@{node:n_2d9e4b6a8c17.vehicle ?? node:n_90a9d6db5f4b.vehicle ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle}",
               "vehicle": {
                 "id": "1",
                 "plate": "EXC1A22",
@@ -3555,7 +3555,7 @@
             "type": "text_body",
             "name": null,
             "data": {
-              "text": "Olá, @{node:n_2d9e4b6a8c17.nomeComprador ?? node:n_90a9d6db5f4b.nomeComprador}. \n\nFoi confirmado o pagamento da taxa de transferência do veículo @{node:n_2d9e4b6a8c17.vehicle.brandModel ?? node:n_90a9d6db5f4b.vehicle.brandModel}, placa @{node:n_2d9e4b6a8c17.vehicle.plate ?? node:n_90a9d6db5f4b.vehicle.plate}.\n\nAguarde enquanto validamos o processo e registramos o veículo em seu nome.\n",
+              "text": "Olá, @{node:n_2d9e4b6a8c17.nomeComprador ?? node:n_90a9d6db5f4b.nomeComprador ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}. \n\nFoi confirmado o pagamento da taxa de transferência do veículo @{node:n_2d9e4b6a8c17.vehicle.brandModel ?? node:n_90a9d6db5f4b.vehicle.brandModel ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.brandModel}, placa @{node:n_2d9e4b6a8c17.vehicle.plate ?? node:n_90a9d6db5f4b.vehicle.plate ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.plate}.\n\nAguarde enquanto validamos o processo e registramos o veículo em seu nome.\n",
               "align": "left"
             }
           },
@@ -3623,7 +3623,7 @@
             "type": "text_body",
             "name": null,
             "data": {
-              "text": "Olá, @{node:n_2d9e4b6a8c17.nomeComprador ?? node:n_90a9d6db5f4b.nomeComprador}. \nA transferência do veículo @{node:n_2d9e4b6a8c17.vehicle.brandModel ?? node:n_90a9d6db5f4b.vehicle.brandModel}, placa @{node:n_2d9e4b6a8c17.vehicle.plate ?? node:n_90a9d6db5f4b.vehicle.plate} foi realizada com sucesso e o veículo encontra-se em seu nome.\n\nAcesse o aplicativo da Carteira Digital de Trânsito - CDT para baixar o documento do veículo.\n",
+              "text": "Olá, @{node:n_2d9e4b6a8c17.nomeComprador ?? node:n_90a9d6db5f4b.nomeComprador ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}. \nA transferência do veículo @{node:n_2d9e4b6a8c17.vehicle.brandModel ?? node:n_90a9d6db5f4b.vehicle.brandModel ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.brandModel}, placa @{node:n_2d9e4b6a8c17.vehicle.plate ?? node:n_90a9d6db5f4b.vehicle.plate ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.plate} foi realizada com sucesso e o veículo encontra-se em seu nome.\n\nAcesse o aplicativo da Carteira Digital de Trânsito - CDT para baixar o documento do veículo.\n",
               "align": "left"
             }
           },
@@ -5496,7 +5496,7 @@
           "x": 268,
           "y": 4444
         },
-        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/consulta-debitos?codigoTransferencia=@{node:n_2d9e4b6a8c17.codigoTransferencia ?? node:n_6c4d8e2a1b90.codigoTransferencia ?? node:n_90a9d6db5f4b.codigoTransferencia}",
+        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/consulta-debitos?codigoTransferencia=@{node:n_2d9e4b6a8c17.codigoTransferencia ?? node:n_6c4d8e2a1b90.codigoTransferencia ?? node:n_90a9d6db5f4b.codigoTransferencia ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoTransferencia}",
         "responseExamples": [
           {
             "id": "662e4b72-b520-47e2-a222-bd21ed66959a",
@@ -5516,7 +5516,7 @@
           "y": 4320
         },
         "method": "GET",
-        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/pix?codigoTransferencia=@{node:n_2d9e4b6a8c17.codigoTransferencia ?? node:n_6c4d8e2a1b90.codigoTransferencia ?? node:n_90a9d6db5f4b.codigoTransferencia}&forcarNovo=true"
+        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/pix?codigoTransferencia=@{node:n_2d9e4b6a8c17.codigoTransferencia ?? node:n_6c4d8e2a1b90.codigoTransferencia ?? node:n_90a9d6db5f4b.codigoTransferencia ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoTransferencia}&forcarNovo=true"
       }
     },
     {
@@ -5945,7 +5945,7 @@
     {
       "id": "n_8c3f5d0b2a71",
       "type": "if_node",
-      "name": "TDV criada e no estado 7?",
+      "name": "TDV já criada?",
       "data": {
         "position": {
           "x": 5724,
@@ -5961,6 +5961,35 @@
           ],
           "combinator": "and"
         }
+      }
+    },
+    {
+      "id": "n_a4e7b1c9d205",
+      "type": "case_node",
+      "name": "Rotear por estado (TDV existente)",
+      "data": {
+        "position": {
+          "x": 7200,
+          "y": 3932
+        },
+        "value": "@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.estado}",
+        "routes": [
+          {
+            "id": "r_estado_7_01",
+            "label": "Estado 7 — Aviso pagamento",
+            "value": "7"
+          },
+          {
+            "id": "r_estado_8_01",
+            "label": "Estado 8 — Pagamento confirmado",
+            "value": "8"
+          },
+          {
+            "id": "r_estado_9_01",
+            "label": "Estado 9 — Concluído",
+            "value": "9"
+          }
+        ]
       }
     },
     {
@@ -6951,8 +6980,26 @@
     },
     {
       "sourceId": "n_17b70b7efa60",
-      "targetId": "n_5a7c9e1b3d46",
+      "targetId": "n_a4e7b1c9d205",
       "sourceHandle": "right-source",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_a4e7b1c9d205",
+      "targetId": "s_fb22aac48147",
+      "sourceHandle": "r_estado_7_01",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_a4e7b1c9d205",
+      "targetId": "s_1abd59a0d122",
+      "sourceHandle": "r_estado_8_01",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_a4e7b1c9d205",
+      "targetId": "s_92a9313c0809",
+      "sourceHandle": "r_estado_9_01",
       "targetHandle": "input"
     },
     {
