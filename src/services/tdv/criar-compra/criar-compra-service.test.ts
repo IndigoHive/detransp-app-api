@@ -15,7 +15,11 @@ const baseInput = {
   origem: CodigoOrigemTDV.E_NOTARIADO,
   nomeVendedor: 'João Vendedor',
   codigoVendedor: '11122233344',
-  emailVendedor: ''
+  emailVendedor: '',
+  cepComprador: '01310100',
+  logradouroComprador: 'Av. Paulista',
+  bairroComprador: 'Bela Vista',
+  numeroComprador: '1000'
 }
 
 const vehicleSummary = {
@@ -39,7 +43,7 @@ function asClient (client: Partial<DetranSpServiceNowTdvClient>): DetranSpServic
 }
 
 describe('CriarCompraService', () => {
-  it('creates TDV with stub origem and routes by estado without address PATCH when CEP is absent', async () => {
+  it('creates TDV with stub origem and includes address on criaTdv', async () => {
     const criaTdv = vi.fn().mockResolvedValue({
       result: { codigoTransferenciaVeiculo: 'TDV-NEW' }
     })
@@ -74,6 +78,11 @@ describe('CriarCompraService', () => {
       emailVendedor: '',
       codigoVendedor: '11122233344',
       origem: CodigoOrigemTDV.E_NOTARIADO,
+      cepComprador: '01310100',
+      bairroComprador: 'Bela Vista',
+      logradouroComprador: 'Av. Paulista',
+      numeroComprador: '1000',
+      complementoComprador: '',
       confirmacaoAutodeclaracaoResidenciaComprador: 'true'
     })
     expect(buscaEndereco).not.toHaveBeenCalled()
@@ -130,18 +139,27 @@ describe('CriarCompraService', () => {
       nomeComprador: 'Maria Compradora',
       nomeMunicipioVeiculo: 'SAO PAULO',
       nomeMunicipioComprador: 'CAMPINAS',
+      cepComprador: '01310100',
+      bairroComprador: 'Bela Vista',
+      logradouroComprador: 'Av. Paulista',
+      numeroComprador: '1000',
+      complementoComprador: '',
       confirmacaoAutodeclaracaoResidenciaComprador: 'true'
     })
   })
 
-  it('enriches missing chassi, km vistoriada and numero from listaTdvs stub', async () => {
+  it('enriches missing address and vehicle fields from listaTdvs stub', async () => {
     const listaTdvs = vi.fn().mockResolvedValue({
       result: [{
         placaVeiculo: 'GHI8J90',
         codigoRenavamVeiculo: '00010020031',
         chassiVeiculo: '9BWZZZ377VT004251',
         kmVistoriadaVeiculo: '32009',
-        numeroComprador: '221'
+        cepComprador: '01310-100',
+        logradouroComprador: 'Av. Paulista',
+        bairroComprador: 'Bela Vista',
+        numeroComprador: '221',
+        complementoComprador: 'Apto 1'
       }]
     })
     const criaTdv = vi.fn().mockResolvedValue({
@@ -159,7 +177,14 @@ describe('CriarCompraService', () => {
       detranSpServiceNowTdv: asClient({ listaTdvs, criaTdv, buscaTdv })
     })
 
-    await expect(service.run(authHeader, baseInput)).resolves.toMatchObject({
+    await expect(service.run(authHeader, {
+      placaVeiculo: 'GHI8J90',
+      renavamVeiculo: '00010020031',
+      origem: CodigoOrigemTDV.E_NOTARIADO,
+      nomeVendedor: 'João Vendedor',
+      codigoVendedor: '11122233344',
+      emailVendedor: ''
+    })).resolves.toMatchObject({
       proximaAcao: 'aviso_pagamento',
       codigoTransferencia: 'TDV-NEW'
     })
@@ -167,12 +192,16 @@ describe('CriarCompraService', () => {
     expect(listaTdvs).toHaveBeenCalledWith(clientAuth, {
       ativa: 'true',
       codigoComprador: cpf,
-      campos: 'placaVeiculo,codigoRenavamVeiculo,chassiVeiculo,kmVeiculo,kmVistoriadaVeiculo,numeroComprador,codigoTransferenciaVeiculo'
+      campos: 'placaVeiculo,codigoRenavamVeiculo,chassiVeiculo,kmVeiculo,kmVistoriadaVeiculo,cepComprador,logradouroComprador,bairroComprador,numeroComprador,complementoComprador,codigoTransferenciaVeiculo'
     })
     expect(criaTdv).toHaveBeenCalledWith(clientAuth, expect.objectContaining({
       chassiVeiculo: '9BWZZZ377VT004251',
       kmVistoriadaVeiculo: '32009',
+      cepComprador: '01310100',
+      logradouroComprador: 'Av. Paulista',
+      bairroComprador: 'Bela Vista',
       numeroComprador: '221',
+      complementoComprador: 'Apto 1',
       confirmacaoAutodeclaracaoResidenciaComprador: 'true'
     }))
   })
@@ -278,7 +307,12 @@ describe('CriarCompraService', () => {
     })
 
     await expect(service.run(authHeader, {
-      ...baseInput,
+      placaVeiculo: 'GHI8J90',
+      renavamVeiculo: '00010020031',
+      origem: CodigoOrigemTDV.E_NOTARIADO,
+      nomeVendedor: 'João Vendedor',
+      codigoVendedor: '11122233344',
+      emailVendedor: '',
       cepComprador: '01310-100',
       numeroComprador: '100',
       chassiVeiculo: '9BWZZZ377VT004251',
@@ -358,30 +392,47 @@ describe('CriarCompraService', () => {
     )
   })
 
-  it('skips address lookup when CEP is empty or invalid', async () => {
-    const criaTdv = vi.fn().mockResolvedValue({
-      result: { codigoTransferenciaVeiculo: 'TDV-NEW' }
-    })
+  it('rejects when CEP is empty or invalid and stub has no address', async () => {
+    const criaTdv = vi.fn()
     const buscaEndereco = vi.fn()
-    const buscaTdv = vi.fn().mockResolvedValue({
-      result: {
-        estado: CodigoEstadoTDV.ATPVE_ASSINADA_VENDEDOR_COMUNICACAO_VENDA_GERADA,
-        placaVeiculo: 'GHI8J90',
-        codigoRenavamVeiculo: '00010020031'
-      }
-    })
+    const listaTdvs = vi.fn().mockResolvedValue({ result: [] })
 
     const service = new CriarCompraService({
-      detranSpServiceNowTdv: asClient({ criaTdv, buscaEndereco, buscaTdv })
+      detranSpServiceNowTdv: asClient({ criaTdv, buscaEndereco, listaTdvs })
     })
 
-    await expect(service.run(authHeader, { ...baseInput, cepComprador: '  ' }))
-      .resolves.toMatchObject({ proximaAcao: 'aviso_pagamento' })
+    await expect(service.run(authHeader, {
+      placaVeiculo: 'GHI8J90',
+      renavamVeiculo: '00010020031',
+      origem: CodigoOrigemTDV.E_NOTARIADO,
+      nomeVendedor: 'João Vendedor',
+      codigoVendedor: '11122233344',
+      emailVendedor: '',
+      cepComprador: '  ',
+      chassiVeiculo: '9BWZZZ377VT004251',
+      kmVistoriadaVeiculo: '32009'
+    })).rejects.toMatchObject({
+      status: 400,
+      message: 'cepComprador, bairroComprador e logradouroComprador são obrigatórios'
+    })
 
-    await expect(service.run(authHeader, { ...baseInput, cepComprador: '123' }))
-      .resolves.toMatchObject({ proximaAcao: 'aviso_pagamento' })
+    await expect(service.run(authHeader, {
+      placaVeiculo: 'GHI8J90',
+      renavamVeiculo: '00010020031',
+      origem: CodigoOrigemTDV.E_NOTARIADO,
+      nomeVendedor: 'João Vendedor',
+      codigoVendedor: '11122233344',
+      emailVendedor: '',
+      cepComprador: '123',
+      chassiVeiculo: '9BWZZZ377VT004251',
+      kmVistoriadaVeiculo: '32009'
+    })).rejects.toMatchObject({
+      status: 400,
+      message: 'cepComprador, bairroComprador e logradouroComprador são obrigatórios'
+    })
 
     expect(buscaEndereco).not.toHaveBeenCalled()
+    expect(criaTdv).not.toHaveBeenCalled()
   })
 
   it('returns snackbar error for unexpected estado', async () => {

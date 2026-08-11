@@ -2,7 +2,8 @@ import type { DetranSpServiceNowTdvClient } from '../../../clients/detran-sp-ser
 import type {
   CodigoEstadoTDV,
   CodigoOrigemComunicacaoVendaVeiculo,
-  CodigoOrigemTDV
+  CodigoOrigemTDV,
+  ListaTdvsResultData
 } from '../../../clients/detran-sp-service-now/tdv/types'
 import { extractBearerToken, extractCpfFromToken } from '../../../utils/token'
 
@@ -22,10 +23,15 @@ const LISTA_COMPRAS_CAMPOS = [
   'codigoVendedor',
   'nomeMunicipioVeiculo',
   'nomeMunicipioComprador',
+  'logradouroComprador',
+  'numeroComprador',
+  'complementoComprador',
+  'bairroComprador',
+  'ufComprador',
+  'cepComprador',
   'chassiVeiculo',
   'kmVeiculo',
-  'kmVistoriadaVeiculo',
-  'numeroComprador'
+  'kmVistoriadaVeiculo'
 ].join(',')
 
 type Dependencies = {
@@ -56,16 +62,45 @@ type CompraVehicle = {
   codigoVendedor?: string
   nomeMunicipioVeiculo?: string
   nomeMunicipioComprador?: string
+  logradouroComprador?: string
+  numeroComprador?: string
+  complementoComprador?: string
+  bairroComprador?: string
+  ufComprador?: string
+  cepComprador?: string
   chassiVeiculo?: string
   kmVeiculo?: string
   kmVistoriadaVeiculo?: string
-  numeroComprador?: string
   descricaoCorVeiculo?: string
   enderecoComprador?: string
 }
 
 export type ConsultaComprasResult = {
   vehicles: CompraVehicle[]
+}
+
+function trimField (value: string | null | undefined): string | undefined {
+  const trimmed = value?.trim()
+  return trimmed || undefined
+}
+
+function formatEnderecoComprador (tdv: ListaTdvsResultData): string | undefined {
+  const logradouro = trimField(tdv.logradouroComprador)
+  const numero = trimField(tdv.numeroComprador)
+  const complemento = trimField(tdv.complementoComprador)
+  const bairro = trimField(tdv.bairroComprador)
+  const municipio = trimField(tdv.nomeMunicipioComprador)
+  const uf = trimField(tdv.ufComprador)
+  const cep = trimField(tdv.cepComprador)
+  const municipioUf = municipio
+    ? (uf ? `${municipio} - ${uf}` : municipio)
+    : uf
+
+  const endereco = [logradouro, numero, complemento, bairro, municipioUf, cep]
+    .filter(Boolean)
+    .join(', ')
+
+  return endereco || undefined
 }
 
 export class ConsultaComprasService {
@@ -91,56 +126,65 @@ export class ConsultaComprasService {
     }
 
     const vehicles = result.result.map((tdv, index) => {
-      const codigoTransferencia = tdv.codigoTransferenciaVeiculo?.trim() ?? ''
-      const plate = tdv.placaVeiculo ?? ''
-      const renavam = tdv.codigoRenavamVeiculo ?? ''
+      const codigoTransferencia = trimField(tdv.codigoTransferenciaVeiculo) ?? ''
+      const plate = trimField(tdv.placaVeiculo) ?? ''
+      const renavam = trimField(tdv.codigoRenavamVeiculo) ?? ''
       const id = codigoTransferencia || (plate && renavam ? `${plate}-${renavam}` : String(index + 1))
-      const enderecoComprador = [
-        tdv.numeroComprador?.trim(),
-        tdv.nomeMunicipioComprador?.trim()
-      ].filter(Boolean).join(', ')
+      const enderecoComprador = formatEnderecoComprador(tdv)
+      const chassiVeiculo = trimField(tdv.chassiVeiculo)
+      const kmVeiculo = trimField(tdv.kmVeiculo)
+      const kmVistoriadaVeiculo = trimField(tdv.kmVistoriadaVeiculo) ?? kmVeiculo
+      const descricaoMarcaVeiculo = trimField(tdv.descricaoMarcaVeiculo)
+      const descricaoCorVeiculo = trimField(tdv.descricaoCorVeiculo)
+      const codigoComprador = trimField(tdv.codigoComprador)
+      const nomeComprador = trimField(tdv.nomeComprador)
+      const nomeVendedor = trimField(tdv.nomeVendedor)
+      const codigoVendedor = trimField(tdv.codigoVendedor)
+      const nomeMunicipioVeiculo = trimField(tdv.nomeMunicipioVeiculo)
+      const nomeMunicipioComprador = trimField(tdv.nomeMunicipioComprador)
+      const logradouroComprador = trimField(tdv.logradouroComprador)
+      const numeroComprador = trimField(tdv.numeroComprador)
+      const complementoComprador = trimField(tdv.complementoComprador)
+      const bairroComprador = trimField(tdv.bairroComprador)
+      const ufComprador = trimField(tdv.ufComprador)
+      const cepComprador = trimField(tdv.cepComprador)
 
       return {
         id,
-        title: tdv.descricaoMarcaVeiculo ?? '',
+        title: descricaoMarcaVeiculo ?? '',
         plate,
         licensingStatus: 'PENDENTE',
         licensingExpirationDate: '',
         type: 'Passeio',
-        brandModel: tdv.descricaoMarcaVeiculo ?? '',
+        brandModel: descricaoMarcaVeiculo ?? '',
         renavam,
         lastLicensing: '',
         yearFab: '',
         yearMod: '',
         codigoTransferencia,
-        ...(tdv.ativa !== undefined ? { ativa: tdv.ativa } : {}),
-        ...(tdv.estado !== undefined ? { estado: tdv.estado } : {}),
-        ...(tdv.origem !== undefined ? { origem: tdv.origem } : {}),
-        ...(tdv.origemComunicacaoVendaVeiculo !== undefined
+        ...(tdv.ativa != null ? { ativa: tdv.ativa } : {}),
+        ...(tdv.estado != null ? { estado: tdv.estado } : {}),
+        ...(tdv.origem != null ? { origem: tdv.origem } : {}),
+        ...(tdv.origemComunicacaoVendaVeiculo != null
           ? { origemComunicacaoVendaVeiculo: tdv.origemComunicacaoVendaVeiculo }
           : {}),
-        ...(tdv.descricaoMarcaVeiculo !== undefined
-          ? { descricaoMarcaVeiculo: tdv.descricaoMarcaVeiculo }
-          : {}),
-        ...(tdv.codigoComprador !== undefined ? { codigoComprador: tdv.codigoComprador } : {}),
-        ...(tdv.nomeComprador !== undefined ? { nomeComprador: tdv.nomeComprador } : {}),
-        ...(tdv.nomeVendedor !== undefined ? { nomeVendedor: tdv.nomeVendedor } : {}),
-        ...(tdv.codigoVendedor !== undefined ? { codigoVendedor: tdv.codigoVendedor } : {}),
-        ...(tdv.nomeMunicipioVeiculo !== undefined
-          ? { nomeMunicipioVeiculo: tdv.nomeMunicipioVeiculo }
-          : {}),
-        ...(tdv.nomeMunicipioComprador !== undefined
-          ? { nomeMunicipioComprador: tdv.nomeMunicipioComprador }
-          : {}),
-        ...(tdv.chassiVeiculo?.trim() ? { chassiVeiculo: tdv.chassiVeiculo.trim() } : {}),
-        ...(tdv.kmVeiculo?.trim() ? { kmVeiculo: tdv.kmVeiculo.trim() } : {}),
-        ...((tdv.kmVistoriadaVeiculo?.trim() || tdv.kmVeiculo?.trim())
-          ? { kmVistoriadaVeiculo: (tdv.kmVistoriadaVeiculo?.trim() || tdv.kmVeiculo?.trim())! }
-          : {}),
-        ...(tdv.numeroComprador?.trim() ? { numeroComprador: tdv.numeroComprador.trim() } : {}),
-        ...(tdv.descricaoCorVeiculo?.trim()
-          ? { descricaoCorVeiculo: tdv.descricaoCorVeiculo.trim() }
-          : {}),
+        ...(descricaoMarcaVeiculo ? { descricaoMarcaVeiculo } : {}),
+        ...(codigoComprador ? { codigoComprador } : {}),
+        ...(nomeComprador ? { nomeComprador } : {}),
+        ...(nomeVendedor ? { nomeVendedor } : {}),
+        ...(codigoVendedor ? { codigoVendedor } : {}),
+        ...(nomeMunicipioVeiculo ? { nomeMunicipioVeiculo } : {}),
+        ...(nomeMunicipioComprador ? { nomeMunicipioComprador } : {}),
+        ...(logradouroComprador ? { logradouroComprador } : {}),
+        ...(numeroComprador ? { numeroComprador } : {}),
+        ...(complementoComprador ? { complementoComprador } : {}),
+        ...(bairroComprador ? { bairroComprador } : {}),
+        ...(ufComprador ? { ufComprador } : {}),
+        ...(cepComprador ? { cepComprador } : {}),
+        ...(chassiVeiculo ? { chassiVeiculo } : {}),
+        ...(kmVeiculo ? { kmVeiculo } : {}),
+        ...(kmVistoriadaVeiculo ? { kmVistoriadaVeiculo } : {}),
+        ...(descricaoCorVeiculo ? { descricaoCorVeiculo } : {}),
         ...(enderecoComprador ? { enderecoComprador } : {})
       }
     })

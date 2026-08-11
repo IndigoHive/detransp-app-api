@@ -84,7 +84,11 @@ const STUB_ENRICH_CAMPOS = [
   'chassiVeiculo',
   'kmVeiculo',
   'kmVistoriadaVeiculo',
+  'cepComprador',
+  'logradouroComprador',
+  'bairroComprador',
   'numeroComprador',
+  'complementoComprador',
   'codigoTransferenciaVeiculo'
 ].join(',')
 
@@ -164,7 +168,11 @@ function normalizeAtiva (ativa: CriarCompraInput['ativa']): 'true' | 'false' | u
   return undefined
 }
 
-function hasFullAddress (input: CriarCompraInput): boolean {
+function hasFullAddress (input: {
+  cepComprador?: string
+  logradouroComprador?: string
+  bairroComprador?: string
+}): boolean {
   return Boolean(
     normalizeCep(input.cepComprador)
     && input.logradouroComprador?.trim()
@@ -172,7 +180,10 @@ function hasFullAddress (input: CriarCompraInput): boolean {
   )
 }
 
-function resolveKmVistoriada (input: Pick<CriarCompraInput, 'kmVistoriadaVeiculo' | 'kmVeiculo'>): string | undefined {
+function resolveKmVistoriada (input: {
+  kmVistoriadaVeiculo?: string | null
+  kmVeiculo?: string | null
+}): string | undefined {
   const kmVistoriada = input.kmVistoriadaVeiculo?.trim()
   if (kmVistoriada) return kmVistoriada
   const kmVeiculo = input.kmVeiculo?.trim()
@@ -246,6 +257,10 @@ export class CriarCompraService {
     })
 
     const addressFields = await this.resolveAddressFields(auth, enriched)
+    if (!hasFullAddress(addressFields)) {
+      throw BadRequest('cepComprador, bairroComprador e logradouroComprador são obrigatórios')
+    }
+
     const optionalFields = pickOptionalListingFields(enriched)
     const criaTdvPayload = {
       ...optionalFields,
@@ -341,8 +356,23 @@ export class CriarCompraService {
     const needsChassi = !input.chassiVeiculo?.trim()
     const needsKmVistoriada = !resolveKmVistoriada(input)
     const needsKmVeiculo = !input.kmVeiculo?.trim()
+    const needsCep = !normalizeCep(input.cepComprador)
+    const needsLogradouro = !input.logradouroComprador?.trim()
+    const needsBairro = !input.bairroComprador?.trim()
     const needsNumero = !input.numeroComprador?.trim()
-    if (!needsChassi && !needsKmVistoriada && !needsKmVeiculo && !needsNumero) {
+    const needsComplemento = !input.complementoComprador?.trim()
+    const needsCodigoTransferencia = !input.codigoTransferenciaVeiculo?.trim()
+    if (
+      !needsChassi
+      && !needsKmVistoriada
+      && !needsKmVeiculo
+      && !needsCep
+      && !needsLogradouro
+      && !needsBairro
+      && !needsNumero
+      && !needsComplemento
+      && !needsCodigoTransferencia
+    ) {
       return input
     }
 
@@ -371,10 +401,22 @@ export class CriarCompraService {
       ...(needsKmVistoriada && stubKmVistoriada
         ? { kmVistoriadaVeiculo: stubKmVistoriada }
         : {}),
+      ...(needsCep && normalizeCep(stub.cepComprador ?? undefined)
+        ? { cepComprador: normalizeCep(stub.cepComprador ?? undefined) }
+        : {}),
+      ...(needsLogradouro && stub.logradouroComprador?.trim()
+        ? { logradouroComprador: stub.logradouroComprador.trim() }
+        : {}),
+      ...(needsBairro && stub.bairroComprador?.trim()
+        ? { bairroComprador: stub.bairroComprador.trim() }
+        : {}),
       ...(needsNumero && stub.numeroComprador?.trim()
         ? { numeroComprador: stub.numeroComprador.trim() }
         : {}),
-      ...(!input.codigoTransferenciaVeiculo?.trim() && stub.codigoTransferenciaVeiculo?.trim()
+      ...(needsComplemento && stub.complementoComprador?.trim()
+        ? { complementoComprador: stub.complementoComprador.trim() }
+        : {}),
+      ...(needsCodigoTransferencia && stub.codigoTransferenciaVeiculo?.trim()
         ? { codigoTransferenciaVeiculo: stub.codigoTransferenciaVeiculo.trim() }
         : {})
     }
@@ -394,20 +436,25 @@ export class CriarCompraService {
 
     const cep = normalizeCep(input.cepComprador)
     if (!cep) {
-      return input.numeroComprador?.trim()
-        ? { numeroComprador: input.numeroComprador.trim() }
-        : {}
+      return {
+        ...(input.numeroComprador?.trim() ? { numeroComprador: input.numeroComprador.trim() } : {}),
+        ...(input.complementoComprador?.trim()
+          ? { complementoComprador: input.complementoComprador.trim() }
+          : {})
+      }
     }
 
     const enderecoResult = await this.client.buscaEndereco(auth, cep)
     const endereco = enderecoResult?.result
-    const numero = input.numeroComprador?.trim() ?? ''
 
     return {
       cepComprador: cep,
-      bairroComprador: endereco?.bairro ?? '',
-      logradouroComprador: endereco?.logradouro ?? endereco?.endereco ?? '',
-      ...(numero ? { numeroComprador: numero } : { numeroComprador: '' }),
+      bairroComprador: input.bairroComprador?.trim() || endereco?.bairro || '',
+      logradouroComprador: input.logradouroComprador?.trim()
+        || endereco?.logradouro
+        || endereco?.endereco
+        || '',
+      numeroComprador: input.numeroComprador?.trim() ?? '',
       complementoComprador: input.complementoComprador?.trim() || endereco?.complemento || ''
     }
   }

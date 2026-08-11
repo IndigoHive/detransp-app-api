@@ -23,8 +23,10 @@ type VehicleData = {
 }
 
 function buildVehicleData (data: BuscaTdvResultData | undefined, fallback: ListaTdvsResultData): VehicleData {
-  const origem = data?.origem ?? fallback.origem
-  const origemComunicacaoVendaVeiculo = data?.origemComunicacaoVendaVeiculo ?? fallback.origemComunicacaoVendaVeiculo
+  const origem = data?.origem ?? fallback.origem ?? undefined
+  const origemComunicacaoVendaVeiculo = data?.origemComunicacaoVendaVeiculo
+    ?? fallback.origemComunicacaoVendaVeiculo
+    ?? undefined
 
   return {
     id: '1',
@@ -37,8 +39,8 @@ function buildVehicleData (data: BuscaTdvResultData | undefined, fallback: Lista
     lastLicensing: '',
     yearFab: '',
     yearMod: '',
-    ...(origem !== undefined ? { origem } : {}),
-    ...(origemComunicacaoVendaVeiculo !== undefined ? { origemComunicacaoVendaVeiculo } : {})
+    ...(origem != null ? { origem } : {}),
+    ...(origemComunicacaoVendaVeiculo != null ? { origemComunicacaoVendaVeiculo } : {})
   }
 }
 
@@ -125,8 +127,10 @@ export class VerificarEstadoTdvService {
             brandModel: activeBuyer.descricaoMarcaVeiculo ?? '',
             renavam: activeBuyer.codigoRenavamVeiculo ?? '',
             codigoTransferencia: activeBuyer.codigoTransferenciaVeiculo ?? '',
-            ...(activeBuyer.origem !== undefined ? { origem: activeBuyer.origem } : {}),
-            ...(activeBuyer.origemComunicacaoVendaVeiculo !== undefined ? { origemComunicacaoVendaVeiculo: activeBuyer.origemComunicacaoVendaVeiculo } : {})
+            ...(activeBuyer.origem != null ? { origem: activeBuyer.origem } : {}),
+            ...(activeBuyer.origemComunicacaoVendaVeiculo != null
+              ? { origemComunicacaoVendaVeiculo: activeBuyer.origemComunicacaoVendaVeiculo }
+              : {})
           }]
         }
       }

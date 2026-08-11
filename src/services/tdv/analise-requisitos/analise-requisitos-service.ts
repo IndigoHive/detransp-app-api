@@ -102,8 +102,8 @@ export class AnaliseRequisitosService {
     return {
       hasRestriction: false,
       hasActiveTDV: true,
-      codigoTransferencia,
-      ...(activeTdv.origem !== undefined ? { origem: activeTdv.origem } : {})
+      ...(codigoTransferencia != null ? { codigoTransferencia } : {}),
+      ...(activeTdv.origem != null ? { origem: activeTdv.origem } : {})
     }
   }
 }
