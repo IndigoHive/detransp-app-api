@@ -41,10 +41,11 @@ export class ListaPagamentosVistoriaService {
   async run (
     auth: VistoriasAuth,
     documento: string,
-    docProprietario: boolean
+    docProprietario: boolean,
+    renavam?: string
   ): Promise<ListaPagamentosVistoriaOutput> {
     try {
-      const result = await this.client.listaPagamentos(auth, documento, docProprietario)
+      const result = await this.client.listaPagamentos(auth, documento, docProprietario, renavam)
       const response = result?.result
 
       if (!response?.success) {
