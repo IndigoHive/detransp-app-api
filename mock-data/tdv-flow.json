@@ -581,8 +581,8 @@
                   "yearMod": "2015",
                   "brandModel": "VOLKS/GOL GTI 1.0",
                   "lastLicensing": "03/12/2025",
-                  "licensingExpirationDate": "31/12/2025",
-                  "licensingStatus": "REGULAR"
+                  "licensingStatus": "REGULAR",
+                  "licensingExpirationDate": "31/12/2025"
                 },
                 {
                   "id": "2",
@@ -594,8 +594,8 @@
                   "yearMod": "2022",
                   "brandModel": "ONIX LT - GM",
                   "lastLicensing": "15/01/2024",
-                  "licensingExpirationDate": "31/12/2024",
-                  "licensingStatus": "A VENCER"
+                  "licensingStatus": "A VENCER",
+                  "licensingExpirationDate": "31/12/2024"
                 },
                 {
                   "id": "3",
@@ -607,8 +607,8 @@
                   "yearMod": "2009",
                   "brandModel": "FIAT/UNO MILLE",
                   "lastLicensing": "20/08/2022",
-                  "licensingExpirationDate": "31/07/2023",
-                  "licensingStatus": "VENCIDO"
+                  "licensingStatus": "VENCIDO",
+                  "licensingExpirationDate": "31/07/2023"
                 }
               ]
             }
@@ -1118,8 +1118,8 @@
                 "plate": "EXC1A22",
                 "title": "Veículo 1",
                 "brandModel": "VOLKS/GOL GTI 1.0",
-                "licensingExpirationDate": "2024-12-31",
-                "licensingStatus": "REGULAR"
+                "licensingStatus": "REGULAR",
+                "licensingExpirationDate": "2024-12-31"
               }
             }
           }
@@ -1308,8 +1308,8 @@
                   "yearMod": "2015",
                   "brandModel": "VOLKS/GOL GTI 1.0",
                   "lastLicensing": "03/12/2025",
-                  "licensingExpirationDate": "31/12/2025",
-                  "licensingStatus": "REGULAR"
+                  "licensingStatus": "REGULAR",
+                  "licensingExpirationDate": "31/12/2025"
                 },
                 {
                   "id": "2",
@@ -1321,8 +1321,8 @@
                   "yearMod": "2022",
                   "brandModel": "ONIX LT - GM",
                   "lastLicensing": "15/01/2024",
-                  "licensingExpirationDate": "31/12/2024",
-                  "licensingStatus": "A VENCER"
+                  "licensingStatus": "A VENCER",
+                  "licensingExpirationDate": "31/12/2024"
                 },
                 {
                   "id": "3",
@@ -1334,8 +1334,8 @@
                   "yearMod": "2009",
                   "brandModel": "FIAT/UNO MILLE",
                   "lastLicensing": "20/08/2022",
-                  "licensingExpirationDate": "31/07/2023",
-                  "licensingStatus": "VENCIDO"
+                  "licensingStatus": "VENCIDO",
+                  "licensingExpirationDate": "31/07/2023"
                 }
               ]
             }
@@ -1469,8 +1469,8 @@
                 "plate": "EXC1A22",
                 "title": "Veículo 1",
                 "brandModel": "VOLKS/GOL GTI 1.0",
-                "licensingExpirationDate": "2024-12-31",
-                "licensingStatus": "REGULAR"
+                "licensingStatus": "REGULAR",
+                "licensingExpirationDate": "2024-12-31"
               }
             }
           }
@@ -1790,8 +1790,8 @@
                 "plate": "EXC1A22",
                 "title": "Veículo 1",
                 "brandModel": "VOLKS/GOL GTI 1.0",
-                "licensingExpirationDate": "2024-12-31",
-                "licensingStatus": "REGULAR"
+                "licensingStatus": "REGULAR",
+                "licensingExpirationDate": "2024-12-31"
               }
             }
           }
@@ -2037,8 +2037,8 @@
                 "plate": "EXC1A22",
                 "title": "Veículo 1",
                 "brandModel": "VOLKS/GOL GTI 1.0",
-                "licensingExpirationDate": "2024-12-31",
-                "licensingStatus": "REGULAR"
+                "licensingStatus": "REGULAR",
+                "licensingExpirationDate": "2024-12-31"
               }
             }
           },
@@ -2512,8 +2512,8 @@
                 "plate": "EXC1A22",
                 "title": "Veículo 1",
                 "brandModel": "VOLKS/GOL GTI 1.0",
-                "licensingExpirationDate": "2024-12-31",
-                "licensingStatus": "REGULAR"
+                "licensingStatus": "REGULAR",
+                "licensingExpirationDate": "2024-12-31"
               }
             }
           }
@@ -4139,8 +4139,8 @@
                 "plate": "EXC1A22",
                 "title": "Veículo 1",
                 "brandModel": "VOLKS/GOL GTI 1.0",
-                "licensingExpirationDate": "2024-12-31",
-                "licensingStatus": "REGULAR"
+                "licensingStatus": "REGULAR",
+                "licensingExpirationDate": "2024-12-31"
               }
             }
           }
@@ -4308,168 +4308,6 @@
         "position": {
           "x": 7916,
           "y": 1484
-        }
-      }
-    },
-    {
-      "id": "s_f3ec803098e6",
-      "name": "Escolha caminho",
-      "content": {
-        "id": "c_7efa30a2b72a",
-        "type": "group",
-        "children": [
-          {
-            "id": "c_b975f1707445",
-            "type": "radio_card_buttons",
-            "name": "seletor",
-            "data": {
-              "options": [
-                {
-                  "id": "1",
-                  "icon": "directions_car",
-                  "label": "Estou vendendo o veículo"
-                },
-                {
-                  "id": "2",
-                  "icon": "pix",
-                  "label": "Estou comprando o veículo"
-                }
-              ],
-              "required": true
-            }
-          }
-        ]
-      },
-      "footer": {
-        "id": "c_cb1c80247711",
-        "type": "group",
-        "children": [
-          {
-            "id": "c_affef0b484ce",
-            "type": "button",
-            "name": null,
-            "data": {
-              "label": "Continuar"
-            }
-          }
-        ]
-      },
-      "navbar": {
-        "id": "379a15e5-304e-4e90-ab7e-946393e578e6",
-        "data": {
-          "title": "Tranferir Veículo",
-          "showReturn": true
-        },
-        "name": null,
-        "type": "nav_bar"
-      },
-      "data": {
-        "position": {
-          "x": -3152,
-          "y": 1224
-        }
-      }
-    },
-    {
-      "id": "s_c33c9326eae7",
-      "name": "[Vendedor] Escolha veículo",
-      "content": {
-        "id": "c_db0ed272410c",
-        "type": "group",
-        "children": [
-          {
-            "id": "c_f750c6ed270a",
-            "type": "text_body",
-            "name": null,
-            "data": {
-              "text": "Qual veículo será vendido?"
-            }
-          },
-          {
-            "id": "c_92bbbeb9713d",
-            "type": "vehicle_select",
-            "name": "seletor",
-            "data": {
-              "layout": [
-                "plate",
-                "badge",
-                "brand_model",
-                "licensing_expiration"
-              ],
-              "source": "@{node:n_4104c4067c20.vehicles}",
-              "required": true,
-              "vehicles": [
-                {
-                  "id": "1",
-                  "type": "Utilitario",
-                  "plate": "BXG3U71",
-                  "title": "VOLKS/GOL GTI 1.0",
-                  "renavam": "00001002003",
-                  "yearFab": "2014",
-                  "yearMod": "2015",
-                  "brandModel": "VOLKS/GOL GTI 1.0",
-                  "lastLicensing": "03/12/2025",
-                  "licensingExpirationDate": "31/12/2025",
-                  "licensingStatus": "REGULAR"
-                },
-                {
-                  "id": "2",
-                  "type": "Passeio",
-                  "plate": "CED3J65",
-                  "title": "ONIX LT - GM",
-                  "renavam": "00002003004",
-                  "yearFab": "2021",
-                  "yearMod": "2022",
-                  "brandModel": "ONIX LT - GM",
-                  "lastLicensing": "15/01/2024",
-                  "licensingExpirationDate": "31/12/2024",
-                  "licensingStatus": "A VENCER"
-                },
-                {
-                  "id": "3",
-                  "type": "Utilitario",
-                  "plate": "RNI4Z30",
-                  "title": "FIAT/UNO MILLE",
-                  "renavam": "00003004005",
-                  "yearFab": "2008",
-                  "yearMod": "2009",
-                  "brandModel": "FIAT/UNO MILLE",
-                  "lastLicensing": "20/08/2022",
-                  "licensingExpirationDate": "31/07/2023",
-                  "licensingStatus": "VENCIDO"
-                }
-              ]
-            }
-          }
-        ]
-      },
-      "footer": {
-        "id": "c_004187a7646f",
-        "type": "group",
-        "children": [
-          {
-            "id": "c_5c9e20480229",
-            "type": "button",
-            "name": null,
-            "data": {
-              "label": "Continuar"
-            }
-          }
-        ]
-      },
-      "navbar": {
-        "id": "ca4dde85-ac9c-4e6b-8ec2-02e38a422620",
-        "data": {
-          "title": "Escolha o veículo",
-          "showReturn": true
-        },
-        "name": null,
-        "type": "nav_bar"
-      },
-      "data": {
-        "position": {
-          "x": -2696,
-          "y": 1232
         }
       }
     },
@@ -4817,6 +4655,70 @@
         "position": {
           "x": 12676,
           "y": 2732
+        }
+      }
+    },
+    {
+      "id": "d_9c3e1a7b04f2",
+      "name": "Sobre a transferência",
+      "content": {
+        "id": "c_1a2b3c4d5e60",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_2b3c4d5e6f71",
+            "type": "text_heading",
+            "name": null,
+            "data": {
+              "text": "Transferir Veículo"
+            }
+          },
+          {
+            "id": "c_3c4d5e6f7a82",
+            "type": "icon_text",
+            "name": null,
+            "data": {
+              "icon": "info",
+              "text": "A Transferência Digital de Veículo permite concluir a venda ou a compra de um veículo diretamente pelo aplicativo, com toda a segurança do Detran-SP.\n\nQuer relembrar como funciona? Toque em \"Saiba mais\" para rever o passo a passo.",
+              "color": "info",
+              "variant": "horizontal",
+              "alignment": "start",
+              "fontWeight": "normal"
+            }
+          }
+        ]
+      },
+      "footer": {
+        "id": "c_4d5e6f7a8b93",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_5e6f7a8b9ca4",
+            "type": "button",
+            "name": null,
+            "data": {
+              "label": "Saiba mais",
+              "variant": "primary",
+              "clickAction": "submit"
+            }
+          },
+          {
+            "id": "c_6f7a8b9cadb5",
+            "type": "button",
+            "name": null,
+            "data": {
+              "label": "Fechar",
+              "variant": "outline",
+              "clickAction": "back"
+            }
+          }
+        ]
+      },
+      "showCloseIcon": true,
+      "data": {
+        "position": {
+          "x": 3180,
+          "y": 640
         }
       }
     }
@@ -5298,8 +5200,8 @@
       "name": "Rotear por ação",
       "data": {
         "position": {
-          "x": -1832,
-          "y": 2008
+          "x": -1752,
+          "y": 2052
         },
         "value": "@{node:n_b824c7dd9350.proximaAcao ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.proximaAcao}",
         "routes": [
@@ -5473,6 +5375,28 @@
       }
     },
     {
+      "id": "n_e7a4c19b3d82",
+      "type": "if_node",
+      "name": "Pagamento já confirmado?",
+      "data": {
+        "position": {
+          "x": 620,
+          "y": 3970
+        },
+        "condition": {
+          "clauses": [
+            {
+              "id": "41a7f382-5b1f-41fa-958c-c1d3c3db2e67",
+              "left": "@{node:n_b685a31ed52c.estado}",
+              "right": "2",
+              "operator": "equals"
+            }
+          ],
+          "combinator": "or"
+        }
+      }
+    },
+    {
       "id": "n_de17c35410fd",
       "type": "pix_screen",
       "name": "Pagamento PIX",
@@ -5481,7 +5405,6 @@
           "x": 1340,
           "y": 4320
         },
-        "method": "GET",
         "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/consulta-debitos?codigoTransferencia=@{node:n_2d9e4b6a8c17.codigoTransferencia ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoTransferencia}"
       }
     },
@@ -6006,7 +5929,6 @@
           "x": 11348,
           "y": 7024
         },
-        "method": "GET",
         "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/consulta-debitos?codigoTransferencia=@{node:n_2d9e4b6a8c17.codigoTransferencia}"
       }
     },
@@ -6064,32 +5986,6 @@
       }
     },
     {
-      "id": "n_3bad58f20fff",
-      "type": "iti_signature_screen",
-      "name": "Documento",
-      "data": {
-        "position": {
-          "x": 9000,
-          "y": 1960
-        },
-        "url": "@{node:n_02cc2ef9116a.link}",
-        "callbackPrefix": "@{node:n_02cc2ef9116a.redirectUri}"
-      }
-    },
-    {
-      "id": "n_54e1a65041fa",
-      "type": "iti_signature_screen",
-      "name": "Documento",
-      "data": {
-        "position": {
-          "x": 5200,
-          "y": -200
-        },
-        "url": "@{node:n_ec80ea40ca78.link}",
-        "callbackPrefix": "@{node:n_ec80ea40ca78.redirectUri}"
-      }
-    },
-    {
       "id": "n_02cc2ef9116a",
       "type": "http_node",
       "name": "Link Assinatura ITI (Comprador)",
@@ -6110,6 +6006,19 @@
       }
     },
     {
+      "id": "n_3bad58f20fff",
+      "type": "iti_signature_screen",
+      "name": "Documento",
+      "data": {
+        "position": {
+          "x": 8520,
+          "y": 2160
+        },
+        "url": "@{node:n_02cc2ef9116a.link}",
+        "callbackPrefix": "@{node:n_02cc2ef9116a.redirectUri}"
+      }
+    },
+    {
       "id": "n_21da615e160d",
       "type": "get_user_info_node",
       "name": "Dados do Usuário Logado",
@@ -6117,6 +6026,28 @@
         "position": {
           "x": 3350,
           "y": -700
+        }
+      }
+    },
+    {
+      "id": "n_1f0a7c3e9b52",
+      "type": "if_node",
+      "name": "Já viu onboarding?",
+      "data": {
+        "position": {
+          "x": 3180,
+          "y": -360
+        },
+        "condition": {
+          "clauses": [
+            {
+              "id": "b1a2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+              "left": "@{node:n_5bd3d687408b.flowAlreadyExecuted}",
+              "right": "true",
+              "operator": "not_equals"
+            }
+          ],
+          "combinator": "or"
         }
       }
     },
@@ -6251,6 +6182,19 @@
             "value": "{ \"link\": \"https://cas.staging.iti.br/oauth2.0/authorize?...\", \"redirectUri\": \"detran.sp://localhost/appdetran/iti/oauth_redirect.html\" }"
           }
         ]
+      }
+    },
+    {
+      "id": "n_54e1a65041fa",
+      "type": "iti_signature_screen",
+      "name": "Documento",
+      "data": {
+        "position": {
+          "x": 320,
+          "y": 2820
+        },
+        "url": "@{node:n_ec80ea40ca78.link}",
+        "callbackPrefix": "@{node:n_ec80ea40ca78.redirectUri}"
       }
     },
     {
@@ -6609,12 +6553,6 @@
       "targetHandle": "input"
     },
     {
-      "sourceId": "n_b685a31ed52c",
-      "targetId": "s_4f0a972b5591",
-      "sourceHandle": "output",
-      "targetHandle": "input"
-    },
-    {
       "sourceId": "s_4f0a972b5591",
       "targetId": "n_de17c35410fd",
       "sourceHandle": "c_27715ff703a0",
@@ -6900,12 +6838,6 @@
       "sourceId": "n_8c3f5d0b2a71",
       "targetId": "s_31f3e90bbdcc",
       "sourceHandle": "false",
-      "targetHandle": "input"
-    },
-    {
-      "sourceId": "s_d1720681ec27",
-      "targetId": "n_4a9529e3107c",
-      "sourceHandle": "navbar_back",
       "targetHandle": "input"
     },
     {
@@ -7204,8 +7136,56 @@
     },
     {
       "sourceId": "n_21da615e160d",
-      "targetId": "s_a95b06ade63c",
+      "targetId": "n_1f0a7c3e9b52",
       "sourceHandle": "output",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_1f0a7c3e9b52",
+      "targetId": "s_a95b06ade63c",
+      "sourceHandle": "true",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_1f0a7c3e9b52",
+      "targetId": "s_d1720681ec27",
+      "sourceHandle": "false",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_d1720681ec27",
+      "targetId": "d_9c3e1a7b04f2",
+      "sourceHandle": "navbar_action",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "d_9c3e1a7b04f2",
+      "targetId": "s_a95b06ade63c",
+      "sourceHandle": "c_5e6f7a8b9ca4",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_d1720681ec27",
+      "targetId": "n_acb9e7f8d196",
+      "sourceHandle": "navbar_back",
+      "targetHandle": "left-target"
+    },
+    {
+      "sourceId": "n_b685a31ed52c",
+      "targetId": "n_e7a4c19b3d82",
+      "sourceHandle": "output",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_e7a4c19b3d82",
+      "targetId": "s_2b3f4c280a32",
+      "sourceHandle": "true",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_e7a4c19b3d82",
+      "targetId": "s_4f0a972b5591",
+      "sourceHandle": "false",
       "targetHandle": "input"
     }
   ]
