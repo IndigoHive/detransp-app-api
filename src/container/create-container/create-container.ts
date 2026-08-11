@@ -68,7 +68,36 @@ export function createContainer (
     // regardless of config, so every .debug() call in the codebase (e.g. the
     // ServiceNow request interceptors) was silently dropped everywhere.
     logger: asFunction(({ config: cfg }: { config: Config }) =>
-      pino({ level: cfg.logging.level, serializers: { err: pino.stdSerializers.err } })
+      pino({
+        level: cfg.logging.level,
+        serializers: { err: pino.stdSerializers.err },
+        redact: {
+          paths: [
+            'headers.authorization',
+            'headers.Authorization',
+            'headers["sn-token"]',
+            'headers["SN-Token"]',
+            'headers.cookie',
+            'headers.Cookie',
+            'headers["set-cookie"]',
+            'headers["x-cpf-usuario"]',
+            'headers["X-CPF-Usuario"]',
+            'req.headers.authorization',
+            'req.headers.cookie',
+            'request.headers.authorization',
+            'request.headers.cookie',
+            'config.headers.authorization',
+            'config.headers.Authorization',
+            'config.headers["sn-token"]',
+            'config.headers["SN-Token"]',
+            'config.headers.cookie',
+            'config.headers.Cookie',
+            'config.headers["x-cpf-usuario"]',
+            'config.headers["X-CPF-Usuario"]'
+          ],
+          censor: '[REDACTED]'
+        }
+      })
     ).singleton(),
   })
   container.register(getClientRegistrations())

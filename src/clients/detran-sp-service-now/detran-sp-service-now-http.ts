@@ -36,7 +36,6 @@ export class DetranSpServiceNowHttp {
       ...(params.withCredentials === undefined ? {} : { withCredentials: params.withCredentials })
     })
 
-
     this.setupInterceptors()
   }
 
@@ -78,10 +77,9 @@ export class DetranSpServiceNowHttp {
         this.logger.debug(
           {
             method: config.method,
-            service: SERVICE_NAME,
+            service: this.serviceName,
             url: config.url,
             fullUrl,
-            headers: config.headers,
             params: config.params,
             data: config.data,
           },
@@ -106,7 +104,7 @@ export class DetranSpServiceNowHttp {
             service: this.serviceName,
             status: response.status,
             url: response.config.url,
-            headers: response.headers,
+            transactionId: response.headers['x-transaction-id'],
             data: response.data,
           },
           'ServiceNow HTTP response'
