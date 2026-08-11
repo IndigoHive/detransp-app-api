@@ -132,3 +132,28 @@ Pontos de atenção:
 - Levantar a especificação da TDV 3.0 (Saída Renave) — não existe em nenhuma das fontes atuais (nem HU, nem swagger, nem PDF), só o fluxo inverso (TDV 4.0) está documentado.
 - Confirmar com o backend a detecção exata de TDV 3.0 vs. TDV 4.0 em runtime (ambas com `origem: '4'` — a diferença é qual parte é CNPJ).
 - Detalhar, por versão, as telas/validações do app conforme forem implementadas (hoje só a TDV 1.0 está em `mock-data/tdv-flow.json`).
+
+Seleção de veículo	1
+Comunicação de venda e-Notariado	2
+Comunicação de venda CDT	3
+ATPV-e Renave seminovos	4
+Entrada Renave	5
+Cartório	6
+
+TDV 3.0 RENAVE saída (cidadão compra da loja) = origem 4
+
+TDV 1.0
+Origem = 1
+ 
+TDV 2.0
+Origem = 2 e 3
+ 
+TDV 3.0
+Origem = 4
+ 
+TDV 4.0
+Origem = 5
+ 
+TDV 6.0
+Origem = 6
+ 
