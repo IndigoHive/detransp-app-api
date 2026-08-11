@@ -78,19 +78,6 @@ export function sumValores (debitos: DebitoIncluded[]): number {
   return Math.round(total * 100) / 100
 }
 
-// pgto's dataExpiracaoQRCode comes back as "YYYY-MM-DD HH:MM:SS" with no
-// timezone marker but is UTC (confirmed against 3 samples, 2026-08-03: the
-// paired registro.expiracao BRT field is consistently exactly 3h earlier;
-// deb-restr's own dataExpiracao for the same kind of PIX QR always includes
-// a proper "...Z" suffix — this is a pgto-side serialization gap, not a
-// per-debt-type quirk). A naive string like this gets parsed as LOCAL time by
-// JS engines, silently adding Brazil's UTC-3 offset — turning a real
-// 15-minute PIX expiration into ~3h15m on the client. Regex only matches the
-// naive shape, so this is a no-op if pgto ever starts sending a real marker.
-export function normalizeUtcDateTime (value: string): string {
-  return /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/.test(value) ? `${value.replace(' ', 'T')}Z` : value
-}
-
 export function buildVeiculoPixId (renavam: string, placa: string): string {
   return Buffer.from(`${renavam},${placa.toUpperCase()}`).toString('base64')
 }

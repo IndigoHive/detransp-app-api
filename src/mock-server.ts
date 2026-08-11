@@ -153,6 +153,15 @@ const MOCK_NOTIFICATIONS = [
     dataEnvio: '01/06/2026 - 08:00',
     lida: true,
   },
+  {
+    id: 'notif-5',
+    codMensagem: 'TDV',
+    titulo: 'Venda assinada',
+    mensagemCurta: 'O vendedor assinou o ATPV-e e a comunicação de venda foi gerada.',
+    mensagemLonga: '<p>O vendedor assinou o ATPV-e e a comunicação de venda foi gerada. Você tem 30 dias para pagar a taxa de transferência a contar da data de assinatura do vendedor.</p>',
+    dataEnvio: '10/08/2026 - 15:48',
+    lida: false,
+  },
 ]
 
 const MOCK_MULTAS = [
@@ -172,7 +181,7 @@ const MOCK_MULTAS = [
 
 // Flow IDs — use the same UUIDs as production so cached app data still works
 const FLOW_ID_LICENCIAMENTO = 'c0c69366-6ca0-4af8-9662-216179e06ec3'
-const FLOW_ID_TDV = '7e1761e2-bace-4c2f-b1eb-a4bf6459d9d4'
+const FLOW_ID_TDV = 'b05e6733-0668-48ec-9350-7150db088c47'
 
 const LICENCIAMENTO_FLOW_JSON = loadFlowJson('licenciamento-flow.json')
 const TDV_FLOW_JSON = loadFlowJson('tdv-flow.json')

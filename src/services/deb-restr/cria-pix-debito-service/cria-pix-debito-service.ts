@@ -8,7 +8,8 @@ import type {
 import { CodigoSefaz } from '../../../clients/detran-sp-service-now-pgto'
 import type { CriaPixDebitoResult, DebRestrVeiculoAuth, PixDebitoTipo } from '../types'
 import type { TiposServicoResolverService } from '../tipos-servico-resolver-service'
-import { buildVeiculoPixId, normalizeUtcDateTime } from '../utils'
+import { normalizeUtcDateTime } from '../../../utils/normalize-utc-datetime'
+import { buildVeiculoPixId } from '../utils'
 
 const CODIGO_SEFAZ_BY_TIPO: Record<PixDebitoTipo, string> = {
   ipva: CodigoSefaz.IPVA,

@@ -296,7 +296,7 @@ describe('vistorias services', () => {
     await expect(new CriaQRCodeVistoriaService(client).run(clientAuth, 'correlation-id')).resolves.toEqual({
       idSolServico: 'qr-code-id',
       qrCode: 'pix-code',
-      expiresAt: '2026-07-24 18:00:00'
+      expiresAt: '2026-07-24T18:00:00Z'
     })
     expect(criaQRCode).toHaveBeenCalledWith(clientAuth, { correlationID: 'correlation-id' })
     await expect(new VerificaQRCodeVistoriaService(client).run(clientAuth, 'qr-code-id')).resolves.toEqual({

@@ -45,6 +45,10 @@ export type AtualizaTdvAtpveAssinadaVendedor = {
   itiCode: string
 }
 
+export type AtualizaTdvTaxaServicoPaga = {
+  estado: CodigoEstadoTDV.TAXA_SERVICO_PAGA
+}
+
 export type AtualizaTdvCancelada = {
   estado: CodigoEstadoTDV.TRANSFERENCIA_CANCELADA
   ativa: 'false'
@@ -66,6 +70,7 @@ export type AtualizaTdvCommand =
   | AtualizaTdvAutodeclaracaoResidenciaConfirmada
   | AtualizaTdvAtpveAssinadaComprador
   | AtualizaTdvAtpveAssinadaVendedor
+  | AtualizaTdvTaxaServicoPaga
   | AtualizaTdvCancelada
   | AtualizaTdvEnderecoComprador
 

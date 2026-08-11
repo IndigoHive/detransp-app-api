@@ -1,6 +1,7 @@
 import type { Logger } from 'pino'
 import type { DetranSpServiceNowLicenciamentoClient } from '../../../clients/detran-sp-service-now-licenciamento'
 import { DetranSpServiceNowLicenciamentoError } from '../../../clients/detran-sp-service-now-licenciamento/errors/detran-sp-service-now-licenciamento-error'
+import { normalizeUtcDateTime } from '../../../utils/normalize-utc-datetime'
 import type { LicenciamentoVeiculoAuth } from '../types'
 
 
@@ -37,7 +38,10 @@ export class CriaQRCodeLicenciamentoService {
         { action: 'mock-pay-txid', renavam: auth.renavam, valor: emvAmount(data?.qrCode), qrRawResponse: result },
         'QR licenciamento criado — resposta ServiceNow completa'
       )
-      return { qrCode: data?.qrCode ?? null, expiresAt: data?.dataExpiracaoQRCode ?? null }
+      return {
+        qrCode: data?.qrCode ?? null,
+        expiresAt: data?.dataExpiracaoQRCode ? normalizeUtcDateTime(data.dataExpiracaoQRCode) : null
+      }
     } catch (createErr) {
       if (!(createErr instanceof DetranSpServiceNowLicenciamentoError)) throw createErr
 
@@ -45,7 +49,10 @@ export class CriaQRCodeLicenciamentoService {
         const existing = await this.client.verificaQRCode(auth, auth.renavam)
         const existingData = existing?.result
         if (existingData && existingData.estadoQRCode === 1) {
-          return { qrCode: existingData.qrCode ?? null, expiresAt: existingData.dataExpiracaoQRCode ?? null }
+          return {
+            qrCode: existingData.qrCode ?? null,
+            expiresAt: existingData.dataExpiracaoQRCode ? normalizeUtcDateTime(existingData.dataExpiracaoQRCode) : null
+          }
         }
       } catch { /* fall through to rethrow */ }
 
