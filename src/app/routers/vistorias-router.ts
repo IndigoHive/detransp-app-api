@@ -142,6 +142,7 @@ export function vistoriasRouter (): Router {
     const documento = asNonEmptyString(req.params.documento)
     const paymentLabel = asNonEmptyString(req.query.docProprietario)
     const docProprietario = getDocProprietarioByPaymentLabel(paymentLabel)
+    const renavam = asNonEmptyString(req.query.renavam)
 
     if (!documento || !DOCUMENT_PATTERN.test(documento)) {
       throw BadRequest('Documento inválido.')
@@ -149,9 +150,10 @@ export function vistoriasRouter (): Router {
     if (docProprietario === undefined) {
       throw BadRequest('docProprietario deve ser Meus pagamentos ou Meus Veículos.')
     }
+    if (renavam && !RENAVAM_PATTERN.test(renavam)) throw BadRequest('RENAVAM inválido.')
 
     const service = req.scope.resolve('listaPagamentosVistoriaService')
-    const result = await service.run(auth, documento, docProprietario)
+    const result = await service.run(auth, documento, docProprietario, renavam)
     res.status(200).json(result)
   })
 

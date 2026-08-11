@@ -80,11 +80,12 @@ export class DetranSpServiceNowVistoriasClient extends DetranSpServiceNowVistori
   async listaPagamentos (
     auth: DetranSpServiceNowAuth,
     documento: string,
-    docProprietario: boolean
+    docProprietario: boolean,
+    renavam?: string
   ): Promise<ListaPagamentosResult> {
     return (await this.axios.get(
       `/api/x_mdpdd_pev/v1/pev/restituicao/listapagamentos/${documento}`,
-      { ...this.withAuth(auth), params: { docProprietario, pageSize: 100 } }
+      { ...this.withAuth(auth), params: { docProprietario, renavam, pageSize: 100 } }
     )).data
   }
 
