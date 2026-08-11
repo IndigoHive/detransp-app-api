@@ -91,6 +91,13 @@ export class ConsultaDebitosService {
     const totalDebitos = debitosResult?.result?.valorTotal ?? 0
     const estadoQRCode = pixResult?.result?.estadoQRCode
 
+    // Temporary (do not ship): txid for mock-paying via the SEFAZ homolog
+    // webhook — warn level on purpose, just to stand out in the log list
+    this.logger.warn(
+      { action: 'mock-pay-txid', codigoTransferencia: input.codigoTransferencia, txid: pixResult?.result?.idQRCode, valor: totalDebitos },
+      'QR TDV débitos criado — txid para pagamento mock em homolog'
+    )
+
     // The DETRAN cron eventually advances a paid TDV to estado 8 (taxa de serviço paga),
     // but it can be slow — since the app polls this endpoint, we accelerate the transition
     // here the moment the PIX is detected as paid. Guarded to estado 7 so repeated polls
