@@ -582,7 +582,7 @@
                   "yearMod": "2015",
                   "brandModel": "VOLKS/GOL GTI 1.0",
                   "lastLicensing": "03/12/2025",
-                  "licensingStatus": "REGULAR",
+                  "status": "REGULAR",
                   "licensingExpirationDate": "31/12/2025"
                 },
                 {
@@ -595,7 +595,7 @@
                   "yearMod": "2022",
                   "brandModel": "ONIX LT - GM",
                   "lastLicensing": "15/01/2024",
-                  "licensingStatus": "A VENCER",
+                  "status": "A VENCER",
                   "licensingExpirationDate": "31/12/2024"
                 },
                 {
@@ -608,7 +608,7 @@
                   "yearMod": "2009",
                   "brandModel": "FIAT/UNO MILLE",
                   "lastLicensing": "20/08/2022",
-                  "licensingStatus": "VENCIDO",
+                  "status": "VENCIDO",
                   "licensingExpirationDate": "31/07/2023"
                 }
               ]
@@ -1135,7 +1135,7 @@
                 "plate": "EXC1A22",
                 "title": "Veículo 1",
                 "brandModel": "VOLKS/GOL GTI 1.0",
-                "licensingStatus": "REGULAR",
+                "status": "REGULAR",
                 "licensingExpirationDate": "2024-12-31"
               }
             }
@@ -1325,7 +1325,7 @@
                   "yearMod": "2015",
                   "brandModel": "VOLKS/GOL GTI 1.0",
                   "lastLicensing": "03/12/2025",
-                  "licensingStatus": "REGULAR",
+                  "status": "REGULAR",
                   "licensingExpirationDate": "31/12/2025"
                 },
                 {
@@ -1338,7 +1338,7 @@
                   "yearMod": "2022",
                   "brandModel": "ONIX LT - GM",
                   "lastLicensing": "15/01/2024",
-                  "licensingStatus": "A VENCER",
+                  "status": "A VENCER",
                   "licensingExpirationDate": "31/12/2024"
                 },
                 {
@@ -1351,7 +1351,7 @@
                   "yearMod": "2009",
                   "brandModel": "FIAT/UNO MILLE",
                   "lastLicensing": "20/08/2022",
-                  "licensingStatus": "VENCIDO",
+                  "status": "VENCIDO",
                   "licensingExpirationDate": "31/07/2023"
                 }
               ]
@@ -1423,7 +1423,7 @@
                 "type": "label_text",
                 "name": null,
                 "data": {
-                  "text": "@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoComprador}",
+                  "text": "@{node:n_0a7cda804e6d.cpfComprador}",
                   "label": "CPF"
                 }
               },
@@ -1432,7 +1432,7 @@
                 "type": "label_text",
                 "name": null,
                 "data": {
-                  "text": "@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}",
+                  "text": "@{node:n_0a7cda804e6d.nomeComprador}",
                   "label": "Nome"
                 }
               },
@@ -1441,35 +1441,8 @@
                 "type": "label_text",
                 "name": null,
                 "data": {
-                  "text": "@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.enderecoComprador}",
+                  "text": "@{node:n_0a7cda804e6d.enderecoComprador}",
                   "label": "Endereço"
-                }
-              },
-              {
-                "id": "c_adf47cf44af7",
-                "type": "button",
-                "name": null,
-                "data": {
-                  "label": "Editar endereço",
-                  "variant": "outline",
-                  "clickAction": "submit",
-                  "visibilityCondition": {
-                    "clauses": [
-                      {
-                        "id": "b46fe39a-71c0-469d-a933-f91c9a14159b",
-                        "left": "",
-                        "right": "",
-                        "operator": "equals"
-                      },
-                      {
-                        "id": "236185cd-e0cf-4551-ac3f-e3c11e687c84",
-                        "left": "",
-                        "right": "",
-                        "operator": "equals"
-                      }
-                    ],
-                    "combinator": "or"
-                  }
                 }
               }
             ],
@@ -1480,13 +1453,13 @@
             "type": "vehicle_info",
             "name": null,
             "data": {
-              "source": "@{node:n_0a7cda804e6d.vehicle ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle}",
+              "source": "@{node:n_0a7cda804e6d.vehicle}",
               "vehicle": {
                 "id": "1",
                 "plate": "EXC1A22",
                 "title": "Veículo 1",
+                "status": "REGULAR",
                 "brandModel": "VOLKS/GOL GTI 1.0",
-                "licensingStatus": "REGULAR",
                 "licensingExpirationDate": "2024-12-31"
               }
             }
@@ -1528,8 +1501,8 @@
       },
       "data": {
         "position": {
-          "x": 6276,
-          "y": 2560
+          "x": 6500,
+          "y": 1780
         }
       }
     },
@@ -1557,11 +1530,11 @@
             }
           },
           {
-            "id": "c_61aa261b7bc9_stub",
+            "id": "c_61aa261b7bc9",
             "type": "text_body",
             "name": null,
             "data": {
-              "text": "Eu, @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}, inscrito no CPF sob o nº @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoComprador}, declaro para os devidos fins que resido em @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.enderecoComprador}.",
+              "text": "Eu, @{node:n_0a7cda804e6d.nomeComprador}, inscrito no CPF sob o nº @{node:n_0a7cda804e6d.cpfComprador}, declaro para os devidos fins que resido em @{node:n_0a7cda804e6d.enderecoComprador}.",
               "align": "justify"
             }
           },
@@ -1582,25 +1555,6 @@
               "text": "Eu confirmo que as informações acima são verdadeiras\n",
               "checked": false,
               "required": true
-            }
-          },
-          {
-            "id": "c_4c46f80b6f01",
-            "type": "opt_in",
-            "name": null,
-            "data": {
-              "title": "",
-              "options": [
-                {
-                  "id": "1",
-                  "key": "opcao_1",
-                  "text": "Eu confirmo que as informações acima são verdadeiras",
-                  "required": false
-                }
-              ],
-              "position": "start",
-              "minRequired": 1,
-              "validationMode": "minCount"
             }
           }
         ]
@@ -1640,8 +1594,8 @@
       },
       "data": {
         "position": {
-          "x": 8104,
-          "y": 2600
+          "x": 7160,
+          "y": 1780
         }
       }
     },
@@ -1807,7 +1761,7 @@
                 "plate": "EXC1A22",
                 "title": "Veículo 1",
                 "brandModel": "VOLKS/GOL GTI 1.0",
-                "licensingStatus": "REGULAR",
+                "status": "REGULAR",
                 "licensingExpirationDate": "2024-12-31"
               }
             }
@@ -1938,29 +1892,34 @@
                 "data": {}
               },
               {
-                "id": "c_iter_debitos_01",
-                "type": "iterator",
+                "id": "c_90d48ffc11dd",
+                "type": "label_text",
                 "name": null,
-                "children": [
-                  {
-                    "id": "c_iter_debito_label_01",
-                    "type": "label_text",
-                    "name": null,
-                    "data": {
-                      "text": "@{item.valorFormatado}",
-                      "label": "@{item.descricao}"
-                    }
-                  },
-                  {
-                    "id": "c_iter_debito_div_01",
-                    "type": "divider",
-                    "name": null,
-                    "data": {}
-                  }
-                ],
                 "data": {
-                  "source": "@{node:n_b685a31ed52c.debitos}"
+                  "text": "@{node:n_b685a31ed52c.taxaTransferencia}",
+                  "label": "Transferência do veículo"
                 }
+              },
+              {
+                "id": "c_381e0ff4556e",
+                "type": "divider",
+                "name": null,
+                "data": {}
+              },
+              {
+                "id": "c_9db5f315559a",
+                "type": "label_text",
+                "name": null,
+                "data": {
+                  "text": "@{node:n_b685a31ed52c.taxaLicenciamento}",
+                  "label": "Licenciamento"
+                }
+              },
+              {
+                "id": "c_f6b5788ae741",
+                "type": "divider",
+                "name": null,
+                "data": {}
               },
               {
                 "id": "c_161e9c548d0b",
@@ -2012,8 +1971,8 @@
       "stickyFooter": true,
       "data": {
         "position": {
-          "x": 604,
-          "y": 3712
+          "x": 980,
+          "y": 3780
         }
       }
     },
@@ -2048,13 +2007,13 @@
             "type": "vehicle_info",
             "name": null,
             "data": {
-              "source": "@{node:n_2d9e4b6a8c17.vehicle ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle}",
+              "source": "@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle}",
               "vehicle": {
                 "id": "1",
                 "plate": "EXC1A22",
                 "title": "Veículo 1",
                 "brandModel": "VOLKS/GOL GTI 1.0",
-                "licensingStatus": "REGULAR",
+                "status": "REGULAR",
                 "licensingExpirationDate": "2024-12-31"
               }
             }
@@ -2378,7 +2337,7 @@
             "type": "text_body",
             "name": null,
             "data": {
-              "text": "Olá, @{node:n_2d9e4b6a8c17.nomeComprador ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}. \nA transferência do veículo @{node:n_2d9e4b6a8c17.vehicle.brandModel ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.brandModel}, placa @{node:n_2d9e4b6a8c17.vehicle.plate ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.plate} foi realizada com sucesso e o veículo encontra-se em seu nome.\n\nAcesse o aplicativo da Carteira Digital de Trânsito - CDT para baixar o documento do veículo.\n",
+              "text": "Olá, @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}. \nA transferência do veículo @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.brandModel}, placa @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.plate} foi realizada com sucesso e o veículo encontra-se em seu nome.\n\nAcesse o aplicativo da Carteira Digital de Trânsito - CDT para baixar o documento do veículo.\n",
               "align": "left"
             }
           },
@@ -2446,7 +2405,7 @@
             "type": "text_body",
             "name": null,
             "data": {
-              "text": "Olá, @{node:n_2d9e4b6a8c17.nomeComprador ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}. \n\nFoi confirmado o pagamento da taxa de transferência do veículo @{node:n_2d9e4b6a8c17.vehicle.brandModel ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.brandModel}, placa @{node:n_2d9e4b6a8c17.vehicle.plate ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.plate}.\n\nAguarde enquanto validamos o processo e registramos o veículo em seu nome.\n",
+              "text": "Olá, @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}. \n\nFoi confirmado o pagamento da taxa de transferência do veículo @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.brandModel}, placa @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.plate}.\n\nAguarde enquanto validamos o processo e registramos o veículo em seu nome.\n",
               "align": "left"
             }
           },
@@ -2514,7 +2473,7 @@
             "type": "text_body",
             "name": null,
             "data": {
-              "text": "Olá, @{node:n_2d9e4b6a8c17.nomeComprador ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}.\n\nA compra do veículo foi cancelada pelo vendedor do veículo. Por isso, encerramos sua solicitação.\n",
+              "text": "Olá, @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}.\n\nA compra do veículo foi cancelada pelo vendedor do veículo. Por isso, encerramos sua solicitação.\n",
               "align": "left"
             }
           },
@@ -2523,13 +2482,13 @@
             "type": "vehicle_info",
             "name": null,
             "data": {
-              "source": "@{node:n_2d9e4b6a8c17.vehicle ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle}",
+              "source": "@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle}",
               "vehicle": {
                 "id": "1",
                 "plate": "EXC1A22",
                 "title": "Veículo 1",
                 "brandModel": "VOLKS/GOL GTI 1.0",
-                "licensingStatus": "REGULAR",
+                "status": "REGULAR",
                 "licensingExpirationDate": "2024-12-31"
               }
             }
@@ -3251,7 +3210,7 @@
       "navbar": {
         "id": "s_p2b2c3d4e5f7_navbar",
         "data": {
-          "title": "Situação judicial pendente",
+          "title": "Situação administrativa pendente",
           "showReturn": true
         },
         "name": null,
@@ -3547,11 +3506,11 @@
       "id": "s_3593782b12c5",
       "name": "[Comprador] Confirmação dados",
       "content": {
-        "id": "c_18e54542ccb4",
+        "id": "c_eade93f301b6",
         "type": "group",
         "children": [
           {
-            "id": "c_9fb5de84b5c3",
+            "id": "c_ce7914edd4b4",
             "type": "text_body",
             "name": null,
             "data": {
@@ -3559,12 +3518,12 @@
             }
           },
           {
-            "id": "c_53d3483cc72c",
+            "id": "c_18c63a0fb582",
             "type": "card",
             "name": null,
             "children": [
               {
-                "id": "c_db3e6102fc51",
+                "id": "c_9b66ffa33bad",
                 "type": "text_heading",
                 "name": null,
                 "data": {
@@ -3573,47 +3532,80 @@
                 }
               },
               {
-                "id": "c_260b63deb5e7",
+                "id": "c_47fae14518a9",
                 "type": "label_text",
                 "name": null,
                 "data": {
-                  "text": "@{node:n_0a7cda804e6d.cpfComprador ?? node:n_2d9e4b6a8c17.cpfComprador}",
+                  "text": "@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoComprador}",
                   "label": "CPF"
                 }
               },
               {
-                "id": "c_67003f938d3c",
+                "id": "c_2ec8a91168d0",
                 "type": "label_text",
                 "name": null,
                 "data": {
-                  "text": "@{node:n_0a7cda804e6d.nomeComprador ?? node:n_21da615e160d.full_name}",
+                  "text": "@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}",
                   "label": "Nome"
                 }
               },
               {
-                "id": "c_83feb4b29f35",
+                "id": "c_268d5bcc17ab",
                 "type": "label_text",
                 "name": null,
                 "data": {
-                  "text": "@{node:n_0a7cda804e6d.enderecoComprador}",
+                  "text": "@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.enderecoComprador}",
                   "label": "Endereço"
+                }
+              },
+              {
+                "id": "c_adf47cf44af7",
+                "type": "button",
+                "name": null,
+                "data": {
+                  "label": "Editar endereço",
+                  "variant": "outline",
+                  "clickAction": "submit",
+                  "visibilityCondition": {
+                    "clauses": [
+                      {
+                        "id": "vc-origem-2",
+                        "left": "@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.origem}",
+                        "right": "2",
+                        "operator": "equals"
+                      },
+                      {
+                        "id": "vc-origem-3",
+                        "left": "@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.origem}",
+                        "right": "3",
+                        "operator": "equals"
+                      },
+                      {
+                        "id": "vc-origem-4",
+                        "left": "@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.origem}",
+                        "right": "4",
+                        "operator": "equals"
+                      }
+                    ],
+                    "combinator": "or"
+                  }
                 }
               }
             ],
             "data": {}
           },
           {
-            "id": "c_f12eaa1d6a19",
+            "id": "c_d87fe542044f",
             "type": "vehicle_info",
             "name": null,
             "data": {
-              "source": "@{node:n_0a7cda804e6d.vehicle ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle}",
+              "source": "@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle}",
               "vehicle": {
                 "id": "1",
                 "plate": "EXC1A22",
                 "title": "Veículo 1",
                 "brandModel": "VOLKS/GOL GTI 1.0",
-                "licensingStatus": "REGULAR",
+                "status": "REGULAR",
                 "licensingExpirationDate": "2024-12-31"
               }
             }
@@ -3621,11 +3613,11 @@
         ]
       },
       "footer": {
-        "id": "c_4c732bdd407f",
+        "id": "c_752e708b11f4",
         "type": "group",
         "children": [
           {
-            "id": "c_66429221c0b0",
+            "id": "c_76535dccc44e",
             "type": "button",
             "name": null,
             "data": {
@@ -3633,39 +3625,7 @@
             }
           },
           {
-            "id": "c_82bc308953da",
-            "type": "button",
-            "name": null,
-            "data": {
-              "label": "Editar endereço",
-              "variant": "outline",
-              "visibilityCondition": {
-                "clauses": [
-                  {
-                    "id": "vc-origem-2",
-                    "left": "@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.origem}",
-                    "right": "2",
-                    "operator": "equals"
-                  },
-                  {
-                    "id": "vc-origem-3",
-                    "left": "@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.origem}",
-                    "right": "3",
-                    "operator": "equals"
-                  },
-                  {
-                    "id": "vc-origem-4",
-                    "left": "@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.origem}",
-                    "right": "4",
-                    "operator": "equals"
-                  }
-                ],
-                "combinator": "or"
-              }
-            }
-          },
-          {
-            "id": "c_73ca0672578a",
+            "id": "c_a952ff30c656",
             "type": "button",
             "name": null,
             "data": {
@@ -3677,7 +3637,7 @@
         ]
       },
       "navbar": {
-        "id": "38d11bb1-752b-4b3f-ba0a-7bad12402b6d",
+        "id": "c_3b2cb9cf659c",
         "data": {
           "title": "Confirmação de compra",
           "showReturn": true
@@ -3687,8 +3647,8 @@
       },
       "data": {
         "position": {
-          "x": 6564,
-          "y": 1484
+          "x": 6276,
+          "y": 2560
         }
       }
     },
@@ -3696,11 +3656,11 @@
       "id": "s_b650bf1fea21",
       "name": "[Comprador] Endereço",
       "content": {
-        "id": "c_2c74ff66c793",
+        "id": "c_0ee4435835af",
         "type": "group",
         "children": [
           {
-            "id": "c_224eeead74b2",
+            "id": "c_15d2d123ee4e",
             "type": "text_body",
             "name": null,
             "data": {
@@ -3708,7 +3668,7 @@
             }
           },
           {
-            "id": "c_fadf4d1caa78",
+            "id": "c_b9c15617969e",
             "type": "text_heading",
             "name": null,
             "data": {
@@ -3716,16 +3676,16 @@
             }
           },
           {
-            "id": "c_c5cbd1eb5592",
+            "id": "c_61aa261b7bc9_stub",
             "type": "text_body",
             "name": null,
             "data": {
-              "text": "Eu, @{node:n_0a7cda804e6d.nomeComprador}, inscrito no CPF sob o nº @{node:n_0a7cda804e6d.cpfComprador}, declaro para os devidos fins que resido em @{node:n_0a7cda804e6d.enderecoComprador}.",
+              "text": "Eu, @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}, inscrito no CPF sob o nº @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoComprador}, declaro para os devidos fins que resido em @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.enderecoComprador}.",
               "align": "justify"
             }
           },
           {
-            "id": "c_67106fd4b49f",
+            "id": "c_6ad356a5b447",
             "type": "text_body",
             "name": null,
             "data": {
@@ -3734,7 +3694,7 @@
             }
           },
           {
-            "id": "c_0ca480a3fff5",
+            "id": "c_73929d52250f",
             "type": "opt_in",
             "name": null,
             "data": {
@@ -3746,11 +3706,11 @@
         ]
       },
       "footer": {
-        "id": "c_20c2cbd896de",
+        "id": "c_be61154e63f0",
         "type": "group",
         "children": [
           {
-            "id": "c_ff2720532af6",
+            "id": "c_598a515cf573",
             "type": "button",
             "name": null,
             "data": {
@@ -3758,7 +3718,7 @@
             }
           },
           {
-            "id": "c_14e6dc24b5f6",
+            "id": "c_634d417d5cc6",
             "type": "button",
             "name": null,
             "data": {
@@ -3770,7 +3730,7 @@
         ]
       },
       "navbar": {
-        "id": "5b6ef436-f31b-49ef-94c9-ee0f4eff7ec0",
+        "id": "c_aca24fbe8263",
         "data": {
           "title": "Confirmação de endereço",
           "showReturn": true
@@ -3780,8 +3740,8 @@
       },
       "data": {
         "position": {
-          "x": 7916,
-          "y": 1484
+          "x": 8104,
+          "y": 2600
         }
       }
     },
@@ -4431,7 +4391,7 @@
         },
         "method": "POST",
         "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/valida-assinatura",
-        "body": "{\n  \"codigoTransferencia\": \"@{node:n_2d9e4b6a8c17.codigoTransferencia ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoTransferencia}\",\n  \"itiCode\": \"@{node:n_3bad58f20fff.code}\"\n}\n",
+        "body": "{\n  \"codigoTransferencia\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoTransferencia}\",\n  \"itiCode\": \"@{node:n_3bad58f20fff.code}\"\n}\n",
         "responseExamples": [
           {
             "id": "2f26dc5c-5d01-488a-8e76-1ca8f0dd33a7",
@@ -4716,7 +4676,7 @@
           "x": 268,
           "y": 4444
         },
-        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/consulta-debitos?codigoTransferencia=@{node:n_2d9e4b6a8c17.codigoTransferencia ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoTransferencia}",
+        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/consulta-debitos?codigoTransferencia=@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoTransferencia}",
         "responseExamples": [
           {
             "id": "662e4b72-b520-47e2-a222-bd21ed66959a",
@@ -4753,11 +4713,12 @@
       "type": "pix_screen",
       "name": "Pagamento PIX",
       "data": {
+        "method": "GET",
         "position": {
           "x": 1340,
           "y": 4320
         },
-        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/consulta-debitos?codigoTransferencia=@{node:n_2d9e4b6a8c17.codigoTransferencia ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoTransferencia}"
+        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/consulta-debitos?codigoTransferencia=@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoTransferencia}"
       }
     },
     {
@@ -4782,7 +4743,7 @@
         },
         "method": "POST",
         "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/cancelar",
-        "body": "{ \"codigoTransferencia\": \"@{node:n_2d9e4b6a8c17.codigoTransferencia ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoTransferencia}\" }\n",
+        "body": "{ \"codigoTransferencia\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoTransferencia}\" }\n",
         "responseExamples": [
           {
             "id": "5af6911b-58b6-4337-843e-002fa8eb4e6f",
@@ -5912,12 +5873,6 @@
       "targetHandle": "input"
     },
     {
-      "sourceId": "s_31f3e90bbdcc",
-      "targetId": "s_ffbdc2f4fe37",
-      "sourceHandle": "c_78ed063a4397",
-      "targetHandle": "input"
-    },
-    {
       "sourceId": "d_5fdc480fb32b",
       "targetId": "n_4005e7a1b0f3",
       "sourceHandle": "c_880c4afa0dbe",
@@ -6176,12 +6131,6 @@
       "targetHandle": "input"
     },
     {
-      "sourceId": "n_8c3f5d0b2a71",
-      "targetId": "s_31f3e90bbdcc",
-      "sourceHandle": "false",
-      "targetHandle": "input"
-    },
-    {
       "sourceId": "n_cd7b779a01a0",
       "targetId": "n_8626ca63ef8e",
       "sourceHandle": "fb741670-fa17-498b-b9c9-cc00349ea0be",
@@ -6296,36 +6245,6 @@
       "targetHandle": "input"
     },
     {
-      "sourceId": "n_0a7cda804e6d",
-      "targetId": "s_3593782b12c5",
-      "sourceHandle": "output",
-      "targetHandle": "input"
-    },
-    {
-      "sourceId": "s_3593782b12c5",
-      "targetId": "s_b650bf1fea21",
-      "sourceHandle": "output",
-      "targetHandle": "input"
-    },
-    {
-      "sourceId": "s_b650bf1fea21",
-      "targetId": "s_24b45fd19f30",
-      "sourceHandle": "output",
-      "targetHandle": "input"
-    },
-    {
-      "sourceId": "s_3593782b12c5",
-      "targetId": "s_ffbdc2f4fe37",
-      "sourceHandle": "c_73ca0672578a",
-      "targetHandle": "input"
-    },
-    {
-      "sourceId": "s_31f3e90bbdcc",
-      "targetId": "s_85ba93c2e996",
-      "sourceHandle": "c_adf47cf44af7",
-      "targetHandle": "input"
-    },
-    {
       "sourceId": "s_85ba93c2e996",
       "targetId": "n_f5aacdb3ca97",
       "sourceHandle": "output",
@@ -6341,12 +6260,6 @@
       "sourceId": "n_c3f8a2e9b147",
       "targetId": "n_8c3f5d0b2a71",
       "sourceHandle": "true",
-      "targetHandle": "input"
-    },
-    {
-      "sourceId": "s_c482ac86f650",
-      "targetId": "n_2d9e4b6a8c17",
-      "sourceHandle": "c_5d63b6199d05",
       "targetHandle": "input"
     },
     {
@@ -6377,24 +6290,6 @@
       "sourceId": "n_a4e7b1c9d205",
       "targetId": "s_92a9313c0809",
       "sourceHandle": "r_estado_9_01",
-      "targetHandle": "input"
-    },
-    {
-      "sourceId": "s_31f3e90bbdcc",
-      "targetId": "n_86edd585a829",
-      "sourceHandle": "c_c29973b3a9ca",
-      "targetHandle": "left-target"
-    },
-    {
-      "sourceId": "n_86edd585a829",
-      "targetId": "s_c482ac86f650",
-      "sourceHandle": "right-source",
-      "targetHandle": "input"
-    },
-    {
-      "sourceId": "s_7e2a1c9b4f08",
-      "targetId": "s_c482ac86f650",
-      "sourceHandle": "c_9d3f7a1e5b20",
       "targetHandle": "input"
     },
     {
@@ -6522,6 +6417,61 @@
       "targetId": "s_4f0a972b5591",
       "sourceHandle": "false",
       "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_0a7cda804e6d",
+      "targetId": "s_31f3e90bbdcc",
+      "sourceHandle": "output"
+    },
+    {
+      "sourceId": "s_31f3e90bbdcc",
+      "targetId": "s_c482ac86f650",
+      "sourceHandle": "c_c29973b3a9ca"
+    },
+    {
+      "sourceId": "s_c482ac86f650",
+      "targetId": "s_24b45fd19f30",
+      "sourceHandle": "c_5d63b6199d05"
+    },
+    {
+      "sourceId": "s_31f3e90bbdcc",
+      "targetId": "s_ffbdc2f4fe37",
+      "sourceHandle": "c_78ed063a4397"
+    },
+    {
+      "sourceId": "n_8c3f5d0b2a71",
+      "targetId": "s_3593782b12c5",
+      "sourceHandle": "false"
+    },
+    {
+      "sourceId": "s_3593782b12c5",
+      "targetId": "s_ffbdc2f4fe37",
+      "sourceHandle": "c_a952ff30c656"
+    },
+    {
+      "sourceId": "s_3593782b12c5",
+      "targetId": "s_85ba93c2e996",
+      "sourceHandle": "c_adf47cf44af7"
+    },
+    {
+      "sourceId": "s_3593782b12c5",
+      "targetId": "n_86edd585a829",
+      "sourceHandle": "c_76535dccc44e"
+    },
+    {
+      "sourceId": "n_86edd585a829",
+      "targetId": "s_b650bf1fea21",
+      "sourceHandle": "right-source"
+    },
+    {
+      "sourceId": "s_7e2a1c9b4f08",
+      "targetId": "s_b650bf1fea21",
+      "sourceHandle": "c_9d3f7a1e5b20"
+    },
+    {
+      "sourceId": "s_b650bf1fea21",
+      "targetId": "n_2d9e4b6a8c17",
+      "sourceHandle": "c_598a515cf573"
     }
   ]
 }
