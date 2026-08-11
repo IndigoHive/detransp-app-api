@@ -3,13 +3,6 @@ import { Router } from 'express'
 export function tdvRouter (): Router {
   const router = Router()
 
-  router.get('/verificar-estado', async (req, res) => {
-    const { accessToken } = req.session!
-    const service = req.scope.resolve('verificarEstadoTdvService')
-    const result = await service.run(accessToken)
-    res.status(200).json(result)
-  })
-
   router.get('/veiculos', async (req, res) => {
     const { accessToken } = req.session!
     const service = req.scope.resolve('consultaVeiculosTdvService')
@@ -113,23 +106,6 @@ export function tdvRouter (): Router {
     const { accessToken } = req.session!
     const service = req.scope.resolve('buscaEnderecoService')
     const result = await service.run(accessToken, { cep: req.params.cep })
-    res.status(200).json(result)
-  })
-
-  router.get('/pix', async (req, res) => {
-    const { accessToken } = req.session!
-    const service = req.scope.resolve('buscaPixService')
-    const codigoTransferencia = req.query.codigoTransferencia as string
-    const forcarNovoRaw = req.query.forcarNovo
-    const forcarNovo = forcarNovoRaw === 'true'
-      ? true
-      : forcarNovoRaw === 'false'
-        ? false
-        : undefined
-    const result = await service.run(accessToken, {
-      codigoTransferencia,
-      ...(forcarNovo !== undefined ? { forcarNovo } : {})
-    })
     res.status(200).json(result)
   })
 

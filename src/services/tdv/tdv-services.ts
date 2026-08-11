@@ -1,5 +1,4 @@
 import { asClass, type NameAndRegistrationPair } from 'awilix'
-import { VerificarEstadoTdvService } from './verificar-estado-tdv'
 import { ConsultaVeiculosService } from './consulta-veiculos'
 import { AnaliseRequisitosService } from './analise-requisitos'
 import { ValidacaoCompradorService } from './validacao-comprador'
@@ -14,13 +13,11 @@ import { ConfirmarEnderecoService } from './confirmar-endereco'
 import { CriarCompraService } from './criar-compra'
 import { ValidaAssinaturaService } from './valida-assinatura'
 import { ConsultaDebitosService } from './consulta-debitos'
-import { BuscaPixService } from './busca-pix'
 import { BuscaEnderecoService } from './busca-endereco'
 import { ProvaVidaService } from './prova-vida'
 import { GerarLinkAssinaturaItiService } from './gerar-link-assinatura-iti'
 
 export type TdvServices = {
-  verificarEstadoTdvService: VerificarEstadoTdvService
   consultaVeiculosTdvService: ConsultaVeiculosService
   analiseRequisitosService: AnaliseRequisitosService
   validacaoCompradorService: ValidacaoCompradorService
@@ -35,7 +32,6 @@ export type TdvServices = {
   criarCompraService: CriarCompraService
   validaAssinaturaService: ValidaAssinaturaService
   consultaDebitosService: ConsultaDebitosService
-  buscaPixService: BuscaPixService
   buscaEnderecoService: BuscaEnderecoService
   provaVidaService: ProvaVidaService
   gerarLinkAssinaturaItiService: GerarLinkAssinaturaItiService
@@ -43,7 +39,6 @@ export type TdvServices = {
 
 export function getTdvRegistrations (): Required<NameAndRegistrationPair<TdvServices>> {
   return {
-    verificarEstadoTdvService: asClass(VerificarEstadoTdvService).scoped(),
     consultaVeiculosTdvService: asClass(ConsultaVeiculosService).scoped(),
     analiseRequisitosService: asClass(AnaliseRequisitosService).scoped(),
     validacaoCompradorService: asClass(ValidacaoCompradorService).scoped(),
@@ -58,7 +53,6 @@ export function getTdvRegistrations (): Required<NameAndRegistrationPair<TdvServ
     criarCompraService: asClass(CriarCompraService).scoped(),
     validaAssinaturaService: asClass(ValidaAssinaturaService).scoped(),
     consultaDebitosService: asClass(ConsultaDebitosService).scoped(),
-    buscaPixService: asClass(BuscaPixService).scoped(),
     buscaEnderecoService: asClass(BuscaEnderecoService).scoped(),
     provaVidaService: asClass(ProvaVidaService).scoped(),
     gerarLinkAssinaturaItiService: asClass(GerarLinkAssinaturaItiService).scoped(),

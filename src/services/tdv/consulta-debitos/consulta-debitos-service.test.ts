@@ -7,7 +7,7 @@ const authHeader = `Bearer header.${Buffer.from(JSON.stringify({ preferred_usern
 const clientAuth = { token: authHeader.replace(/^Bearer\s+/i, ''), cpf }
 
 describe('ConsultaDebitosService', () => {
-  it('returns full debitos list with valorTotal and formatted helpers', async () => {
+  it('returns debitos list together with pix qr fields', async () => {
     const buscaTdv = vi.fn().mockResolvedValue({
       result: { nomeComprador: 'Carlos da Silva' }
     })
@@ -22,7 +22,16 @@ describe('ConsultaDebitosService', () => {
         ]
       }
     })
-    const buscaPixQrCodeTdv = vi.fn()
+    const buscaPixQrCodeTdv = vi.fn().mockResolvedValue({
+      result: {
+        idQRCode: 'QR-1',
+        qrCode: '00020126...',
+        dataExpiracaoQRCode: '2026-08-11T15:00:00.000Z',
+        estadoQRCode: '1',
+        idPagamentoQRCode: '',
+        dataPagamentoQRCode: ''
+      }
+    })
 
     const service = new ConsultaDebitosService({
       detranSpServiceNowTdv: {
@@ -43,11 +52,16 @@ describe('ConsultaDebitosService', () => {
       valorTotal: 761.13,
       taxaTransferencia: 'R$ 272,27',
       taxaLicenciamento: 'R$ 160,22',
-      totalDebitos: 'R$ 761,13'
+      totalDebitos: 'R$ 761,13',
+      qrCode: '00020126...',
+      expiresAt: '2026-08-11T15:00:00.000Z',
+      estado: 1,
+      comprovante: undefined,
+      confirmedDate: undefined
     })
 
     expect(buscaTdv).toHaveBeenCalledWith(clientAuth, 'TDV-1')
     expect(buscaDebitosTdv).toHaveBeenCalledWith(clientAuth, 'TDV-1')
-    expect(buscaPixQrCodeTdv).not.toHaveBeenCalled()
+    expect(buscaPixQrCodeTdv).toHaveBeenCalledWith(clientAuth, 'TDV-1', true)
   })
 })

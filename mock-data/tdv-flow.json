@@ -1784,7 +1784,7 @@
             "type": "vehicle_info",
             "name": null,
             "data": {
-              "source": "@{node:n_2d9e4b6a8c17.vehicle ?? node:n_90a9d6db5f4b.vehicle}",
+              "source": "@{node:n_2d9e4b6a8c17.vehicle}",
               "vehicle": {
                 "id": "1",
                 "plate": "EXC1A22",
@@ -2031,7 +2031,7 @@
             "type": "vehicle_info",
             "name": null,
             "data": {
-              "source": "@{node:n_2d9e4b6a8c17.vehicle ?? node:n_90a9d6db5f4b.vehicle ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle}",
+              "source": "@{node:n_2d9e4b6a8c17.vehicle ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle}",
               "vehicle": {
                 "id": "1",
                 "plate": "EXC1A22",
@@ -2123,7 +2123,7 @@
                 "type": "label_text",
                 "name": null,
                 "data": {
-                  "text": "@{node:n_de17c35410fd.idPagamento}",
+                  "text": "@{node:n_de17c35410fd.comprovante}",
                   "label": "Comprovante do pagamento"
                 }
               },
@@ -2153,7 +2153,7 @@
                 "type": "label_text",
                 "name": null,
                 "data": {
-                  "text": "@{node:n_de17c35410fd.dataPagamento}",
+                  "text": "@{node:n_de17c35410fd.confirmedDate}",
                   "label": "Data e hora da confirmação"
                 }
               }
@@ -2361,7 +2361,7 @@
             "type": "text_body",
             "name": null,
             "data": {
-              "text": "Olá, @{node:n_2d9e4b6a8c17.nomeComprador ?? node:n_90a9d6db5f4b.nomeComprador}. \nA transferência do veículo @{node:n_2d9e4b6a8c17.vehicle.brandModel ?? node:n_90a9d6db5f4b.vehicle.brandModel}, placa @{node:n_2d9e4b6a8c17.vehicle.plate ?? node:n_90a9d6db5f4b.vehicle.plate} foi realizada com sucesso e o veículo encontra-se em seu nome.\n\nAcesse o aplicativo da Carteira Digital de Trânsito - CDT para baixar o documento do veículo.\n",
+              "text": "Olá, @{node:n_2d9e4b6a8c17.nomeComprador}. \nA transferência do veículo @{node:n_2d9e4b6a8c17.vehicle.brandModel}, placa @{node:n_2d9e4b6a8c17.vehicle.plate} foi realizada com sucesso e o veículo encontra-se em seu nome.\n\nAcesse o aplicativo da Carteira Digital de Trânsito - CDT para baixar o documento do veículo.\n",
               "align": "left"
             }
           },
@@ -2429,7 +2429,7 @@
             "type": "text_body",
             "name": null,
             "data": {
-              "text": "Olá, @{node:n_2d9e4b6a8c17.nomeComprador ?? node:n_90a9d6db5f4b.nomeComprador}. \n\nFoi confirmado o pagamento da taxa de transferência do veículo @{node:n_2d9e4b6a8c17.vehicle.brandModel ?? node:n_90a9d6db5f4b.vehicle.brandModel}, placa @{node:n_2d9e4b6a8c17.vehicle.plate ?? node:n_90a9d6db5f4b.vehicle.plate}.\n\nAguarde enquanto validamos o processo e registramos o veículo em seu nome.\n",
+              "text": "Olá, @{node:n_2d9e4b6a8c17.nomeComprador}. \n\nFoi confirmado o pagamento da taxa de transferência do veículo @{node:n_2d9e4b6a8c17.vehicle.brandModel}, placa @{node:n_2d9e4b6a8c17.vehicle.plate}.\n\nAguarde enquanto validamos o processo e registramos o veículo em seu nome.\n",
               "align": "left"
             }
           },
@@ -2497,7 +2497,7 @@
             "type": "text_body",
             "name": null,
             "data": {
-              "text": "Olá, @{node:n_2d9e4b6a8c17.nomeComprador ?? node:n_90a9d6db5f4b.nomeComprador}.\n\nA compra do veículo foi cancelada pelo vendedor do veículo. Por isso, encerramos sua solicitação.\n",
+              "text": "Olá, @{node:n_2d9e4b6a8c17.nomeComprador}.\n\nA compra do veículo foi cancelada pelo vendedor do veículo. Por isso, encerramos sua solicitação.\n",
               "align": "left"
             }
           },
@@ -2506,7 +2506,7 @@
             "type": "vehicle_info",
             "name": null,
             "data": {
-              "source": "@{node:n_2d9e4b6a8c17.vehicle ?? node:n_90a9d6db5f4b.vehicle}",
+              "source": "@{node:n_2d9e4b6a8c17.vehicle}",
               "vehicle": {
                 "id": "1",
                 "plate": "EXC1A22",
@@ -3555,7 +3555,7 @@
             "type": "text_body",
             "name": null,
             "data": {
-              "text": "Olá, @{node:n_2d9e4b6a8c17.nomeComprador ?? node:n_90a9d6db5f4b.nomeComprador ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}. \n\nFoi confirmado o pagamento da taxa de transferência do veículo @{node:n_2d9e4b6a8c17.vehicle.brandModel ?? node:n_90a9d6db5f4b.vehicle.brandModel ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.brandModel}, placa @{node:n_2d9e4b6a8c17.vehicle.plate ?? node:n_90a9d6db5f4b.vehicle.plate ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.plate}.\n\nAguarde enquanto validamos o processo e registramos o veículo em seu nome.\n",
+              "text": "Olá, @{node:n_2d9e4b6a8c17.nomeComprador ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}. \n\nFoi confirmado o pagamento da taxa de transferência do veículo @{node:n_2d9e4b6a8c17.vehicle.brandModel ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.brandModel}, placa @{node:n_2d9e4b6a8c17.vehicle.plate ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.plate}.\n\nAguarde enquanto validamos o processo e registramos o veículo em seu nome.\n",
               "align": "left"
             }
           },
@@ -3623,7 +3623,7 @@
             "type": "text_body",
             "name": null,
             "data": {
-              "text": "Olá, @{node:n_2d9e4b6a8c17.nomeComprador ?? node:n_90a9d6db5f4b.nomeComprador ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}. \nA transferência do veículo @{node:n_2d9e4b6a8c17.vehicle.brandModel ?? node:n_90a9d6db5f4b.vehicle.brandModel ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.brandModel}, placa @{node:n_2d9e4b6a8c17.vehicle.plate ?? node:n_90a9d6db5f4b.vehicle.plate ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.plate} foi realizada com sucesso e o veículo encontra-se em seu nome.\n\nAcesse o aplicativo da Carteira Digital de Trânsito - CDT para baixar o documento do veículo.\n",
+              "text": "Olá, @{node:n_2d9e4b6a8c17.nomeComprador ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}. \nA transferência do veículo @{node:n_2d9e4b6a8c17.vehicle.brandModel ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.brandModel}, placa @{node:n_2d9e4b6a8c17.vehicle.plate ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.plate} foi realizada com sucesso e o veículo encontra-se em seu nome.\n\nAcesse o aplicativo da Carteira Digital de Trânsito - CDT para baixar o documento do veículo.\n",
               "align": "left"
             }
           },
@@ -4000,7 +4000,7 @@
                 "type": "label_text",
                 "name": null,
                 "data": {
-                  "text": "@{node:n_de17c35410fd.idPagamento}",
+                  "text": "@{node:n_de17c35410fd.comprovante}",
                   "label": "Comprovante do pagamento"
                 }
               },
@@ -4030,7 +4030,7 @@
                 "type": "label_text",
                 "name": null,
                 "data": {
-                  "text": "@{node:n_de17c35410fd.dataPagamento}",
+                  "text": "@{node:n_de17c35410fd.confirmedDate}",
                   "label": "Data e hora da confirmação"
                 }
               }
@@ -4103,7 +4103,7 @@
                 "type": "label_text",
                 "name": null,
                 "data": {
-                  "text": "@{node:n_0a7cda804e6d.cpfComprador ?? node:n_2d9e4b6a8c17.cpfComprador ?? node:n_90a9d6db5f4b.cpfComprador}",
+                  "text": "@{node:n_0a7cda804e6d.cpfComprador ?? node:n_2d9e4b6a8c17.cpfComprador}",
                   "label": "CPF"
                 }
               },
@@ -5177,7 +5177,7 @@
         },
         "method": "POST",
         "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/valida-assinatura",
-        "body": "{\n  \"codigoTransferencia\": \"@{node:n_2d9e4b6a8c17.codigoTransferencia ?? node:n_90a9d6db5f4b.codigoTransferencia ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoTransferencia}\",\n  \"itiCode\": \"@{node:n_3bad58f20fff.code}\"\n}\n",
+        "body": "{\n  \"codigoTransferencia\": \"@{node:n_2d9e4b6a8c17.codigoTransferencia ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoTransferencia}\",\n  \"itiCode\": \"@{node:n_3bad58f20fff.code}\"\n}\n",
         "responseExamples": [
           {
             "id": "2f26dc5c-5d01-488a-8e76-1ca8f0dd33a7",
@@ -5293,60 +5293,6 @@
       }
     },
     {
-      "id": "n_90a9d6db5f4b",
-      "type": "http_node",
-      "name": "Verificar estado TDV",
-      "data": {
-        "position": {
-          "x": -2160,
-          "y": 2048
-        },
-        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/verificar-estado",
-        "responseExamples": [
-          {
-            "id": "324edac1-bfb2-40b4-bf17-7db4f1aa8519",
-            "name": "Nova TDV",
-            "value": "{\n  \"proximaAcao\": \"nova_tdv\"\n}"
-          },
-          {
-            "id": "aa3b6e4e-0632-4c0d-8bd5-91dca5d73026",
-            "name": "Comprador",
-            "value": "{\n  \"proximaAcao\": \"comprador\",\n  \"codigoTransferencia\": \"TDV-000000\",\n  \"vehicles\": [\n    {\n      \"plate\": \"ABC1D23\",\n      \"brandModel\": \"Toyota Corolla 2.0\",\n      \"renavam\": \"00001002003\",\n      \"codigoTransferencia\": \"TDV-000000\",\n      \"licensingStatus\": \"REGULAR\"\n    }\n  ]\n}"
-          },
-          {
-            "id": "c267ad04-f8a0-4b68-8054-8153029406fc",
-            "name": "Vendedor 2",
-            "value": "{\n  \"proximaAcao\": \"vendedor_2\",\n  \"nomeComprador\": \"João Silva\",\n  \"codigoTransferencia\": \"TDV-000000\",\n  \"vehicle\": {\n    \"id\": \"1\",\n    \"plate\": \"ABC1D23\",\n    \"title\": \"Toyota Corolla 2.0\",\n    \"licensingStatus\": \"REGULAR\",\n    \"brandModel\": \"Toyota Corolla 2.0\",\n    \"licensingExpirationDate\": \"31/12/2025\",\n    \"renavam\": \"00001002003\",\n    \"lastLicensing\": \"03/12/2025\",\n    \"yearFab\": \"2022\",\n    \"yearMod\": \"2023\"\n  }\n}"
-          },
-          {
-            "id": "5da43371-c2ac-41da-9c0c-1ba0959b266d",
-            "name": "Comprador 2",
-            "value": "{\n  \"proximaAcao\": \"comprador_2\",\n  \"nomeComprador\": \"Carlos da Silva\",\n  \"codigoTransferencia\": \"TDV-000000\",\n  \"vehicle\": {\n    \"id\": \"1\",\n    \"plate\": \"ABC1D23\",\n    \"title\": \"Toyota Corolla 2.0\",\n    \"licensingStatus\": \"REGULAR\",\n    \"brandModel\": \"Toyota Corolla 2.0\",\n    \"licensingExpirationDate\": \"31/12/2025\",\n    \"renavam\": \"00001002003\",\n    \"lastLicensing\": \"03/12/2025\",\n    \"yearFab\": \"2022\",\n    \"yearMod\": \"2023\"\n  }\n}"
-          },
-          {
-            "id": "1ffd8ef3-080e-418d-9101-2ed2b30bdc5d",
-            "name": "Concluído",
-            "value": "{\n  \"proximaAcao\": \"concluido\",\n  \"nomeComprador\": \"Carlos da Silva\",\n  \"codigoTransferencia\": \"TDV-000000\",\n  \"vehicle\": {\n    \"id\": \"1\",\n    \"plate\": \"ABC1D23\",\n    \"title\": \"Toyota Corolla 2.0\",\n    \"licensingStatus\": \"REGULAR\",\n    \"brandModel\": \"Toyota Corolla 2.0\",\n    \"licensingExpirationDate\": \"31/12/2025\",\n    \"renavam\": \"00001002003\",\n    \"lastLicensing\": \"03/12/2025\",\n    \"yearFab\": \"2022\",\n    \"yearMod\": \"2023\"\n  }\n}"
-          },
-          {
-            "id": "ex-verificar-comprador-cancelou",
-            "name": "Comprador cancelou",
-            "value": "{\n  \"proximaAcao\": \"comprador_cancelou\",\n  \"codigoTransferencia\": \"TDV-000000\",\n  \"vehicle\": {\n    \"id\": \"1\",\n    \"plate\": \"ABC1D23\",\n    \"title\": \"Toyota Corolla 2.0\",\n    \"licensingStatus\": \"REGULAR\",\n    \"brandModel\": \"Toyota Corolla 2.0\",\n    \"licensingExpirationDate\": \"31/12/2025\",\n    \"renavam\": \"00001002003\",\n    \"lastLicensing\": \"03/12/2025\",\n    \"yearFab\": \"2022\",\n    \"yearMod\": \"2023\"\n  }\n}"
-          },
-          {
-            "id": "ex-verificar-vendedor-cancelou",
-            "name": "Vendedor cancelou",
-            "value": "{\n  \"proximaAcao\": \"vendedor_cancelou\",\n  \"nomeComprador\": \"Carlos da Silva\",\n  \"codigoTransferencia\": \"TDV-000000\",\n  \"vehicle\": {\n    \"id\": \"1\",\n    \"plate\": \"ABC1D23\",\n    \"title\": \"Toyota Corolla 2.0\",\n    \"licensingStatus\": \"REGULAR\",\n    \"brandModel\": \"Toyota Corolla 2.0\",\n    \"licensingExpirationDate\": \"31/12/2025\",\n    \"renavam\": \"00001002003\",\n    \"lastLicensing\": \"03/12/2025\",\n    \"yearFab\": \"2022\",\n    \"yearMod\": \"2023\"\n  }\n}"
-          },
-          {
-            "id": "ex-verificar-pagamento-confirmado",
-            "name": "Pagamento confirmado",
-            "value": "{\n  \"proximaAcao\": \"pagamento_confirmado\",\n  \"nomeComprador\": \"Carlos da Silva\",\n  \"codigoTransferencia\": \"TDV-000000\",\n  \"vehicle\": {\n    \"id\": \"1\",\n    \"plate\": \"ABC1D23\",\n    \"title\": \"Toyota Corolla 2.0\",\n    \"licensingStatus\": \"REGULAR\",\n    \"brandModel\": \"Toyota Corolla 2.0\",\n    \"licensingExpirationDate\": \"31/12/2025\",\n    \"renavam\": \"00001002003\",\n    \"lastLicensing\": \"03/12/2025\",\n    \"yearFab\": \"2022\",\n    \"yearMod\": \"2023\"\n  }\n}"
-          }
-        ]
-      }
-    },
-    {
       "id": "n_cd7b779a01a0",
       "type": "case_node",
       "name": "Rotear por ação",
@@ -5355,7 +5301,7 @@
           "x": -1832,
           "y": 2008
         },
-        "value": "@{node:n_b824c7dd9350.proximaAcao ?? node:n_90a9d6db5f4b.proximaAcao ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.proximaAcao}",
+        "value": "@{node:n_b824c7dd9350.proximaAcao ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.proximaAcao}",
         "routes": [
           {
             "id": "b9a984e3-5280-40e3-bd80-bd597df5da89",
@@ -5448,7 +5394,7 @@
         },
         "method": "POST",
         "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/valida-assinatura",
-        "body": "{\n  \"codigoTransferencia\": \"@{node:n_b824c7dd9350.codigoTransferencia ?? node:n_90a9d6db5f4b.codigoTransferencia ?? node:n_d87067e61ebb.codigo}\",\n  \"itiCode\": \"@{node:n_54e1a65041fa.code}\"\n}\n",
+        "body": "{\n  \"codigoTransferencia\": \"@{node:n_b824c7dd9350.codigoTransferencia ?? node:n_d87067e61ebb.codigo}\",\n  \"itiCode\": \"@{node:n_54e1a65041fa.code}\"\n}\n",
         "responseExamples": [
           {
             "id": "bbf0c143-4114-42fc-b2e2-632fae3bef9d",
@@ -5516,7 +5462,7 @@
           "x": 268,
           "y": 4444
         },
-        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/consulta-debitos?codigoTransferencia=@{node:n_2d9e4b6a8c17.codigoTransferencia ?? node:n_90a9d6db5f4b.codigoTransferencia ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoTransferencia}",
+        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/consulta-debitos?codigoTransferencia=@{node:n_2d9e4b6a8c17.codigoTransferencia ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoTransferencia}",
         "responseExamples": [
           {
             "id": "662e4b72-b520-47e2-a222-bd21ed66959a",
@@ -5536,7 +5482,7 @@
           "y": 4320
         },
         "method": "GET",
-        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/pix?codigoTransferencia=@{node:n_2d9e4b6a8c17.codigoTransferencia ?? node:n_90a9d6db5f4b.codigoTransferencia ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoTransferencia}&forcarNovo=true"
+        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/consulta-debitos?codigoTransferencia=@{node:n_2d9e4b6a8c17.codigoTransferencia ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoTransferencia}"
       }
     },
     {
@@ -5561,7 +5507,7 @@
         },
         "method": "POST",
         "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/cancelar",
-        "body": "{ \"codigoTransferencia\": \"@{node:n_2d9e4b6a8c17.codigoTransferencia ?? node:n_90a9d6db5f4b.codigoTransferencia}\" }\n",
+        "body": "{ \"codigoTransferencia\": \"@{node:n_2d9e4b6a8c17.codigoTransferencia}\" }\n",
         "responseExamples": [
           {
             "id": "5af6911b-58b6-4337-843e-002fa8eb4e6f",
@@ -5678,17 +5624,6 @@
         "position": {
           "x": -564,
           "y": 1532
-        }
-      }
-    },
-    {
-      "id": "n_b17e692471e5",
-      "type": "waypoint_node",
-      "name": null,
-      "data": {
-        "position": {
-          "x": -860,
-          "y": 452
         }
       }
     },
@@ -6033,7 +5968,7 @@
           "y": 7164
         },
         "method": "GET",
-        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/consulta-debitos?codigoTransferencia=@{node:n_2d9e4b6a8c17.codigoTransferencia ?? node:n_90a9d6db5f4b.codigoTransferencia}",
+        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/consulta-debitos?codigoTransferencia=@{node:n_2d9e4b6a8c17.codigoTransferencia}",
         "responseExamples": [
           {
             "id": "662e4b72-b520-47e2-a222-bd21ed66959a",
@@ -6052,7 +5987,7 @@
           "x": 10376,
           "y": 6852
         },
-        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/consulta-debitos?codigoTransferencia=@{node:n_2d9e4b6a8c17.codigoTransferencia ?? node:n_90a9d6db5f4b.codigoTransferencia}",
+        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/consulta-debitos?codigoTransferencia=@{node:n_2d9e4b6a8c17.codigoTransferencia}",
         "responseExamples": [
           {
             "id": "662e4b72-b520-47e2-a222-bd21ed66959a",
@@ -6072,7 +6007,7 @@
           "y": 7024
         },
         "method": "GET",
-        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/pix?codigoTransferencia=@{node:n_2d9e4b6a8c17.codigoTransferencia ?? node:n_90a9d6db5f4b.codigoTransferencia}&forcarNovo=true"
+        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/consulta-debitos?codigoTransferencia=@{node:n_2d9e4b6a8c17.codigoTransferencia}"
       }
     },
     {
@@ -6326,28 +6261,6 @@
         "position": {
           "x": 5800,
           "y": 2640
-        }
-      }
-    },
-    {
-      "id": "n_e7c1a90b4d25",
-      "type": "if_node",
-      "name": "Cold start: nova TDV?",
-      "data": {
-        "position": {
-          "x": -2500,
-          "y": 2048
-        },
-        "condition": {
-          "clauses": [
-            {
-              "id": "4dfb3c66-266a-4fd9-9b80-77e64746fded",
-              "left": "@{node:n_90a9d6db5f4b.proximaAcao}",
-              "right": "nova_tdv",
-              "operator": "equals"
-            }
-          ],
-          "combinator": "or"
         }
       }
     }
@@ -6624,12 +6537,6 @@
       "targetHandle": "input"
     },
     {
-      "sourceId": "n_90a9d6db5f4b",
-      "targetId": "n_e7c1a90b4d25",
-      "sourceHandle": "output",
-      "targetHandle": "input"
-    },
-    {
       "sourceId": "s_7d910eaa66ad",
       "targetId": "n_b8d2e4f61c37",
       "sourceHandle": "c_8c410daf9e3e",
@@ -6861,12 +6768,6 @@
       "sourceId": "n_cd7b779a01a0",
       "targetId": "n_d87067e61ebb",
       "sourceHandle": "b9a984e3-5280-40e3-bd80-bd597df5da89",
-      "targetHandle": "input"
-    },
-    {
-      "sourceId": "n_b17e692471e5",
-      "targetId": "s_a95b06ade63c",
-      "sourceHandle": "right-source",
       "targetHandle": "input"
     },
     {
@@ -7224,24 +7125,6 @@
       "targetHandle": "input"
     },
     {
-      "sourceId": "n_21da615e160d",
-      "targetId": "n_90a9d6db5f4b",
-      "sourceHandle": "output",
-      "targetHandle": "input"
-    },
-    {
-      "sourceId": "n_e7c1a90b4d25",
-      "targetId": "n_b17e692471e5",
-      "sourceHandle": "true",
-      "targetHandle": "left-target"
-    },
-    {
-      "sourceId": "n_e7c1a90b4d25",
-      "targetId": "n_cd7b779a01a0",
-      "sourceHandle": "false",
-      "targetHandle": "input"
-    },
-    {
       "sourceId": "n_5f8e2a91c3d4",
       "targetId": "n_cd7b779a01a0",
       "sourceHandle": "true",
@@ -7317,6 +7200,12 @@
       "sourceId": "n_acb9e7f8d196",
       "targetId": "n_4a9529e3107c",
       "sourceHandle": "right-source",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_21da615e160d",
+      "targetId": "s_a95b06ade63c",
+      "sourceHandle": "output",
       "targetHandle": "input"
     }
   ]

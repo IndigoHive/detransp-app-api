@@ -893,7 +893,47 @@ app.post('/api/tdv/prova-vida', (req, res) => {
   }, 2000)
 })
 
+const tdvPixPayments: Record<string, {
+  qrCode: string
+  expiresAt: string
+  estado: number
+  comprovante: string | null
+  confirmedDate: string | null
+}> = {}
+
 app.get('/api/tdv/consulta-debitos', (req, res) => {
+  const codigoTransferencia = (req.query.codigoTransferencia as string) || 'TDV-MOCK'
+
+  if (!tdvPixPayments[codigoTransferencia]) {
+    const expiresAt = new Date(Date.now() + 15 * 60 * 1000).toISOString()
+    const qrCode = `00020126580014br.gov.bcb.pix0136mock-tdv-pix-${codigoTransferencia}520400005303986540364.275802BR5925DETRAN SP6009SAO PAULO`
+    tdvPixPayments[codigoTransferencia] = {
+      qrCode,
+      expiresAt,
+      estado: 1,
+      comprovante: null,
+      confirmedDate: null
+    }
+
+    setTimeout(() => {
+      const payment = tdvPixPayments[codigoTransferencia]
+      if (payment && payment.estado === 1) {
+        payment.estado = 2
+        payment.comprovante = `PIX-${codigoTransferencia}-${Date.now()}`
+        const now = new Date()
+        payment.confirmedDate = now.toLocaleString('pt-BR', {
+          timeZone: 'America/Sao_Paulo',
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        }).replace(',', '')
+      }
+    }, 15000)
+  }
+
+  const payment = tdvPixPayments[codigoTransferencia]
   res.json({
     nomeComprador: 'Maria Oliveira Souza',
     debitos: [
@@ -903,7 +943,12 @@ app.get('/api/tdv/consulta-debitos', (req, res) => {
     valorTotal: 364.27,
     taxaTransferencia: 'R$ 243,77',
     taxaLicenciamento: 'R$ 120,50',
-    totalDebitos: 'R$ 364,27'
+    totalDebitos: 'R$ 364,27',
+    qrCode: payment.qrCode,
+    expiresAt: payment.expiresAt,
+    estado: payment.estado,
+    ...(payment.comprovante ? { comprovante: payment.comprovante } : {}),
+    ...(payment.confirmedDate ? { confirmedDate: payment.confirmedDate } : {})
   })
 })
 
@@ -935,59 +980,6 @@ app.get('/api/tdv/enderecos/:cep', (req, res) => {
       tipoLogradouroDne: 81,
       codigoBairro: 26812
     }
-  })
-})
-
-const tdvPixPayments: Record<string, {
-  qrCode: string
-  expiresAt: string
-  estado: number
-  idPagamento: string | null
-  dataPagamento: string | null
-  createdAt: number
-}> = {}
-
-app.get('/api/tdv/pix', (req, res) => {
-  const codigoTransferencia = (req.query.codigoTransferencia as string) || 'TDV-MOCK'
-  const forcarNovo = req.query.forcarNovo === 'true'
-
-  if (forcarNovo || !tdvPixPayments[codigoTransferencia]) {
-    const expiresAt = new Date(Date.now() + 15 * 60 * 1000).toISOString()
-    const qrCode = `00020126580014br.gov.bcb.pix0136mock-tdv-pix-${codigoTransferencia}520400005303986540364.275802BR5925DETRAN SP6009SAO PAULO`
-    tdvPixPayments[codigoTransferencia] = {
-      qrCode,
-      expiresAt,
-      estado: 1,
-      idPagamento: null,
-      dataPagamento: null,
-      createdAt: Date.now()
-    }
-
-    setTimeout(() => {
-      const payment = tdvPixPayments[codigoTransferencia]
-      if (payment && payment.estado === 1) {
-        payment.estado = 2
-        payment.idPagamento = `PIX-${codigoTransferencia}-${Date.now()}`
-        const now = new Date()
-        payment.dataPagamento = now.toLocaleString('pt-BR', {
-          timeZone: 'America/Sao_Paulo',
-          day: '2-digit',
-          month: '2-digit',
-          year: 'numeric',
-          hour: '2-digit',
-          minute: '2-digit'
-        }).replace(',', '')
-      }
-    }, 15000)
-  }
-
-  const payment = tdvPixPayments[codigoTransferencia]
-  res.json({
-    qrCode: payment.qrCode,
-    expiresAt: payment.expiresAt,
-    estado: payment.estado,
-    ...(payment.idPagamento ? { idPagamento: payment.idPagamento } : {}),
-    ...(payment.dataPagamento ? { dataPagamento: payment.dataPagamento } : {})
   })
 })
 
@@ -1053,6 +1045,5 @@ app.listen(PORT, () => {
   console.log('    POST /api/tdv/prova-vida')
   console.log('    GET  /api/tdv/consulta-debitos')
   console.log('    GET  /api/tdv/enderecos/:cep')
-  console.log('    GET  /api/tdv/pix')
   console.log('')
 })
