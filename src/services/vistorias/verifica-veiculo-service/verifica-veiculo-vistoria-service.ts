@@ -10,6 +10,7 @@ import type {
 import { DetranSpServiceNowVistoriasError } from '../../../clients/detran-sp-service-now-vistorias'
 import { isHttpError } from 'http-errors'
 import type { VerificaVistoriaInput } from '../types'
+import { stripHtml } from '../../../utils/strip-html'
 
 type ProcessDefinition = {
   type: VerificaVeiculoBody['tipo']
@@ -92,11 +93,13 @@ const amountFormatter = new Intl.NumberFormat('pt-BR', {
 })
 
 export function isProcessLabel(value: string): boolean {
-  return PROCESS_LABELS.some((label) => label === value)
+  const normalized = stripHtml(value)
+  return PROCESS_LABELS.some((label) => label === normalized)
 }
 
 export function isOtherProcessLabel(value: string): boolean {
-  return OTHER_PROCESS_LABELS.some((label) => label === value)
+  const normalized = stripHtml(value)
+  return OTHER_PROCESS_LABELS.some((label) => label === normalized)
 }
 
 export class VerificaVeiculoVistoriaService {
@@ -141,7 +144,9 @@ export class VerificaVeiculoVistoriaService {
   }
 
   private getProcessDefinition (input: VerificaVistoriaInput): ProcessDefinition {
-    const label = input.tipoProcesso === 'Outros' ? input.outroProcesso : input.tipoProcesso
+    const tipoProcesso = stripHtml(input.tipoProcesso)
+    const outroProcesso = input.outroProcesso ? stripHtml(input.outroProcesso) : input.outroProcesso
+    const label = tipoProcesso === 'Outros' ? outroProcesso : tipoProcesso
     const definition = label ? PROCESS_DEFINITIONS[label as keyof typeof PROCESS_DEFINITIONS] : undefined
 
     if (!definition) {
