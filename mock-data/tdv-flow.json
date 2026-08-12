@@ -3197,54 +3197,136 @@
             "children": [
               {
                 "id": "c_fa175ff49428",
-                "type": "text_label",
+                "type": "rich_text",
                 "name": null,
                 "data": {
-                  "text": "Vistoria"
+                  "html": "<p><span style=\"font-size:12px;color:#7A7F83\"><strong>Vistoria</strong></span></p>"
                 }
               },
               {
-                "id": "c_a874340aeb89",
-                "type": "chip_group",
+                "id": "c_13a6a271f8da",
+                "type": "split_row",
                 "name": null,
+                "children": [
+                  {
+                    "id": "c_2d1b7d6689b5",
+                    "type": "group",
+                    "name": null,
+                    "children": [
+                      {
+                        "id": "c_a874340aeb89",
+                        "type": "chip_group",
+                        "name": null,
+                        "data": {
+                          "mode": "static",
+                          "options": [
+                            {
+                              "id": "1",
+                              "color": "danger",
+                              "label": "<p><span style=\"font-size:10px;color:#E63535;letter-spacing:0.4px\"><strong>Pendente</strong></span></p>"
+                            }
+                          ]
+                        }
+                      }
+                    ],
+                    "data": {}
+                  },
+                  {
+                    "id": "c_fb69445b682b",
+                    "type": "group",
+                    "name": null,
+                    "children": [
+                      {
+                        "id": "c_b83b030f3b99",
+                        "type": "icon_button",
+                        "name": null,
+                        "data": {
+                          "icon": "chevron_right",
+                          "size": "md",
+                          "color": "neutral",
+                          "variant": "outline",
+                          "clickAction": "submit"
+                        }
+                      }
+                    ],
+                    "data": {}
+                  }
+                ],
                 "data": {
-                  "mode": "static",
-                  "options": [
-                    {
-                      "id": "1",
-                      "color": "danger",
-                      "label": "Pendente"
-                    }
-                  ]
+                  "gap": 8,
+                  "align": "center",
+                  "distribution": "space-between"
                 }
               },
               {
                 "id": "c_118c797af1dd",
                 "type": "divider",
                 "name": null,
-                "data": {}
-              },
-              {
-                "id": "c_5d63f8c274ca",
-                "type": "text_label",
-                "name": null,
                 "data": {
-                  "text": "Pagamento"
+                  "fullWidth": true
                 }
               },
               {
-                "id": "c_4f1e64f6d9c5",
-                "type": "chip_group",
+                "id": "c_5d63f8c274ca",
+                "type": "rich_text",
                 "name": null,
                 "data": {
-                  "mode": "static",
-                  "options": [
-                    {
-                      "id": "1",
-                      "color": "danger",
-                      "label": "Pendente"
-                    }
-                  ]
+                  "html": "<p><span style=\"font-size:12px;color:#7A7F83\"><strong>Pagamento</strong></span></p>"
+                }
+              },
+              {
+                "id": "c_dbd42ab01490",
+                "type": "split_row",
+                "name": null,
+                "children": [
+                  {
+                    "id": "c_a1c5d689bec4",
+                    "type": "group",
+                    "name": null,
+                    "children": [
+                      {
+                        "id": "c_4f1e64f6d9c5",
+                        "type": "chip_group",
+                        "name": null,
+                        "data": {
+                          "mode": "static",
+                          "options": [
+                            {
+                              "id": "1",
+                              "color": "danger",
+                              "label": "<p><span style=\"font-size:10px;color:#E63535;letter-spacing:0.4px\"><strong>Pendente</strong></span></p>"
+                            }
+                          ]
+                        }
+                      }
+                    ],
+                    "data": {}
+                  },
+                  {
+                    "id": "c_5415d64d25c6",
+                    "type": "group",
+                    "name": null,
+                    "children": [
+                      {
+                        "id": "c_d29c04a165a7",
+                        "type": "icon_button",
+                        "name": null,
+                        "data": {
+                          "icon": "chevron_right",
+                          "size": "md",
+                          "color": "neutral",
+                          "variant": "outline",
+                          "clickAction": "submit"
+                        }
+                      }
+                    ],
+                    "data": {}
+                  }
+                ],
+                "data": {
+                  "gap": 8,
+                  "align": "center",
+                  "distribution": "space-between"
                 }
               }
             ],
@@ -3255,27 +3337,7 @@
       "footer": {
         "id": "c_1c49d9aadf2b",
         "type": "group",
-        "children": [
-          {
-            "id": "c_332936dbd2a2",
-            "type": "button",
-            "name": null,
-            "data": {
-              "color": "default",
-              "label": "Vistoria",
-              "variant": "outline"
-            }
-          },
-          {
-            "id": "c_91e9ab274f0b",
-            "type": "button",
-            "name": null,
-            "data": {
-              "label": "Pagamento",
-              "variant": "outline"
-            }
-          }
-        ]
+        "children": []
       },
       "navbar": {
         "id": "fac669c9-8d68-4eb3-b881-6e2903f71c63",
@@ -6781,7 +6843,7 @@
     {
       "sourceId": "s_d7fb70e64057",
       "targetId": "s_p2b2c3d4e5f7",
-      "sourceHandle": "c_332936dbd2a2",
+      "sourceHandle": "c_b83b030f3b99",
       "targetHandle": "input"
     },
     {
@@ -6799,7 +6861,7 @@
     {
       "sourceId": "s_d7fb70e64057",
       "targetId": "n_5ffab74d65f1",
-      "sourceHandle": "c_91e9ab274f0b",
+      "sourceHandle": "c_d29c04a165a7",
       "targetHandle": "input"
     },
     {
