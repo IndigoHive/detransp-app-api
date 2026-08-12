@@ -64,6 +64,11 @@ const PROCESS_DEFINITIONS = {
     subtype: 'SEGURANCA_2',
     serviceName: 'Vistoria de Segurança Veicular',
   },
+  SEGURANCA_9: {
+    type: 'SEGURANCA',
+    subtype: 'SEGURANCA_9',
+    serviceName: 'Vistoria de Segurança Veicular',
+  },
 } as const satisfies Record<string, ProcessDefinition>
 
 const PROCESS_LABELS = [
@@ -146,7 +151,7 @@ export class VerificaVeiculoVistoriaService {
   private getProcessDefinition (input: VerificaVistoriaInput): ProcessDefinition {
     const tipoProcesso = stripHtml(input.tipoProcesso)
     const outroProcesso = input.outroProcesso ? stripHtml(input.outroProcesso) : input.outroProcesso
-    const label = tipoProcesso === 'Outros' ? outroProcesso : tipoProcesso
+    const label = tipoProcesso === 'Outros' || tipoProcesso === 'SEGURANCA' ? outroProcesso : tipoProcesso
     const definition = label ? PROCESS_DEFINITIONS[label as keyof typeof PROCESS_DEFINITIONS] : undefined
 
     if (!definition) {
