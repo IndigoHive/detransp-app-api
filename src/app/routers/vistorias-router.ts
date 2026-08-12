@@ -184,15 +184,8 @@ export function vistoriasRouter (): Router {
       throw BadRequest('Documento inválido.')
     }
 
-    //TODO: REMOVE LATER - THIS IS ONLY FOR TESTING IN STAGING
-    const plate = asNonEmptyString(req.body?.placa)?.toUpperCase()
-
-    if (plate && !PLATE_PATTERN.test(plate)) {
-      throw BadRequest('Placa inválida.')
-    }
-
     const service = req.scope.resolve('solicitaRestituicaoVistoriaService')
-    const result = await service.run(auth, token, documento, plate)
+    const result = await service.run(auth, token, documento)
     res.status(200).json(result)
   })
 

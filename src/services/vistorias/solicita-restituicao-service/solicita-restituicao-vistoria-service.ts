@@ -20,7 +20,6 @@ type SolicitaRestituicaoVistoriaServiceOptions = {
 
 const DEFAULT_MAX_ATTEMPTS = 10
 const DEFAULT_POLLING_INTERVAL_MS = 2000
-const PROCESSING_SCENARIO_PLATE = 'ETU0A10' // REMOVE LATER
 
 export class SolicitaRestituicaoVistoriaService {
   private readonly maxAttempts: number
@@ -37,8 +36,7 @@ export class SolicitaRestituicaoVistoriaService {
   async run (
     auth: VistoriasAuth,
     token: string,
-    documento: string,
-    plate?: string
+    documento: string
   ): Promise<SolicitaRestituicaoVistoriaOutput> {
     try {
       const result = await this.client.solicitaRestituicao(auth, { token, documento })
@@ -46,10 +44,6 @@ export class SolicitaRestituicaoVistoriaService {
 
       if (!response?.success) {
         return this.failure(response?.message)
-      }
-
-      if (plate === PROCESSING_SCENARIO_PLATE) {
-        return { success: true, status: 'processing', idRestituicao: response.data.id }
       }
 
       return await this.waitForReceipt(auth, response.data.id)
