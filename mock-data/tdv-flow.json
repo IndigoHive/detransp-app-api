@@ -2612,6 +2612,12 @@
                 }
               },
               {
+                "id": "c_b74ae30828b3",
+                "type": "divider",
+                "name": null,
+                "data": {}
+              },
+              {
                 "id": "c_2ec8a91168d0",
                 "type": "label_text",
                 "name": null,
@@ -2621,12 +2627,57 @@
                 }
               },
               {
-                "id": "c_268d5bcc17ab",
-                "type": "label_text",
+                "id": "c_228353281e63",
+                "type": "divider",
                 "name": null,
+                "data": {}
+              },
+              {
+                "id": "c_1470d9df1389",
+                "type": "split_row",
+                "name": null,
+                "children": [
+                  {
+                    "id": "c_9813005259ce",
+                    "type": "group",
+                    "name": null,
+                    "children": [
+                      {
+                        "id": "c_564646464646",
+                        "type": "label_text",
+                        "name": null,
+                        "data": {
+                          "text": "@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.enderecoComprador}",
+                          "label": "Nome"
+                        }
+                      }
+                    ],
+                    "data": {}
+                  },
+                  {
+                    "id": "c_12ccc6961341",
+                    "type": "group",
+                    "name": null,
+                    "children": [
+                      {
+                        "id": "c_b0e93f0e0e7f",
+                        "type": "icon_button",
+                        "name": null,
+                        "data": {
+                          "icon": "edit",
+                          "size": "md",
+                          "variant": "outline",
+                          "clickAction": "submit"
+                        }
+                      }
+                    ],
+                    "data": {}
+                  }
+                ],
                 "data": {
-                  "text": "@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.enderecoComprador}",
-                  "label": "Endereço"
+                  "gap": 8,
+                  "align": "center",
+                  "distribution": "space-between"
                 }
               },
               {
@@ -2700,6 +2751,12 @@
                 }
               },
               {
+                "id": "c_424fe10f22e4",
+                "type": "divider",
+                "name": null,
+                "data": {}
+              },
+              {
                 "id": "c_3a5f0c8e1d26",
                 "type": "label_text",
                 "name": null,
@@ -2707,6 +2764,12 @@
                   "text": "@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.valorVenda}",
                   "label": "Valor de venda"
                 }
+              },
+              {
+                "id": "c_d8f62b15ddbf",
+                "type": "divider",
+                "name": null,
+                "data": {}
               },
               {
                 "id": "c_9d6b4e2a7f08",
@@ -2757,8 +2820,8 @@
       },
       "data": {
         "position": {
-          "x": 6460,
-          "y": 3040
+          "x": 6428,
+          "y": 3020
         }
       }
     },
@@ -6956,12 +7019,6 @@
     },
     {
       "sourceId": "s_3593782b12c5",
-      "targetId": "s_85ba93c2e996",
-      "sourceHandle": "c_adf47cf44af7",
-      "targetHandle": "input"
-    },
-    {
-      "sourceId": "s_3593782b12c5",
       "targetId": "n_86edd585a829",
       "sourceHandle": "c_76535dccc44e",
       "targetHandle": "input"
@@ -7030,6 +7087,12 @@
       "sourceId": "n_8c3f5d0b2a71",
       "targetId": "n_a4e7b1c9d205",
       "sourceHandle": "true",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_3593782b12c5",
+      "targetId": "s_85ba93c2e996",
+      "sourceHandle": "c_b0e93f0e0e7f",
       "targetHandle": "input"
     }
   ]
