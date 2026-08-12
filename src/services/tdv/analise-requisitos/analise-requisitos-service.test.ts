@@ -26,34 +26,30 @@ describe('AnaliseRequisitosService', () => {
     })
   })
 
-  it('routes to continuar_venda when the TDV was just created (state 1, no sale data yet)', async () => {
+  it('leaves proximaAcao unset when the TDV was just created (state 1, no sale data yet) so the seller sees the cancel-eligible "TDV aberta?" prompt', async () => {
     const listaTdvs = vi.fn().mockResolvedValue({
       result: [{ estado: '1', codigoTransferenciaVeiculo: 'TDV-2' }]
     })
     const service = new AnaliseRequisitosService({ detranSpServiceNowTdv: asClient({ listaTdvs }) })
 
-    await expect(service.run(authorizationHeader, { selectedVehicle })).resolves.toEqual({
-      hasRestriction: false,
-      hasActiveTDV: true,
-      codigoTransferencia: 'TDV-2',
-      estado: '1',
-      proximaAcao: 'continuar_venda'
-    })
+    const result = await service.run(authorizationHeader, { selectedVehicle })
+
+    expect(result.hasActiveTDV).toBe(true)
+    expect(result.estado).toBe('1')
+    expect(result.proximaAcao).toBeUndefined()
   })
 
-  it('routes to continuar_venda when sale data was already informed (state 2, not yet confirmed)', async () => {
+  it('leaves proximaAcao unset when sale data was already informed (state 2, not yet confirmed) so the seller sees the cancel-eligible "TDV aberta?" prompt', async () => {
     const listaTdvs = vi.fn().mockResolvedValue({
       result: [{ estado: '2', codigoTransferenciaVeiculo: 'TDV-3' }]
     })
     const service = new AnaliseRequisitosService({ detranSpServiceNowTdv: asClient({ listaTdvs }) })
 
-    await expect(service.run(authorizationHeader, { selectedVehicle })).resolves.toEqual({
-      hasRestriction: false,
-      hasActiveTDV: true,
-      codigoTransferencia: 'TDV-3',
-      estado: '2',
-      proximaAcao: 'continuar_venda'
-    })
+    const result = await service.run(authorizationHeader, { selectedVehicle })
+
+    expect(result.hasActiveTDV).toBe(true)
+    expect(result.estado).toBe('2')
+    expect(result.proximaAcao).toBeUndefined()
   })
 
   it('leaves proximaAcao unset when the TDV is waiting on the buyer', async () => {

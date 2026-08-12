@@ -2884,12 +2884,12 @@
           {
             "id": "c4e8f2a7-1d05-4b6e-8f2a-100000000001",
             "name": "Retomar venda (sem dados ainda, estado 1)",
-            "value": "{ \"hasRestriction\": false, \"hasActiveTDV\": true, \"codigoTransferencia\": \"TDV-000000\", \"estado\": \"1\", \"proximaAcao\": \"continuar_venda\" }"
+            "value": "{ \"hasRestriction\": false, \"hasActiveTDV\": true, \"codigoTransferencia\": \"TDV-000000\", \"estado\": \"1\" }"
           },
           {
             "id": "c4e8f2a7-1d05-4b6e-8f2a-100000000002",
             "name": "Retomar venda (dados já informados, estado 2)",
-            "value": "{ \"hasRestriction\": false, \"hasActiveTDV\": true, \"codigoTransferencia\": \"TDV-000000\", \"estado\": \"2\", \"proximaAcao\": \"continuar_venda\" }"
+            "value": "{ \"hasRestriction\": false, \"hasActiveTDV\": true, \"codigoTransferencia\": \"TDV-000000\", \"estado\": \"2\" }"
           },
           {
             "id": "0ad95ca6-eb99-4379-8363-262961c02efc",
@@ -2947,6 +2947,34 @@
               "id": "03de2d4c-1cb9-4b4b-a0ee-56a58d4cf721",
               "left": "@{node:n_b824c7dd9350.hasActiveTDV}",
               "right": "true",
+              "operator": "equals"
+            }
+          ],
+          "combinator": "or"
+        }
+      }
+    },
+    {
+      "id": "n_7c2a9e51f8d3",
+      "type": "if_node",
+      "name": "Retomar: ainda preenchendo dados (estado 1 ou 2)?",
+      "data": {
+        "position": {
+          "x": 6980,
+          "y": -1800
+        },
+        "condition": {
+          "clauses": [
+            {
+              "id": "7c2a9e51-f8d3-4b6a-9e1f-000000000001",
+              "left": "@{node:n_b824c7dd9350.estado}",
+              "right": "1",
+              "operator": "equals"
+            },
+            {
+              "id": "7c2a9e51-f8d3-4b6a-9e1f-000000000002",
+              "left": "@{node:n_b824c7dd9350.estado}",
+              "right": "2",
               "operator": "equals"
             }
           ],
@@ -4072,7 +4100,7 @@
     },
     {
       "sourceId": "s_62e905fb199e",
-      "targetId": "s_8fefaaacf3d9",
+      "targetId": "n_7c2a9e51f8d3",
       "sourceHandle": "c_70ffc7dac521",
       "targetHandle": "input"
     },
@@ -4734,6 +4762,18 @@
       "sourceId": "s_9c4e27b810af",
       "targetId": "s_ffbdc2f4fe37",
       "sourceHandle": "c_8f4d2b6e0a71",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_7c2a9e51f8d3",
+      "targetId": "n_c4e8f2a71d05",
+      "sourceHandle": "true",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_7c2a9e51f8d3",
+      "targetId": "s_8fefaaacf3d9",
+      "sourceHandle": "false",
       "targetHandle": "input"
     }
   ]

@@ -22,22 +22,20 @@ export type AnaliseRequisitosResult = {
   // behavior (e.g. skip straight to the final confirmation once sale data is already in).
   estado?: string | undefined
   // Set only when the picked vehicle is ready to move straight into a specific step —
-  // 'vendedor_2' when the buyer already signed and it's the seller's turn, 'continuar_venda'
-  // when there's an active TDV still in the seller's own part of the flow (resume instead of
-  // restarting), 'nova_tdv' when there's nothing blocking a brand new sale. Left unset when
-  // there's an active TDV waiting on the buyer (handled by the existing "TDV aberta?" prompt)
-  // or a restriction.
-  proximaAcao?: 'vendedor_2' | 'continuar_venda' | 'nova_tdv' | undefined
+  // 'vendedor_2' when the buyer already signed and it's the seller's turn, 'nova_tdv' when
+  // there's nothing blocking a brand new sale. Left unset for every other active state
+  // (including states 1-5, still resumable by the seller) — those go through the existing
+  // "TDV aberta?" prompt instead, which is also where cancellation (allowed up to estado 6)
+  // is offered.
+  proximaAcao?: 'vendedor_2' | 'nova_tdv' | undefined
 }
 
-// The seller only has something to do at these states: freshly created (still filling in
-// buyer/sale data) or sale data already informed (still needs to confirm and generate the
-// ATPV-e). Every other active state is the buyer's turn — nothing for the seller to resume.
+// The seller only has a forced next step once the buyer has already signed (estado 6) — every
+// other active state, including still filling in buyer/sale data (1-2) or waiting on the buyer
+// (3-5), goes through the "TDV aberta?" prompt so cancellation stays available up to estado 6.
 function proximaAcaoParaVendedor (estado: CodigoEstadoTDV | undefined): AnaliseRequisitosResult['proximaAcao'] {
   switch (estado) {
     case CodigoEstadoTDV.ATPVE_ASSINADA_COMPRADOR: return 'vendedor_2'
-    case CodigoEstadoTDV.VEICULO_SELECIONADO: return 'continuar_venda'
-    case CodigoEstadoTDV.DADOS_VENDA_INFORMADOS: return 'continuar_venda'
     default: return undefined
   }
 }
