@@ -1378,6 +1378,72 @@
       }
     },
     {
+      "id": "s_9c4e27b810af",
+      "name": "[Comprador] Confirmar compra",
+      "content": {
+        "id": "c_1e6a9f4c8b32",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_4f8c2a6d19e7",
+            "type": "text_body",
+            "name": null,
+            "data": {
+              "text": "A pessoa que está vendendo indicou você como comprador(a) do veículo @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.brandModel}, placa @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.plate}.\n"
+            }
+          },
+          {
+            "id": "c_7b3d0a5e91c6",
+            "type": "text_heading",
+            "name": null,
+            "data": {
+              "text": "Você confirma que está comprando este veículo?\n",
+              "align": "center"
+            }
+          }
+        ]
+      },
+      "footer": {
+        "id": "c_6d1b8f3a92c4",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_3e7a1c9f5b06",
+            "type": "button",
+            "name": null,
+            "data": {
+              "label": "Confirmar"
+            }
+          },
+          {
+            "id": "c_8f4d2b6e0a71",
+            "type": "button",
+            "name": null,
+            "data": {
+              "label": "Recusar",
+              "variant": "outline",
+              "clickAction": "submit"
+            }
+          }
+        ]
+      },
+      "navbar": {
+        "id": "5f2a8c17-6b94-4d0e-9a3c-8e17b4d29f60",
+        "data": {
+          "title": "Intenção de compra",
+          "showReturn": true
+        },
+        "name": null,
+        "type": "nav_bar"
+      },
+      "data": {
+        "position": {
+          "x": 6300,
+          "y": 1700
+        }
+      }
+    },
+    {
       "id": "s_31f3e90bbdcc",
       "name": "[Comprador] Confirmação dados",
       "content": {
@@ -4270,9 +4336,9 @@
     },
     {
       "sourceId": "n_cd7b779a01a0",
-      "targetId": "n_f0798c61f005",
+      "targetId": "s_9c4e27b810af",
       "sourceHandle": "fb741670-fa17-498b-b9c9-cc00349ea0be",
-      "targetHandle": "left-target"
+      "targetHandle": "input"
     },
     {
       "sourceId": "s_e28e30972542",
@@ -4656,6 +4722,18 @@
       "sourceId": "d_9c3e1a7b04f2",
       "targetId": "s_a95b06ade63c",
       "sourceHandle": "c_5e6f7a8b9ca4",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_9c4e27b810af",
+      "targetId": "n_f0798c61f005",
+      "sourceHandle": "c_3e7a1c9f5b06",
+      "targetHandle": "left-target"
+    },
+    {
+      "sourceId": "s_9c4e27b810af",
+      "targetId": "s_ffbdc2f4fe37",
+      "sourceHandle": "c_8f4d2b6e0a71",
       "targetHandle": "input"
     }
   ]
