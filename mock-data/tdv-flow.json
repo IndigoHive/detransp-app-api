@@ -2947,12 +2947,41 @@
             }
           },
           {
+            "id": "c_61aa261b7bc9_edited",
+            "type": "text_body",
+            "name": null,
+            "data": {
+              "text": "Eu, @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}, inscrito no CPF sob o nº @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoComprador}, declaro para os devidos fins que resido em @{node:n_f5aacdb3ca97.result.tipoLogradouro} @{screen:s_7e2a1c9b4f08.comp:c_a8f3e21b9c40.value ?? node:n_f5aacdb3ca97.result.endereco}, @{screen:s_7e2a1c9b4f08.comp:c_b7d4e12a8f31.value}, @{screen:s_7e2a1c9b4f08.comp:c_d5f6a14c6b13.value ?? node:n_f5aacdb3ca97.result.bairro}, @{screen:s_7e2a1c9b4f08.comp:c_4a2614e0e9fb.value ?? node:n_f5aacdb3ca97.result.localidade} - @{node:n_f5aacdb3ca97.result.uf}, @{screen:s_85ba93c2e996.comp:c_6a5c088eac53.value ?? node:n_f5aacdb3ca97.result.cep}.",
+              "align": "justify",
+              "visibilityCondition": {
+                "clauses": [
+                  {
+                    "id": "c_61aa261b7bc9_edited_if",
+                    "left": "@{screen:s_7e2a1c9b4f08.comp:c_b7d4e12a8f31.value}",
+                    "operator": "is_not_empty"
+                  }
+                ],
+                "combinator": "or"
+              }
+            }
+          },
+          {
             "id": "c_61aa261b7bc9_stub",
             "type": "text_body",
             "name": null,
             "data": {
               "text": "Eu, @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}, inscrito no CPF sob o nº @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoComprador}, declaro para os devidos fins que resido em @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.enderecoComprador}.",
-              "align": "justify"
+              "align": "justify",
+              "visibilityCondition": {
+                "clauses": [
+                  {
+                    "id": "c_61aa261b7bc9_stub_if",
+                    "left": "@{screen:s_7e2a1c9b4f08.comp:c_b7d4e12a8f31.value}",
+                    "operator": "is_empty"
+                  }
+                ],
+                "combinator": "or"
+              }
             }
           },
           {
@@ -6952,14 +6981,8 @@
     },
     {
       "sourceId": "s_3593782b12c5",
-      "targetId": "n_86edd585a829",
-      "sourceHandle": "c_76535dccc44e",
-      "targetHandle": "input"
-    },
-    {
-      "sourceId": "n_86edd585a829",
       "targetId": "s_b650bf1fea21",
-      "sourceHandle": "right-source",
+      "sourceHandle": "c_76535dccc44e",
       "targetHandle": "input"
     },
     {
