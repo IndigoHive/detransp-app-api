@@ -5637,8 +5637,8 @@
       "name": "TDV já criada?",
       "data": {
         "position": {
-          "x": 6052,
-          "y": 3032
+          "x": 6268,
+          "y": 2920
         },
         "condition": {
           "clauses": [
@@ -5649,10 +5649,6 @@
             }
           ],
           "combinator": "and"
-        },
-        "position": {
-          "x": 8220,
-          "y": 200
         }
       }
     },
