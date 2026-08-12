@@ -20,19 +20,18 @@
           },
           {
             "id": "c_06c9dbe03799",
-            "type": "text_heading",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "text": "Atenção às regras\n",
-              "align": "center"
+              "html": "<p style=\"text-align:center\"><span style=\"font-size:16px;color:#262828\"><strong>Atenção às regras<br></strong></span></p>"
             }
           },
           {
             "id": "c_7441ea200144",
-            "type": "text_body",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "text": "Confirme se você pode transferir seu veículo por aqui\n"
+              "html": "<p><span style=\"font-size:14px;color:#262828\">Confirme se você pode transferir seu veículo por aqui<br></span></p>"
             }
           }
         ]
@@ -89,19 +88,18 @@
           },
           {
             "id": "c_e0ec38e9ce9f",
-            "type": "text_heading",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "text": "Sem transferência aberta",
-              "align": "center"
+              "html": "<p style=\"text-align:center\"><span style=\"font-size:16px;color:#262828\"><strong>Sem transferência aberta</strong></span></p>"
             }
           },
           {
             "id": "c_855c97f1ff93",
-            "type": "text_body",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "text": "Não conseguimos transferir seu veículo se ele estiver com outro processo aberto"
+              "html": "<p><span style=\"font-size:14px;color:#262828\">Não conseguimos transferir seu veículo se ele estiver com outro processo aberto</span></p>"
             }
           }
         ]
@@ -158,19 +156,18 @@
           },
           {
             "id": "c_b8799d287aa7",
-            "type": "text_heading",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "text": "Sem CRV em papel\n",
-              "align": "center"
+              "html": "<p style=\"text-align:center\"><span style=\"font-size:16px;color:#262828\"><strong>Sem CRV em papel<br></strong></span></p>"
             }
           },
           {
             "id": "c_fd5a938438ef",
-            "type": "text_body",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "text": "O Certificado de Registro de Veículo precisa ser digital\n"
+              "html": "<p><span style=\"font-size:14px;color:#262828\">O Certificado de Registro de Veículo precisa ser digital<br></span></p>"
             }
           }
         ]
@@ -227,19 +224,18 @@
           },
           {
             "id": "c_e8cd6a4449a1",
-            "type": "text_heading",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "text": "Sem ATPV-e emitida\n",
-              "align": "center"
+              "html": "<p style=\"text-align:center\"><span style=\"font-size:16px;color:#262828\"><strong>Sem ATPV-e emitida<br></strong></span></p>"
             }
           },
           {
             "id": "c_f354b34339a8",
-            "type": "text_body",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "text": "Não podemos fazer o processo por aqui se já tiver a autorização de transferência\n"
+              "html": "<p><span style=\"font-size:14px;color:#262828\">Não podemos fazer o processo por aqui se já tiver a autorização de transferência<br></span></p>"
             }
           }
         ]
@@ -296,19 +292,18 @@
           },
           {
             "id": "c_975dc30457e9",
-            "type": "text_heading",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "text": "Com vistoria em dia\n",
-              "align": "center"
+              "html": "<p style=\"text-align:center\"><span style=\"font-size:16px;color:#262828\"><strong>Com vistoria em dia<br></strong></span></p>"
             }
           },
           {
             "id": "c_162372496df5",
-            "type": "text_body",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "text": "Esteja com o laudo de vistoria na validade antes de iniciar a transferência"
+              "html": "<p><span style=\"font-size:14px;color:#262828\">Esteja com o laudo de vistoria na validade antes de iniciar a transferência</span></p>"
             }
           }
         ]
@@ -365,19 +360,18 @@
           },
           {
             "id": "c_fd40e2b1e89b",
-            "type": "text_heading",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "text": "Pague com pix",
-              "align": "center"
+              "html": "<p style=\"text-align:center\"><span style=\"font-size:16px;color:#262828\"><strong>Pague com pix</strong></span></p>"
             }
           },
           {
             "id": "c_c2d0a4fddd65",
-            "type": "text_body",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "text": "E resolva tudo mais rápido pelo nosso aplicativo"
+              "html": "<p><span style=\"font-size:14px;color:#262828\">E resolva tudo mais rápido pelo nosso aplicativo</span></p>"
             }
           }
         ]
@@ -434,19 +428,18 @@
           },
           {
             "id": "c_a865f501b75f",
-            "type": "text_heading",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "text": "Você vai precisar do aplicativo gov.br",
-              "align": "center"
+              "html": "<p style=\"text-align:center\"><span style=\"font-size:16px;color:#262828\"><strong>Você vai precisar do aplicativo gov.br</strong></span></p>"
             }
           },
           {
             "id": "c_1476161603ab",
-            "type": "text_body",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "text": "Certifique se o app gov.br está instalado no seu celular para o reconhecimento facial."
+              "html": "<p><span style=\"font-size:14px;color:#262828\">Certifique se o app gov.br está instalado no seu celular para o reconhecimento facial.</span></p>"
             }
           }
         ]
@@ -499,12 +492,12 @@
                 {
                   "id": "1",
                   "icon": "directions_car",
-                  "label": "Sou vendedor"
+                  "title": "<p style=\"text-align: center;\"><span style=\"color: rgb(17, 20, 20); font-size: 14px;\">Sou vendedor</span></p>"
                 },
                 {
                   "id": "2",
                   "icon": "paid",
-                  "label": "Sou comprador"
+                  "title": "<p style=\"text-align:center\"><span style=\"font-size:14px;color:#111414\">Sou comprador</span></p>"
                 }
               ],
               "required": true
@@ -552,10 +545,10 @@
         "children": [
           {
             "id": "c_16234f6930af",
-            "type": "text_body",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "text": "Qual veículo será vendido?"
+              "html": "<p><span style=\"font-size:14px;color:#262828\">Qual veículo será vendido?</span></p>"
             }
           },
           {
@@ -655,19 +648,18 @@
         "children": [
           {
             "id": "c_97a71e539e87",
-            "type": "text_body",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "text": "Veículo já possui processo de transferência em andamento. \n"
+              "html": "<p><span style=\"font-size:14px;color:#262828\">Veículo já possui processo de transferência em andamento. <br></span></p>"
             }
           },
           {
             "id": "c_5f95272197b1",
-            "type": "text_heading",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "text": "Deseja continuar com o processo de transferência em andamento?\n",
-              "align": "center"
+              "html": "<p style=\"text-align:center\"><span style=\"font-size:16px;color:#262828\"><strong>Deseja continuar com o processo de transferência em andamento?<br></strong></span></p>"
             }
           }
         ]
@@ -726,17 +718,17 @@
             "name": null,
             "data": {
               "icon": "cancel",
-              "text": "Esse veículo tem restrição e não pode ser transferido.",
+              "text": "<p><span style=\"font-size:14px;color:#000000\"><strong>Esse veículo tem restrição e não pode ser transferido.</strong></span></p>",
               "color": "danger",
               "variant": "vertical"
             }
           },
           {
             "id": "c_e7263c74a1bd",
-            "type": "text_body",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "text": "Para resolver, regularize a pendência com o órgão responsável.\n"
+              "html": "<p><span style=\"font-size:14px;color:#262828\">Para resolver, regularize a pendência com o órgão responsável.<br></span></p>"
             }
           }
         ]
@@ -786,7 +778,7 @@
             "name": null,
             "data": {
               "icon": "check_circle",
-              "text": "Está tudo certo com seu veículo",
+              "text": "<p><span style=\"font-size:14px;color:#000000\"><strong>Está tudo certo com seu veículo</strong></span></p>",
               "color": "success",
               "variant": "vertical"
             }
@@ -832,10 +824,10 @@
         "children": [
           {
             "id": "c_fb72964238d6",
-            "type": "text_body",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "text": "Preencha os dados de quem está comprando"
+              "html": "<p><span style=\"font-size:14px;color:#262828\">Preencha os dados de quem está comprando</span></p>"
             }
           },
           {
@@ -843,7 +835,7 @@
             "type": "text_input",
             "name": "cpf",
             "data": {
-              "label": "CPF",
+              "label": "<p><span style=\"font-size:14px;color:#111414\"><strong>CPF</strong></span></p>",
               "required": true
             }
           },
@@ -852,7 +844,7 @@
             "type": "text_input",
             "name": "nome",
             "data": {
-              "label": "Nome",
+              "label": "<p><span style=\"font-size:14px;color:#111414\"><strong>Nome</strong></span></p>",
               "required": true
             }
           },
@@ -861,7 +853,7 @@
             "type": "text_input",
             "name": "email",
             "data": {
-              "label": "E-mail",
+              "label": "<p><span style=\"font-size:14px;color:#111414\"><strong>E-mail</strong></span></p>",
               "required": true
             }
           },
@@ -870,7 +862,7 @@
             "type": "text_input",
             "name": "cep",
             "data": {
-              "label": "CEP",
+              "label": "<p><span style=\"font-size:14px;color:#111414\"><strong>CEP</strong></span></p>",
               "required": true
             }
           },
@@ -879,7 +871,7 @@
             "type": "text_input",
             "name": "numero",
             "data": {
-              "label": "Número",
+              "label": "<p><span style=\"font-size:14px;color:#111414\"><strong>Número</strong></span></p>",
               "required": true
             }
           },
@@ -888,7 +880,7 @@
             "type": "text_input",
             "name": "complemento",
             "data": {
-              "label": "Complemento"
+              "label": "<p><span style=\"font-size:14px;color:#111414\"><strong>Complemento</strong></span></p>"
             }
           }
         ]
@@ -932,10 +924,10 @@
         "children": [
           {
             "id": "c_5b3ce251f9ce",
-            "type": "text_body",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "text": "Preencha os dados do veículo\n"
+              "html": "<p><span style=\"font-size:14px;color:#262828\">Preencha os dados do veículo<br></span></p>"
             }
           },
           {
@@ -943,7 +935,7 @@
             "type": "text_input",
             "name": "valor",
             "data": {
-              "label": "Valor da venda do veículo"
+              "label": "<p><span style=\"font-size:14px;color:#111414\"><strong>Valor da venda do veículo</strong></span></p>"
             }
           },
           {
@@ -951,7 +943,7 @@
             "type": "text_input",
             "name": "km",
             "data": {
-              "label": "Quilometragem (km)",
+              "label": "<p><span style=\"font-size:14px;color:#111414\"><strong>Quilometragem (km)</strong></span></p>",
               "required": true
             }
           }
@@ -1000,17 +992,17 @@
             "name": null,
             "data": {
               "icon": "cancel",
-              "text": "Esse veículo precisa ter placa no padrão Mercosul para a transferência",
+              "text": "<p><span style=\"font-size:14px;color:#000000\"><strong>Esse veículo precisa ter placa no padrão Mercosul para a transferência</strong></span></p>",
               "color": "danger",
               "variant": "vertical"
             }
           },
           {
             "id": "c_590f0e1f1297",
-            "type": "text_body",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "text": "Percebemos que o veículo está registrado em cidade diferente da residência de quem está comprando. Nesse caso, é necessário fazer a troca da placa cinza para o padrão Mercosul.\n\n\n"
+              "html": "<p><span style=\"font-size:14px;color:#262828\">Percebemos que o veículo está registrado em cidade diferente da residência de quem está comprando. Nesse caso, é necessário fazer a troca da placa cinza para o padrão Mercosul.<br><br><br></span></p>"
             }
           },
           {
@@ -1074,10 +1066,10 @@
         "children": [
           {
             "id": "c_45e58a6d55b2",
-            "type": "text_body",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "text": "Confirme os dados informados para a venda do veículo\n"
+              "html": "<p><span style=\"font-size:14px;color:#262828\">Confirme os dados informados para a venda do veículo<br></span></p>"
             }
           },
           {
@@ -1087,38 +1079,34 @@
             "children": [
               {
                 "id": "c_67afa8f97d6f",
-                "type": "text_heading",
+                "type": "rich_text",
                 "name": null,
                 "data": {
-                  "text": "Dados do comprador",
-                  "type": "text_heading"
+                  "html": "<p><span style=\"font-size:16px;color:#262828\"><strong>Dados do comprador</strong></span></p>"
                 }
               },
               {
                 "id": "c_a352193338ab",
-                "type": "label_text",
+                "type": "rich_text",
                 "name": null,
                 "data": {
-                  "text": "@{node:n_02ec1db459dc.cpfComprador}",
-                  "label": "CPF"
+                  "html": "<p><span style=\"font-size:12px;color:#7A7F83\"><strong>CPF</strong></span></p><p><span style=\"font-size:14px;color:#111414\">@{node:n_02ec1db459dc.cpfComprador}</span></p>"
                 }
               },
               {
                 "id": "c_ecdba61563a5",
-                "type": "label_text",
+                "type": "rich_text",
                 "name": null,
                 "data": {
-                  "text": "@{node:n_02ec1db459dc.nomeComprador}",
-                  "label": "Nome"
+                  "html": "<p><span style=\"font-size:12px;color:#7A7F83\"><strong>Nome</strong></span></p><p><span style=\"font-size:14px;color:#111414\">@{node:n_02ec1db459dc.nomeComprador}</span></p>"
                 }
               },
               {
                 "id": "c_c0da528e9caa",
-                "type": "label_text",
+                "type": "rich_text",
                 "name": null,
                 "data": {
-                  "text": "@{node:n_02ec1db459dc.enderecoComprador}",
-                  "label": "Endereço"
+                  "html": "<p><span style=\"font-size:12px;color:#7A7F83\"><strong>Endereço</strong></span></p><p><span style=\"font-size:14px;color:#111414\">@{node:n_02ec1db459dc.enderecoComprador}</span></p>"
                 }
               }
             ],
@@ -1181,10 +1169,10 @@
         "children": [
           {
             "id": "c_5426830a81d2",
-            "type": "text_body",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "text": "Ao confirmar, será criada a autorização para transferência de veículo, a ATPV-e\n"
+              "html": "<p><span style=\"font-size:14px;color:#262828\">Ao confirmar, será criada a autorização para transferência de veículo, a ATPV-e<br></span></p>"
             }
           }
         ]
@@ -1232,25 +1220,25 @@
             "name": null,
             "data": {
               "icon": "check_circle",
-              "text": "Sua intenção de venda foi concluída",
+              "text": "<p><span style=\"font-size:14px;color:#000000\"><strong>Sua intenção de venda foi concluída</strong></span></p>",
               "color": "success",
               "variant": "vertical"
             }
           },
           {
             "id": "c_beecfacfa869",
-            "type": "text_body",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "text": "A pessoa que está comprando o veículo foi informada.\n"
+              "html": "<p><span style=\"font-size:14px;color:#262828\">A pessoa que está comprando o veículo foi informada.<br></span></p>"
             }
           },
           {
             "id": "c_1af5dd23abe0",
-            "type": "text_body",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "text": "Agora, é só aguardar que ela confirme a compra do veículo para continuar o processo de transferência.\n"
+              "html": "<p><span style=\"font-size:14px;color:#262828\">Agora, é só aguardar que ela confirme a compra do veículo para continuar o processo de transferência.<br></span></p>"
             }
           }
         ]
@@ -1295,10 +1283,10 @@
         "children": [
           {
             "id": "c_3e0c049e83c6",
-            "type": "text_body",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "text": "Qual veículo está sendo comprado?\n"
+              "html": "<p><span style=\"font-size:14px;color:#262828\">Qual veículo está sendo comprado?<br></span></p>"
             }
           },
           {
@@ -1398,10 +1386,10 @@
         "children": [
           {
             "id": "c_407acc92b041",
-            "type": "text_body",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "text": "Confirme as informações para a compra do veículo\n"
+              "html": "<p><span style=\"font-size:14px;color:#262828\">Confirme as informações para a compra do veículo<br></span></p>"
             }
           },
           {
@@ -1411,38 +1399,34 @@
             "children": [
               {
                 "id": "c_925dd4263612",
-                "type": "text_heading",
+                "type": "rich_text",
                 "name": null,
                 "data": {
-                  "text": "Dados do comprador",
-                  "type": "text_heading"
+                  "html": "<p><span style=\"font-size:16px;color:#262828\"><strong>Dados do comprador</strong></span></p>"
                 }
               },
               {
                 "id": "c_22e2087d5535",
-                "type": "label_text",
+                "type": "rich_text",
                 "name": null,
                 "data": {
-                  "text": "@{node:n_0a7cda804e6d.cpfComprador}",
-                  "label": "CPF"
+                  "html": "<p><span style=\"font-size:12px;color:#7A7F83\"><strong>CPF</strong></span></p><p><span style=\"font-size:14px;color:#111414\">@{node:n_0a7cda804e6d.cpfComprador}</span></p>"
                 }
               },
               {
                 "id": "c_c50e635eff87",
-                "type": "label_text",
+                "type": "rich_text",
                 "name": null,
                 "data": {
-                  "text": "@{node:n_0a7cda804e6d.nomeComprador}",
-                  "label": "Nome"
+                  "html": "<p><span style=\"font-size:12px;color:#7A7F83\"><strong>Nome</strong></span></p><p><span style=\"font-size:14px;color:#111414\">@{node:n_0a7cda804e6d.nomeComprador}</span></p>"
                 }
               },
               {
                 "id": "c_c52c9fb1affb",
-                "type": "label_text",
+                "type": "rich_text",
                 "name": null,
                 "data": {
-                  "text": "@{node:n_0a7cda804e6d.enderecoComprador}",
-                  "label": "Endereço"
+                  "html": "<p><span style=\"font-size:12px;color:#7A7F83\"><strong>Endereço</strong></span></p><p><span style=\"font-size:14px;color:#111414\">@{node:n_0a7cda804e6d.enderecoComprador}</span></p>"
                 }
               }
             ],
@@ -1515,36 +1499,34 @@
         "children": [
           {
             "id": "c_3ee08a72f3a0",
-            "type": "text_body",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "text": "Confirme seu endereço para continuar a transferência do veículo\n"
+              "html": "<p><span style=\"font-size:14px;color:#262828\">Confirme seu endereço para continuar a transferência do veículo<br></span></p>"
             }
           },
           {
             "id": "c_79e2ebce8df7",
-            "type": "text_heading",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "text": "Dados de quem está comprando"
+              "html": "<p><span style=\"font-size:16px;color:#262828\"><strong>Dados de quem está comprando</strong></span></p>"
             }
           },
           {
             "id": "c_61aa261b7bc9",
-            "type": "text_body",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "text": "Eu, @{node:n_0a7cda804e6d.nomeComprador}, inscrito no CPF sob o nº @{node:n_0a7cda804e6d.cpfComprador}, declaro para os devidos fins que resido em @{node:n_0a7cda804e6d.enderecoComprador}.",
-              "align": "justify"
+              "html": "<p style=\"text-align:justify\"><span style=\"font-size:14px;color:#262828\">Eu, @{node:n_0a7cda804e6d.nomeComprador}, inscrito no CPF sob o nº @{node:n_0a7cda804e6d.cpfComprador}, declaro para os devidos fins que resido em @{node:n_0a7cda804e6d.enderecoComprador}.</span></p>"
             }
           },
           {
             "id": "c_f8f3a8f6a923",
-            "type": "text_body",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "text": "Sob pena da lei, estou ciente de que a falsidade destas informações implicará em penalidades.\n",
-              "align": "justify"
+              "html": "<p style=\"text-align:justify\"><span style=\"font-size:14px;color:#262828\">Sob pena da lei, estou ciente de que a falsidade destas informações implicará em penalidades.<br></span></p>"
             }
           },
           {
@@ -1552,12 +1534,12 @@
             "type": "opt_in",
             "name": null,
             "data": {
-              "title": "Aceite",
+              "title": "<p><span style=\"font-size:14px;color:#111414\"><strong>Aceite</strong></span></p>",
               "options": [
                 {
                   "id": "1",
                   "key": "opcao_1",
-                  "text": "Eu confirmo que as informações acima são verdadeiras",
+                  "text": "<p><span style=\"font-size:14px;color:#111414\">Eu confirmo que as informações acima são verdadeiras</span></p>",
                   "required": false
                 }
               ],
@@ -1620,17 +1602,17 @@
             "name": null,
             "data": {
               "icon": "warning",
-              "text": "Precisamos que confirme a transferência do veículo com sua assinatura eletrônica.",
+              "text": "<p><span style=\"font-size:14px;color:#000000\"><strong>Precisamos que confirme a transferência do veículo com sua assinatura eletrônica.</strong></span></p>",
               "color": "warning",
               "variant": "vertical"
             }
           },
           {
             "id": "c_d1e265554e1a",
-            "type": "text_body",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "text": "Ao assinar, enviaremos uma notificação para que a pessoa que está vendendo o veículo conclua o processo.\n"
+              "html": "<p><span style=\"font-size:14px;color:#262828\">Ao assinar, enviaremos uma notificação para que a pessoa que está vendendo o veículo conclua o processo.<br></span></p>"
             }
           }
         ]
@@ -1689,25 +1671,25 @@
             "name": null,
             "data": {
               "icon": "check_circle",
-              "text": "Sua intenção de compra do veículo foi concluída",
+              "text": "<p><span style=\"font-size:14px;color:#000000\"><strong>Sua intenção de compra do veículo foi concluída</strong></span></p>",
               "color": "success",
               "variant": "vertical"
             }
           },
           {
             "id": "c_f976f3967d7c",
-            "type": "text_body",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "text": "Já avisamos a pessoa que está vendendo o veículo para assinar o documento.\n"
+              "html": "<p><span style=\"font-size:14px;color:#262828\">Já avisamos a pessoa que está vendendo o veículo para assinar o documento.<br></span></p>"
             }
           },
           {
             "id": "c_cb567e2ab2d7",
-            "type": "text_body",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "text": "Agora, é só aguardar que ela confirme a venda do veículo para continuar o processo de transferência."
+              "html": "<p><span style=\"font-size:14px;color:#262828\">Agora, é só aguardar que ela confirme a venda do veículo para continuar o processo de transferência.</span></p>"
             }
           }
         ]
@@ -1752,10 +1734,10 @@
         "children": [
           {
             "id": "c_4921dfc79212",
-            "type": "text_body",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "text": "Olá, @{node:n_21da615e160d.full_name}\n\nO processo de transferência do seu veículo foi confirmado pelo comprador. \n"
+              "html": "<p><span style=\"font-size:14px;color:#262828\">Olá, @{node:n_21da615e160d.full_name}<br><br>O processo de transferência do seu veículo foi confirmado pelo comprador. <br></span></p>"
             }
           },
           {
@@ -1819,17 +1801,17 @@
             "name": null,
             "data": {
               "icon": "check_circle",
-              "text": "Tudo certo,  você concluiu a venda do veículo",
+              "text": "<p><span style=\"font-size:14px;color:#000000\"><strong>Tudo certo,  você concluiu a venda do veículo</strong></span></p>",
               "color": "success",
               "variant": "vertical"
             }
           },
           {
             "id": "c_7fd58eac0708",
-            "type": "text_body",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "text": "A partir de agora, a responsabilidade do veículo Mitsubishi Pajero Sport, cor cinza, placa GAT3U02 é de quem fez a compra.\n\nAssim que o pagamento for realizado, o veículo será registrado em nome do comprador.\n"
+              "html": "<p><span style=\"font-size:14px;color:#262828\">A partir de agora, a responsabilidade do veículo Mitsubishi Pajero Sport, cor cinza, placa GAT3U02 é de quem fez a compra.<br><br>Assim que o pagamento for realizado, o veículo será registrado em nome do comprador.<br></span></p>"
             }
           }
         ]
@@ -1878,19 +1860,18 @@
             "children": [
               {
                 "id": "c_53d9ecc64dbe",
-                "type": "text_heading",
+                "type": "rich_text",
                 "name": null,
                 "data": {
-                  "text": "Transferência de veículo\n"
+                  "html": "<p><span style=\"font-size:16px;color:#262828\"><strong>Transferência de veículo<br></strong></span></p>"
                 }
               },
               {
                 "id": "c_dd811f56a96a",
-                "type": "label_text",
+                "type": "rich_text",
                 "name": null,
                 "data": {
-                  "text": "@{node:n_b685a31ed52c.nomeComprador}",
-                  "label": "Pessoa que assinou a compra"
+                  "html": "<p><span style=\"font-size:12px;color:#7A7F83\"><strong>Pessoa que assinou a compra</strong></span></p><p><span style=\"font-size:14px;color:#111414\">@{node:n_b685a31ed52c.nomeComprador}</span></p>"
                 }
               },
               {
@@ -1901,11 +1882,10 @@
               },
               {
                 "id": "c_90d48ffc11dd",
-                "type": "label_text",
+                "type": "rich_text",
                 "name": null,
                 "data": {
-                  "text": "@{node:n_b685a31ed52c.taxaTransferencia}",
-                  "label": "Transferência do veículo"
+                  "html": "<p><span style=\"font-size:12px;color:#7A7F83\"><strong>Transferência do veículo</strong></span></p><p><span style=\"font-size:14px;color:#111414\">@{node:n_b685a31ed52c.taxaTransferencia}</span></p>"
                 }
               },
               {
@@ -1916,11 +1896,10 @@
               },
               {
                 "id": "c_9db5f315559a",
-                "type": "label_text",
+                "type": "rich_text",
                 "name": null,
                 "data": {
-                  "text": "@{node:n_b685a31ed52c.taxaLicenciamento}",
-                  "label": "Licenciamento"
+                  "html": "<p><span style=\"font-size:12px;color:#7A7F83\"><strong>Licenciamento</strong></span></p><p><span style=\"font-size:14px;color:#111414\">@{node:n_b685a31ed52c.taxaLicenciamento}</span></p>"
                 }
               },
               {
@@ -1931,11 +1910,10 @@
               },
               {
                 "id": "c_161e9c548d0b",
-                "type": "label_text",
+                "type": "rich_text",
                 "name": null,
                 "data": {
-                  "text": "@{node:n_b685a31ed52c.totalDebitos}",
-                  "label": "Valor total"
+                  "html": "<p><span style=\"font-size:12px;color:#7A7F83\"><strong>Valor total</strong></span></p><p><span style=\"font-size:14px;color:#111414\">@{node:n_b685a31ed52c.totalDebitos}</span></p>"
                 }
               }
             ],
@@ -1949,11 +1927,10 @@
         "children": [
           {
             "id": "c_35b1d64b818d",
-            "type": "label_text",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "text": "@{node:n_b685a31ed52c.totalDebitos}",
-              "label": "Total de débitos"
+              "html": "<p><span style=\"font-size:12px;color:#7A7F83\"><strong>Total de débitos</strong></span></p><p><span style=\"font-size:14px;color:#111414\">@{node:n_b685a31ed52c.totalDebitos}</span></p>"
             }
           },
           {
@@ -1993,11 +1970,10 @@
         "children": [
           {
             "id": "c_1675a5ae95e6",
-            "type": "text_body",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "text": "Olá, @{node:n_21da615e160d.full_name}.\n\nA transferência do veículo será finalizada após o pagamento da taxa.\n",
-              "align": "left"
+              "html": "<p><span style=\"font-size:14px;color:#262828\">Olá, @{node:n_21da615e160d.full_name}.<br><br>A transferência do veículo será finalizada após o pagamento da taxa.<br></span></p>"
             }
           },
           {
@@ -2005,8 +1981,8 @@
             "type": "alert",
             "name": null,
             "data": {
-              "body": "Você tem 30 dias para pagar a taxa de transferência à contar da data de assinatura do vendedor.\n",
-              "title": "Importante",
+              "body": "<p><span style=\"font-size:12px;color:#57595A\">Você tem 30 dias para pagar a taxa de transferência à contar da data de assinatura do vendedor.<br></span></p>",
+              "title": "<p><span style=\"font-size:12px;color:#111414\"><strong>Importante</strong></span></p>",
               "variant": "warning"
             }
           },
@@ -2032,18 +2008,17 @@
             "name": null,
             "data": {
               "icon": "info",
-              "text": "Informação",
+              "text": "<p><span style=\"font-size:14px;color:#000000\"><strong>Informação</strong></span></p>",
               "color": "info",
               "variant": "horizontal"
             }
           },
           {
             "id": "c_ca56c3b6a284",
-            "type": "text_body",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "text": "Saiba que, se o pagamento não for feito no prazo, você receberá uma multa de trânsito por infração média e possível remoção do veículo a um pátio, segundo Código Brasileiro de Trânsito.\n",
-              "align": "left"
+              "html": "<p><span style=\"font-size:14px;color:#262828\">Saiba que, se o pagamento não for feito no prazo, você receberá uma multa de trânsito por infração média e possível remoção do veículo a um pátio, segundo Código Brasileiro de Trânsito.<br></span></p>"
             }
           }
         ]
@@ -2092,7 +2067,7 @@
             "name": null,
             "data": {
               "icon": "check_circle",
-              "text": "Seu pagamento foi confirmado",
+              "text": "<p><span style=\"font-size:14px;color:#000000\"><strong>Seu pagamento foi confirmado</strong></span></p>",
               "color": "success",
               "variant": "vertical"
             }
@@ -2104,11 +2079,10 @@
             "children": [
               {
                 "id": "c_9c6bd19eb4c1",
-                "type": "label_text",
+                "type": "rich_text",
                 "name": null,
                 "data": {
-                  "text": "@{node:n_de17c35410fd.comprovante ?? node:n_b685a31ed52c.comprovante}",
-                  "label": "Comprovante do pagamento"
+                  "html": "<p><span style=\"font-size:12px;color:#7A7F83\"><strong>Comprovante do pagamento</strong></span></p><p><span style=\"font-size:14px;color:#111414\">@{node:n_de17c35410fd.comprovante ?? node:n_b685a31ed52c.comprovante}</span></p>"
                 }
               },
               {
@@ -2119,11 +2093,10 @@
               },
               {
                 "id": "c_e2e6b499d19c",
-                "type": "label_text",
+                "type": "rich_text",
                 "name": null,
                 "data": {
-                  "text": "Pix",
-                  "label": "Forma de pagamento"
+                  "html": "<p><span style=\"font-size:12px;color:#7A7F83\"><strong>Forma de pagamento</strong></span></p><p><span style=\"font-size:14px;color:#111414\">Pix</span></p>"
                 }
               },
               {
@@ -2134,11 +2107,10 @@
               },
               {
                 "id": "c_7228906217dc",
-                "type": "label_text",
+                "type": "rich_text",
                 "name": null,
                 "data": {
-                  "text": "@{node:n_de17c35410fd.confirmedDate ?? node:n_b685a31ed52c.confirmedDate}",
-                  "label": "Data e hora da confirmação"
+                  "html": "<p><span style=\"font-size:12px;color:#7A7F83\"><strong>Data e hora da confirmação</strong></span></p><p><span style=\"font-size:14px;color:#111414\">@{node:n_de17c35410fd.confirmedDate ?? node:n_b685a31ed52c.confirmedDate}</span></p>"
                 }
               }
             ],
@@ -2190,26 +2162,25 @@
             "name": null,
             "data": {
               "icon": "warning",
-              "text": "Se você confirmar o cancelamento da transferência do veículo, iremos encerrar essa solicitação.",
+              "text": "<p><span style=\"font-size:14px;color:#000000\"><strong>Se você confirmar o cancelamento da transferência do veículo, iremos encerrar essa solicitação.</strong></span></p>",
               "color": "warning",
               "variant": "vertical"
             }
           },
           {
             "id": "c_2c6466c68695",
-            "type": "text_body",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "text": "Para realizar nova transferência, a pessoa que está fazendo a venda deverá iniciar o processo novamente.\n",
-              "align": "left"
+              "html": "<p><span style=\"font-size:14px;color:#262828\">Para realizar nova transferência, a pessoa que está fazendo a venda deverá iniciar o processo novamente.<br></span></p>"
             }
           },
           {
             "id": "c_cf97fedbde13",
-            "type": "text_body",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "text": "Tem certeza que podemos continuar com o cancelamento?\n"
+              "html": "<p><span style=\"font-size:14px;color:#262828\">Tem certeza que podemos continuar com o cancelamento?<br></span></p>"
             }
           }
         ]
@@ -2274,11 +2245,10 @@
           },
           {
             "id": "c_cf13fc57af79",
-            "type": "text_body",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "text": "Olá, @{node:n_21da615e160d.full_name}\n\nA compra do veículo foi cancelada pela pessoa que você indicou como compradora. Por isso, encerramos sua solicitação.\n\nCaso precise, você deve iniciar uma nova intenção de venda do veículo.\n",
-              "align": "left"
+              "html": "<p><span style=\"font-size:14px;color:#262828\">Olá, @{node:n_21da615e160d.full_name}<br><br>A compra do veículo foi cancelada pela pessoa que você indicou como compradora. Por isso, encerramos sua solicitação.<br><br>Caso precise, você deve iniciar uma nova intenção de venda do veículo.<br></span></p>"
             }
           }
         ]
@@ -2335,26 +2305,25 @@
             "name": null,
             "data": {
               "icon": "check_circle",
-              "text": "Transferência realizada com sucesso",
+              "text": "<p><span style=\"font-size:14px;color:#000000\"><strong>Transferência realizada com sucesso</strong></span></p>",
               "color": "success",
               "variant": "vertical"
             }
           },
           {
             "id": "c_1b35bab5e5b8",
-            "type": "text_body",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "text": "Olá, @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}. \nA transferência do veículo @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.brandModel}, placa @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.plate} foi realizada com sucesso e o veículo encontra-se em seu nome.\n\nAcesse o aplicativo da Carteira Digital de Trânsito - CDT para baixar o documento do veículo.\n",
-              "align": "left"
+              "html": "<p><span style=\"font-size:14px;color:#262828\">Olá, @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}. <br>A transferência do veículo @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.brandModel}, placa @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.plate} foi realizada com sucesso e o veículo encontra-se em seu nome.<br><br>Acesse o aplicativo da Carteira Digital de Trânsito - CDT para baixar o documento do veículo.<br></span></p>"
             }
           },
           {
             "id": "c_612f16419cc7",
-            "type": "text_heading",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "text": "\n"
+              "html": "<p><span style=\"font-size:16px;color:#262828\"><strong><br></strong></span></p>"
             }
           }
         ]
@@ -2403,26 +2372,25 @@
             "name": null,
             "data": {
               "icon": "check_circle",
-              "text": "Pagamento confirmado",
+              "text": "<p><span style=\"font-size:14px;color:#000000\"><strong>Pagamento confirmado</strong></span></p>",
               "color": "success",
               "variant": "vertical"
             }
           },
           {
             "id": "c_57d2dbcf5d15",
-            "type": "text_body",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "text": "Olá, @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}. \n\nFoi confirmado o pagamento da taxa de transferência do veículo @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.brandModel}, placa @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.plate}.\n\nAguarde enquanto validamos o processo e registramos o veículo em seu nome.\n",
-              "align": "left"
+              "html": "<p><span style=\"font-size:14px;color:#262828\">Olá, @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}. <br><br>Foi confirmado o pagamento da taxa de transferência do veículo @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.brandModel}, placa @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.plate}.<br><br>Aguarde enquanto validamos o processo e registramos o veículo em seu nome.<br></span></p>"
             }
           },
           {
             "id": "c_94c7b464ec0a",
-            "type": "text_body",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "text": "Acesse o aplicativo da Carteira Digital de Trânsito - CDT para consultar os veículos em seu nome.\n"
+              "html": "<p><span style=\"font-size:14px;color:#262828\">Acesse o aplicativo da Carteira Digital de Trânsito - CDT para consultar os veículos em seu nome.<br></span></p>"
             }
           }
         ]
@@ -2478,11 +2446,10 @@
           },
           {
             "id": "c_e8d709832748",
-            "type": "text_body",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "text": "Olá, @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}.\n\nA compra do veículo foi cancelada pelo vendedor do veículo. Por isso, encerramos sua solicitação.\n",
-              "align": "left"
+              "html": "<p><span style=\"font-size:14px;color:#262828\">Olá, @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}.<br><br>A compra do veículo foi cancelada pelo vendedor do veículo. Por isso, encerramos sua solicitação.<br></span></p>"
             }
           },
           {
@@ -2545,10 +2512,10 @@
         "children": [
           {
             "id": "c_443512d51b5a",
-            "type": "text_heading",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "text": "Cancelar venda de veículo\n"
+              "html": "<p><span style=\"font-size:16px;color:#262828\"><strong>Cancelar venda de veículo<br></strong></span></p>"
             }
           },
           {
@@ -2557,7 +2524,7 @@
             "name": null,
             "data": {
               "icon": "warning",
-              "text": "Tem certeza que deseja cancelar o processo iniciado?",
+              "text": "<p><span style=\"font-size:14px;color:#000000\"><strong>Tem certeza que deseja cancelar o processo iniciado?</strong></span></p>",
               "color": "warning",
               "variant": "horizontal"
             }
@@ -2604,10 +2571,10 @@
         "children": [
           {
             "id": "c_0b0a9b86d5b3",
-            "type": "text_heading",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "text": "Processo de venda cancelado\n"
+              "html": "<p><span style=\"font-size:16px;color:#262828\"><strong>Processo de venda cancelado<br></strong></span></p>"
             }
           },
           {
@@ -2616,7 +2583,7 @@
             "name": null,
             "data": {
               "icon": "info",
-              "text": "Cancelamos a venda iniciada. Se precisar, reinicie o processo quando quiser.",
+              "text": "<p><span style=\"font-size:14px;color:#000000\"><strong>Cancelamos a venda iniciada. Se precisar, reinicie o processo quando quiser.</strong></span></p>",
               "color": "info",
               "variant": "horizontal"
             }
@@ -2653,10 +2620,10 @@
         "children": [
           {
             "id": "c_1904092e6991",
-            "type": "text_heading",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "text": "Intenção de venda"
+              "html": "<p><span style=\"font-size:16px;color:#262828\"><strong>Intenção de venda</strong></span></p>"
             }
           },
           {
@@ -2665,18 +2632,17 @@
             "name": null,
             "data": {
               "icon": "info",
-              "text": "Encerramos a transferência de veículo.",
+              "text": "<p><span style=\"font-size:14px;color:#000000\"><strong>Encerramos a transferência de veículo.</strong></span></p>",
               "color": "info",
               "variant": "horizontal"
             }
           },
           {
             "id": "c_b855a103f918",
-            "type": "text_body",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "text": "Caso precise, quem está vendendo o veículo deve iniciar o processo novamente.\n",
-              "align": "left"
+              "html": "<p><span style=\"font-size:14px;color:#262828\">Caso precise, quem está vendendo o veículo deve iniciar o processo novamente.<br></span></p>"
             }
           }
         ]
@@ -2711,10 +2677,10 @@
         "children": [
           {
             "id": "c_2b3c4d5e6f71",
-            "type": "text_heading",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "text": "Transferir Veículo"
+              "html": "<p><span style=\"font-size:16px;color:#262828\"><strong>Transferir Veículo</strong></span></p>"
             }
           },
           {
@@ -2723,7 +2689,7 @@
             "name": null,
             "data": {
               "icon": "info",
-              "text": "A Transferência Digital de Veículo permite concluir a venda ou a compra de um veículo diretamente pelo aplicativo, com toda a segurança do Detran-SP.\n\nQuer relembrar como funciona? Toque em \"Saiba mais\" para rever o passo a passo.",
+              "text": "<p><span style=\"font-size:14px;color:#000000\">A Transferência Digital de Veículo permite concluir a venda ou a compra de um veículo diretamente pelo aplicativo, com toda a segurança do Detran-SP.<br><br>Quer relembrar como funciona? Toque em &quot;Saiba mais&quot; para rever o passo a passo.</span></p>",
               "color": "info",
               "variant": "horizontal",
               "alignment": "start",
