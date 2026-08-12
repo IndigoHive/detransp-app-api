@@ -1548,13 +1548,21 @@
             }
           },
           {
-            "id": "c_a2f578f5c566",
+            "id": "c_35dbb4cc068a",
             "type": "opt_in",
             "name": null,
             "data": {
-              "text": "Eu confirmo que as informações acima são verdadeiras\n",
-              "checked": false,
-              "required": true
+              "title": "Aceite",
+              "options": [
+                {
+                  "id": "1",
+                  "key": "opcao_1",
+                  "text": "Eu confirmo que as informações acima são verdadeiras",
+                  "required": false
+                }
+              ],
+              "minRequired": 1,
+              "validationMode": "minCount"
             }
           }
         ]
