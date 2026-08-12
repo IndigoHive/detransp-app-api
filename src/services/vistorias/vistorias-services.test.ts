@@ -394,7 +394,7 @@ describe('vistorias services', () => {
     })
     const service = new ListaPagamentosVistoriaService(asClient({ listaPagamentos }))
 
-    const result = await service.run(clientAuth, '12345678901', false, '00225623218')
+    const result = await service.run(clientAuth, '12345678901', false, { renavam: '00225623218', semPlaca: false, semRenavam: true })
 
     if (!Array.isArray(result)) {
       throw new Error('Expected a payment list')
@@ -426,7 +426,7 @@ describe('vistorias services', () => {
     expect(result[0]).not.toHaveProperty('status')
     expect(result[0]).not.toHaveProperty('paymentDate')
     expect(result[0]).not.toHaveProperty('subtipoDescricao')
-    expect(listaPagamentos).toHaveBeenCalledWith(clientAuth, '12345678901', false, '00225623218')
+    expect(listaPagamentos).toHaveBeenCalledWith(clientAuth, '12345678901', false, { renavam: '00225623218', semPlaca: false, semRenavam: true })
   })
 
   it('returns the restitution identifier after requesting a refund', async () => {

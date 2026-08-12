@@ -21,6 +21,13 @@ function asNonEmptyString (value: unknown): string | undefined {
   return typeof value === 'string' && value.trim() ? value.trim() : undefined
 }
 
+function asOptionalBoolean (value: unknown, field: string): boolean | undefined {
+  if (value === undefined || value === '') return undefined
+  if (value === 'true') return true
+  if (value === 'false') return false
+  throw BadRequest(`${field} deve ser true ou false.`)
+}
+
 export function getDocProprietarioByPaymentLabel (label: string | undefined): boolean | undefined {
   const normalized = label ? stripHtml(label) : label
   if (!normalized || !(normalized in DOC_PROPRIETARIO_BY_PAYMENT_LABEL)) {
@@ -145,6 +152,8 @@ export function vistoriasRouter (): Router {
     const paymentLabel = asNonEmptyString(req.query.docProprietario)
     const docProprietario = getDocProprietarioByPaymentLabel(paymentLabel)
     const renavam = asNonEmptyString(req.query.renavam)
+    const semPlaca = asOptionalBoolean(req.query.semPlaca, 'semPlaca')
+    const semRenavam = asOptionalBoolean(req.query.semRenavam, 'semRenavam')
 
     if (!documento || !DOCUMENT_PATTERN.test(documento)) {
       throw BadRequest('Documento inválido.')
@@ -155,7 +164,11 @@ export function vistoriasRouter (): Router {
     if (renavam && !RENAVAM_PATTERN.test(renavam)) throw BadRequest('RENAVAM inválido.')
 
     const service = req.scope.resolve('listaPagamentosVistoriaService')
-    const result = await service.run(auth, documento, docProprietario, renavam)
+    const result = await service.run(auth, documento, docProprietario, {
+      ...(renavam ? { renavam } : {}),
+      ...(semPlaca === undefined ? {} : { semPlaca }),
+      ...(semRenavam === undefined ? {} : { semRenavam })
+    })
     res.status(200).json(result)
   })
 

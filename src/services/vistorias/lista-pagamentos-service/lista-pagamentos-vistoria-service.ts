@@ -42,10 +42,10 @@ export class ListaPagamentosVistoriaService {
     auth: VistoriasAuth,
     documento: string,
     docProprietario: boolean,
-    renavam?: string
+    filters: { renavam?: string, semPlaca?: boolean, semRenavam?: boolean } = {}
   ): Promise<ListaPagamentosVistoriaOutput> {
     try {
-      const result = await this.client.listaPagamentos(auth, documento, docProprietario, renavam)
+      const result = await this.client.listaPagamentos(auth, documento, docProprietario, filters)
       const response = result?.result
 
       if (!response?.success) {
