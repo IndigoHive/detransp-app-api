@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from 'vitest'
 import type { DetranSpServiceNowTdvClient } from '../../../clients/detran-sp-service-now/tdv'
 import { CodigoEstadoTDV, CodigoOrigemTDV } from '../../../clients/detran-sp-service-now/tdv/types'
+import { formatCurrency } from '../../../utils/currency'
 import { ConfirmarCompraService } from './confirmar-compra-service'
 
 const cpf = '12345678901'
@@ -22,6 +23,8 @@ const tdvData = {
   placaVeiculo: 'ABC1D23',
   descricaoMarcaVeiculo: 'Toyota Corolla 2.0',
   codigoRenavamVeiculo: '00001002003',
+  valorVendaVeiculo: '90000',
+  kmVeiculo: '13000',
   origem: CodigoOrigemTDV.TDV,
   estado: CodigoEstadoTDV.ATPVE_CRIADA
 }
@@ -61,7 +64,9 @@ describe('ConfirmarCompraService', () => {
         renavam: '00001002003',
         lastLicensing: '',
         yearFab: '',
-        yearMod: ''
+        yearMod: '',
+        valorVenda: formatCurrency(90000),
+        quilometragem: '13.000'
       }
     })
 

@@ -710,6 +710,8 @@ app.get('/api/tdv/compras', (_req, res) => {
         ufComprador: 'SP',
         cepComprador: '01014001',
         enderecoComprador: 'RUA BOA VISTA, 10, CENTRO, SÃO PAULO - SP, 01014001',
+        valorVenda: 'R$ 90.000,00',
+        quilometragem: '13.000',
       },
       {
         id: 'GHI8J90-00010020031',
@@ -742,6 +744,8 @@ app.get('/api/tdv/compras', (_req, res) => {
         ufComprador: 'SP',
         cepComprador: '01014001',
         enderecoComprador: 'RUA BOA VISTA, 10, CENTRO, SÃO PAULO - SP, 01014001',
+        valorVenda: 'R$ 90.000,00',
+        quilometragem: '13.000',
       },
     ],
   })
@@ -765,6 +769,8 @@ app.post('/api/tdv/confirmar-compra', (req, res) => {
       lastLicensing: MOCK_VEHICLES[0].lastLicensing,
       yearFab: MOCK_VEHICLES[0].yearFab,
       yearMod: MOCK_VEHICLES[0].yearMod,
+      valorVenda: 'R$ 90.000,00',
+      quilometragem: '13.000',
     } : null,
   })
 })

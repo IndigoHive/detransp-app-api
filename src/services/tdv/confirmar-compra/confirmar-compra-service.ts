@@ -1,6 +1,7 @@
 import { BadRequest } from 'http-errors'
 import type { DetranSpServiceNowTdvClient } from '../../../clients/detran-sp-service-now/tdv'
 import { CodigoEstadoTDV, type CodigoOrigemTDV } from '../../../clients/detran-sp-service-now/tdv/types'
+import { formatCurrency } from '../../../utils/currency'
 import { extractBearerToken, extractCpfFromToken } from '../../../utils/token'
 
 type Dependencies = {
@@ -29,7 +30,16 @@ export type ConfirmarCompraResult = {
     lastLicensing: string
     yearFab: string
     yearMod: string
+    valorVenda?: string
+    quilometragem?: string
   }
+}
+
+function formatNumericDisplay (value: string | undefined, format: (n: number) => string): string | undefined {
+  const trimmed = value?.trim()
+  if (!trimmed) return undefined
+  const n = Number(trimmed)
+  return Number.isFinite(n) ? format(n) : trimmed
 }
 
 export class ConfirmarCompraService {
@@ -92,6 +102,9 @@ export class ConfirmarCompraService {
       data?.nomeMunicipioComprador ? `${data.nomeMunicipioComprador} - ${data.ufComprador ?? 'SP'}` : undefined
     ].filter(Boolean).join(', ')
 
+    const valorVenda = formatNumericDisplay(data?.valorVendaVeiculo, formatCurrency)
+    const quilometragem = formatNumericDisplay(data?.kmVeiculo, n => n.toLocaleString('pt-BR'))
+
     return {
       nomeComprador: data?.nomeComprador ?? '',
       cpfComprador: data?.codigoComprador ?? '',
@@ -108,7 +121,9 @@ export class ConfirmarCompraService {
         renavam: data?.codigoRenavamVeiculo ?? '',
         lastLicensing: '',
         yearFab: '',
-        yearMod: ''
+        yearMod: '',
+        ...(valorVenda ? { valorVenda } : {}),
+        ...(quilometragem ? { quilometragem } : {})
       }
     }
   }

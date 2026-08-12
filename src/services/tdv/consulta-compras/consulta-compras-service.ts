@@ -5,6 +5,7 @@ import type {
   CodigoOrigemTDV,
   ListaTdvsResultData
 } from '../../../clients/detran-sp-service-now/tdv/types'
+import { formatCurrency } from '../../../utils/currency'
 import { extractBearerToken, extractCpfFromToken } from '../../../utils/token'
 import { acaoComoComprador, type ProximaAcaoComprador } from '../proxima-acao-comprador'
 
@@ -32,7 +33,8 @@ const LISTA_COMPRAS_CAMPOS = [
   'cepComprador',
   'chassiVeiculo',
   'kmVeiculo',
-  'kmVistoriadaVeiculo'
+  'kmVistoriadaVeiculo',
+  'valorVendaVeiculo'
 ].join(',')
 
 type Dependencies = {
@@ -73,6 +75,8 @@ type CompraVehicle = {
   chassiVeiculo?: string
   kmVeiculo?: string
   kmVistoriadaVeiculo?: string
+  valorVenda?: string
+  quilometragem?: string
   descricaoCorVeiculo?: string
   enderecoComprador?: string
 }
@@ -103,6 +107,13 @@ function formatEnderecoComprador (tdv: ListaTdvsResultData): string | undefined 
     .join(', ')
 
   return endereco || undefined
+}
+
+function formatNumericDisplay (value: string | undefined, format: (n: number) => string): string | undefined {
+  const trimmed = value?.trim()
+  if (!trimmed) return undefined
+  const n = Number(trimmed)
+  return Number.isFinite(n) ? format(n) : trimmed
 }
 
 export class ConsultaComprasService {
@@ -141,6 +152,8 @@ export class ConsultaComprasService {
       const chassiVeiculo = trimField(tdv.chassiVeiculo)
       const kmVeiculo = trimField(tdv.kmVeiculo)
       const kmVistoriadaVeiculo = trimField(tdv.kmVistoriadaVeiculo) ?? kmVeiculo
+      const valorVenda = formatNumericDisplay(trimField(tdv.valorVendaVeiculo), formatCurrency)
+      const quilometragem = formatNumericDisplay(kmVeiculo, n => n.toLocaleString('pt-BR'))
       const descricaoMarcaVeiculo = trimField(tdv.descricaoMarcaVeiculo)
       const descricaoCorVeiculo = trimField(tdv.descricaoCorVeiculo)
       const codigoComprador = trimField(tdv.codigoComprador)
@@ -192,6 +205,8 @@ export class ConsultaComprasService {
         ...(chassiVeiculo ? { chassiVeiculo } : {}),
         ...(kmVeiculo ? { kmVeiculo } : {}),
         ...(kmVistoriadaVeiculo ? { kmVistoriadaVeiculo } : {}),
+        ...(valorVenda ? { valorVenda } : {}),
+        ...(quilometragem ? { quilometragem } : {}),
         ...(descricaoCorVeiculo ? { descricaoCorVeiculo } : {}),
         ...(enderecoComprador ? { enderecoComprador } : {})
       }]

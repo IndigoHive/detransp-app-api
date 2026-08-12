@@ -1414,7 +1414,7 @@
                 "type": "text_heading",
                 "name": null,
                 "data": {
-                  "text": "Dados do comprador",
+                  "text": "Dados de quem está comprando",
                   "type": "text_heading"
                 }
               },
@@ -1450,19 +1450,58 @@
           },
           {
             "id": "c_fcf3a1f793c9",
-            "type": "vehicle_info",
+            "type": "card",
             "name": null,
-            "data": {
-              "source": "@{node:n_0a7cda804e6d.vehicle}",
-              "vehicle": {
-                "id": "1",
-                "plate": "EXC1A22",
-                "title": "Veículo 1",
-                "status": "REGULAR",
-                "brandModel": "VOLKS/GOL GTI 1.0",
-                "licensingExpirationDate": "2024-12-31"
+            "children": [
+              {
+                "id": "c_8e1a4c7b2d90",
+                "type": "text_heading",
+                "name": null,
+                "data": {
+                  "text": "Dados do veículo",
+                  "type": "text_heading"
+                }
+              },
+              {
+                "id": "c_2b9f6d0e4a13",
+                "type": "vehicle_plate",
+                "name": null,
+                "data": {
+                  "size": "sm",
+                  "plate": "@{node:n_0a7cda804e6d.vehicle.plate}",
+                  "source": "@{node:n_0a7cda804e6d.vehicle}",
+                  "variant": "default"
+                }
+              },
+              {
+                "id": "c_4d7c1a9e6b25",
+                "type": "label_text",
+                "name": null,
+                "data": {
+                  "text": "@{node:n_0a7cda804e6d.vehicle.brandModel}",
+                  "label": "Marca / Modelo"
+                }
+              },
+              {
+                "id": "c_9a3e5f8c1d47",
+                "type": "label_text",
+                "name": null,
+                "data": {
+                  "text": "@{node:n_0a7cda804e6d.vehicle.valorVenda}",
+                  "label": "Valor de venda"
+                }
+              },
+              {
+                "id": "c_6c0b2e7a4f18",
+                "type": "label_text",
+                "name": null,
+                "data": {
+                  "text": "@{node:n_0a7cda804e6d.vehicle.quilometragem}",
+                  "label": "Quilometragem (km)"
+                }
               }
-            }
+            ],
+            "data": {}
           }
         ]
       },
@@ -1483,7 +1522,7 @@
             "type": "button",
             "name": null,
             "data": {
-              "label": "Cancelar",
+              "label": "Cancelar compra",
               "variant": "outline",
               "clickAction": "submit"
             }
@@ -2559,7 +2598,7 @@
                 "type": "text_heading",
                 "name": null,
                 "data": {
-                  "text": "Dados do comprador",
+                  "text": "Dados de quem está comprando",
                   "type": "text_heading"
                 }
               },
@@ -2628,19 +2667,58 @@
           },
           {
             "id": "c_d87fe542044f",
-            "type": "vehicle_info",
+            "type": "card",
             "name": null,
-            "data": {
-              "source": "@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle}",
-              "vehicle": {
-                "id": "1",
-                "plate": "EXC1A22",
-                "title": "Veículo 1",
-                "status": "REGULAR",
-                "brandModel": "VOLKS/GOL GTI 1.0",
-                "licensingExpirationDate": "2024-12-31"
+            "children": [
+              {
+                "id": "c_e4a91b7c3d02",
+                "type": "text_heading",
+                "name": null,
+                "data": {
+                  "text": "Dados do veículo",
+                  "type": "text_heading"
+                }
+              },
+              {
+                "id": "c_1f8c6a0d5b34",
+                "type": "vehicle_plate",
+                "name": null,
+                "data": {
+                  "size": "sm",
+                  "plate": "@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.plate}",
+                  "source": "@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle}",
+                  "variant": "default"
+                }
+              },
+              {
+                "id": "c_7b2e9d4a6c15",
+                "type": "label_text",
+                "name": null,
+                "data": {
+                  "text": "@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.brandModel}",
+                  "label": "Marca / Modelo"
+                }
+              },
+              {
+                "id": "c_3a5f0c8e1d26",
+                "type": "label_text",
+                "name": null,
+                "data": {
+                  "text": "@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.valorVenda}",
+                  "label": "Valor de venda"
+                }
+              },
+              {
+                "id": "c_9d6b4e2a7f08",
+                "type": "label_text",
+                "name": null,
+                "data": {
+                  "text": "@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.quilometragem}",
+                  "label": "Quilometragem (km)"
+                }
               }
-            }
+            ],
+            "data": {}
           }
         ]
       },
@@ -2661,7 +2739,7 @@
             "type": "button",
             "name": null,
             "data": {
-              "label": "Cancelar",
+              "label": "Cancelar compra",
               "variant": "outline",
               "clickAction": "submit"
             }
@@ -2894,9 +2972,17 @@
             "type": "opt_in",
             "name": null,
             "data": {
-              "text": "Eu confirmo que as informações acima são verdadeiras\n",
-              "checked": false,
-              "required": true
+              "title": "Aceite",
+              "options": [
+                {
+                  "id": "1",
+                  "key": "opcao_1",
+                  "text": "Eu confirmo que as informações acima são verdadeiras",
+                  "required": false
+                }
+              ],
+              "minRequired": 1,
+              "validationMode": "minCount"
             }
           }
         ]
@@ -4637,7 +4723,7 @@
           {
             "id": "13ca35ee-ca27-4e9f-b5f2-21dd6e91360c",
             "name": "Confirma compra",
-            "value": "{\n  \"nomeComprador\": \"Carlos da Silva\",\n  \"cpfComprador\": \"721.169.550-17\",\n  \"enderecoComprador\": \"Rua Aulide Carini, 345, Vila Jacuí, São Paulo - SP\",\n  \"vehicle\": {\n    \"id\": \"1\",\n    \"plate\": \"ABC1D23\",\n    \"title\": \"Toyota Corolla 2.0\",\n    \"status\": \"REGULAR\",\n    \"brandModel\": \"Toyota Corolla 2.0\",\n    \"licensingExpirationDate\": \"31/12/2025\",\n    \"renavam\": \"00001002003\",\n    \"lastLicensing\": \"03/12/2025\",\n    \"yearFab\": \"2022\",\n    \"yearMod\": \"2023\"\n  }\n}"
+            "value": "{\n  \"nomeComprador\": \"Carlos da Silva\",\n  \"cpfComprador\": \"721.169.550-17\",\n  \"enderecoComprador\": \"Rua Aulide Carini, 345, Vila Jacuí, São Paulo - SP\",\n  \"vehicle\": {\n    \"id\": \"1\",\n    \"plate\": \"ABC1D23\",\n    \"title\": \"Toyota Corolla 2.0\",\n    \"status\": \"REGULAR\",\n    \"brandModel\": \"Toyota Corolla 2.0\",\n    \"licensingExpirationDate\": \"31/12/2025\",\n    \"renavam\": \"00001002003\",\n    \"lastLicensing\": \"03/12/2025\",\n    \"yearFab\": \"2022\",\n    \"yearMod\": \"2023\",\n    \"valorVenda\": \"R$ 90.000,00\",\n    \"quilometragem\": \"13.000\"\n  }\n}"
           }
         ]
       }
