@@ -2,6 +2,7 @@ import type { Logger } from 'pino'
 import type { DetranSpServiceNowTdvClient } from '../../../clients/detran-sp-service-now/tdv'
 import { CodigoEstadoQRCode, CodigoEstadoTDV } from '../../../clients/detran-sp-service-now/tdv/types'
 import { extractBearerToken, extractCpfFromToken } from '../../../utils/token'
+import { normalizeUtcDateTime } from '../../../utils/normalize-utc-datetime'
 
 type Dependencies = {
   detranSpServiceNowTdv: DetranSpServiceNowTdvClient
@@ -128,7 +129,9 @@ export class ConsultaDebitosService {
       taxaLicenciamento: formatCurrency(taxaLicenciamento),
       totalDebitos: formatCurrency(totalDebitos),
       qrCode: pixResult?.result?.qrCode,
-      expiresAt: pixResult?.result?.dataExpiracaoQRCode,
+      expiresAt: pixResult?.result?.dataExpiracaoQRCode
+        ? normalizeUtcDateTime(pixResult.result.dataExpiracaoQRCode)
+        : undefined,
       estado: estadoQRCode !== undefined ? Number(estadoQRCode) : undefined,
       comprovante: pixResult?.result?.idPagamentoQRCode || undefined,
       confirmedDate: pixResult?.result?.dataPagamentoQRCode || undefined

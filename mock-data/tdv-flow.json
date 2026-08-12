@@ -1378,6 +1378,72 @@
       }
     },
     {
+      "id": "s_9c4e27b810af",
+      "name": "[Comprador] Confirmar compra",
+      "content": {
+        "id": "c_1e6a9f4c8b32",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_4f8c2a6d19e7",
+            "type": "text_body",
+            "name": null,
+            "data": {
+              "text": "A pessoa que está vendendo indicou você como comprador(a) do veículo @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.brandModel}, placa @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.plate}.\n"
+            }
+          },
+          {
+            "id": "c_7b3d0a5e91c6",
+            "type": "text_heading",
+            "name": null,
+            "data": {
+              "text": "Você confirma que está comprando este veículo?\n",
+              "align": "center"
+            }
+          }
+        ]
+      },
+      "footer": {
+        "id": "c_6d1b8f3a92c4",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_3e7a1c9f5b06",
+            "type": "button",
+            "name": null,
+            "data": {
+              "label": "Confirmar"
+            }
+          },
+          {
+            "id": "c_8f4d2b6e0a71",
+            "type": "button",
+            "name": null,
+            "data": {
+              "label": "Recusar",
+              "variant": "outline",
+              "clickAction": "submit"
+            }
+          }
+        ]
+      },
+      "navbar": {
+        "id": "5f2a8c17-6b94-4d0e-9a3c-8e17b4d29f60",
+        "data": {
+          "title": "Intenção de compra",
+          "showReturn": true
+        },
+        "name": null,
+        "type": "nav_bar"
+      },
+      "data": {
+        "position": {
+          "x": 6300,
+          "y": 1700
+        }
+      }
+    },
+    {
       "id": "s_31f3e90bbdcc",
       "name": "[Comprador] Confirmação dados",
       "content": {
@@ -2818,12 +2884,12 @@
           {
             "id": "c4e8f2a7-1d05-4b6e-8f2a-100000000001",
             "name": "Retomar venda (sem dados ainda, estado 1)",
-            "value": "{ \"hasRestriction\": false, \"hasActiveTDV\": true, \"codigoTransferencia\": \"TDV-000000\", \"estado\": \"1\", \"proximaAcao\": \"continuar_venda\" }"
+            "value": "{ \"hasRestriction\": false, \"hasActiveTDV\": true, \"codigoTransferencia\": \"TDV-000000\", \"estado\": \"1\" }"
           },
           {
             "id": "c4e8f2a7-1d05-4b6e-8f2a-100000000002",
             "name": "Retomar venda (dados já informados, estado 2)",
-            "value": "{ \"hasRestriction\": false, \"hasActiveTDV\": true, \"codigoTransferencia\": \"TDV-000000\", \"estado\": \"2\", \"proximaAcao\": \"continuar_venda\" }"
+            "value": "{ \"hasRestriction\": false, \"hasActiveTDV\": true, \"codigoTransferencia\": \"TDV-000000\", \"estado\": \"2\" }"
           },
           {
             "id": "0ad95ca6-eb99-4379-8363-262961c02efc",
@@ -2881,6 +2947,34 @@
               "id": "03de2d4c-1cb9-4b4b-a0ee-56a58d4cf721",
               "left": "@{node:n_b824c7dd9350.hasActiveTDV}",
               "right": "true",
+              "operator": "equals"
+            }
+          ],
+          "combinator": "or"
+        }
+      }
+    },
+    {
+      "id": "n_7c2a9e51f8d3",
+      "type": "if_node",
+      "name": "Retomar: ainda preenchendo dados (estado 1 ou 2)?",
+      "data": {
+        "position": {
+          "x": 6980,
+          "y": -1800
+        },
+        "condition": {
+          "clauses": [
+            {
+              "id": "7c2a9e51-f8d3-4b6a-9e1f-000000000001",
+              "left": "@{node:n_b824c7dd9350.estado}",
+              "right": "1",
+              "operator": "equals"
+            },
+            {
+              "id": "7c2a9e51-f8d3-4b6a-9e1f-000000000002",
+              "left": "@{node:n_b824c7dd9350.estado}",
+              "right": "2",
               "operator": "equals"
             }
           ],
@@ -4006,7 +4100,7 @@
     },
     {
       "sourceId": "s_62e905fb199e",
-      "targetId": "s_8fefaaacf3d9",
+      "targetId": "n_7c2a9e51f8d3",
       "sourceHandle": "c_70ffc7dac521",
       "targetHandle": "input"
     },
@@ -4270,9 +4364,9 @@
     },
     {
       "sourceId": "n_cd7b779a01a0",
-      "targetId": "n_f0798c61f005",
+      "targetId": "s_9c4e27b810af",
       "sourceHandle": "fb741670-fa17-498b-b9c9-cc00349ea0be",
-      "targetHandle": "left-target"
+      "targetHandle": "input"
     },
     {
       "sourceId": "s_e28e30972542",
@@ -4656,6 +4750,30 @@
       "sourceId": "d_9c3e1a7b04f2",
       "targetId": "s_a95b06ade63c",
       "sourceHandle": "c_5e6f7a8b9ca4",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_9c4e27b810af",
+      "targetId": "n_f0798c61f005",
+      "sourceHandle": "c_3e7a1c9f5b06",
+      "targetHandle": "left-target"
+    },
+    {
+      "sourceId": "s_9c4e27b810af",
+      "targetId": "s_ffbdc2f4fe37",
+      "sourceHandle": "c_8f4d2b6e0a71",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_7c2a9e51f8d3",
+      "targetId": "n_c4e8f2a71d05",
+      "sourceHandle": "true",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_7c2a9e51f8d3",
+      "targetId": "s_8fefaaacf3d9",
+      "sourceHandle": "false",
       "targetHandle": "input"
     }
   ]
