@@ -81,11 +81,11 @@ export class DetranSpServiceNowVistoriasClient extends DetranSpServiceNowVistori
     auth: DetranSpServiceNowAuth,
     documento: string,
     docProprietario: boolean,
-    renavam?: string
+    filters: { renavam?: string, semPlaca?: boolean, semRenavam?: boolean } = {}
   ): Promise<ListaPagamentosResult> {
     return (await this.axios.get(
       `/api/x_mdpdd_pev/v1/pev/restituicao/listapagamentos/${documento}`,
-      { ...this.withAuth(auth), params: { docProprietario, renavam, pageSize: 100 } }
+      { ...this.withAuth(auth), params: { docProprietario, ...filters, pageSize: 100 } }
     )).data
   }
 

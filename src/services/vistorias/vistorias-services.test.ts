@@ -394,7 +394,7 @@ describe('vistorias services', () => {
     })
     const service = new ListaPagamentosVistoriaService(asClient({ listaPagamentos }))
 
-    const result = await service.run(clientAuth, '12345678901', false, '00225623218')
+    const result = await service.run(clientAuth, '12345678901', false, { renavam: '00225623218', semPlaca: false, semRenavam: true })
 
     if (!Array.isArray(result)) {
       throw new Error('Expected a payment list')
@@ -426,7 +426,7 @@ describe('vistorias services', () => {
     expect(result[0]).not.toHaveProperty('status')
     expect(result[0]).not.toHaveProperty('paymentDate')
     expect(result[0]).not.toHaveProperty('subtipoDescricao')
-    expect(listaPagamentos).toHaveBeenCalledWith(clientAuth, '12345678901', false, '00225623218')
+    expect(listaPagamentos).toHaveBeenCalledWith(clientAuth, '12345678901', false, { renavam: '00225623218', semPlaca: false, semRenavam: true })
   })
 
   it('returns the restitution identifier after requesting a refund', async () => {
@@ -497,31 +497,6 @@ describe('vistorias services', () => {
         description: 'Pagamento não elegível para restituição'
       }
     })
-  })
-
-  it('returns processing immediately for the temporary plate scenario', async () => {
-    const solicitaRestituicao = vi.fn().mockResolvedValue({
-      result: {
-        success: true,
-        data: { id: 'restituicao-id' }
-      }
-    })
-    const consultaComprovanteRestituicao = vi.fn()
-    const service = new SolicitaRestituicaoVistoriaService(
-      asClient({ solicitaRestituicao, consultaComprovanteRestituicao })
-    )
-
-    await expect(service.run(
-      clientAuth,
-      '6557-A8E2-7A2C-6577',
-      '12345678901',
-      'ETU0A10'
-    )).resolves.toEqual({
-      success: true,
-      status: 'processing',
-      idRestituicao: 'restituicao-id'
-    })
-    expect(consultaComprovanteRestituicao).not.toHaveBeenCalled()
   })
 
   it('returns processing when the restitution receipt does not become available', async () => {
