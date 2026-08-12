@@ -6,6 +6,7 @@ import { stripHtml } from '../../utils/strip-html'
 
 const PLATE_PATTERN = /^[A-Z]{3}[0-9][A-Z0-9][0-9]{2}$/
 const RENAVAM_PATTERN = /^\d{9,11}$/
+const WITHOUT_VEHICLE_DATA_PATH_VALUE = 'sem-identificacao'
 const PEV_NUMBER_PATTERN = /^PEV\d+$/
 const DOCUMENT_PATTERN = /^(?:\d{11}|\d{14})$/
 const VISTORIA_TOKEN_PATTERN = /^[A-Z0-9]{4}(?:-[A-Z0-9]{4}){3}$/
@@ -57,34 +58,43 @@ export function vistoriasRouter (): Router {
 
   router.post('/veiculos/verificar', async (req, res) => {
     const auth = getAuth(req)
-    const placa = asNonEmptyString(req.body?.placa)
-    const renavam = asNonEmptyString(req.body?.renavam)
     const tipoProcesso = asNonEmptyString(req.body?.tipoProcesso)
-    const outroProcesso = getApplicableOtherProcess(tipoProcesso, asNonEmptyString(req.body?.outroProcesso))
+    const requestedProcessSubtype = asNonEmptyString(req.body?.outroProcesso)
 
-    if (!placa || !renavam || !tipoProcesso) {
-      throw BadRequest('Campos obrigatórios ausentes: placa, renavam e tipoProcesso.')
+    if (!tipoProcesso) {
+      throw BadRequest('Tipo de processo ausente.')
     }
-    const normalizedPlate = placa.toUpperCase()
-    if (!PLATE_PATTERN.test(normalizedPlate)) {
-      throw BadRequest('Placa inválida.')
-    }
-    if (!RENAVAM_PATTERN.test(renavam)) {
-      throw BadRequest('RENAVAM inválido.')
-    }
-    if (!isProcessLabel(tipoProcesso)) {
+
+    const processSubtype = getApplicableProcessSubtype(tipoProcesso, requestedProcessSubtype)
+    const allowsMissingVehicleData = isProcessWithoutVehicleData(tipoProcesso, processSubtype)
+
+    if (!allowsMissingVehicleData && !isProcessLabel(tipoProcesso)) {
       throw BadRequest('Tipo de processo inválido.')
     }
-    if (stripHtml(tipoProcesso) === 'Outros' && (!outroProcesso || !isOtherProcessLabel(outroProcesso))) {
+    if (stripHtml(tipoProcesso) === 'Outros' && (!processSubtype || !isOtherProcessLabel(processSubtype))) {
       throw BadRequest('Outro processo inválido ou ausente.')
     }
+
+    const placa = asNonEmptyString(req.body?.placa)?.toUpperCase()
+    const renavam = asNonEmptyString(req.body?.renavam)
+
+    if (!allowsMissingVehicleData && (!placa || !renavam)) {
+      throw BadRequest('Campos obrigatórios ausentes: placa e renavam.')
+    }
+    if (placa && !PLATE_PATTERN.test(placa)) {
+      throw BadRequest('Placa inválida.')
+    }
+    if (renavam && !RENAVAM_PATTERN.test(renavam)) {
+      throw BadRequest('RENAVAM inválido.')
+    }
+
     const service = req.scope.resolve('verificaVeiculoVistoriaService')
     const result = await service.run({
       ...auth,
-      placa: normalizedPlate,
-      renavam,
+      placa: placa ?? '',
+      renavam: renavam ?? '',
       tipoProcesso,
-      ...(outroProcesso ? { outroProcesso } : {})
+      ...(processSubtype ? { outroProcesso: processSubtype } : {})
     })
     res.status(200).json(result)
   })
@@ -98,7 +108,7 @@ export function vistoriasRouter (): Router {
       throw BadRequest('RENAVAM ou correlationId não encontrado.')
     }
 
-    if (!RENAVAM_PATTERN.test(renavam)) {
+    if (!isValidVehicleIdentifierPath(renavam)) {
       throw BadRequest('RENAVAM inválido.')
     }
 
@@ -112,7 +122,7 @@ export function vistoriasRouter (): Router {
     const renavam = asNonEmptyString(req.params.renavam)
     const paymentId = asNonEmptyString(req.query.id)
 
-    if (!renavam || !RENAVAM_PATTERN.test(renavam)) {
+    if (!isValidVehicleIdentifierPath(renavam)) {
       throw BadRequest('RENAVAM inválido.')
     }
 
@@ -131,7 +141,7 @@ export function vistoriasRouter (): Router {
     const numeroPEV = asNonEmptyString(req.body?.numeroPEV)
     const documento = asNonEmptyString(req.body?.documento)
 
-    if (!renavam || !RENAVAM_PATTERN.test(renavam)) {
+    if (!isValidVehicleIdentifierPath(renavam)) {
       throw BadRequest('RENAVAM inválido.')
     }
     if (!numeroPEV || !documento) {
@@ -218,6 +228,17 @@ export function vistoriasRouter (): Router {
   return router
 }
 
-export function getApplicableOtherProcess (tipoProcesso: string | undefined, outroProcesso: string | undefined) {
-  return (tipoProcesso ? stripHtml(tipoProcesso) : tipoProcesso) === 'Outros' ? outroProcesso : undefined
+export function getApplicableProcessSubtype (processType: string, requestedSubtype: string | undefined) {
+  const normalizedProcessType = stripHtml(processType)
+  return normalizedProcessType === 'Outros' || isProcessWithoutVehicleData(normalizedProcessType, requestedSubtype)
+    ? requestedSubtype
+    : undefined
+}
+
+export function isProcessWithoutVehicleData (processType: string, processSubtype: string | undefined) {
+  return stripHtml(processType) === 'SEGURANCA' && processSubtype === 'SEGURANCA_9'
+}
+
+export function isValidVehicleIdentifierPath (renavam: string | undefined) {
+  return renavam === WITHOUT_VEHICLE_DATA_PATH_VALUE || Boolean(renavam && RENAVAM_PATTERN.test(renavam))
 }
