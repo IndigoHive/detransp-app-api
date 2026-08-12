@@ -86,6 +86,27 @@ describe('ConsultaDebitosService', () => {
     expect(atualizaTdv).not.toHaveBeenCalled()
   })
 
+  it('normalizes a naive (marker-less) expiration to UTC so the PIX countdown is not shifted by 3h', async () => {
+    const naivePix = {
+      result: {
+        estadoQRCode: '1',
+        qrCode: 'PIX-QR',
+        // ServiceNow sends UTC without a marker; JS would otherwise parse it as
+        // BRT (UTC-3) and turn a 15-min expiration into ~3h15m on the client.
+        dataExpiracaoQRCode: '2026-08-11 12:15:00'
+      }
+    }
+    const service = buildService({
+      buscaTdv: vi.fn().mockResolvedValue({ result: { nomeComprador: 'Maria', estado: '7' } }),
+      buscaDebitosTdv: vi.fn().mockResolvedValue(debitosResult),
+      buscaPixQrCodeTdv: vi.fn().mockResolvedValue(naivePix)
+    })
+
+    await expect(service.run(authorizationHeader, input)).resolves.toMatchObject({
+      expiresAt: '2026-08-11T12:15:00Z'
+    })
+  })
+
   it('still returns the débitos when the acceleration call fails', async () => {
     const atualizaTdv = vi.fn().mockRejectedValue(new Error('estado inválido'))
     const service = buildService({
