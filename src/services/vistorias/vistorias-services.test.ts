@@ -186,6 +186,26 @@ describe('vistorias services', () => {
     })
   })
 
+  it('forwards the inspection without plate and RENAVAM as SEGURANCA_9', async () => {
+    const verificaVeiculo = vi.fn().mockResolvedValue(null)
+    const service = new VerificaVeiculoVistoriaService(asClient({ verificaVeiculo }))
+
+    await service.run({
+      ...clientAuth,
+      placa: '',
+      renavam: '',
+      tipoProcesso: 'SEGURANCA',
+      outroProcesso: 'SEGURANCA_9'
+    })
+
+    expect(verificaVeiculo).toHaveBeenCalledWith(clientAuth, {
+      placa: '',
+      renavam: '',
+      tipo: 'SEGURANCA',
+      subtipo: 'SEGURANCA_9'
+    })
+  })
+
   it('returns snackbar feedback when ServiceNow reports that the vehicle is ineligible', async () => {
     const service = new VerificaVeiculoVistoriaService(asClient({
       verificaVeiculo: vi.fn().mockResolvedValue({
