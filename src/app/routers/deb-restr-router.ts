@@ -1,6 +1,7 @@
 import { type Request, Router } from 'express'
 import { BadRequest } from 'http-errors'
 import type { PixDebitoTipo } from '../../services/deb-restr/types'
+import { stripHtml } from '../../utils/strip-html'
 
 function asNonEmptyString (value: unknown): string | undefined {
   return typeof value === 'string' && value.trim() ? value : undefined
@@ -14,8 +15,9 @@ const REPRESENTACAO_TRUE = new Set<unknown>([true, 'true', 'Veículos de outras 
 const REPRESENTACAO_FALSE = new Set<unknown>([false, 'false', '', undefined, null, 'Meus Veículos', 'Meus veículos'])
 
 function parseRepresentacao (value: unknown): boolean {
-  if (REPRESENTACAO_TRUE.has(value)) return true
-  if (REPRESENTACAO_FALSE.has(value)) return false
+  const normalized = typeof value === 'string' ? stripHtml(value) : value
+  if (REPRESENTACAO_TRUE.has(normalized)) return true
+  if (REPRESENTACAO_FALSE.has(normalized)) return false
   throw BadRequest('Valor de representacao não reconhecido.')
 }
 

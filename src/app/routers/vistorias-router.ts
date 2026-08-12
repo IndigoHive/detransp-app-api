@@ -2,6 +2,7 @@ import { type Request, Router } from 'express'
 import { BadRequest, Unauthorized } from 'http-errors'
 import { isOtherProcessLabel, isProcessLabel } from '../../services/vistorias/verifica-veiculo-service'
 import type { VistoriasAuth } from '../../services/vistorias'
+import { stripHtml } from '../../utils/strip-html'
 
 const PLATE_PATTERN = /^[A-Z]{3}[0-9][A-Z0-9][0-9]{2}$/
 const RENAVAM_PATTERN = /^\d{9,11}$/
@@ -20,11 +21,12 @@ function asNonEmptyString (value: unknown): string | undefined {
 }
 
 export function getDocProprietarioByPaymentLabel (label: string | undefined): boolean | undefined {
-  if (!label || !(label in DOC_PROPRIETARIO_BY_PAYMENT_LABEL)) {
+  const normalized = label ? stripHtml(label) : label
+  if (!normalized || !(normalized in DOC_PROPRIETARIO_BY_PAYMENT_LABEL)) {
     return undefined
   }
 
-  return DOC_PROPRIETARIO_BY_PAYMENT_LABEL[label as keyof typeof DOC_PROPRIETARIO_BY_PAYMENT_LABEL]
+  return DOC_PROPRIETARIO_BY_PAYMENT_LABEL[normalized as keyof typeof DOC_PROPRIETARIO_BY_PAYMENT_LABEL]
 }
 
 function getAuth (req: Request): VistoriasAuth {
@@ -65,7 +67,7 @@ export function vistoriasRouter (): Router {
     if (!isProcessLabel(tipoProcesso)) {
       throw BadRequest('Tipo de processo inválido.')
     }
-    if (tipoProcesso === 'Outros' && (!outroProcesso || !isOtherProcessLabel(outroProcesso))) {
+    if (stripHtml(tipoProcesso) === 'Outros' && (!outroProcesso || !isOtherProcessLabel(outroProcesso))) {
       throw BadRequest('Outro processo inválido ou ausente.')
     }
     const service = req.scope.resolve('verificaVeiculoVistoriaService')
@@ -201,5 +203,5 @@ export function vistoriasRouter (): Router {
 }
 
 export function getApplicableOtherProcess (tipoProcesso: string | undefined, outroProcesso: string | undefined) {
-  return tipoProcesso === 'Outros' ? outroProcesso : undefined
+  return (tipoProcesso ? stripHtml(tipoProcesso) : tipoProcesso) === 'Outros' ? outroProcesso : undefined
 }
