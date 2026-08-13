@@ -1371,8 +1371,8 @@
       },
       "data": {
         "position": {
-          "x": 5200,
-          "y": 1760
+          "x": 4964,
+          "y": 1756
         }
       }
     },
@@ -1437,8 +1437,8 @@
       },
       "data": {
         "position": {
-          "x": 6080,
-          "y": 2364
+          "x": 5996,
+          "y": 2568
         }
       }
     },
@@ -1580,7 +1580,7 @@
             "type": "button",
             "name": null,
             "data": {
-              "label": "Cancelar",
+              "label": "Cancelar Compra",
               "variant": "outline",
               "clickAction": "submit"
             }
@@ -5518,8 +5518,8 @@
       "name": "Consulta Compras",
       "data": {
         "position": {
-          "x": 4940,
-          "y": 2040
+          "x": 4748,
+          "y": 2052
         },
         "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/compras",
         "responseExamples": [
@@ -5542,8 +5542,8 @@
       "name": "Confirmar Compra",
       "data": {
         "position": {
-          "x": 6140,
-          "y": 2120
+          "x": 6348,
+          "y": 2196
         },
         "method": "POST",
         "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/confirmar-compra",
@@ -5720,8 +5720,8 @@
       "name": "Liveness",
       "data": {
         "position": {
-          "x": 5880,
-          "y": 2120
+          "x": 5704,
+          "y": 1952
         }
       }
     },
@@ -6421,8 +6421,8 @@
       "name": "Origem 2|3|4? (skip liveness + confirmar-compra)",
       "data": {
         "position": {
-          "x": 5888,
-          "y": 2768
+          "x": 5976,
+          "y": 3684
         },
         "condition": {
           "clauses": [
@@ -6455,8 +6455,8 @@
       "name": "TDV já criada?",
       "data": {
         "position": {
-          "x": 6268,
-          "y": 2920
+          "x": 6240,
+          "y": 3908
         },
         "condition": {
           "clauses": [
@@ -6487,8 +6487,8 @@
       "name": "Rotear por estado (TDV existente)",
       "data": {
         "position": {
-          "x": 8204,
-          "y": 4768
+          "x": 7820,
+          "y": 3792
         },
         "value": "@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.estado}",
         "routes": [
@@ -6778,8 +6778,8 @@
       "name": "Origem 4 (venda para loja)?",
       "data": {
         "position": {
-          "x": 7824,
-          "y": 708
+          "x": 7820,
+          "y": 664
         },
         "condition": {
           "clauses": [
