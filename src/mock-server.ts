@@ -709,6 +709,8 @@ app.post('/api/tdv/confirmar-compra', (req, res) => {
     nomeComprador: 'Maria Oliveira Souza',
     cpfComprador: '987.654.321-00',
     enderecoComprador: 'Rua das Flores, 123, Jardim Paulista, São Paulo - SP',
+    valorVenda: 'R$ 90.000,00',
+    quilometragem: '13.000',
     vehicle: MOCK_VEHICLES[0] ? {
       id: MOCK_VEHICLES[0].id,
       plate: MOCK_VEHICLES[0].plate,

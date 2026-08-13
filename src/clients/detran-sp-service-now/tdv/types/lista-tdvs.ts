@@ -14,6 +14,7 @@ export type ListaTdvsResultData = {
   codigoTransferenciaVeiculo?: string
   placaVeiculo?: string
   descricaoMarcaVeiculo?: string
+  descricaoCorVeiculo?: string
   codigoRenavamVeiculo?: string
   codigoComprador?: string
   codigoVendedor?: string

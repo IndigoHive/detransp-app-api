@@ -50,6 +50,20 @@ export type Config = {
     arquivosBaseUrl: string
     bypassMatch: boolean
   }
+  // Dev/QA-only: when enabled, the TDV service runs against an in-memory stateful mock
+  // (see MockDetranSpServiceNowTdvClient) instead of the real ServiceNow backend, so the
+  // whole seller/buyer flow can be exercised without external dependencies. Never in prod.
+  tdvMock: {
+    enabled: boolean
+    sellerCpf: string
+    buyerCpf: string
+    vehiclePlate: string
+    vehicleRenavam: string
+    // When set (a raw CodigoEstadoTDV code, "1".."10"), the mock seeds one TDV already at that
+    // state — with seller, buyer, and sale data all pre-filled — instead of starting empty, so
+    // a single step of the flow can be tested without redoing everything before it.
+    initialEstado: string
+  }
   rotaCrvPecas: {
     baseUrl: string
     arquivosBaseUrl: string
