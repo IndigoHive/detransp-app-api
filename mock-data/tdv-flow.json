@@ -5325,8 +5325,8 @@
       },
       "data": {
         "position": {
-          "x": 7240,
-          "y": 3280
+          "x": 6388,
+          "y": 5520
         }
       }
     },
@@ -5370,8 +5370,8 @@
       },
       "data": {
         "position": {
-          "x": 7240,
-          "y": 3600
+          "x": 5948,
+          "y": 5344
         }
       }
     }
@@ -6559,8 +6559,8 @@
       "name": "Origem 2|3|4|6? (skip liveness + confirmar-compra)",
       "data": {
         "position": {
-          "x": 5976,
-          "y": 3684
+          "x": 4664,
+          "y": 3808
         },
         "condition": {
           "clauses": [
@@ -6599,8 +6599,8 @@
       "name": "TDV 6.0 cartório (origem 6 + estado 7)?",
       "data": {
         "position": {
-          "x": 6240,
-          "y": 3684
+          "x": 5048,
+          "y": 3828
         },
         "condition": {
           "clauses": [
@@ -6627,8 +6627,8 @@
       "name": "Validar TDV",
       "data": {
         "position": {
-          "x": 6560,
-          "y": 3480
+          "x": 5340,
+          "y": 3692
         },
         "method": "POST",
         "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/validar-tdv",
@@ -6658,8 +6658,8 @@
       "name": "Rotear validar-tdv",
       "data": {
         "position": {
-          "x": 6880,
-          "y": 3480
+          "x": 5576,
+          "y": 3668
         },
         "value": "@{node:n_7f1b5d2e9c38.proximaAcao}",
         "routes": [
