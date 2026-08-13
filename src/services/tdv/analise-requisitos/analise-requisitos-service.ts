@@ -28,6 +28,12 @@ export type AnaliseRequisitosResult = {
   // "TDV aberta?" prompt instead, which is also where cancellation (allowed up to estado 6)
   // is offered.
   proximaAcao?: 'vendedor_2' | 'nova_tdv' | undefined
+  // Buyer name, surfaced once known so the seller's re-entry screens (e.g. "comprador assinou")
+  // can display who signed without a separate lookup.
+  nomeComprador?: string | undefined
+  // Vehicle color, same rationale as nomeComprador — the seller's re-entry screens show it
+  // without a separate vehicle lookup.
+  descricaoCorVeiculo?: string | undefined
 }
 
 // The seller only has a forced next step once the buyer has already signed (estado 6) — every
@@ -71,7 +77,9 @@ export class AnaliseRequisitosService {
         hasActiveTDV: true,
         codigoTransferencia: activeTdv.codigoTransferenciaVeiculo ?? undefined,
         estado: activeTdv.estado,
-        proximaAcao: proximaAcaoParaVendedor(activeTdv.estado)
+        proximaAcao: proximaAcaoParaVendedor(activeTdv.estado),
+        nomeComprador: activeTdv.nomeComprador,
+        descricaoCorVeiculo: activeTdv.descricaoCorVeiculo
       }
     }
 

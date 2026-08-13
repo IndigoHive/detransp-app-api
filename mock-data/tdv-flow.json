@@ -53,7 +53,7 @@
       "navbar": {
         "id": "20d3206d-354b-45eb-b76f-a42e922ee60a",
         "data": {
-          "steps": 7,
+          "steps": 6,
           "actionIcon": "close",
           "showReturn": true,
           "currentStep": 1
@@ -121,7 +121,7 @@
       "navbar": {
         "id": "c8d644f9-9db8-4d3d-8ef4-e9a573aa75c4",
         "data": {
-          "steps": 7,
+          "steps": 6,
           "actionIcon": "close",
           "showReturn": true,
           "currentStep": 2
@@ -189,7 +189,7 @@
       "navbar": {
         "id": "fdb3b6e5-ee5c-4f5e-abe0-533be8ad8966",
         "data": {
-          "steps": 7,
+          "steps": 6,
           "actionIcon": "close",
           "showReturn": true,
           "currentStep": 3
@@ -257,7 +257,7 @@
       "navbar": {
         "id": "32d7fa07-2551-4936-a3a4-0cac31db5cee",
         "data": {
-          "steps": 7,
+          "steps": 6,
           "actionIcon": "close",
           "showReturn": true,
           "currentStep": 4
@@ -325,7 +325,7 @@
       "navbar": {
         "id": "b893755a-c2ea-45b2-bd09-1bbbb85f3f63",
         "data": {
-          "steps": 7,
+          "steps": 6,
           "actionIcon": "close",
           "showReturn": true,
           "currentStep": 5
@@ -385,7 +385,7 @@
             "type": "button",
             "name": null,
             "data": {
-              "label": "Continuar"
+              "label": "Iniciar"
             }
           }
         ]
@@ -393,7 +393,7 @@
       "navbar": {
         "id": "9c764671-eba6-467f-a170-b900b17c4bcf",
         "data": {
-          "steps": 7,
+          "steps": 6,
           "actionIcon": "close",
           "showReturn": true,
           "currentStep": 6
@@ -548,7 +548,7 @@
             "type": "rich_text",
             "name": null,
             "data": {
-              "html": "<p><span style=\"font-size:14px;color:#262828\">Qual veículo será vendido?</span></p>"
+              "html": "<p style=\"text-align: center;\"><span style=\"color: rgb(38, 40, 40); font-size: 16px;\">Qual veículo será vendido?</span></p>"
             }
           },
           {
@@ -558,9 +558,7 @@
             "data": {
               "layout": [
                 "plate",
-                "badge",
-                "brand_model",
-                "licensing_expiration"
+                "brand_model"
               ],
               "source": "@{node:n_4104c4067c20.vehicles}",
               "required": true,
@@ -626,8 +624,10 @@
       "navbar": {
         "id": "ca4dde85-ac9c-4e6b-8ec2-02e38a422620",
         "data": {
+          "steps": 8,
           "title": "Escolha o veículo",
-          "showReturn": true
+          "showReturn": true,
+          "currentStep": 1
         },
         "name": null,
         "type": "nav_bar"
@@ -777,8 +777,8 @@
             "type": "icon_text",
             "name": null,
             "data": {
-              "icon": "check_circle",
-              "text": "<p><span style=\"font-size:14px;color:#000000\"><strong>Está tudo certo com seu veículo</strong></span></p>",
+              "icon": "check",
+              "text": "<p><span style=\"color: rgb(0, 0, 0); font-size: 14px;\">Está tudo certo com seu veículo</span></p>",
               "color": "success",
               "variant": "vertical"
             }
@@ -802,8 +802,10 @@
       "navbar": {
         "id": "a0f6c3e3-79f1-4aec-b733-e3bc80b2ce07",
         "data": {
+          "steps": 8,
           "title": "Análise de requisitos",
-          "showReturn": true
+          "showReturn": true,
+          "currentStep": 2
         },
         "name": null,
         "type": "nav_bar"
@@ -827,7 +829,7 @@
             "type": "rich_text",
             "name": null,
             "data": {
-              "html": "<p><span style=\"font-size:14px;color:#262828\">Preencha os dados de quem está comprando</span></p>"
+              "html": "<p style=\"text-align: center;\"><span style=\"color: rgb(38, 40, 40); font-size: 16px;\">Preencha os dados de quem está comprando</span></p>"
             }
           },
           {
@@ -835,8 +837,10 @@
             "type": "text_input",
             "name": "cpf",
             "data": {
-              "label": "<p><span style=\"font-size:14px;color:#111414\"><strong>CPF</strong></span></p>",
-              "required": true
+              "label": "<p><span style=\"color: rgb(17, 20, 20); font-size: 16px;\"><strong>CPF</strong></span></p>",
+              "required": true,
+              "helperText": "<p></p>",
+              "placeholder": "123.456.789-10"
             }
           },
           {
@@ -844,8 +848,9 @@
             "type": "text_input",
             "name": "nome",
             "data": {
-              "label": "<p><span style=\"font-size:14px;color:#111414\"><strong>Nome</strong></span></p>",
-              "required": true
+              "label": "<p><span style=\"color: rgb(17, 20, 20); font-size: 16px;\"><strong>Nome</strong></span></p>",
+              "required": true,
+              "placeholder": "Car*** *va"
             }
           },
           {
@@ -853,8 +858,9 @@
             "type": "text_input",
             "name": "email",
             "data": {
-              "label": "<p><span style=\"font-size:14px;color:#111414\"><strong>E-mail</strong></span></p>",
-              "required": true
+              "label": "<p><span style=\"color: rgb(17, 20, 20); font-size: 16px;\"><strong>E-mail</strong></span></p>",
+              "required": true,
+              "placeholder": "eduardo@gmail.com"
             }
           },
           {
@@ -862,8 +868,9 @@
             "type": "text_input",
             "name": "cep",
             "data": {
-              "label": "<p><span style=\"font-size:14px;color:#111414\"><strong>CEP</strong></span></p>",
-              "required": true
+              "label": "<p><span style=\"color: rgb(17, 20, 20); font-size: 16px;\"><strong>CEP</strong></span></p>",
+              "required": true,
+              "placeholder": "08060-283"
             }
           },
           {
@@ -871,8 +878,9 @@
             "type": "text_input",
             "name": "numero",
             "data": {
-              "label": "<p><span style=\"font-size:14px;color:#111414\"><strong>Número</strong></span></p>",
-              "required": true
+              "label": "<p><span style=\"color: rgb(17, 20, 20); font-size: 16px;\"><strong>Número</strong></span></p>",
+              "required": true,
+              "placeholder": "1234"
             }
           },
           {
@@ -880,7 +888,8 @@
             "type": "text_input",
             "name": "complemento",
             "data": {
-              "label": "<p><span style=\"font-size:14px;color:#111414\"><strong>Complemento</strong></span></p>"
+              "label": "<p><span style=\"color: rgb(17, 20, 20); font-size: 16px;\"><strong>Complemento</strong></span></p>",
+              "placeholder": "Apartamento X"
             }
           }
         ]
@@ -902,16 +911,18 @@
       "navbar": {
         "id": "86959e70-c9c2-4de7-af0b-90ed79814d61",
         "data": {
+          "steps": 8,
           "title": "Informações sobre a venda",
-          "showReturn": true
+          "showReturn": true,
+          "currentStep": 4
         },
         "name": null,
         "type": "nav_bar"
       },
       "data": {
         "position": {
-          "x": 7540,
-          "y": -220
+          "x": 7956,
+          "y": -328
         }
       }
     },
@@ -927,7 +938,7 @@
             "type": "rich_text",
             "name": null,
             "data": {
-              "html": "<p><span style=\"font-size:14px;color:#262828\">Preencha os dados do veículo<br></span></p>"
+              "html": "<p style=\"text-align: center;\"><span style=\"color: rgb(38, 40, 40); font-size: 16px;\">Preencha os dados do veículo</span></p>"
             }
           },
           {
@@ -935,7 +946,9 @@
             "type": "text_input",
             "name": "valor",
             "data": {
-              "label": "<p><span style=\"font-size:14px;color:#111414\"><strong>Valor da venda do veículo</strong></span></p>"
+              "label": "<p><span style=\"color: rgb(17, 20, 20); font-size: 16px;\"><strong>Valor da venda do veículo</strong></span></p>",
+              "required": true,
+              "placeholder": "R$ 90.000,00"
             }
           },
           {
@@ -943,8 +956,9 @@
             "type": "text_input",
             "name": "km",
             "data": {
-              "label": "<p><span style=\"font-size:14px;color:#111414\"><strong>Quilometragem (km)</strong></span></p>",
-              "required": true
+              "label": "<p><span style=\"color: rgb(17, 20, 20); font-size: 16px;\"><strong>Quilometragem (km)</strong></span></p>",
+              "required": true,
+              "placeholder": "13.000"
             }
           }
         ]
@@ -966,8 +980,10 @@
       "navbar": {
         "id": "7b2365a7-98f2-47c0-80b0-c7ee0fc0c012",
         "data": {
+          "steps": 8,
           "title": "Informações sobre a venda",
-          "showReturn": true
+          "showReturn": true,
+          "currentStep": 4
         },
         "name": null,
         "type": "nav_bar"
@@ -1069,7 +1085,7 @@
             "type": "rich_text",
             "name": null,
             "data": {
-              "html": "<p><span style=\"font-size:14px;color:#262828\">Confirme os dados informados para a venda do veículo<br></span></p>"
+              "html": "<p style=\"text-align: center;\"><span style=\"font-size: 16px;\">Confirme os dados informados para a venda do veículo</span></p>"
             }
           },
           {
@@ -1082,7 +1098,7 @@
                 "type": "rich_text",
                 "name": null,
                 "data": {
-                  "html": "<p><span style=\"font-size:16px;color:#262828\"><strong>Dados do comprador</strong></span></p>"
+                  "html": "<p><span style=\"font-size: 16px;\"><strong>Dados de quem está comprando</strong></span></p>"
                 }
               },
               {
@@ -1098,7 +1114,7 @@
                 "type": "rich_text",
                 "name": null,
                 "data": {
-                  "html": "<p><span style=\"font-size:12px;color:#7A7F83\"><strong>Nome</strong></span></p><p><span style=\"font-size:14px;color:#111414\">@{node:n_02ec1db459dc.nomeComprador}</span></p>"
+                  "html": "<p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>Nome</strong></span></p><p><span style=\"color: rgb(17, 20, 20); font-size: 14px;\">@{node:n_02ec1db459dc.nomeComprador | maskName}</span></p>"
                 }
               },
               {
@@ -1113,20 +1129,67 @@
             "data": {}
           },
           {
-            "id": "c_b59d229b8b67",
-            "type": "vehicle_info",
+            "id": "c_f82e1fc91f13",
+            "type": "card",
             "name": null,
-            "data": {
-              "source": "@{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle}",
-              "vehicle": {
-                "id": "1",
-                "plate": "EXC1A22",
-                "title": "Veículo 1",
-                "status": "REGULAR",
-                "brandModel": "VOLKS/GOL GTI 1.0",
-                "licensingExpirationDate": "2024-12-31"
+            "children": [
+              {
+                "id": "c_a5d8e82ca570",
+                "type": "rich_text",
+                "name": null,
+                "data": {
+                  "html": "<p><span style=\"font-size: 16px;\"><strong>Dados do veículo</strong></span></p>"
+                }
+              },
+              {
+                "id": "c_1ec46ea01c1f",
+                "type": "vehicle_plate",
+                "name": null,
+                "data": {
+                  "size": "sm",
+                  "align": "left",
+                  "plate": "@{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.plate}",
+                  "variant": "default"
+                }
+              },
+              {
+                "id": "c_f6a82271020c",
+                "type": "rich_text",
+                "name": null,
+                "data": {
+                  "html": "<p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>Marca / Modelo</strong></span></p><p><span style=\"color: rgb(17, 20, 20); font-size: 14px;\">@{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.brandModel}</span></p>"
+                }
+              },
+              {
+                "id": "c_a3219774230d",
+                "type": "divider",
+                "name": null,
+                "data": {}
+              },
+              {
+                "id": "c_16dd55e19c05",
+                "type": "rich_text",
+                "name": null,
+                "data": {
+                  "html": "<p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>Valor de venda</strong></span></p><p><span style=\"color: rgb(17, 20, 20); font-size: 14px;\">@{screen:s_8ed2db9cbfd7.comp:c_f0a773241106.value}</span></p>"
+                }
+              },
+              {
+                "id": "c_aac03c5bebc4",
+                "type": "divider",
+                "name": null,
+                "data": {}
+              },
+              {
+                "id": "c_d03980ce2b7c",
+                "type": "rich_text",
+                "name": null,
+                "data": {
+                  "html": "<p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>Quilometragem (km)</strong></span></p><p><span style=\"color: rgb(17, 20, 20); font-size: 14px;\">@{screen:s_8ed2db9cbfd7.comp:c_95aef308d32f.value}</span></p>"
+                }
               }
-            }
+            ],
+            "data": {}
           }
         ]
       },
@@ -1147,8 +1210,10 @@
       "navbar": {
         "id": "ac4c005a-eb6d-45e7-ab2b-b4ed8f18f56f",
         "data": {
+          "steps": 8,
           "title": "Confirmação dos dados",
-          "showReturn": true
+          "showReturn": true,
+          "currentStep": 4
         },
         "name": null,
         "type": "nav_bar"
@@ -1172,7 +1237,7 @@
             "type": "rich_text",
             "name": null,
             "data": {
-              "html": "<p><span style=\"font-size:14px;color:#262828\">Ao confirmar, será criada a autorização para transferência de veículo, a ATPV-e<br></span></p>"
+              "html": "<p style=\"text-align: center;\"><span style=\"font-size: 16px;\">Ao confirmar, será criada a autorização para transferência de veículo, a ATPV-e</span></p>"
             }
           }
         ]
@@ -1194,8 +1259,10 @@
       "navbar": {
         "id": "c3fc6a17-5d02-437b-9e12-ae5b6d970b8d",
         "data": {
+          "steps": 8,
           "title": "Confirmação intenção de venda",
-          "showReturn": true
+          "showReturn": true,
+          "currentStep": 5
         },
         "name": null,
         "type": "nav_bar"
@@ -1219,8 +1286,8 @@
             "type": "icon_text",
             "name": null,
             "data": {
-              "icon": "check_circle",
-              "text": "<p><span style=\"font-size:14px;color:#000000\"><strong>Sua intenção de venda foi concluída</strong></span></p>",
+              "icon": "check",
+              "text": "<p><span style=\"font-size: 16px;\"><strong>Sua intenção de venda foi concluída</strong></span></p>",
               "color": "success",
               "variant": "vertical"
             }
@@ -1230,7 +1297,7 @@
             "type": "rich_text",
             "name": null,
             "data": {
-              "html": "<p><span style=\"font-size:14px;color:#262828\">A pessoa que está comprando o veículo foi informada.<br></span></p>"
+              "html": "<p style=\"text-align: center;\"><span style=\"font-size: 16px;\">A pessoa que está comprando o veículo foi informada.</span></p>"
             }
           },
           {
@@ -1238,7 +1305,7 @@
             "type": "rich_text",
             "name": null,
             "data": {
-              "html": "<p><span style=\"font-size:14px;color:#262828\">Agora, é só aguardar que ela confirme a compra do veículo para continuar o processo de transferência.<br></span></p>"
+              "html": "<p style=\"text-align: center;\"><span style=\"font-size: 16px;\">Agora, é só <strong>aguardar que ela confirme a compra</strong> do veículo para continuar o processo de transferência.</span></p>"
             }
           }
         ]
@@ -1286,7 +1353,7 @@
             "type": "rich_text",
             "name": null,
             "data": {
-              "html": "<p><span style=\"font-size:14px;color:#262828\">Qual veículo está sendo comprado?<br></span></p>"
+              "html": "<p style=\"text-align: center;\"><span style=\"font-size: 16px;\">Qual veículo está sendo comprado?</span></p>"
             }
           },
           {
@@ -1296,9 +1363,7 @@
             "data": {
               "layout": [
                 "plate",
-                "badge",
-                "brand_model",
-                "licensing_expiration"
+                "brand_model"
               ],
               "source": "@{node:n_598dfad57128.vehicles}",
               "required": true,
@@ -1364,8 +1429,10 @@
       "navbar": {
         "id": "0aea202f-9089-43ed-bed8-2e5754df23bd",
         "data": {
+          "steps": 8,
           "title": "Escolha o veículo",
-          "showReturn": true
+          "showReturn": true,
+          "currentStep": 1
         },
         "name": null,
         "type": "nav_bar"
@@ -1438,8 +1505,8 @@
       },
       "data": {
         "position": {
-          "x": 6300,
-          "y": 1700
+          "x": 6080,
+          "y": 2364
         }
       }
     },
@@ -1455,7 +1522,7 @@
             "type": "rich_text",
             "name": null,
             "data": {
-              "html": "<p><span style=\"font-size:14px;color:#262828\">Confirme as informações para a compra do veículo<br></span></p>"
+              "html": "<p style=\"text-align: center;\"><span style=\"font-size: 16px;\">Confirme as informações para a compra do veículo</span></p>"
             }
           },
           {
@@ -1468,7 +1535,7 @@
                 "type": "rich_text",
                 "name": null,
                 "data": {
-                  "html": "<p><span style=\"font-size:16px;color:#262828\"><strong>Dados do comprador</strong></span></p>"
+                  "html": "<p><span><strong>Dados de quem está comprando</strong></span></p>"
                 }
               },
               {
@@ -1484,7 +1551,7 @@
                 "type": "rich_text",
                 "name": null,
                 "data": {
-                  "html": "<p><span style=\"font-size:12px;color:#7A7F83\"><strong>Nome</strong></span></p><p><span style=\"font-size:14px;color:#111414\">@{node:n_0a7cda804e6d.nomeComprador}</span></p>"
+                  "html": "<p><span style=\"font-size:12px;color:#7A7F83\"><strong>Nome</strong></span></p><p><span style=\"font-size:14px;color:#111414\">@{node:n_0a7cda804e6d.nomeComprador | maskName}</span></p>"
                 }
               },
               {
@@ -1499,55 +1566,64 @@
             "data": {}
           },
           {
-            "id": "c_fcf3a1f793c9",
+            "id": "c_8b8579820930",
             "type": "card",
             "name": null,
             "children": [
               {
-                "id": "c_8e1a4c7b2d90",
-                "type": "text_heading",
+                "id": "c_87d4db49da85",
+                "type": "rich_text",
                 "name": null,
                 "data": {
-                  "text": "Dados do veículo",
-                  "type": "text_heading"
+                  "html": "<p><span style=\"font-size: 16px;\"><strong>Dados do veículo</strong></span></p>"
                 }
               },
               {
-                "id": "c_2b9f6d0e4a13",
+                "id": "c_a4abc36c34a0",
                 "type": "vehicle_plate",
                 "name": null,
                 "data": {
                   "size": "sm",
+                  "align": "left",
                   "plate": "@{node:n_0a7cda804e6d.vehicle.plate}",
                   "source": "@{node:n_0a7cda804e6d.vehicle}",
                   "variant": "default"
                 }
               },
               {
-                "id": "c_4d7c1a9e6b25",
-                "type": "label_text",
+                "id": "c_ba010dedd3a2",
+                "type": "rich_text",
                 "name": null,
                 "data": {
-                  "text": "@{node:n_0a7cda804e6d.vehicle.brandModel}",
-                  "label": "Marca / Modelo"
+                  "html": "<p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>Marca / Modelo</strong></span></p><p><span style=\"color: rgb(17, 20, 20); font-size: 14px;\">@{node:n_0a7cda804e6d.vehicle.brandModel}</span></p>"
                 }
               },
               {
-                "id": "c_9a3e5f8c1d47",
-                "type": "label_text",
+                "id": "c_4a343ee25d90",
+                "type": "divider",
+                "name": null,
+                "data": {}
+              },
+              {
+                "id": "c_9a49e26b4687",
+                "type": "rich_text",
                 "name": null,
                 "data": {
-                  "text": "@{node:n_0a7cda804e6d.vehicle.valorVenda}",
-                  "label": "Valor de venda"
+                  "html": "<p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>Valor de venda</strong></span></p><p><span style=\"color: rgb(17, 20, 20); font-size: 14px;\">@{node:n_0a7cda804e6d.vehicle.valorVenda}</span></p>"
                 }
               },
               {
-                "id": "c_6c0b2e7a4f18",
-                "type": "label_text",
+                "id": "c_315f3c852478",
+                "type": "divider",
+                "name": null,
+                "data": {}
+              },
+              {
+                "id": "c_d9d3c44f0770",
+                "type": "rich_text",
                 "name": null,
                 "data": {
-                  "text": "@{node:n_0a7cda804e6d.vehicle.quilometragem}",
-                  "label": "Quilometragem (km)"
+                  "html": "<p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>Quilometragem (km)</strong></span></p><p><span style=\"color: rgb(17, 20, 20); font-size: 14px;\">@{node:n_0a7cda804e6d.vehicle.quilometragem}</span></p>"
                 }
               }
             ],
@@ -1572,7 +1648,7 @@
             "type": "button",
             "name": null,
             "data": {
-              "label": "Cancelar compra",
+              "label": "Cancelar",
               "variant": "outline",
               "clickAction": "submit"
             }
@@ -1582,8 +1658,10 @@
       "navbar": {
         "id": "38d11bb1-752b-4b3f-ba0a-7bad12402b6d",
         "data": {
+          "steps": 8,
           "title": "Confirmação de compra",
-          "showReturn": true
+          "showReturn": true,
+          "currentStep": 3
         },
         "name": null,
         "type": "nav_bar"
@@ -1607,7 +1685,7 @@
             "type": "rich_text",
             "name": null,
             "data": {
-              "html": "<p><span style=\"font-size:14px;color:#262828\">Confirme seu endereço para continuar a transferência do veículo<br></span></p>"
+              "html": "<p style=\"text-align: center;\"><span style=\"font-size: 16px;\">Confirme seu endereço para continuar a transferência do veículo</span></p>"
             }
           },
           {
@@ -1631,7 +1709,7 @@
             "type": "rich_text",
             "name": null,
             "data": {
-              "html": "<p style=\"text-align:justify\"><span style=\"font-size:14px;color:#262828\">Sob pena da lei, estou ciente de que a falsidade destas informações implicará em penalidades.<br></span></p>"
+              "html": "<p style=\"text-align: justify;\"><span style=\"color: rgb(38, 40, 40); font-size: 14px;\">Sob pena da lei, estou ciente de que a falsidade destas informações implicará em penalidades.</span></p>"
             }
           },
           {
@@ -1639,7 +1717,7 @@
             "type": "opt_in",
             "name": null,
             "data": {
-              "title": "<p><span style=\"font-size:14px;color:#111414\"><strong>Aceite</strong></span></p>",
+              "title": "<p></p>",
               "options": [
                 {
                   "id": "1",
@@ -1681,8 +1759,10 @@
       "navbar": {
         "id": "5b6ef436-f31b-49ef-94c9-ee0f4eff7ec0",
         "data": {
+          "steps": 8,
           "title": "Confirmação de endereço",
-          "showReturn": true
+          "showReturn": true,
+          "currentStep": 4
         },
         "name": null,
         "type": "nav_bar"
@@ -1707,7 +1787,7 @@
             "name": null,
             "data": {
               "icon": "warning",
-              "text": "<p><span style=\"font-size:14px;color:#000000\"><strong>Precisamos que confirme a transferência do veículo com sua assinatura eletrônica.</strong></span></p>",
+              "text": "<p><span style=\"font-size: 16px;\">Precisamos que <strong>confirme a transferência do veículo com sua assinatura eletrônica.</strong></span></p>",
               "color": "warning",
               "variant": "vertical"
             }
@@ -1717,7 +1797,7 @@
             "type": "rich_text",
             "name": null,
             "data": {
-              "html": "<p><span style=\"font-size:14px;color:#262828\">Ao assinar, enviaremos uma notificação para que a pessoa que está vendendo o veículo conclua o processo.<br></span></p>"
+              "html": "<p style=\"text-align: center;\"><span style=\"font-size: 16px;\">Ao assinar, enviaremos uma <strong>notificação para que a pessoa que está vendendo</strong> o veículo conclua o processo.</span></p>"
             }
           }
         ]
@@ -1750,8 +1830,10 @@
       "navbar": {
         "id": "b1581ec5-a786-4283-9c63-479b98aef092",
         "data": {
+          "steps": 8,
           "title": "Assinatura do documento",
-          "showReturn": true
+          "showReturn": true,
+          "currentStep": 5
         },
         "name": null,
         "type": "nav_bar"
@@ -1775,8 +1857,8 @@
             "type": "icon_text",
             "name": null,
             "data": {
-              "icon": "check_circle",
-              "text": "<p><span style=\"font-size:14px;color:#000000\"><strong>Sua intenção de compra do veículo foi concluída</strong></span></p>",
+              "icon": "check",
+              "text": "<p><span style=\"font-size: 16px;\"><strong>Sua intenção de compra do veículo foi concluída</strong></span></p>",
               "color": "success",
               "variant": "vertical"
             }
@@ -1786,7 +1868,7 @@
             "type": "rich_text",
             "name": null,
             "data": {
-              "html": "<p><span style=\"font-size:14px;color:#262828\">Já avisamos a pessoa que está vendendo o veículo para assinar o documento.<br></span></p>"
+              "html": "<p><span style=\"font-size: 16px;\">Já avisamos a pessoa que está vendendo o veículo para assinar o documento.</span></p>"
             }
           },
           {
@@ -1794,7 +1876,7 @@
             "type": "rich_text",
             "name": null,
             "data": {
-              "html": "<p><span style=\"font-size:14px;color:#262828\">Agora, é só aguardar que ela confirme a venda do veículo para continuar o processo de transferência.</span></p>"
+              "html": "<p><span style=\"font-size: 16px;\">Agora, é só <strong>aguardar que ela confirme a venda do veículo</strong> para continuar o processo de transferência.</span></p>"
             }
           }
         ]
@@ -1842,24 +1924,63 @@
             "type": "rich_text",
             "name": null,
             "data": {
-              "html": "<p><span style=\"font-size:14px;color:#262828\">Olá, @{node:n_21da615e160d.full_name}<br><br>O processo de transferência do seu veículo foi confirmado pelo comprador. <br></span></p>"
+              "html": "<p style=\"text-align: center;\"><span style=\"color: rgb(38, 40, 40); font-size: 16px;\">Olá, @{node:n_21da615e160d.full_name}<br>O processo de transferência do seu veículo foi confirmado pelo comprador.&nbsp;<br></span></p>"
             }
           },
           {
-            "id": "c_c8a343c5a26a",
-            "type": "vehicle_info",
+            "id": "c_075c5aafff72",
+            "type": "card",
             "name": null,
-            "data": {
-              "source": "@{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle}",
-              "vehicle": {
-                "id": "1",
-                "plate": "EXC1A22",
-                "title": "Veículo 1",
-                "status": "REGULAR",
-                "brandModel": "VOLKS/GOL GTI 1.0",
-                "licensingExpirationDate": "2024-12-31"
+            "children": [
+              {
+                "id": "c_bac30b91f25a",
+                "type": "vehicle_plate",
+                "name": null,
+                "data": {
+                  "size": "sm",
+                  "align": "left",
+                  "plate": "@{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.plate}",
+                  "variant": "default"
+                }
+              },
+              {
+                "id": "c_cc176e290b23",
+                "type": "rich_text",
+                "name": null,
+                "data": {
+                  "html": "<p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>Veículo</strong></span></p><p><span style=\"color: rgb(17, 20, 20); font-size: 14px;\">@{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.brandModel}</span></p>"
+                }
+              },
+              {
+                "id": "c_42eca0dd5841",
+                "type": "divider",
+                "name": null,
+                "data": {}
+              },
+              {
+                "id": "c_248aa67e3c3d",
+                "type": "rich_text",
+                "name": null,
+                "data": {
+                  "html": "<p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>Cor</strong></span></p><p><span style=\"color: rgb(17, 20, 20); font-size: 14px;\">@{node:n_b824c7dd9350.descricaoCorVeiculo}</span></p>"
+                }
+              },
+              {
+                "id": "c_fc295d478475",
+                "type": "divider",
+                "name": null,
+                "data": {}
+              },
+              {
+                "id": "c_ed3eb704da4a",
+                "type": "rich_text",
+                "name": null,
+                "data": {
+                  "html": "<p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>Pessoa que assinou a compra</strong></span></p><p><span style=\"color: rgb(17, 20, 20); font-size: 14px;\">@{node:n_b824c7dd9350.nomeComprador}</span></p>"
+                }
               }
-            }
+            ],
+            "data": {}
           }
         ]
       },
@@ -1905,8 +2026,8 @@
             "type": "icon_text",
             "name": null,
             "data": {
-              "icon": "check_circle",
-              "text": "<p><span style=\"font-size:14px;color:#000000\"><strong>Tudo certo,  você concluiu a venda do veículo</strong></span></p>",
+              "icon": "check",
+              "text": "<p><span style=\"font-size: 16px;\"><strong>Tudo certo, você concluiu a venda do veículo</strong></span></p>",
               "color": "success",
               "variant": "vertical"
             }
@@ -1916,7 +2037,7 @@
             "type": "rich_text",
             "name": null,
             "data": {
-              "html": "<p><span style=\"font-size:14px;color:#262828\">A partir de agora, a responsabilidade do veículo Mitsubishi Pajero Sport, cor cinza, placa GAT3U02 é de quem fez a compra.<br><br>Assim que o pagamento for realizado, o veículo será registrado em nome do comprador.<br></span></p>"
+              "html": "<p style=\"text-align: center;\"><span style=\"font-size: 16px;\">A partir de agora, a responsabilidade do veículo <strong>Mitsubishi Pajero Sport, cor cinza, placa GAT3U02</strong> é de quem fez a compra.<br><br>Assim que o <strong>pagamento for realizado</strong>, o veículo será registrado em nome do comprador.</span></p>"
             }
           }
         ]
@@ -1968,7 +2089,7 @@
                 "type": "rich_text",
                 "name": null,
                 "data": {
-                  "html": "<p><span style=\"font-size:16px;color:#262828\"><strong>Transferência de veículo<br></strong></span></p>"
+                  "html": "<p><span style=\"color: rgb(38, 40, 40); font-size: 16px;\"><strong>Transferência de veículo</strong></span></p>"
                 }
               },
               {
@@ -2018,7 +2139,7 @@
                 "type": "rich_text",
                 "name": null,
                 "data": {
-                  "html": "<p><span style=\"font-size:12px;color:#7A7F83\"><strong>Valor total</strong></span></p><p><span style=\"font-size:14px;color:#111414\">@{node:n_b685a31ed52c.totalDebitos}</span></p>"
+                  "html": "<p><span style=\"color: rgb(0, 88, 175); font-size: 12px;\"><strong>Valor total</strong></span></p><p><span style=\"color: rgb(0, 88, 175); font-size: 14px;\">@{node:n_b685a31ed52c.totalDebitos}</span></p>"
                 }
               }
             ],
@@ -2031,11 +2152,47 @@
         "type": "group",
         "children": [
           {
-            "id": "c_35b1d64b818d",
-            "type": "rich_text",
+            "id": "c_5f891233e7b2",
+            "type": "split_row",
             "name": null,
+            "children": [
+              {
+                "id": "c_60b2dfe92a0b",
+                "type": "group",
+                "name": null,
+                "children": [
+                  {
+                    "id": "c_d7054ae747a3",
+                    "type": "rich_text",
+                    "name": null,
+                    "data": {
+                      "html": "<p><span style=\"color: rgb(38, 40, 40); font-size: 16px;\"><strong>Total de débitos</strong></span></p>"
+                    }
+                  }
+                ],
+                "data": {}
+              },
+              {
+                "id": "c_f1a3ab5ad8f6",
+                "type": "group",
+                "name": null,
+                "children": [
+                  {
+                    "id": "c_18cdc8f8328d",
+                    "type": "rich_text",
+                    "name": null,
+                    "data": {
+                      "html": "<p><span style=\"color: rgb(0, 88, 175); font-size: 16px;\"><strong>@{node:n_b685a31ed52c.totalDebitos}</strong></span></p>"
+                    }
+                  }
+                ],
+                "data": {}
+              }
+            ],
             "data": {
-              "html": "<p><span style=\"font-size:12px;color:#7A7F83\"><strong>Total de débitos</strong></span></p><p><span style=\"font-size:14px;color:#111414\">@{node:n_b685a31ed52c.totalDebitos}</span></p>"
+              "gap": 8,
+              "align": "center",
+              "distribution": "space-between"
             }
           },
           {
@@ -2078,7 +2235,7 @@
             "type": "rich_text",
             "name": null,
             "data": {
-              "html": "<p><span style=\"font-size:14px;color:#262828\">Olá, @{node:n_21da615e160d.full_name}.<br><br>A transferência do veículo será finalizada após o pagamento da taxa.<br></span></p>"
+              "html": "<p><span style=\"color: rgb(38, 40, 40); font-size: 16px;\">Olá, @{node:n_21da615e160d.full_name}.<br><br>A transferência do veículo será <strong>finalizada após o pagamento da taxa</strong>.</span></p>"
             }
           },
           {
@@ -2092,20 +2249,59 @@
             }
           },
           {
-            "id": "c_0a1e9af9e170",
-            "type": "vehicle_info",
+            "id": "c_e1a222967b20",
+            "type": "card",
             "name": null,
-            "data": {
-              "source": "@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle}",
-              "vehicle": {
-                "id": "1",
-                "plate": "EXC1A22",
-                "title": "Veículo 1",
-                "status": "REGULAR",
-                "brandModel": "VOLKS/GOL GTI 1.0",
-                "licensingExpirationDate": "2024-12-31"
+            "children": [
+              {
+                "id": "c_d41326c2592d",
+                "type": "vehicle_plate",
+                "name": null,
+                "data": {
+                  "size": "sm",
+                  "align": "left",
+                  "plate": "@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.plate}",
+                  "variant": "default"
+                }
+              },
+              {
+                "id": "c_b095af0e209b",
+                "type": "rich_text",
+                "name": null,
+                "data": {
+                  "html": "<p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>Veículo</strong></span></p><p><span style=\"color: rgb(17, 20, 20); font-size: 14px;\">@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.brandModel}</span></p>"
+                }
+              },
+              {
+                "id": "c_fb72259fe60f",
+                "type": "divider",
+                "name": null,
+                "data": {}
+              },
+              {
+                "id": "c_3a589876c4e7",
+                "type": "rich_text",
+                "name": null,
+                "data": {
+                  "html": "<p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>Cor</strong></span></p><p><span style=\"color: rgb(17, 20, 20); font-size: 14px;\">@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.descricaoCorVeiculo}</span></p>"
+                }
+              },
+              {
+                "id": "c_92e05b1d909f",
+                "type": "divider",
+                "name": null,
+                "data": {}
+              },
+              {
+                "id": "c_1ef15f484e07",
+                "type": "rich_text",
+                "name": null,
+                "data": {
+                  "html": "<p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>Pessoa que assinou a compra</strong></span></p><p><span style=\"color: rgb(17, 20, 20); font-size: 14px;\">@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}</span></p>"
+                }
               }
-            }
+            ],
+            "data": {}
           },
           {
             "id": "c_aa3245234c0a",
@@ -2123,7 +2319,7 @@
             "type": "rich_text",
             "name": null,
             "data": {
-              "html": "<p><span style=\"font-size:14px;color:#262828\">Saiba que, se o pagamento não for feito no prazo, você receberá uma multa de trânsito por infração média e possível remoção do veículo a um pátio, segundo Código Brasileiro de Trânsito.<br></span></p>"
+              "html": "<p><span style=\"color: rgb(38, 40, 40); font-size: 12px;\">Saiba que, se o pagamento não for feito no prazo, você receberá uma multa de trânsito por infração média e possível remoção do veículo a um pátio, segundo Código Brasileiro de Trânsito.<br></span></p>"
             }
           }
         ]
@@ -2171,8 +2367,8 @@
             "type": "icon_text",
             "name": null,
             "data": {
-              "icon": "check_circle",
-              "text": "<p><span style=\"font-size:14px;color:#000000\"><strong>Seu pagamento foi confirmado</strong></span></p>",
+              "icon": "check",
+              "text": "<p><span style=\"color: rgb(0, 0, 0); font-size: 16px;\"><strong>Seu pagamento foi confirmado</strong></span></p>",
               "color": "success",
               "variant": "vertical"
             }
@@ -2325,8 +2521,8 @@
       },
       "data": {
         "position": {
-          "x": 9660,
-          "y": 2652
+          "x": 7160,
+          "y": 2800
         }
       }
     },
@@ -2409,8 +2605,8 @@
             "type": "icon_text",
             "name": null,
             "data": {
-              "icon": "check_circle",
-              "text": "<p><span style=\"font-size:14px;color:#000000\"><strong>Transferência realizada com sucesso</strong></span></p>",
+              "icon": "check",
+              "text": "<p><span style=\"color: rgb(0, 0, 0); font-size: 16px;\"><strong>Transferência realizada com sucesso</strong></span></p>",
               "color": "success",
               "variant": "vertical"
             }
@@ -2420,7 +2616,7 @@
             "type": "rich_text",
             "name": null,
             "data": {
-              "html": "<p><span style=\"font-size:14px;color:#262828\">Olá, @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}. <br>A transferência do veículo @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.brandModel}, placa @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.plate} foi realizada com sucesso e o veículo encontra-se em seu nome.<br><br>Acesse o aplicativo da Carteira Digital de Trânsito - CDT para baixar o documento do veículo.<br></span></p>"
+              "html": "<p><span style=\"color: rgb(38, 40, 40); font-size: 16px;\">Olá, @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}.&nbsp;</span></p><p><span style=\"color: rgb(38, 40, 40); font-size: 16px;\"><br>A transferência do veículo <strong>@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.brandModel}, placa @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.plate}&nbsp;</strong>foi realizada com sucesso e o veículo encontra-se em seu nome.<br><br>Acesse o aplicativo da <strong>Carteira Digital de Trânsito - CDT para baixar o documento</strong> do veículo.<br></span></p>"
             }
           },
           {
@@ -2476,8 +2672,8 @@
             "type": "icon_text",
             "name": null,
             "data": {
-              "icon": "check_circle",
-              "text": "<p><span style=\"font-size:14px;color:#000000\"><strong>Pagamento confirmado</strong></span></p>",
+              "icon": "check",
+              "text": "<p><span style=\"color: rgb(0, 0, 0); font-size: 16px;\"><strong>Pagamento confirmado</strong></span></p>",
               "color": "success",
               "variant": "vertical"
             }
@@ -2487,7 +2683,7 @@
             "type": "rich_text",
             "name": null,
             "data": {
-              "html": "<p><span style=\"font-size:14px;color:#262828\">Olá, @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}. <br><br>Foi confirmado o pagamento da taxa de transferência do veículo @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.brandModel}, placa @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.plate}.<br><br>Aguarde enquanto validamos o processo e registramos o veículo em seu nome.<br></span></p>"
+              "html": "<p><span style=\"color: rgb(38, 40, 40); font-size: 16px;\">Olá, @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}.&nbsp;<br><br>Foi confirmado o pagamento da taxa de transferência do veículo <strong>@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.brandModel}, placa @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.plate}.</strong><br><br>Aguarde enquanto validamos o processo e <strong>registramos o veículo em seu nome.</strong><br></span></p>"
             }
           },
           {
@@ -2495,7 +2691,7 @@
             "type": "rich_text",
             "name": null,
             "data": {
-              "html": "<p><span style=\"font-size:14px;color:#262828\">Acesse o aplicativo da Carteira Digital de Trânsito - CDT para consultar os veículos em seu nome.<br></span></p>"
+              "html": "<p style=\"text-align: center;\"><span style=\"color: rgb(38, 40, 40); font-size: 16px;\">Acesse o aplicativo da Carteira Digital de Trânsito - CDT para consultar os veículos em seu nome.</span></p>"
             }
           }
         ]
@@ -2603,6 +2799,126 @@
         "position": {
           "x": 780,
           "y": 5080
+        }
+      }
+    },
+    {
+      "id": "s_550eb1c5ac27",
+      "name": "[Vendedor] Sucesso liveness",
+      "content": {
+        "id": "c_432cff39912f",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_1dc67556b4e8",
+            "type": "rich_text",
+            "name": null,
+            "data": {
+              "html": "<p style=\"text-align: center;\"><span style=\"font-size: 16px;\">Está tudo certo, podemos continuar</span></p>"
+            }
+          },
+          {
+            "id": "c_d805664f105c",
+            "type": "image",
+            "name": null,
+            "data": {
+              "asset": {
+                "id": "7a645c41-4de3-430b-afd4-6058d4df0033",
+                "url": "https://detransp-app-editor-assets.s3.amazonaws.com/17da1ca4-aecd-4545-ae3c-d0916a0c4e67.png"
+              }
+            }
+          }
+        ]
+      },
+      "footer": {
+        "id": "c_d84b441092c8",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_ab6568c146a9",
+            "type": "button",
+            "name": null,
+            "data": {
+              "label": "Continuar"
+            }
+          }
+        ]
+      },
+      "navbar": {
+        "id": "cd800b1d-d4bc-4c3d-8897-ebe5e82926c6",
+        "data": {
+          "steps": 8,
+          "title": "Análise de requisitos",
+          "showReturn": true,
+          "currentStep": 3
+        },
+        "name": null,
+        "type": "nav_bar"
+      },
+      "data": {
+        "position": {
+          "x": 7420,
+          "y": -276
+        }
+      }
+    },
+    {
+      "id": "s_0d60f1885598",
+      "name": "[Comprador] Sucesso liveness",
+      "content": {
+        "id": "c_bab17ecf308e",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_eadca0272860",
+            "type": "rich_text",
+            "name": null,
+            "data": {
+              "html": "<p style=\"text-align: center;\"><span style=\"font-size: 16px;\">Está tudo certo, podemos continuar</span></p>"
+            }
+          },
+          {
+            "id": "c_f5c5fed3cc30",
+            "type": "image",
+            "name": null,
+            "data": {
+              "asset": {
+                "id": "7a645c41-4de3-430b-afd4-6058d4df0033",
+                "url": "https://detransp-app-editor-assets.s3.amazonaws.com/17da1ca4-aecd-4545-ae3c-d0916a0c4e67.png"
+              }
+            }
+          }
+        ]
+      },
+      "footer": {
+        "id": "c_4bd98f6c4546",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_3b12cbb726a6",
+            "type": "button",
+            "name": null,
+            "data": {
+              "label": "Continuar"
+            }
+          }
+        ]
+      },
+      "navbar": {
+        "id": "7bdf768b-7884-4665-89e1-87fb9ac94e60",
+        "data": {
+          "steps": 8,
+          "title": "Análise de requisitos",
+          "showReturn": true,
+          "currentStep": 2
+        },
+        "name": null,
+        "type": "nav_bar"
+      },
+      "data": {
+        "position": {
+          "x": 5872,
+          "y": 1584
         }
       }
     },
@@ -4675,7 +4991,7 @@
           {
             "id": "c8a1f9d2-3b6e-4a7c-9f0d-1e2b3c4d5e6f",
             "name": "Comprador já assinou (vendedor_2)",
-            "value": "{ \"hasRestriction\": false, \"hasActiveTDV\": true, \"codigoTransferencia\": \"TDV-000000\", \"estado\": \"6\", \"proximaAcao\": \"vendedor_2\" }"
+            "value": "{ \"hasRestriction\": false, \"hasActiveTDV\": true, \"codigoTransferencia\": \"TDV-000000\", \"estado\": \"6\", \"proximaAcao\": \"vendedor_2\", \"nomeComprador\": \"Carlos da Silva\", \"descricaoCorVeiculo\": \"Branca\" }"
           },
           {
             "id": "c4e8f2a7-1d05-4b6e-8f2a-100000000001",
@@ -4878,7 +5194,7 @@
           {
             "id": "2eaf52de-b422-48f5-8166-e8ca4ded4630",
             "name": "Lista 3 compras pendentes",
-            "value": "{\n  \"vehicles\": [\n    {\n      \"id\": \"1\",\n      \"title\": \"VOLKS/GOL GTI 1.0\",\n      \"plate\": \"BXG3U71\",\n      \"status\": \"REGULAR\",\n      \"licensingExpirationDate\": \"31/12/2025\",\n      \"type\": \"Utilitario\",\n      \"brandModel\": \"VOLKS/GOL GTI 1.0\",\n      \"renavam\": \"00001002003\",\n      \"lastLicensing\": \"03/12/2025\",\n      \"yearFab\": \"2014\",\n      \"yearMod\": \"2015\",\n      \"codigoTransferencia\": \"TDV-000001\",\n      \"proximaAcao\": \"comprador\",\n      \"nomeComprador\": \"\"\n    },\n    {\n      \"id\": \"2\",\n      \"title\": \"ONIX LT - GM\",\n      \"plate\": \"CED3J65\",\n      \"status\": \"A VENCER\",\n      \"licensingExpirationDate\": \"31/12/2024\",\n      \"type\": \"Passeio\",\n      \"brandModel\": \"ONIX LT - GM\",\n      \"renavam\": \"00002003004\",\n      \"lastLicensing\": \"15/01/2024\",\n      \"yearFab\": \"2021\",\n      \"yearMod\": \"2022\",\n      \"codigoTransferencia\": \"TDV-000002\",\n      \"proximaAcao\": \"comprador_2\",\n      \"nomeComprador\": \"\"\n    },\n    {\n      \"id\": \"3\",\n      \"title\": \"FIAT/UNO MILLE\",\n      \"plate\": \"RNI4Z30\",\n      \"status\": \"VENCIDO\",\n      \"licensingExpirationDate\": \"31/07/2023\",\n      \"type\": \"Utilitario\",\n      \"brandModel\": \"FIAT/UNO MILLE\",\n      \"renavam\": \"00003004005\",\n      \"lastLicensing\": \"20/08/2022\",\n      \"yearFab\": \"2008\",\n      \"yearMod\": \"2009\",\n      \"codigoTransferencia\": \"TDV-000003\",\n      \"proximaAcao\": \"pagamento_confirmado\",\n      \"nomeComprador\": \"Carlos da Silva\"\n    }\n  ]\n}\n"
+            "value": "{\n  \"vehicles\": [\n    {\n      \"id\": \"1\",\n      \"title\": \"VOLKS/GOL GTI 1.0\",\n      \"plate\": \"BXG3U71\",\n      \"status\": \"REGULAR\",\n      \"licensingExpirationDate\": \"31/12/2025\",\n      \"type\": \"Utilitario\",\n      \"brandModel\": \"VOLKS/GOL GTI 1.0\",\n      \"renavam\": \"00001002003\",\n      \"lastLicensing\": \"03/12/2025\",\n      \"yearFab\": \"2014\",\n      \"yearMod\": \"2015\",\n      \"codigoTransferencia\": \"TDV-000001\",\n      \"proximaAcao\": \"comprador\",\n      \"nomeComprador\": \"\",\n      \"descricaoCorVeiculo\": \"Branca\"\n    },\n    {\n      \"id\": \"2\",\n      \"title\": \"ONIX LT - GM\",\n      \"plate\": \"CED3J65\",\n      \"status\": \"A VENCER\",\n      \"licensingExpirationDate\": \"31/12/2024\",\n      \"type\": \"Passeio\",\n      \"brandModel\": \"ONIX LT - GM\",\n      \"renavam\": \"00002003004\",\n      \"lastLicensing\": \"15/01/2024\",\n      \"yearFab\": \"2021\",\n      \"yearMod\": \"2022\",\n      \"codigoTransferencia\": \"TDV-000002\",\n      \"proximaAcao\": \"comprador_2\",\n      \"nomeComprador\": \"Carlos da Silva\",\n      \"descricaoCorVeiculo\": \"Branca\"\n    },\n    {\n      \"id\": \"3\",\n      \"title\": \"FIAT/UNO MILLE\",\n      \"plate\": \"RNI4Z30\",\n      \"status\": \"VENCIDO\",\n      \"licensingExpirationDate\": \"31/07/2023\",\n      \"type\": \"Utilitario\",\n      \"brandModel\": \"FIAT/UNO MILLE\",\n      \"renavam\": \"00003004005\",\n      \"lastLicensing\": \"20/08/2022\",\n      \"yearFab\": \"2008\",\n      \"yearMod\": \"2009\",\n      \"codigoTransferencia\": \"TDV-000003\",\n      \"proximaAcao\": \"pagamento_confirmado\",\n      \"nomeComprador\": \"Carlos da Silva\",\n      \"descricaoCorVeiculo\": \"Branca\"\n    }\n  ]\n}\n"
           },
           {
             "id": "6b7ae0d4-fed7-4944-ab40-8aaeb8b2ea30",
@@ -6390,18 +6706,6 @@
       "targetHandle": "input"
     },
     {
-      "sourceId": "n_32b7a4b7dfc4",
-      "targetId": "n_0a7cda804e6d",
-      "sourceHandle": "output",
-      "targetHandle": "input"
-    },
-    {
-      "sourceId": "n_4d4ab6c16ec8",
-      "targetId": "s_2909315de67e",
-      "sourceHandle": "output",
-      "targetHandle": "input"
-    },
-    {
       "sourceId": "s_46aa0d528dfd",
       "targetId": "n_055bfbb86b6a",
       "sourceHandle": "c_d214c4655ccc",
@@ -7167,6 +7471,30 @@
       "sourceId": "n_7c2a9e51f8d3",
       "targetId": "s_8fefaaacf3d9",
       "sourceHandle": "false",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_4d4ab6c16ec8",
+      "targetId": "s_550eb1c5ac27",
+      "sourceHandle": "output",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_550eb1c5ac27",
+      "targetId": "s_2909315de67e",
+      "sourceHandle": "c_ab6568c146a9",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_32b7a4b7dfc4",
+      "targetId": "s_0d60f1885598",
+      "sourceHandle": "output",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_0d60f1885598",
+      "targetId": "n_0a7cda804e6d",
+      "sourceHandle": "c_3b12cbb726a6",
       "targetHandle": "input"
     }
   ]

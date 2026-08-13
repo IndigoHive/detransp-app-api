@@ -91,6 +91,11 @@ const GOVBR_SCOPES = [
 ]
 const dashboardUrl = 'api/x_mdpdd_dashboard/v1/dashboard/'
 
+const isNonProduction = (env.NODE_ENV || 'development') !== 'production'
+// Dev/QA-only TDV mock mode: swaps the ServiceNow TDV client for an in-memory stateful mock.
+// Gated to non-production regardless of the env var value.
+const tdvMockEnabled = env.TDV_MOCK_ENABLED === 'true' && isNonProduction
+
 export const config: Config = {
   application: {
     environment: (env.NODE_ENV || 'development') as ApplicationEnvironment,
@@ -122,8 +127,9 @@ export const config: Config = {
     vidaBaseUrl: env.ROTA_VIDA_BASE_URL || '',
     arquivosBaseUrl: env.ROTA_ARQUIVOS_BASE_URL || '',
     // Dev/QA-only escape hatch to test downstream TDV flows without a real biometric match.
-    // Never honored in production, regardless of the env var value.
-    bypassMatch: env.LIVENESS_BYPASS_MATCH === 'true' && (env.NODE_ENV || 'development') !== 'production',
+    // Never honored in production, regardless of the env var value. Also implied by TDV mock
+    // mode, so the mocked prova-vida returns its fake code without an upload/match round-trip.
+    bypassMatch: (env.LIVENESS_BYPASS_MATCH === 'true' || tdvMockEnabled) && isNonProduction,
   },
   rotaCrvPecas: {
     baseUrl: env.ROTA_CRV_PECAS_BASE_URL || '',
@@ -139,6 +145,14 @@ export const config: Config = {
   },
   logging: {
     level: env.LOG_LEVEL || DEFAULT_LOG_LEVEL
+  },
+  tdvMock: {
+    enabled: tdvMockEnabled,
+    sellerCpf: env.TDV_MOCK_SELLER_CPF || '',
+    buyerCpf: env.TDV_MOCK_BUYER_CPF || '',
+    vehiclePlate: env.TDV_MOCK_VEHICLE_PLATE || 'ABC1D23',
+    vehicleRenavam: env.TDV_MOCK_VEHICLE_RENAVAM || '12345678901',
+    initialEstado: env.TDV_MOCK_INITIAL_ESTADO || '',
   }
 }
 
