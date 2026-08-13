@@ -5298,7 +5298,7 @@
             "name": null,
             "data": {
               "icon": "warning",
-              "text": "<p><span style=\"font-size:14px;color:#000000\">Para este serviço, é obrigatório que o cartório tenha comunicado a assinatura tanto do comprador quanto do vendedor. Não foi localizada uma assinatura. Portanto, para realizar sua transferência o comprador precisa solicitar transferência pelo serviço Transferir Propriedade de Veículo Registrado em São Paulo.</span></p>",
+              "text": "<p><span style=\"font-size:14px;color:#000000\">Para este serviço, é obrigatório que o cartório tenha comunicado a assinatura tanto do comprador quanto do vendedor.</span></p><p><span style=\"font-size:14px;color:#000000\">Não foi localizada uma assinatura. Portanto, para realizar sua transferência o comprador precisa solicitar transferência pelo serviço <strong>Transferir Propriedade de Veículo Registrado em São Paulo</strong>.</span></p>",
               "color": "warning",
               "variant": "horizontal",
               "alignment": "start",
@@ -5312,13 +5312,23 @@
         "type": "group",
         "children": [
           {
+            "id": "c_71a9e2b4d830",
+            "type": "button",
+            "name": null,
+            "data": {
+              "label": "Solicitar serviço",
+              "variant": "primary",
+              "clickAction": "submit"
+            }
+          },
+          {
             "id": "c_b2e1f0d9c8a7",
             "type": "button",
             "name": null,
             "data": {
-              "label": "Fechar",
+              "label": "Retornar para a tela inicial",
               "variant": "outline",
-              "clickAction": "back"
+              "clickAction": "submit"
             }
           }
         ]
@@ -5342,8 +5352,8 @@
             "type": "icon_text",
             "name": null,
             "data": {
-              "icon": "check",
-              "text": "<p><span style=\"font-size:14px;color:#000000\">Este serviço é destinada exclusivamente quando o comprador e vendedor são pessoas físicas. Caso uma das partes for uma empresa (pessoa jurídica), solicite a transferência pelo serviço Transferir Propriedade de Veículo Registrado em São Paulo.</span></p>",
+              "icon": "warning",
+              "text": "<p><span style=\"font-size:14px;color:#000000\">Este serviço é destinada <strong>exclusivamente</strong> quando o comprador e vendedor são <strong>pessoas físicas</strong>. Caso uma das partes for uma empresa (pessoa jurídica), solicite a transferência pelo serviço <strong>Transferir Propriedade de Veículo Registrado em São Paulo</strong>.</span></p>",
               "color": "warning",
               "variant": "horizontal",
               "alignment": "start",
@@ -5357,13 +5367,23 @@
         "type": "group",
         "children": [
           {
+            "id": "c_82b0f3c5e941",
+            "type": "button",
+            "name": null,
+            "data": {
+              "label": "Solicitar serviço",
+              "variant": "primary",
+              "clickAction": "submit"
+            }
+          },
+          {
             "id": "c_d4e3f2a1b0c9",
             "type": "button",
             "name": null,
             "data": {
-              "label": "Fechar",
+              "label": "Retornar para a tela inicial",
               "variant": "outline",
-              "clickAction": "back"
+              "clickAction": "submit"
             }
           }
         ]
@@ -7128,6 +7148,29 @@
           "y": 1924
         }
       }
+    },
+    {
+      "id": "n_93c1a4d6f052",
+      "type": "open_url_node",
+      "name": "Solicitar serviço",
+      "data": {
+        "position": {
+          "x": 6920,
+          "y": 5344
+        },
+        "url": "https://www.detran.sp.gov.br/detransp"
+      }
+    },
+    {
+      "id": "n_a4d2b5e7f163",
+      "type": "end_node",
+      "name": "End",
+      "data": {
+        "position": {
+          "x": 6920,
+          "y": 5520
+        }
+      }
     }
   ],
   "edges": [
@@ -8275,6 +8318,30 @@
       "sourceId": "n_8a2c6e3f0d49",
       "targetId": "d_0c4e8a5b2f61",
       "sourceHandle": "r_validar_duas_pessoas_01",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "d_9b3d7f4a1e50",
+      "targetId": "n_93c1a4d6f052",
+      "sourceHandle": "c_71a9e2b4d830",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "d_9b3d7f4a1e50",
+      "targetId": "n_a4d2b5e7f163",
+      "sourceHandle": "c_b2e1f0d9c8a7",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "d_0c4e8a5b2f61",
+      "targetId": "n_93c1a4d6f052",
+      "sourceHandle": "c_82b0f3c5e941",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "d_0c4e8a5b2f61",
+      "targetId": "n_a4d2b5e7f163",
+      "sourceHandle": "c_d4e3f2a1b0c9",
       "targetHandle": "input"
     }
   ]
