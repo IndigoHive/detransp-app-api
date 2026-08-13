@@ -12,7 +12,7 @@ const input = {
   cepComprador: '01310100',
   numeroComprador: '100',
   complementoComprador: 'Apto 1',
-  valorVenda: '30000',
+  valorVenda: '3000000', // R$ 30.000,00 in centavos, per the money input's contract
   quilometragem: '50000',
   codigoProvaVidaVendedor: 'liveness-123'
 }
@@ -28,7 +28,7 @@ describe('InformarDadosVendaService', () => {
     const atualizaTdv = vi.fn().mockResolvedValue({ result: {} })
     const service = new InformarDadosVendaService({ detranSpServiceNowTdv: asClient({ buscaTdv, buscaEndereco, atualizaTdv }) })
 
-    await expect(service.run(authorizationHeader, input)).resolves.toEqual({})
+    await expect(service.run(authorizationHeader, input)).resolves.toEqual({ valorVenda: '30000' })
 
     expect(atualizaTdv).toHaveBeenCalledWith(
       { token: expect.any(String), cpf: '05246487601' },
@@ -50,7 +50,7 @@ describe('InformarDadosVendaService', () => {
     const atualizaTdv = vi.fn()
     const service = new InformarDadosVendaService({ detranSpServiceNowTdv: asClient({ buscaTdv, buscaEndereco, atualizaTdv }) })
 
-    await expect(service.run(authorizationHeader, input)).resolves.toEqual({})
+    await expect(service.run(authorizationHeader, input)).resolves.toEqual({ valorVenda: '30000' })
 
     expect(atualizaTdv).not.toHaveBeenCalled()
     expect(buscaEndereco).not.toHaveBeenCalled()
