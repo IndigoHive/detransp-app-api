@@ -1,5 +1,9 @@
 import type { DetranSpServiceNowTdvClient } from '../../../clients/detran-sp-service-now/tdv'
-import { CodigoEstadoTDV } from '../../../clients/detran-sp-service-now/tdv/types'
+import {
+  CodigoEstadoTDV,
+  type CodigoOrigemTDV,
+  type ListaTdvsResultData
+} from '../../../clients/detran-sp-service-now/tdv/types'
 import { extractBearerToken, extractCpfFromToken } from '../../../utils/token'
 
 type Dependencies = {
@@ -34,6 +38,36 @@ export type AnaliseRequisitosResult = {
   // Vehicle color, same rationale as nomeComprador — the seller's re-entry screens show it
   // without a separate vehicle lookup.
   descricaoCorVeiculo?: string | undefined
+  // TDV.origem from ServiceNow — the seller flow branches on this after liveness
+  // (origem 5 = Entrada Renave / venda para loja). Not present on the vehicle list.
+  origem?: CodigoOrigemTDV | undefined
+  cpfComprador?: string | undefined
+  emailComprador?: string | undefined
+  enderecoComprador?: string | undefined
+}
+
+function trimField (value: string | null | undefined): string | undefined {
+  const trimmed = value?.trim()
+  return trimmed || undefined
+}
+
+function formatEnderecoComprador (tdv: ListaTdvsResultData): string | undefined {
+  const logradouro = trimField(tdv.logradouroComprador)
+  const numero = trimField(tdv.numeroComprador)
+  const complemento = trimField(tdv.complementoComprador)
+  const bairro = trimField(tdv.bairroComprador)
+  const municipio = trimField(tdv.nomeMunicipioComprador)
+  const uf = trimField(tdv.ufComprador)
+  const cep = trimField(tdv.cepComprador)
+  const municipioUf = municipio
+    ? (uf ? `${municipio} - ${uf}` : municipio)
+    : uf
+
+  const endereco = [logradouro, numero, complemento, bairro, municipioUf, cep]
+    .filter(Boolean)
+    .join(', ')
+
+  return endereco || undefined
 }
 
 // The seller only has a forced next step once the buyer has already signed (estado 6) — every
@@ -72,6 +106,9 @@ export class AnaliseRequisitosService {
     )
 
     if (activeTdv) {
+      const enderecoComprador = formatEnderecoComprador(activeTdv)
+      const cpfComprador = trimField(activeTdv.codigoComprador)
+      const emailComprador = trimField(activeTdv.emailComprador)
       return {
         hasRestriction: false,
         hasActiveTDV: true,
@@ -79,7 +116,11 @@ export class AnaliseRequisitosService {
         estado: activeTdv.estado,
         proximaAcao: proximaAcaoParaVendedor(activeTdv.estado),
         nomeComprador: activeTdv.nomeComprador,
-        descricaoCorVeiculo: activeTdv.descricaoCorVeiculo
+        descricaoCorVeiculo: activeTdv.descricaoCorVeiculo,
+        ...(activeTdv.origem != null ? { origem: activeTdv.origem } : {}),
+        ...(cpfComprador ? { cpfComprador } : {}),
+        ...(emailComprador ? { emailComprador } : {}),
+        ...(enderecoComprador ? { enderecoComprador } : {})
       }
     }
 
