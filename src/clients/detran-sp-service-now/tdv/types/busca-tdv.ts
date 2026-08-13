@@ -8,6 +8,7 @@ export type BuscaTdvResultData = {
   placaVeiculo?: string
   placaMercosul?: 'true' | 'false'
   descricaoMarcaVeiculo?: string
+  descricaoCorVeiculo?: string
   codigoRenavamVeiculo?: string
   codigoMunicipioVeiculo?: string
   nomeMunicipioVeiculo?: string

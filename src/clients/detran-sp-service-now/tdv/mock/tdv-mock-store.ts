@@ -21,6 +21,10 @@ const MUNICIPIO_NOME = 'SAO PAULO'
 const MUNICIPIO_CODIGO = '9668'
 const MUNICIPIO_IBGE = 3550308
 
+// Fixed alongside the seeded vehicle's brand/model — real ServiceNow TDV records carry
+// descricaoCorVeiculo, but it isn't part of CriaTdvCommand, so it's set here like descricaoMarca.
+const VEHICLE_COLOR = 'BRANCA'
+
 // Fields the AtualizaTdv discriminated union may carry onto the stored TDV record. Copied over
 // generically on each update so the mock doesn't need a branch per transition type.
 const MERGEABLE_TDV_FIELDS = [
@@ -126,6 +130,7 @@ export class TdvMockStore {
       placaVeiculo: vehicle.placa,
       placaMercosul: vehicle.placaMercosul,
       descricaoMarcaVeiculo: vehicle.descricaoMarca,
+      descricaoCorVeiculo: VEHICLE_COLOR,
       codigoRenavamVeiculo: vehicle.codigoRenavam,
       codigoMunicipioVeiculo: vehicle.codigoMunicipio,
       nomeMunicipioVeiculo: vehicle.nomeMunicipio,
@@ -242,6 +247,7 @@ export class TdvMockStore {
       placaVeiculo: command.placaVeiculo,
       placaMercosul: 'true',
       descricaoMarcaVeiculo: vehicle.descricaoMarca,
+      descricaoCorVeiculo: VEHICLE_COLOR,
       codigoRenavamVeiculo: command.codigoRenavamVeiculo,
       codigoMunicipioVeiculo: MUNICIPIO_CODIGO,
       nomeMunicipioVeiculo: MUNICIPIO_NOME,

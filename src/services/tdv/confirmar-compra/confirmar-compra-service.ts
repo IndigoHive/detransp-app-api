@@ -15,6 +15,8 @@ export type ConfirmarCompraResult = {
   nomeComprador: string
   cpfComprador: string
   enderecoComprador: string
+  valorVenda: string
+  quilometragem: string
   vehicle: {
     id: string
     plate: string
@@ -80,6 +82,8 @@ export class ConfirmarCompraService {
       nomeComprador: data?.nomeComprador ?? '',
       cpfComprador: data?.codigoComprador ?? '',
       enderecoComprador,
+      valorVenda: data?.valorVendaVeiculo ?? '',
+      quilometragem: data?.kmVeiculo ?? '',
       vehicle: {
         id: '1',
         plate: data?.placaVeiculo ?? '',
