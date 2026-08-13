@@ -5006,8 +5006,8 @@
       },
       "data": {
         "position": {
-          "x": 12916,
-          "y": 1104
+          "x": 13900,
+          "y": 1144
         }
       }
     }
@@ -6805,8 +6805,100 @@
       "name": "End",
       "data": {
         "position": {
-          "x": 13324,
-          "y": 1588
+          "x": 14308,
+          "y": 1628
+        }
+      }
+    },
+    {
+      "id": "n_b8366e042aa1",
+      "type": "http_node",
+      "name": "Link Assinatura ITI (Vendedor Loja)",
+      "data": {
+        "position": {
+          "x": 12800,
+          "y": 1524
+        },
+        "method": "GET",
+        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/link-assinatura-iti",
+        "responseExamples": [
+          {
+            "id": "c85a39be-c170-4fbf-b588-f472acdd1403",
+            "name": "Sucesso",
+            "value": "{ \"link\": \"https://cas.staging.iti.br/oauth2.0/authorize?...\", \"redirectUri\": \"detran.sp://localhost/appdetran/iti/oauth_redirect.html\" }"
+          }
+        ]
+      }
+    },
+    {
+      "id": "n_034c402d0d07",
+      "type": "iti_signature_screen",
+      "name": "Documento",
+      "data": {
+        "position": {
+          "x": 13020,
+          "y": 1524
+        },
+        "url": "@{node:n_b8366e042aa1.link}",
+        "callbackPrefix": "@{node:n_b8366e042aa1.redirectUri}"
+      }
+    },
+    {
+      "id": "n_a56ddf102a2a",
+      "type": "http_node",
+      "name": "Valida Assinatura",
+      "data": {
+        "position": {
+          "x": 13240,
+          "y": 1524
+        },
+        "method": "POST",
+        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/valida-assinatura",
+        "body": "{\n  \"codigoTransferencia\": \"@{node:n_b824c7dd9350.codigoTransferencia}\",\n  \"itiCode\": \"@{node:n_034c402d0d07.code}\"\n}\n",
+        "responseExamples": [
+          {
+            "id": "0803de88-773f-4674-a48e-ee4440814586",
+            "name": "Válido",
+            "value": "{ \"valid\": true }"
+          },
+          {
+            "id": "7299fec4-0ae9-4239-b212-be9ce2813c12",
+            "name": "Inválido",
+            "value": "{ \"valid\": false }"
+          }
+        ]
+      }
+    },
+    {
+      "id": "n_083fd6fdd19b",
+      "type": "if_node",
+      "name": "Assinado?",
+      "data": {
+        "position": {
+          "x": 13480,
+          "y": 1524
+        },
+        "condition": {
+          "clauses": [
+            {
+              "id": "e41b301d-58cd-4a39-b608-2e082156bb42",
+              "left": "@{node:n_a56ddf102a2a.valid}",
+              "right": "true",
+              "operator": "equals"
+            }
+          ],
+          "combinator": "or"
+        }
+      }
+    },
+    {
+      "id": "n_cdfe4c34d954",
+      "type": "waypoint_node",
+      "name": null,
+      "data": {
+        "position": {
+          "x": 12580,
+          "y": 1924
         }
       }
     }
@@ -7870,7 +7962,7 @@
     },
     {
       "sourceId": "s_0807856fe2c1",
-      "targetId": "s_ae3771c838a8",
+      "targetId": "n_b8366e042aa1",
       "sourceHandle": "c_44adce41af68",
       "targetHandle": "input"
     },
@@ -7884,6 +7976,42 @@
       "sourceId": "s_ae3771c838a8",
       "targetId": "n_33535da57490",
       "sourceHandle": "c_199eae2ef0a3",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_b8366e042aa1",
+      "targetId": "n_034c402d0d07",
+      "sourceHandle": "output",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_034c402d0d07",
+      "targetId": "n_a56ddf102a2a",
+      "sourceHandle": "output",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_a56ddf102a2a",
+      "targetId": "n_083fd6fdd19b",
+      "sourceHandle": "output",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_083fd6fdd19b",
+      "targetId": "s_ae3771c838a8",
+      "sourceHandle": "true",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_083fd6fdd19b",
+      "targetId": "n_cdfe4c34d954",
+      "sourceHandle": "false",
+      "targetHandle": "right-target"
+    },
+    {
+      "sourceId": "n_cdfe4c34d954",
+      "targetId": "s_0807856fe2c1",
+      "sourceHandle": "left-source",
       "targetHandle": "input"
     }
   ]
