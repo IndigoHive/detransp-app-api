@@ -4610,6 +4610,406 @@
           "y": 3612
         }
       }
+    },
+    {
+      "id": "s_5d25c3769fdc",
+      "name": "[Vendedor] Confirmação dados loja",
+      "content": {
+        "id": "c_c3498cded87e",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_7960aab7e8d4",
+            "type": "rich_text",
+            "name": null,
+            "data": {
+              "html": "<p><span style=\"font-size:14px;color:#262828\">Confirme os dados informados para a venda do veículo<br></span></p>"
+            }
+          },
+          {
+            "id": "c_7d850c02adb9",
+            "type": "card",
+            "name": null,
+            "children": [
+              {
+                "id": "c_5998cde96a98",
+                "type": "rich_text",
+                "name": null,
+                "data": {
+                  "html": "<p><span><strong>Dados da empresa que está comprando</strong></span></p>"
+                }
+              },
+              {
+                "id": "c_a067bb79cc81",
+                "type": "rich_text",
+                "name": null,
+                "data": {
+                  "html": "<p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>CNPJ</strong></span></p><p><span style=\"color: rgb(17, 20, 20); font-size: 14px;\">@{node:n_02ec1db459dc.cpfComprador}</span></p>"
+                }
+              },
+              {
+                "id": "c_68e7be6249ca",
+                "type": "rich_text",
+                "name": null,
+                "data": {
+                  "html": "<p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>Empresa</strong></span></p><p><span style=\"color: rgb(17, 20, 20); font-size: 14px;\">@{node:n_02ec1db459dc.nomeComprador}</span></p>"
+                }
+              },
+              {
+                "id": "c_0348d174e41e",
+                "type": "rich_text",
+                "name": null,
+                "data": {
+                  "html": "<p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>E-mail</strong></span></p><p><span style=\"color: rgb(17, 20, 20); font-size: 14px;\">Texto de exemplo</span></p>"
+                }
+              },
+              {
+                "id": "c_41b1c632c907",
+                "type": "rich_text",
+                "name": null,
+                "data": {
+                  "html": "<p><span style=\"font-size:12px;color:#7A7F83\"><strong>Endereço</strong></span></p><p><span style=\"font-size:14px;color:#111414\">@{node:n_02ec1db459dc.enderecoComprador}</span></p>"
+                }
+              },
+              {
+                "id": "c_032d38802b4c",
+                "type": "icon_text",
+                "name": null,
+                "data": {
+                  "icon": "info",
+                  "text": "<div data-space-between-row=\"\" style=\"display: flex; flex-direction: row; align-items: flex-start; gap: 16px; width: 100%; min-width: 0px;\"><div data-space-between-cell=\"\" style=\"flex: 100 100 0%; min-width: 0px; overflow-wrap: break-word;\"><p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>Se os dados estiverem incorretos, cancele a solicitação e ajuste as informações antes de prosseguir.</strong></span></p></div><div data-space-between-cell=\"\" style=\"flex: 0 0 0%; min-width: 0px; overflow-wrap: break-word;\"><p></p></div></div><p></p>",
+                  "color": "danger",
+                  "variant": "horizontal",
+                  "alignment": "start"
+                }
+              }
+            ],
+            "data": {}
+          },
+          {
+            "id": "c_88cdcb7f963b",
+            "type": "card",
+            "name": null,
+            "children": [
+              {
+                "id": "c_86cd4a4f71e0",
+                "type": "rich_text",
+                "name": null,
+                "data": {
+                  "html": "<p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>Renavam</strong></span></p><p><span style=\"color: rgb(17, 20, 20); font-size: 14px;\">@{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.renavam}</span></p>"
+                }
+              },
+              {
+                "id": "c_6d38fda1e628",
+                "type": "rich_text",
+                "name": null,
+                "data": {
+                  "html": "<p style=\"text-align: left;\"><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>Placa</strong></span></p>"
+                }
+              },
+              {
+                "id": "c_585dcb637f3e",
+                "type": "vehicle_plate",
+                "name": null,
+                "data": {
+                  "size": "sm",
+                  "align": "left",
+                  "plate": "@{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.plate}",
+                  "variant": "default"
+                }
+              },
+              {
+                "id": "c_d186275e2517",
+                "type": "rich_text",
+                "name": null,
+                "data": {
+                  "html": "<p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>Ano</strong></span></p><p><span style=\"color: rgb(17, 20, 20); font-size: 14px;\">@{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.yearFab}</span></p>"
+                }
+              },
+              {
+                "id": "c_51eb3d0b11f8",
+                "type": "rich_text",
+                "name": null,
+                "data": {
+                  "html": "<p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>Marca e modelo</strong></span></p><p><span style=\"color: rgb(17, 20, 20); font-size: 14px;\">@{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.brandModel}</span></p>"
+                }
+              },
+              {
+                "id": "c_c6c1b0f719cf",
+                "type": "rich_text",
+                "name": null,
+                "data": {
+                  "html": "<p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>Cor</strong></span></p><p><span style=\"color: rgb(17, 20, 20); font-size: 14px;\">@{node:n_b824c7dd9350.descricaoCorVeiculo ?? screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.descricaoCorVeiculo}</span></p>"
+                }
+              },
+              {
+                "id": "c_6c0414a9f03d",
+                "type": "rich_text",
+                "name": null,
+                "data": {
+                  "html": "<p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>Chassi</strong></span></p><p><span style=\"color: rgb(17, 20, 20); font-size: 14px;\">@{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.chassi}</span></p>"
+                }
+              },
+              {
+                "id": "c_8470f04cad1b",
+                "type": "icon_text",
+                "name": null,
+                "data": {
+                  "icon": "info",
+                  "text": "<div data-space-between-row=\"\" style=\"display: flex; flex-direction: row; align-items: flex-start; gap: 16px; width: 100%; min-width: 0px;\"><div data-space-between-cell=\"\" style=\"flex: 100 100 0%; min-width: 0px; overflow-wrap: break-word;\"><p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>Se os dados estiverem incorretos, cancele a solicitação e ajuste as informações antes de prosseguir.</strong></span></p></div><div data-space-between-cell=\"\" style=\"flex: 0 0 0%; min-width: 0px; overflow-wrap: break-word;\"><p></p></div></div><p></p>",
+                  "color": "danger",
+                  "variant": "horizontal",
+                  "alignment": "start"
+                }
+              }
+            ],
+            "data": {}
+          }
+        ]
+      },
+      "footer": {
+        "id": "c_dd08825d3035",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_fcb124f9a5d8",
+            "type": "button",
+            "name": null,
+            "data": {
+              "label": "Confirmar"
+            }
+          },
+          {
+            "id": "c_1fc69009958c",
+            "type": "button",
+            "name": null,
+            "data": {
+              "label": "Cancelar venda",
+              "variant": "outline"
+            }
+          }
+        ]
+      },
+      "navbar": {
+        "id": "b8e4d7c2-1a3f-4e5b-9c8d-6f2a1b0e4d73",
+        "data": {
+          "title": "Confirmação dos dados",
+          "showReturn": true
+        },
+        "name": null,
+        "type": "nav_bar"
+      },
+      "data": {
+        "position": {
+          "x": 12600,
+          "y": 1000
+        }
+      }
+    },
+    {
+      "id": "s_800e39d059b5",
+      "name": "[Vendedor] Termo para venda",
+      "content": {
+        "id": "c_5c4e81934bd5",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_787c01905e3e",
+            "type": "rich_text",
+            "name": null,
+            "data": {
+              "html": "<p><span style=\"font-size:14px;color:#262828\">Leia atentamente e aceite os termos da venda</span></p>"
+            }
+          },
+          {
+            "id": "c_882084b629a0",
+            "type": "rich_text",
+            "name": null,
+            "data": {
+              "html": "<p><span style=\"font-size:16px;color:#262828\"><strong>Termo de ciência e responsabilidade</strong></span></p>"
+            }
+          },
+          {
+            "id": "c_fe7cbff88d92",
+            "type": "rich_text",
+            "name": null,
+            "data": {
+              "html": "<p><span style=\"font-size:14px;color:#262828\">Eu, @{node:n_21da615e160d.full_name}, inscrito no CPF sob o nº @{node:n_21da615e160d.cpf}, declaro para os devidos fins que estou transferindo a propriedade do veículo de minha titularidade, de placa @{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.plate}, marca/modelo @{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.brandModel}, ano de fabricação @{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.yearFab}, Renavam @{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.renavam}, para a empresa @{node:n_02ec1db459dc.nomeComprador}, inscrita no CNPJ sob o nº @{node:n_02ec1db459dc.cpfComprador}, localizada em @{node:n_02ec1db459dc.enderecoComprador}.<br>Estou ciente de que a veracidade das informações fornecidas é de minha total responsabilidade e que a falsidade destas informações poderá acarretar penalidades previstas em lei.</span></p>"
+            }
+          },
+          {
+            "id": "c_375c9817ebc3",
+            "type": "opt_in",
+            "name": null,
+            "data": {
+              "title": "",
+              "options": [
+                {
+                  "id": "1",
+                  "key": "opcao_1",
+                  "text": "<p><span style=\"font-size:14px;color:#111414\">Declaro que li e concordo com os termos e condições acima.</span></p>",
+                  "required": false
+                }
+              ],
+              "position": "center",
+              "minRequired": 1,
+              "validationMode": "minCount"
+            }
+          }
+        ]
+      },
+      "footer": {
+        "id": "c_c674ec328b30",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_bcbcfed95b18",
+            "type": "button",
+            "name": null,
+            "data": {
+              "label": "Confirmar"
+            }
+          }
+        ]
+      },
+      "navbar": {
+        "id": "343024e7-847f-4f3d-bf43-45c2a91d5176",
+        "data": {
+          "title": "Termo para venda",
+          "showReturn": true
+        },
+        "name": null,
+        "type": "nav_bar"
+      },
+      "data": {
+        "position": {
+          "x": 13120,
+          "y": 1000
+        }
+      }
+    },
+    {
+      "id": "s_0807856fe2c1",
+      "name": "[Vendedor] Assinatura",
+      "content": {
+        "id": "c_8aecf57efa30",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_442e3aadf0f3",
+            "type": "icon_text",
+            "name": null,
+            "data": {
+              "icon": "warning",
+              "text": "",
+              "color": "warning",
+              "variant": "vertical",
+              "fontWeight": "semibold"
+            }
+          },
+          {
+            "id": "c_33b7afb1dcdd",
+            "type": "rich_text",
+            "name": null,
+            "data": {
+              "html": "<p><span style=\"font-size:14px;color:#262828\">Precisamos que <strong>confirme a transferência do veículo com sua assinatura eletrônica.</strong></span></p>"
+            }
+          }
+        ]
+      },
+      "footer": {
+        "id": "c_180aced8a091",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_44adce41af68",
+            "type": "button",
+            "name": null,
+            "data": {
+              "label": "Assinar"
+            }
+          },
+          {
+            "id": "c_738a5a523293",
+            "type": "button",
+            "name": null,
+            "data": {
+              "label": "Cancelar",
+              "variant": "outline"
+            }
+          }
+        ]
+      },
+      "navbar": {
+        "id": "118f790a-383f-468e-9cce-bcfdabc3cf83",
+        "data": {
+          "title": "Assinatura do documento",
+          "showReturn": true
+        },
+        "name": null,
+        "type": "nav_bar"
+      },
+      "data": {
+        "position": {
+          "x": 13640,
+          "y": 1000
+        }
+      }
+    },
+    {
+      "id": "s_ae3771c838a8",
+      "name": "[Vendedor] Conclusão loja",
+      "content": {
+        "id": "c_be67129d8319",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_5b02586e1a82",
+            "type": "icon_text",
+            "name": null,
+            "data": {
+              "icon": "check",
+              "text": "<p><span style=\"font-size:14px;color:#000000\"><strong>Tudo certo!</strong></span></p>",
+              "color": "success",
+              "variant": "vertical"
+            }
+          },
+          {
+            "id": "c_25a61420a5a6",
+            "type": "rich_text",
+            "name": null,
+            "data": {
+              "html": "<p><span style=\"font-size:14px;color:#262828\"><strong>Você concluiu a venda do veículo!</strong><br><br>A partir de agora, a responsabilidade do veículo @{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.brandModel}, cor @{node:n_b824c7dd9350.descricaoCorVeiculo ?? screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.descricaoCorVeiculo}, placa @{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.plate} é do comprador. A empresa já foi notificada e o processo está em andamento.<br><br>O veículo está registrado em nome da empresa que está comprando.</span></p>"
+            }
+          }
+        ]
+      },
+      "footer": {
+        "id": "c_39fdc207207b",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_199eae2ef0a3",
+            "type": "button",
+            "name": null,
+            "data": {
+              "label": "Retornar para a tela inicial"
+            }
+          }
+        ]
+      },
+      "navbar": {
+        "id": "0c2faf42-da49-46e6-9fd9-b7f59f96fc9f",
+        "data": {},
+        "name": null,
+        "type": "nav_bar"
+      },
+      "data": {
+        "position": {
+          "x": 14160,
+          "y": 1000
+        }
+      }
     }
   ],
   "drawers": [
@@ -6371,6 +6771,28 @@
           "y": 4064
         }
       }
+    },
+    {
+      "id": "n_8e2f4a6c1b3d",
+      "type": "if_node",
+      "name": "Origem 4 (venda para loja)?",
+      "data": {
+        "position": {
+          "x": 7900,
+          "y": 400
+        },
+        "condition": {
+          "clauses": [
+            {
+              "id": "8e2f4a6c-1b3d-4e5f-9a0b-2c3d4e5f6a7b",
+              "left": "@{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.origem}",
+              "right": "4",
+              "operator": "equals"
+            }
+          ],
+          "combinator": "or"
+        }
+      }
     }
   ],
   "edges": [
@@ -7384,7 +7806,7 @@
     },
     {
       "sourceId": "s_550eb1c5ac27",
-      "targetId": "s_2909315de67e",
+      "targetId": "n_8e2f4a6c1b3d",
       "sourceHandle": "c_ab6568c146a9",
       "targetHandle": "input"
     },
@@ -7398,6 +7820,54 @@
       "sourceId": "s_0d60f1885598",
       "targetId": "n_0a7cda804e6d",
       "sourceHandle": "c_3b12cbb726a6",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_8e2f4a6c1b3d",
+      "targetId": "s_5d25c3769fdc",
+      "sourceHandle": "true",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_8e2f4a6c1b3d",
+      "targetId": "s_2909315de67e",
+      "sourceHandle": "false",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_5d25c3769fdc",
+      "targetId": "s_800e39d059b5",
+      "sourceHandle": "c_fcb124f9a5d8",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_5d25c3769fdc",
+      "targetId": "d_2d7cb6069d63",
+      "sourceHandle": "c_1fc69009958c",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_800e39d059b5",
+      "targetId": "s_0807856fe2c1",
+      "sourceHandle": "c_bcbcfed95b18",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_0807856fe2c1",
+      "targetId": "s_ae3771c838a8",
+      "sourceHandle": "c_44adce41af68",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_0807856fe2c1",
+      "targetId": "d_2d7cb6069d63",
+      "sourceHandle": "c_738a5a523293",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_ae3771c838a8",
+      "targetId": "n_2f71a8110ee1",
+      "sourceHandle": "c_199eae2ef0a3",
       "targetHandle": "input"
     }
   ]
