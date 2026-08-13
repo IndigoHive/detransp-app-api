@@ -1152,8 +1152,8 @@
       },
       "data": {
         "position": {
-          "x": 10180,
-          "y": 40
+          "x": 10188,
+          "y": -220
         }
       }
     },
@@ -3068,8 +3068,8 @@
       },
       "data": {
         "position": {
-          "x": 6428,
-          "y": 3020
+          "x": 6416,
+          "y": 4012
         }
       }
     },
@@ -3125,8 +3125,8 @@
       },
       "data": {
         "position": {
-          "x": 7012,
-          "y": 3048
+          "x": 7040,
+          "y": 4036
         }
       }
     },
@@ -3232,8 +3232,8 @@
       },
       "data": {
         "position": {
-          "x": 7748,
-          "y": 2940
+          "x": 7808,
+          "y": 4032
         }
       }
     },
@@ -3362,8 +3362,8 @@
       },
       "data": {
         "position": {
-          "x": 8396,
-          "y": 3104
+          "x": 8416,
+          "y": 4040
         }
       }
     },
@@ -4606,8 +4606,8 @@
       },
       "data": {
         "position": {
-          "x": 12320,
-          "y": 3612
+          "x": 12316,
+          "y": 3820
         }
       }
     },
@@ -4801,8 +4801,8 @@
       },
       "data": {
         "position": {
-          "x": 12600,
-          "y": 1000
+          "x": 11400,
+          "y": 976
         }
       }
     },
@@ -4883,8 +4883,8 @@
       },
       "data": {
         "position": {
-          "x": 13120,
-          "y": 1000
+          "x": 11880,
+          "y": 1220
         }
       }
     },
@@ -4951,8 +4951,8 @@
       },
       "data": {
         "position": {
-          "x": 13640,
-          "y": 1000
+          "x": 12400,
+          "y": 1144
         }
       }
     },
@@ -5006,8 +5006,8 @@
       },
       "data": {
         "position": {
-          "x": 14160,
-          "y": 1000
+          "x": 12916,
+          "y": 1104
         }
       }
     }
@@ -6516,8 +6516,8 @@
       "name": "Busca endereço",
       "data": {
         "position": {
-          "x": 7572,
-          "y": 3496
+          "x": 7588,
+          "y": 4488
         },
         "method": "GET",
         "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/enderecos/@{screen:s_85ba93c2e996.comp:c_6a5c088eac53.value}",
@@ -6536,8 +6536,8 @@
       "name": "Criar Compra",
       "data": {
         "position": {
-          "x": 8980,
-          "y": 3920
+          "x": 8964,
+          "y": 4400
         },
         "method": "POST",
         "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/criar-compra",
@@ -6778,8 +6778,8 @@
       "name": "Origem 4 (venda para loja)?",
       "data": {
         "position": {
-          "x": 7900,
-          "y": 400
+          "x": 7824,
+          "y": 708
         },
         "condition": {
           "clauses": [
@@ -6791,6 +6791,17 @@
             }
           ],
           "combinator": "or"
+        }
+      }
+    },
+    {
+      "id": "n_33535da57490",
+      "type": "end_node",
+      "name": "End",
+      "data": {
+        "position": {
+          "x": 13324,
+          "y": 1588
         }
       }
     }
@@ -7866,7 +7877,7 @@
     },
     {
       "sourceId": "s_ae3771c838a8",
-      "targetId": "n_2f71a8110ee1",
+      "targetId": "n_33535da57490",
       "sourceHandle": "c_199eae2ef0a3",
       "targetHandle": "input"
     }
