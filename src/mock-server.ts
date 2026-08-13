@@ -261,17 +261,28 @@ app.post('/api/auth/govbr/token', (req, res) => {
   })
 })
 
+const MOCK_FLOW_USER_INFO = {
+  cpf: '123.456.789-00',
+  full_name: 'João da Silva Santos',
+  email: 'joao.silva@email.com',
+  phone_number: '+5511999998888',
+}
+
 app.get('/api/auth/govbr/userinfo', (_req, res) => {
   res.json({
     data: {
       sub: '12345678900',
-      name: 'João da Silva Santos',
-      email: 'joao.silva@email.com',
-      phone_number: '+5511999998888',
-      cpf: '123.456.789-00',
+      name: MOCK_FLOW_USER_INFO.full_name,
+      email: MOCK_FLOW_USER_INFO.email,
+      phone_number: MOCK_FLOW_USER_INFO.phone_number,
+      cpf: MOCK_FLOW_USER_INFO.cpf,
       picture: null,
     },
   })
+})
+
+app.get('/api/auth/govbr/flow-user-info', (_req, res) => {
+  res.json(MOCK_FLOW_USER_INFO)
 })
 
 app.post('/api/auth/govbr/logout', (_req, res) => {
@@ -623,9 +634,139 @@ app.post('/api/services/solicitar-vistoria-em-transito', (req, res) => {
 // ---------------------------------------------------------------------------
 // TDV (Transferência Digital de Veículo)
 // ---------------------------------------------------------------------------
+const MOCK_TDV_COMPRA_ENDERECO = {
+  codigoComprador: '123.456.789-00',
+  nomeComprador: 'João da Silva Santos',
+  logradouroComprador: 'RUA BOA VISTA',
+  numeroComprador: '10',
+  complementoComprador: '',
+  bairroComprador: 'CENTRO',
+  nomeMunicipioComprador: 'SÃO PAULO',
+  ufComprador: 'SP',
+  cepComprador: '01014001',
+  enderecoComprador: 'RUA BOA VISTA, 10, CENTRO, SÃO PAULO - SP, 01014001',
+  valorVenda: 'R$ 90.000,00',
+  quilometragem: '13.000',
+}
+
+function mockTdvCompra (vehicle: {
+  id: string
+  title: string
+  plate: string
+  brandModel: string
+  renavam: string
+  yearFab: string
+  yearMod: string
+  origem: string
+  codigoTransferencia?: string
+  ativa?: string
+  estado?: string
+  proximaAcao?: string
+  origemComunicacaoVendaVeiculo?: string
+  nomeVendedor?: string
+  codigoVendedor?: string
+}) {
+  return {
+    licensingStatus: 'REGULAR',
+    licensingExpirationDate: '31/12/2025',
+    type: 'Passeio',
+    lastLicensing: '10/05/2025',
+    codigoTransferencia: '',
+    descricaoMarcaVeiculo: vehicle.brandModel,
+    descricaoCorVeiculo: 'Branco',
+    nomeVendedor: 'João Vendedor',
+    codigoVendedor: '11122233344',
+    nomeMunicipioVeiculo: 'SAO PAULO',
+    ...MOCK_TDV_COMPRA_ENDERECO,
+    ...vehicle,
+  }
+}
+
+const MOCK_TDV_COMPRAS = [
+  mockTdvCompra({
+    id: 'origem-1',
+    title: 'FIAT/ARGO 1.0 (1 · TDV 1.0)',
+    plate: 'ABC1A11',
+    brandModel: 'FIAT/ARGO 1.0 (1 · TDV 1.0)',
+    renavam: '00010020031',
+    yearFab: '2021',
+    yearMod: '2022',
+    origem: '1',
+    codigoTransferencia: 'TDV-MOCK-O1',
+    estado: '3',
+    proximaAcao: 'comprador',
+    nomeVendedor: 'Maria Oliveira Souza',
+    codigoVendedor: '98765432100',
+  }),
+  mockTdvCompra({
+    id: 'origem-2',
+    title: 'HONDA/CIVIC (2 · e-Notariado)',
+    plate: 'DEF2B22',
+    brandModel: 'HONDA/CIVIC (2 · e-Notariado)',
+    renavam: '00010020032',
+    yearFab: '2020',
+    yearMod: '2021',
+    origem: '2',
+    origemComunicacaoVendaVeiculo: '9',
+    ativa: 'true',
+  }),
+  mockTdvCompra({
+    id: 'origem-3',
+    title: 'VW/GOL 1.0 (3 · CDT)',
+    plate: 'GHI3C33',
+    brandModel: 'VW/GOL 1.0 (3 · CDT)',
+    renavam: '00010020033',
+    yearFab: '2019',
+    yearMod: '2020',
+    origem: '3',
+    origemComunicacaoVendaVeiculo: '8',
+    ativa: 'true',
+  }),
+  mockTdvCompra({
+    id: 'origem-4',
+    title: 'TOYOTA/COROLLA (4 · Renave saída)',
+    plate: 'JKL4D44',
+    brandModel: 'TOYOTA/COROLLA (4 · Renave saída)',
+    renavam: '00010020034',
+    yearFab: '2022',
+    yearMod: '2023',
+    origem: '4',
+    ativa: 'true',
+  }),
+  mockTdvCompra({
+    id: 'origem-6',
+    title: 'CHEV/ONIX (6 · Cartório)',
+    plate: 'MNO6E66',
+    brandModel: 'CHEV/ONIX (6 · Cartório)',
+    renavam: '00010020036',
+    yearFab: '2021',
+    yearMod: '2022',
+    origem: '6',
+    origemComunicacaoVendaVeiculo: '4',
+    codigoTransferencia: "null",
+    estado: '7',
+    ativa: 'true',
+  }),
+]
+
+const MOCK_TDV_ENTRADA_RENAVE = {
+  id: 'v-origem-5',
+  plate: 'PQR5F55',
+  title: 'HYUNDAI/HB20 (5 · Entrada Renave)',
+  type: 'AUTOMOVEL',
+  licensingStatus: 'REGULAR' as const,
+  brandModel: 'HYUNDAI/HB20 (5 · Entrada Renave)',
+  renavam: '00010020035',
+  lastLicensing: '2025',
+  yearFab: '2022',
+  yearMod: '2023',
+  licensingExpirationDate: '2026-12-31',
+}
+
 app.get('/api/tdv/veiculos', (_req, res) => {
+  const vehicles = [...MOCK_VEHICLES, MOCK_TDV_ENTRADA_RENAVE]
   res.json({
-    vehicles: MOCK_VEHICLES.map(v => ({
+    vehicles: vehicles.map(v => ({
       id: v.id,
       title: v.title,
       plate: v.plate,
@@ -642,6 +783,22 @@ app.get('/api/tdv/veiculos', (_req, res) => {
 })
 
 app.post('/api/tdv/analise-requisitos', (req, res) => {
+  const plate = req.body?.selectedVehicle?.plate
+  if (plate === MOCK_TDV_ENTRADA_RENAVE.plate) {
+    res.json({
+      hasRestriction: false,
+      hasActiveTDV: true,
+      codigoTransferencia: 'TDV-MOCK-O5',
+      estado: '2',
+      origem: '5',
+      cpfComprador: '16794464003768',
+      nomeComprador: 'CAOA MOTOR DO BRASIL LTDA',
+      emailComprador: 'CERTIDOCPJ@EMAIL.COM',
+      enderecoComprador: 'Avenida Conselheiro Nébias, 240, Encruzilhada, Santos - SP, 11045001',
+      descricaoCorVeiculo: 'BRANCA',
+    })
+    return
+  }
   res.json({
     hasRestriction: false,
     hasActiveTDV: false,
@@ -684,71 +841,7 @@ app.post('/api/tdv/cancelar', (req, res) => {
 })
 
 app.get('/api/tdv/compras', (_req, res) => {
-  res.json({
-    vehicles: [
-      {
-        id: '10',
-        title: 'FIAT/ARGO 1.0',
-        plate: 'DEF5G67',
-        licensingStatus: 'REGULAR',
-        licensingExpirationDate: '31/12/2025',
-        type: 'Passeio',
-        brandModel: 'FIAT/ARGO 1.0',
-        renavam: '00010020030',
-        lastLicensing: '10/05/2025',
-        yearFab: '2021',
-        yearMod: '2022',
-        codigoTransferencia: 'TDV-MOCK001',
-        origem: '4',
-        codigoComprador: '123.456.789-00',
-        nomeComprador: 'João da Silva Santos',
-        logradouroComprador: 'RUA BOA VISTA',
-        numeroComprador: '10',
-        complementoComprador: '',
-        bairroComprador: 'CENTRO',
-        nomeMunicipioComprador: 'SÃO PAULO',
-        ufComprador: 'SP',
-        cepComprador: '01014001',
-        enderecoComprador: 'RUA BOA VISTA, 10, CENTRO, SÃO PAULO - SP, 01014001',
-        valorVenda: 'R$ 90.000,00',
-        quilometragem: '13.000',
-      },
-      {
-        id: 'GHI8J90-00010020031',
-        title: 'VW/GOL 1.0',
-        plate: 'GHI8J90',
-        licensingStatus: 'REGULAR',
-        licensingExpirationDate: '31/12/2025',
-        type: 'Passeio',
-        brandModel: 'VW/GOL 1.0',
-        renavam: '00010020031',
-        lastLicensing: '10/05/2025',
-        yearFab: '2019',
-        yearMod: '2020',
-        codigoTransferencia: '',
-        ativa: 'true',
-        origem: '4',
-        origemComunicacaoVendaVeiculo: '9',
-        descricaoMarcaVeiculo: 'VW/GOL 1.0',
-        descricaoCorVeiculo: 'Branco',
-        nomeVendedor: 'João Vendedor',
-        codigoVendedor: '11122233344',
-        nomeMunicipioVeiculo: 'SAO PAULO',
-        codigoComprador: '123.456.789-00',
-        nomeComprador: 'João da Silva Santos',
-        logradouroComprador: 'RUA BOA VISTA',
-        numeroComprador: '10',
-        complementoComprador: '',
-        bairroComprador: 'CENTRO',
-        nomeMunicipioComprador: 'SÃO PAULO',
-        ufComprador: 'SP',
-        cepComprador: '01014001',
-        enderecoComprador: 'RUA BOA VISTA, 10, CENTRO, SÃO PAULO - SP, 01014001',
-        valorVenda: 'R$ 90.000,00',
-        quilometragem: '13.000',
-      },
-    ],
-  })
+  res.json({ vehicles: MOCK_TDV_COMPRAS })
 })
 
 app.post('/api/tdv/confirmar-compra', (req, res) => {
@@ -845,9 +938,16 @@ app.post('/api/tdv/criar-compra', (req, res) => {
 
 app.post('/api/tdv/validar-tdv', (_req, res) => {
   // Uncomment one return to test each TDV 6.0 path:
-  return res.json({ proximaAcao: 'enotariado' })
-  // return res.json({ proximaAcao: 'duas_assinaturas' })
+  // return res.json({ proximaAcao: 'enotariado' })
+  return res.json({ proximaAcao: 'duas_assinaturas' })
   // return res.json({ proximaAcao: 'duas_pessoas_fisicas' })
+})
+
+app.get('/api/tdv/link-assinatura-iti', (_req, res) => {
+  res.json({
+    link: 'https://iti-mock.example/oauth2.0/authorize?client_id=mock&redirect_uri=detransp://iti/callback&response_type=code&scope=sign',
+    redirectUri: 'detransp://iti/callback',
+  })
 })
 
 app.post('/api/tdv/valida-assinatura', (req, res) => {
@@ -972,6 +1072,7 @@ app.listen(PORT, () => {
   console.log('    POST /api/auth/govbr/authorization-url')
   console.log('    POST /api/auth/govbr/token')
   console.log('    GET  /api/auth/govbr/userinfo')
+  console.log('    GET  /api/auth/govbr/flow-user-info')
   console.log('    POST /api/auth/govbr/logout')
   console.log('  Flows:')
   console.log('    GET  /api/flows')
@@ -1012,6 +1113,7 @@ app.listen(PORT, () => {
   console.log('    POST /api/tdv/confirmar-compra')
   console.log('    POST /api/tdv/criar-compra')
   console.log('    POST /api/tdv/validar-tdv')
+  console.log('    GET  /api/tdv/link-assinatura-iti')
   console.log('    POST /api/tdv/valida-assinatura')
   console.log('    POST /api/tdv/prova-vida')
   console.log('    GET  /api/tdv/consulta-debitos')
