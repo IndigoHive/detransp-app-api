@@ -1,6 +1,7 @@
 import { UnprocessableEntity } from 'http-errors'
 import type { DetranSpServiceNowTdvClient } from '../../../clients/detran-sp-service-now/tdv'
 import { CodigoEstadoTDV } from '../../../clients/detran-sp-service-now/tdv/types'
+import { centsToReais } from '../../../utils/cents-to-reais'
 import { sanitizeEnderecoComplemento } from '../../../utils/sanitize-endereco-complemento'
 import { extractBearerToken, extractCpfFromToken } from '../../../utils/token'
 
@@ -21,7 +22,9 @@ export type InformarDadosVendaInput = {
   codigoProvaVidaVendedor: string
 }
 
-export type InformarDadosVendaResult = Record<string, never>
+export type InformarDadosVendaResult = {
+  valorVenda: string
+}
 
 // Advances the TDV to state 2 (DADOS_VENDA_INFORMADOS) as soon as the seller submits the
 // sale screen (value + mileage) — not batched with TDV creation or ATPV-e generation.
@@ -38,6 +41,7 @@ export class InformarDadosVendaService {
     const auth = { token, cpf }
 
     const tdvAtual = (await this.client.buscaTdv(auth, input.codigoTransferencia))?.result
+    const valorVendaReais = centsToReais(input.valorVenda)
 
     if (!tdvAtual?.kmVistoriadaVeiculo) {
       throw new UnprocessableEntity('O veículo precisa ser vistoriado antes de prosseguir com a venda.')
@@ -67,13 +71,13 @@ export class InformarDadosVendaService {
         logradouroComprador: endereco?.logradouro ?? endereco?.endereco ?? '',
         numeroComprador: input.numeroComprador,
         complementoComprador: sanitizeEnderecoComplemento(input.complementoComprador ?? ''),
-        valorVendaVeiculo: input.valorVenda,
+        valorVendaVeiculo: valorVendaReais,
         kmVeiculo: input.quilometragem,
         codigoProvaVidaVendedor: input.codigoProvaVidaVendedor,
         tipoProvaVidaVendedor: '2' // LIVENESS
       })
     }
 
-    return {}
+    return { valorVenda: valorVendaReais }
   }
 }
