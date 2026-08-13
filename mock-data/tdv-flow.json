@@ -583,7 +583,7 @@
             "type": "rich_text",
             "name": null,
             "data": {
-              "html": "<p><span style=\"font-size:14px;color:#262828\">Veículo já possui processo de transferência em andamento. <br></span></p>"
+              "html": "<p style=\"text-align: center;\"><span style=\"color: rgb(38, 40, 40); font-size: 16px;\">Veículo já possui processo de transferência em andamento. </span></p>"
             }
           },
           {
@@ -591,7 +591,7 @@
             "type": "rich_text",
             "name": null,
             "data": {
-              "html": "<p style=\"text-align:center\"><span style=\"font-size:16px;color:#262828\"><strong>Deseja continuar com o processo de transferência em andamento?<br></strong></span></p>"
+              "html": "<p style=\"text-align: center;\"><span style=\"color: rgb(38, 40, 40); font-size: 16px;\"><strong>Deseja continuar com o processo de transferência em andamento?</strong></span></p>"
             }
           }
         ]
@@ -2470,7 +2470,7 @@
             "type": "icon_text",
             "name": null,
             "data": {
-              "icon": "cancel",
+              "icon": "info",
               "text": " ",
               "color": "danger",
               "variant": "vertical"
@@ -2481,7 +2481,7 @@
             "type": "rich_text",
             "name": null,
             "data": {
-              "html": "<p><span style=\"font-size:14px;color:#262828\">Olá, @{node:n_21da615e160d.full_name}<br><br>A compra do veículo foi cancelada pela pessoa que você indicou como compradora. Por isso, encerramos sua solicitação.<br><br>Caso precise, você deve iniciar uma nova intenção de venda do veículo.<br></span></p>"
+              "html": "<p><span style=\"color: rgb(38, 40, 40); font-size: 16px;\">Olá, @{node:n_21da615e160d.full_name}.<br><br>A compra do veículo foi cancelada pela pessoa que você indicou como compradora. Por isso, encerramos sua solicitação.<br><br>Caso precise, você deve iniciar uma nova intenção de venda do veículo.</span></p>"
             }
           }
         ]
@@ -2671,7 +2671,7 @@
             "type": "icon_text",
             "name": null,
             "data": {
-              "icon": "check_circle",
+              "icon": "info",
               "text": " ",
               "color": "danger",
               "variant": "vertical"
@@ -2682,7 +2682,7 @@
             "type": "rich_text",
             "name": null,
             "data": {
-              "html": "<p><span style=\"font-size:14px;color:#262828\">Olá, @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}.<br><br>A compra do veículo foi cancelada pelo vendedor do veículo. Por isso, encerramos sua solicitação.<br></span></p>"
+              "html": "<p><span style=\"color: rgb(38, 40, 40); font-size: 16px;\">Olá,&nbsp;@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}.<br><br>A compra do veículo foi cancelada pelo vendedor do veículo. Por isso, encerramos sua solicitação.<br></span></p>"
             }
           },
           {
@@ -2690,6 +2690,10 @@
             "type": "vehicle_info",
             "name": null,
             "data": {
+              "layout": [
+                "plate",
+                "brand_model"
+              ],
               "source": "@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle}",
               "vehicle": {
                 "id": "1",
