@@ -409,74 +409,6 @@
       }
     },
     {
-      "id": "s_95c89379f948",
-      "name": "Onboarding 7",
-      "content": {
-        "id": "c_7e25fc2b3842",
-        "type": "group",
-        "children": [
-          {
-            "id": "c_ee17af039cdb",
-            "type": "image",
-            "name": null,
-            "data": {
-              "asset": {
-                "id": "e53caef2-466d-4ea7-92fe-b7e13302d8db",
-                "url": "https://detransp-app-editor-assets.s3.amazonaws.com/4199212a-6744-4162-80d6-4430cfe0a7f4.png"
-              }
-            }
-          },
-          {
-            "id": "c_a865f501b75f",
-            "type": "rich_text",
-            "name": null,
-            "data": {
-              "html": "<p style=\"text-align:center\"><span style=\"font-size:16px;color:#262828\"><strong>Você vai precisar do aplicativo gov.br</strong></span></p>"
-            }
-          },
-          {
-            "id": "c_1476161603ab",
-            "type": "rich_text",
-            "name": null,
-            "data": {
-              "html": "<p><span style=\"font-size:14px;color:#262828\">Certifique se o app gov.br está instalado no seu celular para o reconhecimento facial.</span></p>"
-            }
-          }
-        ]
-      },
-      "footer": {
-        "id": "c_d284eb364059",
-        "type": "group",
-        "children": [
-          {
-            "id": "c_62125e5d5178",
-            "type": "button",
-            "name": null,
-            "data": {
-              "label": "Continuar"
-            }
-          }
-        ]
-      },
-      "navbar": {
-        "id": "cdaaf5bf-e81b-4630-a024-624bf3e02137",
-        "data": {
-          "steps": 7,
-          "actionIcon": "close",
-          "showReturn": true,
-          "currentStep": 7
-        },
-        "name": null,
-        "type": "nav_bar"
-      },
-      "data": {
-        "position": {
-          "x": 2772,
-          "y": 56
-        }
-      }
-    },
-    {
       "id": "s_d1720681ec27",
       "name": "Escolha caminho",
       "content": {
@@ -5784,17 +5716,6 @@
       }
     },
     {
-      "id": "n_0be79e85fea6",
-      "type": "waypoint_node",
-      "name": null,
-      "data": {
-        "position": {
-          "x": 3424,
-          "y": -52
-        }
-      }
-    },
-    {
       "id": "n_796144e7ef81",
       "type": "waypoint_node",
       "name": null,
@@ -6557,7 +6478,7 @@
     },
     {
       "sourceId": "s_eac3ed5620ab",
-      "targetId": "s_95c89379f948",
+      "targetId": "s_d1720681ec27",
       "sourceHandle": "c_8740a40c5026",
       "targetHandle": "input"
     },
@@ -6928,18 +6849,6 @@
       "targetHandle": "input"
     },
     {
-      "sourceId": "s_95c89379f948",
-      "targetId": "n_0be79e85fea6",
-      "sourceHandle": "navbar_action",
-      "targetHandle": "left-target"
-    },
-    {
-      "sourceId": "n_0be79e85fea6",
-      "targetId": "s_d1720681ec27",
-      "sourceHandle": "right-source",
-      "targetHandle": "input"
-    },
-    {
       "sourceId": "s_eac3ed5620ab",
       "targetId": "n_796144e7ef81",
       "sourceHandle": "navbar_action",
@@ -7093,12 +7002,6 @@
       "sourceId": "s_8fefaaacf3d9",
       "targetId": "n_4d4ab6c16ec8",
       "sourceHandle": "c_b1ff1279cc4e",
-      "targetHandle": "input"
-    },
-    {
-      "sourceId": "s_95c89379f948",
-      "targetId": "s_d1720681ec27",
-      "sourceHandle": "c_62125e5d5178",
       "targetHandle": "input"
     },
     {
