@@ -3060,8 +3060,10 @@
       "navbar": {
         "id": "c_3b2cb9cf659c",
         "data": {
+          "steps": 8,
           "title": "Confirmação de compra",
-          "showReturn": true
+          "showReturn": true,
+          "currentStep": 2
         },
         "name": null,
         "type": "nav_bar"
@@ -3117,8 +3119,10 @@
       "navbar": {
         "id": "c_c3f8ea604d12",
         "data": {
+          "steps": 8,
           "title": "Editar endereço",
-          "showReturn": true
+          "showReturn": true,
+          "currentStep": 3
         },
         "name": null,
         "type": "nav_bar"
@@ -3224,8 +3228,10 @@
       "navbar": {
         "id": "c_c3f8ea604d12",
         "data": {
+          "steps": 8,
           "title": "Editar endereço",
-          "showReturn": true
+          "showReturn": true,
+          "currentStep": 3
         },
         "name": null,
         "type": "nav_bar"
@@ -3383,8 +3389,10 @@
       "navbar": {
         "id": "c_aca24fbe8263",
         "data": {
+          "steps": 8,
           "title": "Confirmação de endereço",
-          "showReturn": true
+          "showReturn": true,
+          "currentStep": 3
         },
         "name": null,
         "type": "nav_bar"
@@ -4822,8 +4830,10 @@
       "navbar": {
         "id": "b8e4d7c2-1a3f-4e5b-9c8d-6f2a1b0e4d73",
         "data": {
+          "steps": 8,
           "title": "Confirmação dos dados",
-          "showReturn": true
+          "showReturn": true,
+          "currentStep": 4
         },
         "name": null,
         "type": "nav_bar"
@@ -4904,8 +4914,10 @@
       "navbar": {
         "id": "343024e7-847f-4f3d-bf43-45c2a91d5176",
         "data": {
+          "steps": 8,
           "title": "Termo para venda",
-          "showReturn": true
+          "showReturn": true,
+          "currentStep": 5
         },
         "name": null,
         "type": "nav_bar"
@@ -4972,8 +4984,10 @@
       "navbar": {
         "id": "118f790a-383f-468e-9cce-bcfdabc3cf83",
         "data": {
+          "steps": 8,
           "title": "Assinatura do documento",
-          "showReturn": true
+          "showReturn": true,
+          "currentStep": 6
         },
         "name": null,
         "type": "nav_bar"
