@@ -5284,6 +5284,96 @@
           "y": 640
         }
       }
+    },
+    {
+      "id": "d_9b3d7f4a1e50",
+      "name": "Duas assinaturas",
+      "content": {
+        "id": "c_bd6ba8b5d567",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_86c28f3b94ff",
+            "type": "icon_text",
+            "name": null,
+            "data": {
+              "icon": "warning",
+              "text": "<p><span style=\"font-size:14px;color:#000000\">Para este serviço, é obrigatório que o cartório tenha comunicado a assinatura tanto do comprador quanto do vendedor. Não foi localizada uma assinatura. Portanto, para realizar sua transferência o comprador precisa solicitar transferência pelo serviço Transferir Propriedade de Veículo Registrado em São Paulo.</span></p>",
+              "color": "warning",
+              "variant": "horizontal",
+              "alignment": "start",
+              "fontWeight": "normal"
+            }
+          }
+        ]
+      },
+      "footer": {
+        "id": "c_a1f0e9d8c7b6",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_b2e1f0d9c8a7",
+            "type": "button",
+            "name": null,
+            "data": {
+              "label": "Fechar",
+              "variant": "outline",
+              "clickAction": "back"
+            }
+          }
+        ]
+      },
+      "data": {
+        "position": {
+          "x": 7240,
+          "y": 3280
+        }
+      }
+    },
+    {
+      "id": "d_0c4e8a5b2f61",
+      "name": "Duas pessoas físicas",
+      "content": {
+        "id": "c_219e16c5a7a4",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_e80c5558fd8d",
+            "type": "icon_text",
+            "name": null,
+            "data": {
+              "icon": "check",
+              "text": "<p><span style=\"font-size:14px;color:#000000\">Este serviço é destinada exclusivamente quando o comprador e vendedor são pessoas físicas. Caso uma das partes for uma empresa (pessoa jurídica), solicite a transferência pelo serviço Transferir Propriedade de Veículo Registrado em São Paulo.</span></p>",
+              "color": "warning",
+              "variant": "horizontal",
+              "alignment": "start",
+              "fontWeight": "normal"
+            }
+          }
+        ]
+      },
+      "footer": {
+        "id": "c_c3d2e1f0a9b8",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_d4e3f2a1b0c9",
+            "type": "button",
+            "name": null,
+            "data": {
+              "label": "Fechar",
+              "variant": "outline",
+              "clickAction": "back"
+            }
+          }
+        ]
+      },
+      "data": {
+        "position": {
+          "x": 7240,
+          "y": 3600
+        }
+      }
     }
   ],
   "actions": [
@@ -6466,7 +6556,7 @@
     {
       "id": "n_c3f8a2e9b147",
       "type": "if_node",
-      "name": "Origem 2|3|4? (skip liveness + confirmar-compra)",
+      "name": "Origem 2|3|4|6? (skip liveness + confirmar-compra)",
       "data": {
         "position": {
           "x": 5976,
@@ -6491,10 +6581,104 @@
               "left": "@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.origem}",
               "right": "4",
               "operator": "equals"
+            },
+            {
+              "id": "skip-pv-origem-eq-6",
+              "left": "@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.origem}",
+              "right": "6",
+              "operator": "equals"
             }
           ],
           "combinator": "or"
         }
+      }
+    },
+    {
+      "id": "n_6e0a4c1d8b27",
+      "type": "if_node",
+      "name": "TDV 6.0 cartório (origem 6 + estado 7)?",
+      "data": {
+        "position": {
+          "x": 6240,
+          "y": 3684
+        },
+        "condition": {
+          "clauses": [
+            {
+              "id": "tdv60-origem-eq-6",
+              "left": "@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.origem}",
+              "right": "6",
+              "operator": "equals"
+            },
+            {
+              "id": "tdv60-estado-eq-7",
+              "left": "@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.estado}",
+              "right": "7",
+              "operator": "equals"
+            }
+          ],
+          "combinator": "and"
+        }
+      }
+    },
+    {
+      "id": "n_7f1b5d2e9c38",
+      "type": "http_node",
+      "name": "Validar TDV",
+      "data": {
+        "position": {
+          "x": 6560,
+          "y": 3480
+        },
+        "method": "POST",
+        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/validar-tdv",
+        "body": "{\n  \"codigoTransferenciaVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoTransferencia}\",\n  \"placaVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.plate}\",\n  \"codigoRenavamVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.renavam}\",\n  \"origem\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.origem}\",\n  \"estado\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.estado}\",\n  \"ativa\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.ativa}\",\n  \"origemComunicacaoVendaVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.origemComunicacaoVendaVeiculo}\",\n  \"descricaoMarcaVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.descricaoMarcaVeiculo}\",\n  \"codigoComprador\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoComprador}\",\n  \"nomeComprador\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}\",\n  \"nomeVendedor\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeVendedor}\",\n  \"codigoVendedor\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoVendedor}\",\n  \"nomeMunicipioVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeMunicipioVeiculo}\",\n  \"nomeMunicipioComprador\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeMunicipioComprador}\",\n  \"chassiVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.chassiVeiculo}\",\n  \"kmVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.kmVeiculo}\",\n  \"kmVistoriadaVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.kmVistoriadaVeiculo}\"\n}",
+        "responseExamples": [
+          {
+            "id": "ex-validar-tdv-enotariado",
+            "name": "Sucesso — e-notariado",
+            "value": "{\n  \"proximaAcao\": \"enotariado\"\n}"
+          },
+          {
+            "id": "ex-validar-tdv-duas-assinaturas",
+            "name": "Duas assinaturas",
+            "value": "{\n  \"proximaAcao\": \"duas_assinaturas\"\n}"
+          },
+          {
+            "id": "ex-validar-tdv-duas-pessoas",
+            "name": "Duas pessoas físicas",
+            "value": "{\n  \"proximaAcao\": \"duas_pessoas_fisicas\"\n}"
+          }
+        ]
+      }
+    },
+    {
+      "id": "n_8a2c6e3f0d49",
+      "type": "case_node",
+      "name": "Rotear validar-tdv",
+      "data": {
+        "position": {
+          "x": 6880,
+          "y": 3480
+        },
+        "value": "@{node:n_7f1b5d2e9c38.proximaAcao}",
+        "routes": [
+          {
+            "id": "r_validar_enotariado_01",
+            "label": "E-notariado",
+            "value": "enotariado"
+          },
+          {
+            "id": "r_validar_duas_assinaturas_01",
+            "label": "Duas assinaturas",
+            "value": "duas_assinaturas"
+          },
+          {
+            "id": "r_validar_duas_pessoas_01",
+            "label": "Duas pessoas físicas",
+            "value": "duas_pessoas_fisicas"
+          }
+        ]
       }
     },
     {
@@ -7807,7 +7991,7 @@
     },
     {
       "sourceId": "n_c3f8a2e9b147",
-      "targetId": "n_8c3f5d0b2a71",
+      "targetId": "n_6e0a4c1d8b27",
       "sourceHandle": "true",
       "targetHandle": "input"
     },
@@ -8055,6 +8239,42 @@
       "sourceId": "n_cdfe4c34d954",
       "targetId": "s_0807856fe2c1",
       "sourceHandle": "left-source",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_6e0a4c1d8b27",
+      "targetId": "n_7f1b5d2e9c38",
+      "sourceHandle": "true",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_6e0a4c1d8b27",
+      "targetId": "n_8c3f5d0b2a71",
+      "sourceHandle": "false",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_7f1b5d2e9c38",
+      "targetId": "n_8a2c6e3f0d49",
+      "sourceHandle": "output",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_8a2c6e3f0d49",
+      "targetId": "n_8c3f5d0b2a71",
+      "sourceHandle": "r_validar_enotariado_01",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_8a2c6e3f0d49",
+      "targetId": "d_9b3d7f4a1e50",
+      "sourceHandle": "r_validar_duas_assinaturas_01",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_8a2c6e3f0d49",
+      "targetId": "d_0c4e8a5b2f61",
+      "sourceHandle": "r_validar_duas_pessoas_01",
       "targetHandle": "input"
     }
   ]

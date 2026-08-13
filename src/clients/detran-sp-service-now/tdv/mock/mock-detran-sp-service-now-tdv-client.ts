@@ -16,7 +16,9 @@ import type {
   CriaTdvResult,
   ListaTdvsResult,
   ListTdvsQuery,
-  ListaVeiculosProprietarioResult
+  ListaVeiculosProprietarioResult,
+  ValidarTdvCommand,
+  ValidarTdvResult
 } from '../types'
 import { tdvMockStore } from './tdv-mock-store'
 
@@ -185,5 +187,10 @@ export class MockDetranSpServiceNowTdvClient extends DetranSpServiceNowTdvClient
   ): Promise<BuscaPixQrCodeTdvResult> {
     this.seed()
     return tdvMockStore.getPixQrCode(codigoTransferenciaVeiculo)
+  }
+
+  async validarTdv (_auth: DetranSpServiceNowAuth, _data: ValidarTdvCommand): Promise<ValidarTdvResult> {
+    this.seed()
+    return { result: {} }
   }
 }

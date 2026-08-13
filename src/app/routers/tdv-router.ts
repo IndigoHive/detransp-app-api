@@ -80,6 +80,13 @@ export function tdvRouter (): Router {
     res.status(200).json(result)
   })
 
+  router.post('/validar-tdv', async (req, res) => {
+    const { accessToken } = req.session!
+    const service = req.scope.resolve('validarTdvService')
+    const result = await service.run(accessToken, req.body)
+    res.status(200).json(result)
+  })
+
   router.post('/valida-assinatura', async (req, res) => {
     const { accessToken } = req.session!
     const service = req.scope.resolve('validaAssinaturaService')

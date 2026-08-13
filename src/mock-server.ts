@@ -843,6 +843,13 @@ app.post('/api/tdv/criar-compra', (req, res) => {
   // return res.json({ showSnackbar: { variant: 'error', title: 'Erro', description: 'Estado da transferência inválido para continuar' } })
 })
 
+app.post('/api/tdv/validar-tdv', (_req, res) => {
+  // Uncomment one return to test each TDV 6.0 path:
+  return res.json({ proximaAcao: 'enotariado' })
+  // return res.json({ proximaAcao: 'duas_assinaturas' })
+  // return res.json({ proximaAcao: 'duas_pessoas_fisicas' })
+})
+
 app.post('/api/tdv/valida-assinatura', (req, res) => {
   res.json({
     valid: true,
@@ -1004,6 +1011,7 @@ app.listen(PORT, () => {
   console.log('    GET  /api/tdv/compras')
   console.log('    POST /api/tdv/confirmar-compra')
   console.log('    POST /api/tdv/criar-compra')
+  console.log('    POST /api/tdv/validar-tdv')
   console.log('    POST /api/tdv/valida-assinatura')
   console.log('    POST /api/tdv/prova-vida')
   console.log('    GET  /api/tdv/consulta-debitos')

@@ -13,7 +13,9 @@ import type {
   CriaTdvResult,
   ListaTdvsResult,
   ListTdvsQuery,
-  ListaVeiculosProprietarioResult
+  ListaVeiculosProprietarioResult,
+  ValidarTdvCommand,
+  ValidarTdvResult
 } from './types'
 
 export type DetranSpServiceNowTdvClientParams = {
@@ -121,6 +123,16 @@ export class DetranSpServiceNowTdvClient extends DetranSpServiceNowHttp {
       await this.axios.get<BuscaPixQrCodeTdvResult>(
         `/transferencias-de-veiculos/${codigoTransferenciaVeiculo}/qr-code`,
         { ...this.withAuth(auth), params: { forcarNovo } }
+      )
+    ).data
+  }
+
+  async validarTdv (auth: DetranSpServiceNowAuth, data: ValidarTdvCommand): Promise<ValidarTdvResult> {
+    return (
+      await this.axios.post<ValidarTdvResult>(
+        '/transferencias-de-veiculos/validar-tdv',
+        data,
+        this.withAuth(auth)
       )
     ).data
   }

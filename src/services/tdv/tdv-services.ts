@@ -15,6 +15,7 @@ import { ConsultaDebitosService } from './consulta-debitos'
 import { BuscaEnderecoService } from './busca-endereco'
 import { ProvaVidaService } from './prova-vida'
 import { GerarLinkAssinaturaItiService } from './gerar-link-assinatura-iti'
+import { ValidarTdvService } from './validar-tdv'
 
 export type TdvServices = {
   consultaVeiculosTdvService: ConsultaVeiculosService
@@ -33,6 +34,7 @@ export type TdvServices = {
   buscaEnderecoService: BuscaEnderecoService
   provaVidaService: ProvaVidaService
   gerarLinkAssinaturaItiService: GerarLinkAssinaturaItiService
+  validarTdvService: ValidarTdvService
 }
 
 export function getTdvRegistrations (): Required<NameAndRegistrationPair<TdvServices>> {
@@ -53,5 +55,6 @@ export function getTdvRegistrations (): Required<NameAndRegistrationPair<TdvServ
     buscaEnderecoService: asClass(BuscaEnderecoService).scoped(),
     provaVidaService: asClass(ProvaVidaService).scoped(),
     gerarLinkAssinaturaItiService: asClass(GerarLinkAssinaturaItiService).scoped(),
+    validarTdvService: asClass(ValidarTdvService).scoped(),
   }
 }
