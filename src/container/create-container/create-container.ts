@@ -19,7 +19,8 @@ import { getClientRegistrations, DetranSpServiceNowLicenciamentoClient, DetranSp
 import { DetranSpServiceNowDebRestrClient } from '../../clients/detran-sp-service-now-deb-restr'
 import { DetranSpServiceNowPgtoClient } from '../../clients/detran-sp-service-now-pgto'
 import { RotaCaixaPostalClient } from '../../clients/rota-caixa-postal'
-import { RotaVidaClient } from '../../clients/rota-vida'
+import { RotaVidaClient, MockRotaVidaClient } from '../../clients/rota-vida'
+import { MockDetranSpServiceNowTdvClient, tdvMockStore, estadoLabel } from '../../clients/detran-sp-service-now/tdv/mock'
 import { RotaCrvPecasClient } from '../../clients/rota-crv-pecas'
 import { RotaVistoriasClient } from '../../clients/rota-vistorias'
 import pino, { type Logger } from 'pino'
@@ -112,6 +113,31 @@ export function createContainer (
   container.register(getVistoriasRegistrations())
   container.register(getPool(config))
   container.register(getRepositoryRegistrations())
+
+  // Dev/QA-only: swap the ServiceNow TDV client (and prova-vida client) for in-memory stateful
+  // mocks so the whole seller/buyer TDV flow can be run without external dependencies. Registered
+  // last so it overrides the real registrations above (Awilix: last write wins per key).
+  if (config.tdvMock.enabled) {
+    container.register({
+      detranSpServiceNowTdv: asClass(MockDetranSpServiceNowTdvClient).scoped(),
+      rotaVidaClient: asFunction(({ config: cfg, logger }: { config: Config; logger: Logger }) =>
+        new MockRotaVidaClient({
+          vidaBaseUrl: cfg.rotaVida.vidaBaseUrl,
+          arquivosBaseUrl: cfg.rotaVida.arquivosBaseUrl,
+          logger,
+        })
+      ).scoped(),
+    })
+    console.log('⚠️  TDV MOCK MODE ATIVO — TDV rodando em memória (in-memory, stateful). Nunca use em produção.')
+
+    const seeded = tdvMockStore.ensureSeeded(config.tdvMock)
+    if (seeded) {
+      console.log(
+        `⚠️  TDV MOCK: massa iniciada com ${seeded.record.codigoTransferenciaVeiculo} já em ${estadoLabel(seeded.record.estado)} ` +
+        `(vendedor ${config.tdvMock.sellerCpf}, comprador ${config.tdvMock.buyerCpf})`
+      )
+    }
+  }
 
   return container
 }
