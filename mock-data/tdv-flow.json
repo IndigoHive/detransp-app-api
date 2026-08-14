@@ -2866,30 +2866,16 @@
         "type": "group",
         "children": [
           {
-            "id": "c_2e7b98e5db44",
-            "type": "image",
+            "id": "c_5c2b95ef7900",
+            "type": "empty_state",
             "name": null,
             "data": {
               "asset": {
-                "id": "5444d0f0-a1d2-466e-a93a-fee6af377c6f",
-                "url": "https://detransp-app-editor-assets.s3.amazonaws.com/69db4439-3c18-4ec8-a2d1-e5fcfa984817.png"
-              }
-            }
-          },
-          {
-            "id": "c_cc056cce8fca",
-            "type": "rich_text",
-            "name": null,
-            "data": {
-              "html": "<p style=\"text-align: center;\"><span style=\"font-size: 16px;\"><strong>Não há veículos em seu registro</strong></span></p>"
-            }
-          },
-          {
-            "id": "c_b68e5daa18e2",
-            "type": "rich_text",
-            "name": null,
-            "data": {
-              "html": "<p style=\"text-align: center;\"><span style=\"font-size: 16px;\">Não existem veículos vinculados</span></p>"
+                "id": "aef08b2d-c257-496d-bb01-af67931cf7be",
+                "url": "https://detransp-app-editor-assets.s3.amazonaws.com/3b0cbcb0-47c7-4faa-a7d9-85a062dea315.png"
+              },
+              "title": "<p style=\"text-align: center;\"><span style=\"font-size: 16px;\"><strong>Não há veículos em seu registro</strong></span></p>",
+              "description": "<p><span style=\"font-size: 16px;\">Não existem veículos vinculados</span></p>"
             }
           }
         ]
