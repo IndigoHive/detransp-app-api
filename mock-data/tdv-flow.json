@@ -1252,7 +1252,7 @@
             "type": "button",
             "name": null,
             "data": {
-              "icon": "arrow_back",
+              "icon": "arrow_back_ios",
               "label": "Retornar para a tela inicial"
             }
           }
@@ -1822,7 +1822,7 @@
             "type": "button",
             "name": null,
             "data": {
-              "icon": "arrow_back",
+              "icon": "arrow_back_ios",
               "label": "Retornar para a tela inicial"
             }
           }
@@ -2432,7 +2432,7 @@
             "name": null,
             "data": {
               "icon": "warning",
-              "text": "<p><span style=\"font-size:14px;color:#000000\"><strong>Se você confirmar o cancelamento da transferência do veículo, iremos encerrar essa solicitação.</strong></span></p>",
+              "text": "<p style=\"text-align: left;\"><span style=\"font-size: 16px;\">Se você confirmar o cancelamento da transferência do veículo, <strong>iremos encerrar essa solicitação.</strong></span></p>",
               "color": "warning",
               "variant": "vertical"
             }
@@ -2442,7 +2442,7 @@
             "type": "rich_text",
             "name": null,
             "data": {
-              "html": "<p><span style=\"font-size:14px;color:#262828\">Para realizar nova transferência, a pessoa que está fazendo a venda deverá iniciar o processo novamente.<br></span></p>"
+              "html": "<p><span style=\"font-size: 16px;\">Para realizar nova transferência, a pessoa que está fazendo a venda <strong>deverá iniciar o processo novamente.</strong></span></p>"
             }
           },
           {
@@ -2450,7 +2450,7 @@
             "type": "rich_text",
             "name": null,
             "data": {
-              "html": "<p><span style=\"font-size:14px;color:#262828\">Tem certeza que podemos continuar com o cancelamento?<br></span></p>"
+              "html": "<p style=\"text-align: center;\"><span style=\"color: rgb(38, 40, 40); font-size: 16px;\"><strong>Tem certeza que podemos continuar com o cancelamento?</strong></span></p>"
             }
           }
         ]
@@ -2607,7 +2607,7 @@
             "type": "button",
             "name": null,
             "data": {
-              "icon": "chevron_left",
+              "icon": "arrow_back_ios",
               "label": "Retornar para a tela inicial"
             }
           }
@@ -2674,7 +2674,7 @@
             "type": "button",
             "name": null,
             "data": {
-              "icon": "chevron_left",
+              "icon": "arrow_back_ios",
               "label": "Retornar para a tela inicial"
             }
           }
@@ -2719,28 +2719,63 @@
             "type": "rich_text",
             "name": null,
             "data": {
-              "html": "<p><span style=\"color: rgb(38, 40, 40); font-size: 16px;\">Olá,&nbsp;@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}.<br><br>A compra do veículo foi cancelada pelo vendedor do veículo. Por isso, encerramos sua solicitação.<br></span></p>"
+              "html": "<p><span style=\"color: rgb(38, 40, 40); font-size: 16px;\">Olá,&nbsp;@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}.<br><br>A compra do veículo <strong>foi cancelada pelo vendedor do veículo.</strong> Por isso, encerramos sua solicitação.</span></p>"
             }
           },
           {
-            "id": "c_caa46070f81d",
-            "type": "vehicle_info",
+            "id": "c_9e1d58f5e64c",
+            "type": "card",
             "name": null,
-            "data": {
-              "layout": [
-                "plate",
-                "brand_model"
-              ],
-              "source": "@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle}",
-              "vehicle": {
-                "id": "1",
-                "plate": "EXC1A22",
-                "title": "Veículo 1",
-                "status": "REGULAR",
-                "brandModel": "VOLKS/GOL GTI 1.0",
-                "licensingExpirationDate": "2024-12-31"
+            "children": [
+              {
+                "id": "c_3974e0fae884",
+                "type": "vehicle_plate",
+                "name": null,
+                "data": {
+                  "size": "sm",
+                  "align": "left",
+                  "plate": "@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.plate}",
+                  "variant": "default"
+                }
+              },
+              {
+                "id": "c_bc0d5540e1ba",
+                "type": "rich_text",
+                "name": null,
+                "data": {
+                  "html": "<p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>Veículo</strong></span></p><p>@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.brandModel}</p>"
+                }
+              },
+              {
+                "id": "c_f1710626207b",
+                "type": "divider",
+                "name": null,
+                "data": {}
+              },
+              {
+                "id": "c_ab4228d2eb99",
+                "type": "rich_text",
+                "name": null,
+                "data": {
+                  "html": "<p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>Cor</strong></span></p><p>@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.descricaoCorVeiculo}</p>"
+                }
+              },
+              {
+                "id": "c_330e76a79b17",
+                "type": "divider",
+                "name": null,
+                "data": {}
+              },
+              {
+                "id": "c_8731364d9fde",
+                "type": "rich_text",
+                "name": null,
+                "data": {
+                  "html": "<p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>Pessoa que cancelou a venda</strong></span></p><p>@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeVendedor}</p>"
+                }
               }
-            }
+            ],
+            "data": {}
           }
         ]
       },
@@ -2753,7 +2788,7 @@
             "type": "button",
             "name": null,
             "data": {
-              "icon": "chevron_left",
+              "icon": "arrow_back_ios",
               "label": "Retornar para a tela inicial"
             }
           }
@@ -3069,7 +3104,7 @@
             "name": null,
             "data": {
               "icon": "info",
-              "text": "<p><span style=\"font-size:14px;color:#000000\"><strong>Encerramos a transferência de veículo.</strong></span></p>",
+              "text": "<p><span style=\"color: rgb(122, 127, 131); font-size: 14px;\">Encerramos a transferência de veículo.</span></p>",
               "color": "info",
               "variant": "horizontal"
             }
@@ -3079,7 +3114,7 @@
             "type": "rich_text",
             "name": null,
             "data": {
-              "html": "<p><span style=\"font-size:14px;color:#262828\">Caso precise, quem está vendendo o veículo deve iniciar o processo novamente.<br></span></p>"
+              "html": "<p><span style=\"color: rgb(38, 40, 40); font-size: 14px;\">Caso precise, quem está vendendo o veículo deve iniciar o processo novamente.</span></p>"
             }
           }
         ]
