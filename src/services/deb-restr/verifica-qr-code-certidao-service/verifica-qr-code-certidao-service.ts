@@ -1,3 +1,5 @@
+import { Unauthorized } from 'http-errors'
+import { DetranSpServiceNowDebRestrError } from '../../../clients/detran-sp-service-now-deb-restr'
 import type { DetranSpServiceNowDebRestrClient } from '../../../clients/detran-sp-service-now-deb-restr'
 import type { DebRestrVeiculoAuth, VerificaQRCodeCertidaoResult } from '../types'
 import { formatDateTimeBr } from '../utils'
@@ -10,7 +12,7 @@ export class VerificaQRCodeCertidaoService {
   }
 
   async run (auth: DebRestrVeiculoAuth): Promise<VerificaQRCodeCertidaoResult> {
-    const result = await this.client.verificaQRCodeCertidao(auth, auth.renavam)
+    const result = await this.verificaQRCodeCertidao(auth)
     const data = result?.data
     const estadoId = data?.relationships?.estado?.links?.data?.id
     const rawEstado = estadoId != null ? Number(estadoId) : null
@@ -32,6 +34,19 @@ export class VerificaQRCodeCertidaoService {
       estado,
       comprovante: data?.attributes?.endToEndId || null,
       confirmedDate: dataPagamento ? formatDateTimeBr(dataPagamento) : null,
+    }
+  }
+
+  private async verificaQRCodeCertidao (
+    auth: DebRestrVeiculoAuth
+  ): ReturnType<DetranSpServiceNowDebRestrClient['verificaQRCodeCertidao']> {
+    try {
+      return await this.client.verificaQRCodeCertidao(auth, auth.renavam)
+    } catch (err) {
+      if (err instanceof DetranSpServiceNowDebRestrError && err.upstreamStatus === 401) {
+        throw Unauthorized('Sessão expirada. Faça login novamente.')
+      }
+      throw err
     }
   }
 }

@@ -111,7 +111,7 @@ export class DetranSpServiceNowPgtoHttp {
 
         throw createError(
           status,
-          new DetranSpServiceNowPgtoError(message ?? 'UnknownError', userMessage, error.response?.data),
+          new DetranSpServiceNowPgtoError(message ?? 'UnknownError', userMessage, error.response?.data, error.response?.status),
           { expose: true }
         )
       }
