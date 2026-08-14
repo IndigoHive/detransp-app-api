@@ -43,6 +43,8 @@ export type VerificaQRCodeResult =
           body: {
             id: string
             status: string
+            expiracao?: number
+            dtExpiracao?: string
           }
         }
         correlationID: string | null

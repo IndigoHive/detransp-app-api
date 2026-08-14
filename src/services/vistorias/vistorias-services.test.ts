@@ -275,6 +275,7 @@ describe('vistorias services', () => {
   })
 
   it('maps QR code creation and status to the PIX screen contract', async () => {
+    const dateNow = vi.spyOn(Date, 'now').mockReturnValue(Date.parse('2026-07-24T17:45:00Z'))
     const criaQRCode = vi.fn().mockResolvedValue({
       result: {
         success: true,
@@ -305,7 +306,9 @@ describe('vistorias services', () => {
             process: 'status-qr-code',
             body: {
               id: 'qr-code-id',
-              status: 'LIQUIDADO'
+              status: 'LIQUIDADO',
+              expiracao: 900,
+              dtExpiracao: '2026-07-24 18:00:00'
             }
           },
           correlationID: null
@@ -316,15 +319,17 @@ describe('vistorias services', () => {
     await expect(new CriaQRCodeVistoriaService(client).run(clientAuth, 'correlation-id')).resolves.toEqual({
       idSolServico: 'qr-code-id',
       qrCode: 'pix-code',
-      expiresAt: '2026-07-24T18:00:00Z'
+      expiresAt: '2026-07-24T18:00:00.000Z'
     })
     expect(criaQRCode).toHaveBeenCalledWith(clientAuth, { correlationID: 'correlation-id' })
     await expect(new VerificaQRCodeVistoriaService(client).run(clientAuth, 'qr-code-id')).resolves.toEqual({
       estado: 2,
       comprovante: 'qr-code-id',
-      confirmedDate: expect.any(String)
+      confirmedDate: expect.any(String),
+      expiresAt: '2026-07-24T18:00:00Z'
     })
     expect(client.verificaQRCode).toHaveBeenCalledWith(clientAuth, 'qr-code-id')
+    dateNow.mockRestore()
   })
 
   it('maps the generated authorization document to the frontend contract', async () => {

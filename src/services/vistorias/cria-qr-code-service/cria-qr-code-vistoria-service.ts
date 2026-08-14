@@ -1,6 +1,11 @@
 import type { DetranSpServiceNowVistoriasClient } from '../../../clients/detran-sp-service-now-vistorias'
-import { normalizeUtcDateTime } from '../../../utils/normalize-utc-datetime'
 import type { VistoriasAuth } from '../types'
+
+function resolveExpiresAt (expirationSeconds: number | undefined): string | null {
+  if (expirationSeconds === undefined || !Number.isFinite(expirationSeconds) || expirationSeconds <= 0) return null
+
+  return new Date(Date.now() + expirationSeconds * 1000).toISOString()
+}
 
 export class CriaQRCodeVistoriaService {
   constructor (private readonly client: DetranSpServiceNowVistoriasClient) {}
@@ -17,7 +22,7 @@ export class CriaQRCodeVistoriaService {
     return {
       idSolServico: qrCode?.id ?? null,
       qrCode: qrCode?.emv ?? null,
-      expiresAt: qrCode?.dtExpiracao ? normalizeUtcDateTime(qrCode.dtExpiracao) : null
+      expiresAt: resolveExpiresAt(qrCode?.expiracao)
     }
   }
 }
