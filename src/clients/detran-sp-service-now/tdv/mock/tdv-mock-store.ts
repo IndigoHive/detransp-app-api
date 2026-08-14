@@ -321,8 +321,15 @@ export class TdvMockStore {
     }
   }
 
-  getPixQrCode (codigo: string): BuscaPixQrCodeTdvResultSuccess {
+  getPixQrCode (codigo: string, forcarNovo: boolean): BuscaPixQrCodeTdvResultSuccess | undefined {
     let pix = this.pixByTdv.get(codigo)
+
+    // Mirrors real forcarNovo semantics: forcarNovo=false only reads an existing charge, it
+    // never mints one — the débitos-list screen calls with this false so the PIX's short
+    // expiration window doesn't start ticking before the buyer ever reaches the QR screen.
+    if (!pix && !forcarNovo) {
+      return undefined
+    }
 
     // Idempotent like the real forcarNovo semantics: the same QR/txid is reused across polls for
     // a given TDV, only its paid status changes over time.

@@ -12,6 +12,11 @@ type Dependencies = {
 
 export type ConsultaDebitosInput = {
   codigoTransferencia: string
+  // Only true for the "Pagamento PIX" node (the screen that actually shows the QR code).
+  // The débitos-list screen calls this same endpoint first, with this false, so it must
+  // only read an existing charge — never mint one — or the PIX's short expiration window
+  // starts ticking before the buyer ever sees the QR.
+  gerarQrCode: boolean
 }
 
 export type ConsultaDebitosResult = {
@@ -60,21 +65,40 @@ export class ConsultaDebitosService {
 
     // ServiceNow's forcarNovo is idempotent on its end — it only actually issues a new QR/PIX
     // charge if the existing one is expired, otherwise it just returns the current one. So this
-    // is always safe to pass as true, whether this is the first fetch or a later poll.
+    // is always safe to pass as true, whether this is the first fetch or a later poll — but it
+    // must only be true for the PIX screen (gerarQrCode), never for the débitos-list screen.
+    const fetchPix = () => {
+      if (input.gerarQrCode) {
+        this.logger.info(
+          { codigoTransferencia: input.codigoTransferencia },
+          'Solicitando geração/renovação do QR code PIX da TDV'
+        )
+      }
+      return this.client.buscaPixQrCodeTdv(auth, input.codigoTransferencia, input.gerarQrCode)
+    }
+
     const [tdvResult, initialDebitosResult, initialPixResult] = await Promise.all([
       this.client.buscaTdv(auth, input.codigoTransferencia),
       this.client.buscaDebitosTdv(auth, input.codigoTransferencia),
-      this.client.buscaPixQrCodeTdv(auth, input.codigoTransferencia, true)
+      fetchPix()
     ])
 
     let debitosResult = initialDebitosResult
     let pixResult = initialPixResult
 
-    for (let attempt = 0; attempt < MAX_POLL_ATTEMPTS && (!debitosResult || !pixResult); attempt++) {
+    // Only keep polling for the PIX side when one is actually expected to appear — if
+    // gerarQrCode is false and none exists yet, an undefined pixResult is the correct,
+    // final answer, not something to retry away (that would just stall the débitos
+    // screen for MAX_POLL_ATTEMPTS * POLL_INTERVAL_MS for no reason).
+    for (
+      let attempt = 0;
+      attempt < MAX_POLL_ATTEMPTS && (!debitosResult || (input.gerarQrCode && !pixResult));
+      attempt++
+    ) {
       await sleep(POLL_INTERVAL_MS)
       const [polledDebitos, polledPix] = await Promise.all([
         debitosResult ?? this.client.buscaDebitosTdv(auth, input.codigoTransferencia),
-        pixResult ?? this.client.buscaPixQrCodeTdv(auth, input.codigoTransferencia, true)
+        input.gerarQrCode && !pixResult ? fetchPix() : pixResult
       ])
       debitosResult = polledDebitos
       pixResult = polledPix
@@ -94,11 +118,15 @@ export class ConsultaDebitosService {
     const estadoQRCode = pixResult?.result?.estadoQRCode
 
     // Temporary (do not ship): txid for mock-paying via the SEFAZ homolog
-    // webhook — warn level on purpose, just to stand out in the log list
-    this.logger.warn(
-      { action: 'mock-pay-txid', codigoTransferencia: input.codigoTransferencia, txid: pixResult?.result?.idQRCode, valor: totalDebitos },
-      'QR TDV débitos criado — txid para pagamento mock em homolog'
-    )
+    // webhook — warn level on purpose, just to stand out in the log list. Only
+    // logged when a charge actually exists — with gerarQrCode false (débitos-list
+    // screen) and no prior charge, pixResult is legitimately undefined.
+    if (pixResult?.result?.idQRCode) {
+      this.logger.warn(
+        { action: 'mock-pay-txid', codigoTransferencia: input.codigoTransferencia, txid: pixResult.result.idQRCode, valor: totalDebitos },
+        'QR TDV débitos criado — txid para pagamento mock em homolog'
+      )
+    }
 
     // The DETRAN cron eventually advances a paid TDV to estado 8 (taxa de serviço paga),
     // but it can be slow — since the app polls this endpoint, we accelerate the transition

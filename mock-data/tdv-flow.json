@@ -2236,14 +2236,51 @@
             "data": {}
           },
           {
-            "id": "c_aa3245234c0a",
-            "type": "icon_text",
+            "id": "c_abaddb72c11a",
+            "type": "split_row",
             "name": null,
+            "children": [
+              {
+                "id": "c_d6ce72488f0b",
+                "type": "group",
+                "name": null,
+                "children": [
+                  {
+                    "id": "c_ae85b3562959",
+                    "type": "icon_button",
+                    "name": null,
+                    "data": {
+                      "icon": "info",
+                      "size": "sm",
+                      "color": "neutral",
+                      "variant": "ghost",
+                      "clickAction": "submit"
+                    }
+                  }
+                ],
+                "data": {}
+              },
+              {
+                "id": "c_17df4c98f05b",
+                "type": "group",
+                "name": null,
+                "children": [
+                  {
+                    "id": "c_2a01e43802af",
+                    "type": "rich_text",
+                    "name": null,
+                    "data": {
+                      "html": "<p><span style=\"font-size: 14px;\"><strong>Informação</strong></span></p>"
+                    }
+                  }
+                ],
+                "data": {}
+              }
+            ],
             "data": {
-              "icon": "info",
-              "text": "<p><span style=\"font-size:14px;color:#000000\"><strong>Informação</strong></span></p>",
-              "color": "info",
-              "variant": "horizontal"
+              "gap": 8,
+              "align": "center",
+              "distribution": "grow-end"
             }
           },
           {
@@ -2875,7 +2912,7 @@
                 "url": "https://detransp-app-editor-assets.s3.amazonaws.com/3b0cbcb0-47c7-4faa-a7d9-85a062dea315.png"
               },
               "title": "<p style=\"text-align: center;\"><span style=\"font-size: 16px;\"><strong>Não há veículos em seu registro</strong></span></p>",
-              "description": "<p><span style=\"font-size: 16px;\">Não existem veículos vinculados</span></p>"
+              "description": "<p style=\"text-align: center;\"><span style=\"font-size: 16px;\">Não existem veículos vinculados</span></p>"
             }
           }
         ]
@@ -3829,7 +3866,7 @@
           "x": 260,
           "y": 4080
         },
-        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/consulta-debitos?codigoTransferencia=@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoTransferencia}",
+        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/consulta-debitos?codigoTransferencia=@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoTransferencia}&gerarQrCode=false",
         "responseExamples": [
           {
             "id": "662e4b72-b520-47e2-a222-bd21ed66959a",
@@ -3849,7 +3886,7 @@
           "y": 4100
         },
         "method": "GET",
-        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/consulta-debitos?codigoTransferencia=@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoTransferencia}"
+        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/consulta-debitos?codigoTransferencia=@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoTransferencia}&gerarQrCode=true"
       }
     },
     {

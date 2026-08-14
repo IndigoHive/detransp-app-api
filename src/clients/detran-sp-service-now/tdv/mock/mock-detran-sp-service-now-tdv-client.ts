@@ -181,9 +181,9 @@ export class MockDetranSpServiceNowTdvClient extends DetranSpServiceNowTdvClient
   async buscaPixQrCodeTdv (
     _auth: DetranSpServiceNowAuth,
     codigoTransferenciaVeiculo: string,
-    _forcarNovo: boolean
+    forcarNovo: boolean
   ): Promise<BuscaPixQrCodeTdvResult> {
     this.seed()
-    return tdvMockStore.getPixQrCode(codigoTransferenciaVeiculo)
+    return tdvMockStore.getPixQrCode(codigoTransferenciaVeiculo, forcarNovo)
   }
 }
