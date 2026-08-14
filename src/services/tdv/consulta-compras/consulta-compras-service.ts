@@ -22,6 +22,7 @@ export type ConsultaComprasResult = {
     codigoTransferencia: string
     proximaAcao: ProximaAcaoComprador
     nomeComprador: string
+    nomeVendedor: string
     descricaoCorVeiculo: string
   }>
 }
@@ -68,6 +69,7 @@ export class ConsultaComprasService {
         codigoTransferencia: tdv.codigoTransferenciaVeiculo ?? '',
         proximaAcao,
         nomeComprador: tdv.nomeComprador ?? '',
+        nomeVendedor: tdv.nomeVendedor ?? '',
         descricaoCorVeiculo: tdv.descricaoCorVeiculo ?? ''
       }]
     })
