@@ -121,4 +121,17 @@ describe('ConsultaDebitosService', () => {
       totalDebitos: 'R$ 364,27'
     })
   })
+
+  it('formats confirmedDate in pt-BR for display on the "Pagamento concluído" screen', async () => {
+    const service = buildService({
+      buscaTdv: vi.fn().mockResolvedValue({ result: { nomeComprador: 'Maria', estado: '7' } }),
+      buscaDebitosTdv: vi.fn().mockResolvedValue(debitosResult),
+      buscaPixQrCodeTdv: vi.fn().mockResolvedValue(pixResult('2')),
+      atualizaTdv: vi.fn().mockResolvedValue({ result: { codigoTransferenciaVeiculo: 'TDV1' } })
+    })
+
+    await expect(service.run(authorizationHeader, input)).resolves.toMatchObject({
+      confirmedDate: '11/08/2026 às 08:30'
+    })
+  })
 })

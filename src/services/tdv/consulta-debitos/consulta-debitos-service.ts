@@ -3,6 +3,7 @@ import type { DetranSpServiceNowTdvClient } from '../../../clients/detran-sp-ser
 import { CodigoEstadoQRCode, CodigoEstadoTDV } from '../../../clients/detran-sp-service-now/tdv/types'
 import { extractBearerToken, extractCpfFromToken } from '../../../utils/token'
 import { normalizeUtcDateTime } from '../../../utils/normalize-utc-datetime'
+import { formatDateTimeBr } from '../../deb-restr/utils'
 
 type Dependencies = {
   detranSpServiceNowTdv: DetranSpServiceNowTdvClient
@@ -134,7 +135,9 @@ export class ConsultaDebitosService {
         : undefined,
       estado: estadoQRCode !== undefined ? Number(estadoQRCode) : undefined,
       comprovante: pixResult?.result?.idPagamentoQRCode || undefined,
-      confirmedDate: pixResult?.result?.dataPagamentoQRCode || undefined
+      confirmedDate: pixResult?.result?.dataPagamentoQRCode
+        ? formatDateTimeBr(pixResult.result.dataPagamentoQRCode)
+        : undefined
     }
   }
 }
