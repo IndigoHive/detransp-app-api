@@ -1743,8 +1743,8 @@
             "type": "button",
             "name": null,
             "data": {
-              "icon": "check",
-              "label": "Assinar"
+              "label": "Assinar",
+              "secondaryIcon": "check"
             }
           },
           {
@@ -1752,9 +1752,9 @@
             "type": "button",
             "name": null,
             "data": {
-              "icon": "close",
               "label": "Cancelar",
-              "variant": "outline"
+              "variant": "outline",
+              "secondaryIcon": "close"
             }
           }
         ]
