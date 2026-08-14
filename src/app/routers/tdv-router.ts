@@ -84,7 +84,11 @@ export function tdvRouter (): Router {
     const { accessToken } = req.session!
     const service = req.scope.resolve('consultaDebitosService')
     const codigoTransferencia = req.query.codigoTransferencia as string
-    const result = await service.run(accessToken, { codigoTransferencia })
+    // Only the PIX screen should actually mint/renew a charge — the débitos-list screen
+    // (reached first, before the buyer opts to pay) must only read an existing one, or the
+    // PIX's short expiration window starts ticking before the QR is ever shown.
+    const gerarQrCode = req.query.gerarQrCode === 'true'
+    const result = await service.run(accessToken, { codigoTransferencia, gerarQrCode })
     res.status(200).json(result)
   })
 
