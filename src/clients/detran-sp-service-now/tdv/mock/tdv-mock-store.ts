@@ -181,7 +181,10 @@ export class TdvMockStore {
     }
   }
 
-  getVehicles (): ListaVeiculosProprietarioResultData[] {
+  // Empty when the caller is the seeded buyer, so switching to "Sou vendedor" with the buyer's
+  // CPF exercises the empty-state screen instead of always finding a vehicle to sell.
+  getVehicles (cpf?: string): ListaVeiculosProprietarioResultData[] {
+    if (cpf && this.cfg.buyerCpf && cpf === this.cfg.buyerCpf) return []
     return [this.buildVehicle()]
   }
 

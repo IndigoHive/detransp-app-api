@@ -2857,6 +2857,63 @@
           "y": 1584
         }
       }
+    },
+    {
+      "id": "s_f4686d81785e",
+      "name": "Nenhum veículo encontrado",
+      "content": {
+        "id": "c_bab58aa82868",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_2e7b98e5db44",
+            "type": "image",
+            "name": null,
+            "data": {
+              "asset": {
+                "id": "5444d0f0-a1d2-466e-a93a-fee6af377c6f",
+                "url": "https://detransp-app-editor-assets.s3.amazonaws.com/69db4439-3c18-4ec8-a2d1-e5fcfa984817.png"
+              }
+            }
+          },
+          {
+            "id": "c_cc056cce8fca",
+            "type": "rich_text",
+            "name": null,
+            "data": {
+              "html": "<p style=\"text-align: center;\"><span style=\"font-size: 16px;\"><strong>Não há veículos em seu registro</strong></span></p>"
+            }
+          },
+          {
+            "id": "c_b68e5daa18e2",
+            "type": "rich_text",
+            "name": null,
+            "data": {
+              "html": "<p style=\"text-align: center;\"><span style=\"font-size: 16px;\">Não existem veículos vinculados</span></p>"
+            }
+          }
+        ]
+      },
+      "footer": {
+        "id": "c_48bc75d83e7f",
+        "type": "group",
+        "children": []
+      },
+      "navbar": {
+        "id": "2db895f4-bf99-417b-8fc2-ccd2cdbf9497",
+        "data": {
+          "title": "Voltar",
+          "showReturn": true
+        },
+        "name": null,
+        "type": "nav_bar"
+      },
+      "data": {
+        "position": {
+          "x": 5600,
+          "y": 700
+        }
+      }
     }
   ],
   "drawers": [
@@ -4261,6 +4318,48 @@
           "combinator": "or"
         }
       }
+    },
+    {
+      "id": "n_58509e28e26a",
+      "type": "if_node",
+      "name": "Vendedor possui veículos?",
+      "data": {
+        "position": {
+          "x": 5000,
+          "y": -300
+        },
+        "condition": {
+          "clauses": [
+            {
+              "id": "62af1340-a878-4afc-8a06-9acf6a816dc9",
+              "left": "@{node:n_4104c4067c20.vehicles}",
+              "operator": "is_not_empty"
+            }
+          ],
+          "combinator": "or"
+        }
+      }
+    },
+    {
+      "id": "n_592311f09d10",
+      "type": "if_node",
+      "name": "Comprador possui transferências?",
+      "data": {
+        "position": {
+          "x": 5100,
+          "y": 1900
+        },
+        "condition": {
+          "clauses": [
+            {
+              "id": "2d0bea94-8da1-4bda-9393-5755d04a8847",
+              "left": "@{node:n_598dfad57128.vehicles}",
+              "operator": "is_not_empty"
+            }
+          ],
+          "combinator": "or"
+        }
+      }
     }
   ],
   "edges": [
@@ -4268,12 +4367,6 @@
       "sourceId": "n_b92680d39623",
       "targetId": "n_4104c4067c20",
       "sourceHandle": "true",
-      "targetHandle": "input"
-    },
-    {
-      "sourceId": "n_4104c4067c20",
-      "targetId": "s_83bb5547ec06",
-      "sourceHandle": "output",
       "targetHandle": "input"
     },
     {
@@ -4322,12 +4415,6 @@
       "sourceId": "n_b92680d39623",
       "targetId": "n_598dfad57128",
       "sourceHandle": "false",
-      "targetHandle": "input"
-    },
-    {
-      "sourceId": "n_598dfad57128",
-      "targetId": "s_52363926e91c",
-      "sourceHandle": "output",
       "targetHandle": "input"
     },
     {
@@ -5048,6 +5135,42 @@
       "sourceId": "s_0d60f1885598",
       "targetId": "n_0a7cda804e6d",
       "sourceHandle": "c_3b12cbb726a6",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_4104c4067c20",
+      "targetId": "n_58509e28e26a",
+      "sourceHandle": "output",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_58509e28e26a",
+      "targetId": "s_83bb5547ec06",
+      "sourceHandle": "true",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_58509e28e26a",
+      "targetId": "s_f4686d81785e",
+      "sourceHandle": "false",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_598dfad57128",
+      "targetId": "n_592311f09d10",
+      "sourceHandle": "output",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_592311f09d10",
+      "targetId": "s_52363926e91c",
+      "sourceHandle": "true",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_592311f09d10",
+      "targetId": "s_f4686d81785e",
+      "sourceHandle": "false",
       "targetHandle": "input"
     }
   ]

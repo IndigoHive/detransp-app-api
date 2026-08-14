@@ -77,9 +77,9 @@ export class MockDetranSpServiceNowTdvClient extends DetranSpServiceNowTdvClient
     tdvMockStore.ensureSeeded(this.params.config.tdvMock)
   }
 
-  async listaVeiculosProprietario (_auth: DetranSpServiceNowAuth): Promise<ListaVeiculosProprietarioResult> {
+  async listaVeiculosProprietario (auth: DetranSpServiceNowAuth): Promise<ListaVeiculosProprietarioResult> {
     this.seed()
-    return { result: tdvMockStore.getVehicles() }
+    return { result: tdvMockStore.getVehicles(auth.cpf) }
   }
 
   async listaTdvs (_auth: DetranSpServiceNowAuth, query: ListTdvsQuery): Promise<ListaTdvsResult> {
