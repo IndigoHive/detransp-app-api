@@ -6,6 +6,15 @@ type Dependencies = {
   detranSpServiceNowTdv: DetranSpServiceNowTdvClient
 }
 
+// "MARIA COMPRADORA TESTE" -> "Maria" — this screen only greets the buyer by
+// first name; the full nomeComprador value is still used as-is elsewhere
+// (declarations, seller-facing identity confirmation).
+function firstName (fullName: string): string {
+  const [first] = fullName.trim().split(/\s+/)
+  if (!first) return ''
+  return first.charAt(0).toUpperCase() + first.slice(1).toLowerCase()
+}
+
 export type ConsultaComprasResult = {
   vehicles: Array<{
     id: string
@@ -68,7 +77,7 @@ export class ConsultaComprasService {
         yearMod: '',
         codigoTransferencia: tdv.codigoTransferenciaVeiculo ?? '',
         proximaAcao,
-        nomeComprador: tdv.nomeComprador ?? '',
+        nomeComprador: firstName(tdv.nomeComprador ?? ''),
         nomeVendedor: tdv.nomeVendedor ?? '',
         descricaoCorVeiculo: tdv.descricaoCorVeiculo ?? ''
       }]

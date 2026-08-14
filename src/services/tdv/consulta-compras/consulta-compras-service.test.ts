@@ -45,4 +45,17 @@ describe('ConsultaComprasService', () => {
 
     await expect(service.run(authorizationHeader)).resolves.toEqual({ vehicles: [] })
   })
+
+  it('reduces nomeComprador to just the first name, title-cased, for the greeting screens', async () => {
+    const listaTdvs = vi.fn().mockResolvedValue({
+      result: [
+        { estado: '3', codigoTransferenciaVeiculo: 'TDV-A', placaVeiculo: 'AAA1111', descricaoMarcaVeiculo: 'A', codigoRenavamVeiculo: '1', nomeComprador: 'MARIA COMPRADORA TESTE' }
+      ]
+    })
+    const service = new ConsultaComprasService({ detranSpServiceNowTdv: asClient({ listaTdvs }) })
+
+    const result = await service.run(authorizationHeader)
+
+    expect(result.vehicles[0]).toMatchObject({ nomeComprador: 'Maria' })
+  })
 })
