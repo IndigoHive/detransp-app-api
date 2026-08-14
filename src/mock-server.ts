@@ -787,10 +787,8 @@ app.post('/api/tdv/analise-requisitos', (req, res) => {
   if (plate === MOCK_TDV_ENTRADA_RENAVE.plate) {
     res.json({
       hasRestriction: false,
-      hasActiveTDV: true,
-      codigoTransferencia: 'TDV-MOCK-O5',
-      estado: '2',
-      origem: '5',
+      hasActiveTDV: false,
+      proximaAcao: 'nova_tdv',
       cpfComprador: '16794464003768',
       nomeComprador: 'CAOA MOTOR DO BRASIL LTDA',
       emailComprador: 'CERTIDOCPJ@EMAIL.COM',
@@ -820,8 +818,17 @@ app.post('/api/tdv/validacao-venda', (req, res) => {
 })
 
 app.post('/api/tdv/criar', (req, res) => {
+  const plate = req.body?.placaVeiculo
+  if (plate === MOCK_TDV_ENTRADA_RENAVE.plate) {
+    res.status(201).json({
+      codigo: 'TDV-MOCK-O5',
+      origem: '5',
+    })
+    return
+  }
   res.status(201).json({
     codigo: 'TDV-' + Date.now().toString(36).toUpperCase(),
+    origem: '1',
   })
 })
 

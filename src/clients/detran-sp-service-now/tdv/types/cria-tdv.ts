@@ -30,6 +30,7 @@ export type CriaTdvCommand = {
 export type CriaTdvResultSuccess = {
   result: {
     codigoTransferenciaVeiculo: string
+    origem?: CodigoOrigemTDV
   }
 }
 

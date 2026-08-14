@@ -13,6 +13,7 @@ export type CriarTdvInput = {
 
 export type CriarTdvResult = {
   codigo: string
+  origem?: CodigoOrigemTDV
 }
 
 // Creates the TDV as soon as the seller passes the vehicle eligibility check (state 1,
@@ -43,7 +44,10 @@ export class CriarTdvService {
     const tdvAtiva = tdvsAtivas?.result?.find(tdv => tdv.estado !== CodigoEstadoTDV.TRANSFERENCIA_CANCELADA)
 
     if (tdvAtiva?.codigoTransferenciaVeiculo) {
-      return { codigo: tdvAtiva.codigoTransferenciaVeiculo }
+      return {
+        codigo: tdvAtiva.codigoTransferenciaVeiculo,
+        ...(tdvAtiva.origem != null ? { origem: tdvAtiva.origem } : {})
+      }
     }
 
     const createResult = await this.client.criaTdv(auth, {
@@ -60,6 +64,9 @@ export class CriarTdvService {
       throw new Error('Falha ao criar transferência')
     }
 
-    return { codigo }
+    return {
+      codigo,
+      ...(createResult.result.origem != null ? { origem: createResult.result.origem } : {})
+    }
   }
 }

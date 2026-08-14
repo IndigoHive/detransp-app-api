@@ -102,7 +102,12 @@ export class MockDetranSpServiceNowTdvClient extends DetranSpServiceNowTdvClient
       { vendedor: auth.cpf, placa: record.placaVeiculo },
       `\n🟢 [TDV-MOCK] ${record.codigoTransferenciaVeiculo} criada  →  ${estadoLabel(record.estado)}  (vendedor ${auth.cpf})`
     )
-    return { result: { codigoTransferenciaVeiculo: record.codigoTransferenciaVeiculo! } }
+    return {
+      result: {
+        codigoTransferenciaVeiculo: record.codigoTransferenciaVeiculo!,
+        ...(record.origem != null ? { origem: record.origem } : {})
+      }
+    }
   }
 
   async atualizaTdv (

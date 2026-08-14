@@ -5567,8 +5567,8 @@
       "name": "Retomar: ainda preenchendo dados (estado 1 ou 2)?",
       "data": {
         "position": {
-          "x": 6980,
-          "y": -1800
+          "x": 7436,
+          "y": -1804
         },
         "condition": {
           "clauses": [
@@ -5974,7 +5974,12 @@
           {
             "id": "f0c3aea6-736b-4662-a6ff-a468f5c7fa53",
             "name": "Sucesso",
-            "value": "{ \"codigo\": \"TDV-123456\" }"
+            "value": "{ \"codigo\": \"TDV-123456\", \"origem\": \"1\" }"
+          },
+          {
+            "id": "a5e1c7d0-4b29-4f8a-9c31-6d2e8b0a4f17",
+            "name": "Entrada Renave (origem 5)",
+            "value": "{ \"codigo\": \"TDV-000000\", \"origem\": \"5\" }"
           }
         ]
       }
@@ -6728,17 +6733,6 @@
       }
     },
     {
-      "id": "n_17b70b7efa60",
-      "type": "waypoint_node",
-      "name": null,
-      "data": {
-        "position": {
-          "x": 8440,
-          "y": 200
-        }
-      }
-    },
-    {
       "id": "n_a4e7b1c9d205",
       "type": "case_node",
       "name": "Rotear por estado (TDV existente)",
@@ -7042,7 +7036,7 @@
           "clauses": [
             {
               "id": "8e2f4a6c-1b3d-4e5f-9a0b-2c3d4e5f6a7b",
-              "left": "@{node:n_b824c7dd9350.origem}",
+              "left": "@{node:n_d87067e61ebb.origem}",
               "right": "5",
               "operator": "equals"
             }
@@ -8041,18 +8035,6 @@
       "sourceId": "n_c3f8a2e9b147",
       "targetId": "n_6e0a4c1d8b27",
       "sourceHandle": "true",
-      "targetHandle": "input"
-    },
-    {
-      "sourceId": "n_8c3f5d0b2a71",
-      "targetId": "n_17b70b7efa60",
-      "sourceHandle": "true",
-      "targetHandle": "left-target"
-    },
-    {
-      "sourceId": "n_17b70b7efa60",
-      "targetId": "n_a4e7b1c9d205",
-      "sourceHandle": "right-source",
       "targetHandle": "input"
     },
     {
