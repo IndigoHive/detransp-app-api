@@ -56,9 +56,13 @@ export function debRestrRouter (): Router {
 
   router.post('/veiculos/:renavam/consulta', async (req, res) => {
     const { accessToken, cpf: userCpf } = req.session!
-    const renavam = asNonEmptyString(req.params.renavam)
-    const placa = asNonEmptyString(req.body?.placa)
     const representacao = parseRepresentacao(req.body?.representacao)
+    const renavam = asNonEmptyString(
+      representacao ? req.body?.renavamRepresentacao : req.body?.renavamProprio
+    )
+    const placa = asNonEmptyString(
+      representacao ? req.body?.placaRepresentacao : req.body?.placaProprio
+    )
     if (!userCpf || !renavam || !placa) {
       throw BadRequest('Requisição inválida.')
     }
