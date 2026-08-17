@@ -720,6 +720,7 @@
             "data": {
               "label": "<p><span style=\"color: rgb(17, 20, 20); font-size: 16px;\"><strong>E-mail</strong></span></p>",
               "required": true,
+              "inputType": "email",
               "placeholder": "eduardo@gmail.com"
             }
           },
@@ -5695,8 +5696,8 @@
       "name": "Validação Venda",
       "data": {
         "position": {
-          "x": 2828,
-          "y": -376
+          "x": 2544,
+          "y": -404
         },
         "method": "POST",
         "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/validacao-venda",
@@ -5721,8 +5722,8 @@
       "name": "Cidade diferente?",
       "data": {
         "position": {
-          "x": 3088,
-          "y": -380
+          "x": 2764,
+          "y": -404
         },
         "condition": {
           "clauses": [
@@ -5919,7 +5920,7 @@
     },
     {
       "id": "n_cab5c7cef409",
-      "type": "web_view_screen",
+      "type": "open_url_node",
       "name": "Placa Mercosul",
       "data": {
         "position": {
@@ -6285,8 +6286,8 @@
       "name": "Informar Dados Venda",
       "data": {
         "position": {
-          "x": 2608,
-          "y": -380
+          "x": 3004,
+          "y": -392
         },
         "method": "POST",
         "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/informar-dados-venda",
@@ -7178,7 +7179,7 @@
     },
     {
       "sourceId": "n_d371d777d048",
-      "targetId": "s_3a0b04432a52",
+      "targetId": "n_a3f7c1e92b04",
       "sourceHandle": "false",
       "targetHandle": "input"
     },
@@ -7318,12 +7319,6 @@
       "sourceId": "s_eb956ee1dce8",
       "targetId": "n_cab5c7cef409",
       "sourceHandle": "c_ee087ad678bc",
-      "targetHandle": "input"
-    },
-    {
-      "sourceId": "n_cab5c7cef409",
-      "targetId": "n_33825c778fc5",
-      "sourceHandle": "output",
       "targetHandle": "input"
     },
     {
@@ -7532,13 +7527,13 @@
     },
     {
       "sourceId": "s_8ed2db9cbfd7",
-      "targetId": "n_a3f7c1e92b04",
+      "targetId": "n_4378ea225f58",
       "sourceHandle": "c_6909006a32c0",
       "targetHandle": "input"
     },
     {
       "sourceId": "n_a3f7c1e92b04",
-      "targetId": "n_4378ea225f58",
+      "targetId": "s_3a0b04432a52",
       "sourceHandle": "output",
       "targetHandle": "input"
     },
