@@ -1,10 +1,10 @@
 import type { DetranSpServiceNowTdvClient } from '../../../clients/detran-sp-service-now/tdv'
 import {
   CodigoEstadoTDV,
-  type CodigoOrigemTDV,
-  type ListaTdvsResultData
+  type CodigoOrigemTDV
 } from '../../../clients/detran-sp-service-now/tdv/types'
 import { extractBearerToken, extractCpfFromToken } from '../../../utils/token'
+import { compradorDisplayFieldsFromTdv } from '../comprador-display-fields'
 
 type Dependencies = {
   detranSpServiceNowTdv: DetranSpServiceNowTdvClient
@@ -46,30 +46,6 @@ export type AnaliseRequisitosResult = {
   enderecoComprador?: string | undefined
 }
 
-function trimField (value: string | null | undefined): string | undefined {
-  const trimmed = value?.trim()
-  return trimmed || undefined
-}
-
-function formatEnderecoComprador (tdv: ListaTdvsResultData): string | undefined {
-  const logradouro = trimField(tdv.logradouroComprador)
-  const numero = trimField(tdv.numeroComprador)
-  const complemento = trimField(tdv.complementoComprador)
-  const bairro = trimField(tdv.bairroComprador)
-  const municipio = trimField(tdv.nomeMunicipioComprador)
-  const uf = trimField(tdv.ufComprador)
-  const cep = trimField(tdv.cepComprador)
-  const municipioUf = municipio
-    ? (uf ? `${municipio} - ${uf}` : municipio)
-    : uf
-
-  const endereco = [logradouro, numero, complemento, bairro, municipioUf, cep]
-    .filter(Boolean)
-    .join(', ')
-
-  return endereco || undefined
-}
-
 // The seller only has a forced next step once the buyer has already signed (estado 6) — every
 // other active state, including still filling in buyer/sale data (1-2) or waiting on the buyer
 // (3-5), goes through the "TDV aberta?" prompt so cancellation stays available up to estado 6.
@@ -106,21 +82,14 @@ export class AnaliseRequisitosService {
     )
 
     if (activeTdv) {
-      const enderecoComprador = formatEnderecoComprador(activeTdv)
-      const cpfComprador = trimField(activeTdv.codigoComprador)
-      const emailComprador = trimField(activeTdv.emailComprador)
       return {
         hasRestriction: false,
         hasActiveTDV: true,
         codigoTransferencia: activeTdv.codigoTransferenciaVeiculo ?? undefined,
         estado: activeTdv.estado,
         proximaAcao: proximaAcaoParaVendedor(activeTdv.estado),
-        nomeComprador: activeTdv.nomeComprador,
-        descricaoCorVeiculo: activeTdv.descricaoCorVeiculo,
         ...(activeTdv.origem != null ? { origem: activeTdv.origem } : {}),
-        ...(cpfComprador ? { cpfComprador } : {}),
-        ...(emailComprador ? { emailComprador } : {}),
-        ...(enderecoComprador ? { enderecoComprador } : {})
+        ...compradorDisplayFieldsFromTdv(activeTdv)
       }
     }
 

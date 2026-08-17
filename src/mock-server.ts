@@ -823,6 +823,11 @@ app.post('/api/tdv/criar', (req, res) => {
     res.status(201).json({
       codigo: 'TDV-MOCK-O5',
       origem: '5',
+      cpfComprador: '16794464003768',
+      nomeComprador: 'CAOA MOTOR DO BRASIL LTDA',
+      emailComprador: 'CERTIDOCPJ@EMAIL.COM',
+      enderecoComprador: 'Avenida Conselheiro Nébias, 240, Encruzilhada, Santos - SP, 11045001',
+      descricaoCorVeiculo: 'BRANCA',
     })
     return
   }

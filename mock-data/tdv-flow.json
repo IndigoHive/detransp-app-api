@@ -4801,7 +4801,7 @@
                 "type": "rich_text",
                 "name": null,
                 "data": {
-                  "html": "<p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>CNPJ</strong></span></p><p><span style=\"color: rgb(17, 20, 20); font-size: 14px;\">@{node:n_b824c7dd9350.cpfComprador}</span></p>"
+                  "html": "<p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>CNPJ</strong></span></p><p><span style=\"color: rgb(17, 20, 20); font-size: 14px;\">@{node:n_d87067e61ebb.cpfComprador ?? node:n_b824c7dd9350.cpfComprador}</span></p>"
                 }
               },
               {
@@ -4809,7 +4809,7 @@
                 "type": "rich_text",
                 "name": null,
                 "data": {
-                  "html": "<p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>Empresa</strong></span></p><p><span style=\"color: rgb(17, 20, 20); font-size: 14px;\">@{node:n_b824c7dd9350.nomeComprador}</span></p>"
+                  "html": "<p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>Empresa</strong></span></p><p><span style=\"color: rgb(17, 20, 20); font-size: 14px;\">@{node:n_d87067e61ebb.nomeComprador ?? node:n_b824c7dd9350.nomeComprador}</span></p>"
                 }
               },
               {
@@ -4817,7 +4817,7 @@
                 "type": "rich_text",
                 "name": null,
                 "data": {
-                  "html": "<p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>E-mail</strong></span></p><p><span style=\"color: rgb(17, 20, 20); font-size: 14px;\">@{node:n_b824c7dd9350.emailComprador}</span></p>"
+                  "html": "<p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>E-mail</strong></span></p><p><span style=\"color: rgb(17, 20, 20); font-size: 14px;\">@{node:n_d87067e61ebb.emailComprador ?? node:n_b824c7dd9350.emailComprador}</span></p>"
                 }
               },
               {
@@ -4825,7 +4825,7 @@
                 "type": "rich_text",
                 "name": null,
                 "data": {
-                  "html": "<p><span style=\"font-size:12px;color:#7A7F83\"><strong>Endereço</strong></span></p><p><span style=\"font-size:14px;color:#111414\">@{node:n_b824c7dd9350.enderecoComprador}</span></p>"
+                  "html": "<p><span style=\"font-size:12px;color:#7A7F83\"><strong>Endereço</strong></span></p><p><span style=\"font-size:14px;color:#111414\">@{node:n_d87067e61ebb.enderecoComprador ?? node:n_b824c7dd9350.enderecoComprador}</span></p>"
                 }
               },
               {
@@ -4896,7 +4896,7 @@
                 "type": "rich_text",
                 "name": null,
                 "data": {
-                  "html": "<p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>Cor</strong></span></p><p><span style=\"color: rgb(17, 20, 20); font-size: 14px;\">@{node:n_b824c7dd9350.descricaoCorVeiculo ?? screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.descricaoCorVeiculo}</span></p>"
+                  "html": "<p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>Cor</strong></span></p><p><span style=\"color: rgb(17, 20, 20); font-size: 14px;\">@{node:n_d87067e61ebb.descricaoCorVeiculo ?? node:n_b824c7dd9350.descricaoCorVeiculo ?? screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.descricaoCorVeiculo}</span></p>"
                 }
               },
               {
@@ -4993,7 +4993,7 @@
             "type": "rich_text",
             "name": null,
             "data": {
-              "html": "<p><span style=\"font-size:14px;color:#262828\">Eu, @{node:n_21da615e160d.full_name}, inscrito no CPF sob o nº @{node:n_21da615e160d.cpf}, declaro para os devidos fins que estou transferindo a propriedade do veículo de minha titularidade, de placa @{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.plate}, marca/modelo @{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.brandModel}, ano de fabricação @{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.yearFab}, Renavam @{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.renavam}, para a empresa @{node:n_b824c7dd9350.nomeComprador}, inscrita no CNPJ sob o nº @{node:n_b824c7dd9350.cpfComprador}, localizada em @{node:n_b824c7dd9350.enderecoComprador}.<br>Estou ciente de que a veracidade das informações fornecidas é de minha total responsabilidade e que a falsidade destas informações poderá acarretar penalidades previstas em lei.</span></p>"
+              "html": "<p><span style=\"font-size:14px;color:#262828\">Eu, @{node:n_21da615e160d.full_name}, inscrito no CPF sob o nº @{node:n_21da615e160d.cpf}, declaro para os devidos fins que estou transferindo a propriedade do veículo de minha titularidade, de placa @{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.plate}, marca/modelo @{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.brandModel}, ano de fabricação @{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.yearFab}, Renavam @{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.renavam}, para a empresa @{node:n_d87067e61ebb.nomeComprador ?? node:n_b824c7dd9350.nomeComprador}, inscrita no CNPJ sob o nº @{node:n_d87067e61ebb.cpfComprador ?? node:n_b824c7dd9350.cpfComprador}, localizada em @{node:n_d87067e61ebb.enderecoComprador ?? node:n_b824c7dd9350.enderecoComprador}.<br>Estou ciente de que a veracidade das informações fornecidas é de minha total responsabilidade e que a falsidade destas informações poderá acarretar penalidades previstas em lei.</span></p>"
             }
           },
           {
@@ -5142,7 +5142,7 @@
             "type": "rich_text",
             "name": null,
             "data": {
-              "html": "<p><span style=\"font-size:14px;color:#262828\"><strong>Você concluiu a venda do veículo!</strong><br><br>A partir de agora, a responsabilidade do veículo @{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.brandModel}, cor @{node:n_b824c7dd9350.descricaoCorVeiculo ?? screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.descricaoCorVeiculo}, placa @{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.plate} é do comprador. A empresa já foi notificada e o processo está em andamento.<br><br>O veículo está registrado em nome da empresa que está comprando.</span></p>"
+              "html": "<p><span style=\"font-size:14px;color:#262828\"><strong>Você concluiu a venda do veículo!</strong><br><br>A partir de agora, a responsabilidade do veículo @{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.brandModel}, cor @{node:n_d87067e61ebb.descricaoCorVeiculo ?? node:n_b824c7dd9350.descricaoCorVeiculo ?? screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.descricaoCorVeiculo}, placa @{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.plate} é do comprador. A empresa já foi notificada e o processo está em andamento.<br><br>O veículo está registrado em nome da empresa que está comprando.</span></p>"
             }
           }
         ]
@@ -6083,7 +6083,7 @@
           {
             "id": "a5e1c7d0-4b29-4f8a-9c31-6d2e8b0a4f17",
             "name": "Entrada Renave (origem 5)",
-            "value": "{ \"codigo\": \"TDV-000000\", \"origem\": \"5\" }"
+            "value": "{ \"codigo\": \"TDV-000000\", \"origem\": \"5\", \"cpfComprador\": \"16794464003768\", \"nomeComprador\": \"CAOA MOTOR DO BRASIL LTDA\", \"emailComprador\": \"CERTIDOCPJ@EMAIL.COM\", \"enderecoComprador\": \"Avenida Conselheiro Nébias, 240, Encruzilhada, Santos - SP, 11045001\", \"descricaoCorVeiculo\": \"BRANCA\" }"
           }
         ]
       }
