@@ -2525,7 +2525,7 @@
             "type": "rich_text",
             "name": null,
             "data": {
-              "html": "<p style=\"text-align: center;\"><span style=\"color: rgb(38, 40, 40); font-size: 16px;\">Olá, @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}.&nbsp;</span></p><p style=\"text-align: center;\"><span style=\"color: rgb(38, 40, 40); font-size: 16px;\"><br>A transferência do veículo <strong>@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.brandModel}, placa @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.plate}&nbsp;</strong>foi realizada com sucesso e o veículo encontra-se em seu nome.<br><br>Acesse o aplicativo da <strong>Carteira Digital de Trânsito - CDT para baixar o documento</strong> do veículo.<br></span></p>"
+              "html": "<p style=\"text-align: center;\"><span style=\"color: rgb(38, 40, 40); font-size: 16px;\">Olá, @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}.&nbsp;</span></p><p style=\"text-align: center;\"><span style=\"color: rgb(38, 40, 40); font-size: 16px;\"><br>A transferência do veículo <strong>@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.brandModel}, placa @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.plate}&nbsp;</strong>foi realizada com sucesso e o veículo encontra-se em seu nome.<br><br>Acesse o aplicativo da <strong>CNH do Brasil para baixar o documento</strong> do veículo.<br></span></p>"
             }
           },
           {
@@ -2600,7 +2600,7 @@
             "type": "rich_text",
             "name": null,
             "data": {
-              "html": "<p style=\"text-align: center;\"><span style=\"color: rgb(38, 40, 40); font-size: 16px;\">Acesse o aplicativo da Carteira Digital de Trânsito - CDT para consultar os veículos em seu nome.</span></p>"
+              "html": "<p style=\"text-align: center;\"><span style=\"color: rgb(38, 40, 40); font-size: 16px;\">Acesse o aplicativo da CNH do Brasil para consultar os veículos em seu nome.</span></p>"
             }
           }
         ]
@@ -3495,7 +3495,7 @@
             "type": "text_body",
             "name": null,
             "data": {
-              "text": "Acesse o aplicativo da Carteira Digital de Trânsito - CDT para consultar os veículos em seu nome.\n"
+              "text": "Acesse o aplicativo da CNH do Brasil para consultar os veículos em seu nome.\n"
             }
           }
         ]
@@ -3554,7 +3554,7 @@
             "type": "text_body",
             "name": null,
             "data": {
-              "text": "Olá, @{node:n_2d9e4b6a8c17.nomeComprador ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}. \nA transferência do veículo @{node:n_2d9e4b6a8c17.vehicle.brandModel ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.brandModel}, placa @{node:n_2d9e4b6a8c17.vehicle.plate ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.plate} foi realizada com sucesso e o veículo encontra-se em seu nome.\n\nAcesse o aplicativo da Carteira Digital de Trânsito - CDT para baixar o documento do veículo.\n",
+              "text": "Olá, @{node:n_2d9e4b6a8c17.nomeComprador ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}. \nA transferência do veículo @{node:n_2d9e4b6a8c17.vehicle.brandModel ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.brandModel}, placa @{node:n_2d9e4b6a8c17.vehicle.plate ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.plate} foi realizada com sucesso e o veículo encontra-se em seu nome.\n\nAcesse o aplicativo da CNH do Brasil para baixar o documento do veículo.\n",
               "align": "left"
             }
           },
