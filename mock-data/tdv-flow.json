@@ -864,14 +864,23 @@
         "type": "group",
         "children": [
           {
-            "id": "c_d058091411ef",
-            "type": "icon_text",
+            "id": "c_59ea02d1b7b6",
+            "type": "icon",
             "name": null,
             "data": {
-              "icon": "cancel",
-              "text": "<p><span style=\"font-size:14px;color:#000000\"><strong>Esse veículo precisa ter placa no padrão Mercosul para a transferência</strong></span></p>",
+              "icon": "info",
+              "size": 24,
               "color": "danger",
-              "variant": "vertical"
+              "background": true,
+              "backgroundSize": 48
+            }
+          },
+          {
+            "id": "c_5f8f5a9a491c",
+            "type": "rich_text",
+            "name": null,
+            "data": {
+              "html": "<p style=\"text-align: center;\"><span style=\"font-size: 16px;\">Esse veículo precisa ter <strong>placa no padrão Mercosul</strong> para a transferência</span></p>"
             }
           },
           {
@@ -879,7 +888,7 @@
             "type": "rich_text",
             "name": null,
             "data": {
-              "html": "<p><span style=\"font-size:14px;color:#262828\">Percebemos que o veículo está registrado em cidade diferente da residência de quem está comprando. Nesse caso, é necessário fazer a troca da placa cinza para o padrão Mercosul.<br><br><br></span></p>"
+              "html": "<p style=\"text-align: center;\"><span style=\"font-size: 16px;\">Percebemos que o veículo está registrado em cidade diferente da residência de quem está comprando. Nesse caso, é necessário <strong>fazer a troca da placa</strong> cinza para o padrão Mercosul.</span></p>"
             }
           },
           {
@@ -888,6 +897,7 @@
             "name": null,
             "data": {
               "size": "md",
+              "align": "center",
               "plate": "EXC1A22",
               "source": "",
               "variant": "default"
@@ -5915,7 +5925,8 @@
         "position": {
           "x": 3884,
           "y": -1168
-        }
+        },
+        "url": "https://www.poupatempo.sp.gov.br/carta/50AAC7E2-1FA2-4B9D-9558-62DC1401971F"
       }
     },
     {
