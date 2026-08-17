@@ -104,8 +104,7 @@ export class MockDetranSpServiceNowTdvClient extends DetranSpServiceNowTdvClient
     )
     return {
       result: {
-        codigoTransferenciaVeiculo: record.codigoTransferenciaVeiculo!,
-        ...(record.origem != null ? { origem: record.origem } : {})
+        codigoTransferenciaVeiculo: record.codigoTransferenciaVeiculo!
       }
     }
   }
