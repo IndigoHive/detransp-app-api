@@ -55,14 +55,15 @@ type CompraVehicle = {
   yearMod: string
   codigoTransferencia: string
   proximaAcao: ProximaAcaoComprador
+  nomeComprador: string
+  nomeVendedor: string
+  descricaoCorVeiculo: string
   ativa?: 'true' | 'false' | '1' | '0'
   estado?: CodigoEstadoTDV
   origem?: CodigoOrigemTDV
   origemComunicacaoVendaVeiculo?: CodigoOrigemComunicacaoVendaVeiculo
   descricaoMarcaVeiculo?: string
   codigoComprador?: string
-  nomeComprador?: string
-  nomeVendedor?: string
   codigoVendedor?: string
   nomeMunicipioVeiculo?: string
   nomeMunicipioComprador?: string
@@ -77,12 +78,20 @@ type CompraVehicle = {
   kmVistoriadaVeiculo?: string
   valorVenda?: string
   quilometragem?: string
-  descricaoCorVeiculo?: string
   enderecoComprador?: string
 }
 
 export type ConsultaComprasResult = {
   vehicles: CompraVehicle[]
+}
+
+// "MARIA COMPRADORA TESTE" -> "Maria" — greeting screens only use the first
+// name; the full nomeComprador value is still used as-is elsewhere
+// (declarations, seller-facing identity confirmation).
+function firstName (fullName: string): string {
+  const [first] = fullName.trim().split(/\s+/)
+  if (!first) return ''
+  return first.charAt(0).toUpperCase() + first.slice(1).toLowerCase()
 }
 
 function trimField (value: string | null | undefined): string | undefined {
@@ -155,10 +164,9 @@ export class ConsultaComprasService {
       const valorVenda = formatNumericDisplay(trimField(tdv.valorVendaVeiculo), formatCurrency)
       const quilometragem = formatNumericDisplay(kmVeiculo, n => n.toLocaleString('pt-BR'))
       const descricaoMarcaVeiculo = trimField(tdv.descricaoMarcaVeiculo)
-      const descricaoCorVeiculo = trimField(tdv.descricaoCorVeiculo)
+      const descricaoCorVeiculo = trimField(tdv.descricaoCorVeiculo) ?? ''
       const codigoComprador = trimField(tdv.codigoComprador)
-      const nomeComprador = trimField(tdv.nomeComprador)
-      const nomeVendedor = trimField(tdv.nomeVendedor)
+      const nomeVendedor = trimField(tdv.nomeVendedor) ?? ''
       const codigoVendedor = trimField(tdv.codigoVendedor)
       const nomeMunicipioVeiculo = trimField(tdv.nomeMunicipioVeiculo)
       const nomeMunicipioComprador = trimField(tdv.nomeMunicipioComprador)
@@ -183,6 +191,9 @@ export class ConsultaComprasService {
         yearMod: '',
         codigoTransferencia,
         proximaAcao,
+        nomeComprador: firstName(tdv.nomeComprador ?? ''),
+        nomeVendedor,
+        descricaoCorVeiculo,
         ...(tdv.ativa != null ? { ativa: tdv.ativa } : {}),
         ...(tdv.estado != null ? { estado: tdv.estado } : {}),
         ...(tdv.origem != null ? { origem: tdv.origem } : {}),
@@ -191,8 +202,6 @@ export class ConsultaComprasService {
           : {}),
         ...(descricaoMarcaVeiculo ? { descricaoMarcaVeiculo } : {}),
         ...(codigoComprador ? { codigoComprador } : {}),
-        ...(nomeComprador ? { nomeComprador } : {}),
-        ...(nomeVendedor ? { nomeVendedor } : {}),
         ...(codigoVendedor ? { codigoVendedor } : {}),
         ...(nomeMunicipioVeiculo ? { nomeMunicipioVeiculo } : {}),
         ...(nomeMunicipioComprador ? { nomeMunicipioComprador } : {}),
@@ -207,7 +216,6 @@ export class ConsultaComprasService {
         ...(kmVistoriadaVeiculo ? { kmVistoriadaVeiculo } : {}),
         ...(valorVenda ? { valorVenda } : {}),
         ...(quilometragem ? { quilometragem } : {}),
-        ...(descricaoCorVeiculo ? { descricaoCorVeiculo } : {}),
         ...(enderecoComprador ? { enderecoComprador } : {})
       }]
     })

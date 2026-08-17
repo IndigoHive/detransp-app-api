@@ -111,7 +111,7 @@ export class DetranSpServiceNowDebRestrHttp {
 
         throw createError(
           status,
-          new DetranSpServiceNowDebRestrError(message ?? 'UnknownError', userMessage, error.response?.data),
+          new DetranSpServiceNowDebRestrError(message ?? 'UnknownError', userMessage, error.response?.data, error.response?.status),
           { expose: true }
         )
       }

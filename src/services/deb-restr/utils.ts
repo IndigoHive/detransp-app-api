@@ -81,7 +81,3 @@ export function sumValores (debitos: DebitoIncluded[]): number {
 export function buildVeiculoPixId (renavam: string, placa: string): string {
   return Buffer.from(`${renavam},${placa.toUpperCase()}`).toString('base64')
 }
-
-export function toSentenceCase (value: string): string {
-  return value.charAt(0).toLocaleUpperCase('pt-BR') + value.slice(1).toLocaleLowerCase('pt-BR')
-}

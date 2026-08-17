@@ -1,5 +1,6 @@
 import type { DetranSpServiceNowVistoriasClient } from '../../../clients/detran-sp-service-now-vistorias'
 import { formatDateTimeBr } from '../../deb-restr/utils'
+import { normalizeUtcDateTime } from '../../../utils/normalize-utc-datetime'
 import type { VistoriasAuth } from '../types'
 
 const PAID_STATUS = 'LIQUIDADO'
@@ -12,6 +13,7 @@ export class VerificaQRCodeVistoriaService {
     estado: number | null
     comprovante: string | null
     confirmedDate: string | null
+    expiresAt: string | null
   }> {
     const result = await this.client.verificaQRCode(auth, paymentId)
     const response = result?.result
@@ -24,7 +26,8 @@ export class VerificaQRCodeVistoriaService {
     return {
       estado,
       comprovante: body?.id ?? null,
-      confirmedDate: estado === 2 ? formatDateTimeBr(new Date().toISOString()) : null
+      confirmedDate: estado === 2 ? formatDateTimeBr(new Date().toISOString()) : null,
+      expiresAt: body?.dtExpiracao ? normalizeUtcDateTime(body.dtExpiracao) : null
     }
   }
 }

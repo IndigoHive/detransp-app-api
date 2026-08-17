@@ -1,5 +1,6 @@
+import { Unauthorized } from 'http-errors'
 import type { DetranSpServiceNowPgtoClient } from '../../../clients/detran-sp-service-now-pgto'
-import { normalizeEstadoQRCode } from '../../../clients/detran-sp-service-now-pgto'
+import { DetranSpServiceNowPgtoError, normalizeEstadoQRCode } from '../../../clients/detran-sp-service-now-pgto'
 import type { DebRestrVeiculoAuth, VerificaPixDebitoResult } from '../types'
 import { formatDateTimeBr } from '../utils'
 
@@ -16,7 +17,7 @@ export class VerificaPixDebitoService {
 
   async run (params: VerificaPixDebitoParams): Promise<VerificaPixDebitoResult> {
     const { idSolServico, ...auth } = params
-    const result = await this.client.verificaPix(auth, idSolServico)
+    const result = await this.verificaPix(auth, idSolServico)
 
     const qrCode = result?.included?.find((item) => item.type === 'qr-code')
     const attrs = qrCode?.attributes
@@ -37,6 +38,20 @@ export class VerificaPixDebitoService {
       estado,
       comprovante: attrs?.idPagamentoQRCode || null,
       confirmedDate,
+    }
+  }
+
+  private async verificaPix (
+    auth: Parameters<DetranSpServiceNowPgtoClient['verificaPix']>[0],
+    idSolServico: string
+  ): ReturnType<DetranSpServiceNowPgtoClient['verificaPix']> {
+    try {
+      return await this.client.verificaPix(auth, idSolServico)
+    } catch (err) {
+      if (err instanceof DetranSpServiceNowPgtoError && err.upstreamStatus === 401) {
+        throw Unauthorized('Sessão expirada. Faça login novamente.')
+      }
+      throw err
     }
   }
 }

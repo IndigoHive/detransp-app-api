@@ -79,9 +79,9 @@ export class MockDetranSpServiceNowTdvClient extends DetranSpServiceNowTdvClient
     tdvMockStore.ensureSeeded(this.params.config.tdvMock)
   }
 
-  async listaVeiculosProprietario (_auth: DetranSpServiceNowAuth): Promise<ListaVeiculosProprietarioResult> {
+  async listaVeiculosProprietario (auth: DetranSpServiceNowAuth): Promise<ListaVeiculosProprietarioResult> {
     this.seed()
-    return { result: tdvMockStore.getVehicles() }
+    return { result: tdvMockStore.getVehicles(auth.cpf) }
   }
 
   async listaTdvs (_auth: DetranSpServiceNowAuth, query: ListTdvsQuery): Promise<ListaTdvsResult> {
@@ -188,10 +188,10 @@ export class MockDetranSpServiceNowTdvClient extends DetranSpServiceNowTdvClient
   async buscaPixQrCodeTdv (
     _auth: DetranSpServiceNowAuth,
     codigoTransferenciaVeiculo: string,
-    _forcarNovo: boolean
+    forcarNovo: boolean
   ): Promise<BuscaPixQrCodeTdvResult> {
     this.seed()
-    return tdvMockStore.getPixQrCode(codigoTransferenciaVeiculo)
+    return tdvMockStore.getPixQrCode(codigoTransferenciaVeiculo, forcarNovo)
   }
 
   async validarTdv (_auth: DetranSpServiceNowAuth, _data: ValidarTdvCommand): Promise<ValidarTdvResult> {

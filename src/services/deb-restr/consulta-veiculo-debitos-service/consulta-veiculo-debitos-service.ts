@@ -11,7 +11,7 @@ import type {
   DebRestrVeiculoAuth,
   VehicleDebtsPayload
 } from '../types'
-import { deriveIpvaSectionStatus, deriveSectionStatus, formatCurrencyBr, sumValores, toSentenceCase } from '../utils'
+import { deriveIpvaSectionStatus, deriveSectionStatus, formatCurrencyBr, sumValores } from '../utils'
 
 const LICENCIAMENTO_BLOQUEADO_TEXT = 'Para liberar o pagamento do licenciamento, é preciso que todos os débitos do veículo tenham sido pagos.'
 
@@ -119,9 +119,9 @@ export class ConsultaVeiculoDebitosService {
         renavam: attributes.renavam ?? null,
         yearFab: attributes.anoFabricacao?.toString() ?? null,
         yearMod: attributes.anoModelo?.toString() ?? null,
-        cor: attributes.cor?.descricao ? toSentenceCase(attributes.cor.descricao) : null,
-        tipo: attributes.tipo?.descricao ? toSentenceCase(attributes.tipo.descricao) : null,
-        combustivel: attributes.combustivel?.descricao ? toSentenceCase(attributes.combustivel.descricao) : null,
+        cor: attributes.cor?.descricao ?? null,
+        tipo: attributes.tipo?.descricao ?? null,
+        combustivel: attributes.combustivel?.descricao ?? null,
       },
       restrictions: {
         bloqueioFurtoRoubo: meta?.bloqueioFurtoRoubo,

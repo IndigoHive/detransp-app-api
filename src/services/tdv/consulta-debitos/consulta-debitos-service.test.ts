@@ -5,7 +5,7 @@ import { ConsultaDebitosService } from './consulta-debitos-service'
 
 const authorizationHeader = 'Bearer eyJhbGciOiJub25lIn0.eyJwcmVmZXJyZWRfdXNlcm5hbWUiOiIwNTI0NjQ4NzYwMSIsIm5hbWUiOiJKb8OjbyBEZXRyYW4iLCJlbWFpbCI6ImpvYW9AZXhhbXBsZS5jb20ifQ.'
 
-const input = { codigoTransferencia: 'TDV1' }
+const input = { codigoTransferencia: 'TDV1', gerarQrCode: true }
 
 const debitosResult = {
   result: {
@@ -33,7 +33,8 @@ function asClient (client: Partial<DetranSpServiceNowTdvClient>): DetranSpServic
   return client as DetranSpServiceNowTdvClient
 }
 
-const logger = { info: vi.fn(), warn: vi.fn() } as unknown as Logger
+const loggerInfo = vi.fn()
+const logger = { info: loggerInfo, warn: vi.fn() } as unknown as Logger
 
 function buildService (client: Partial<DetranSpServiceNowTdvClient>) {
   return new ConsultaDebitosService({ detranSpServiceNowTdv: asClient(client), logger })
@@ -120,5 +121,71 @@ describe('ConsultaDebitosService', () => {
       estado: 2,
       totalDebitos: 'R$ 364,27'
     })
+  })
+
+  it('formats confirmedDate in pt-BR for display on the "Pagamento concluído" screen', async () => {
+    const service = buildService({
+      buscaTdv: vi.fn().mockResolvedValue({ result: { nomeComprador: 'Maria', estado: '7' } }),
+      buscaDebitosTdv: vi.fn().mockResolvedValue(debitosResult),
+      buscaPixQrCodeTdv: vi.fn().mockResolvedValue(pixResult('2')),
+      atualizaTdv: vi.fn().mockResolvedValue({ result: { codigoTransferenciaVeiculo: 'TDV1' } })
+    })
+
+    await expect(service.run(authorizationHeader, input)).resolves.toMatchObject({
+      confirmedDate: '11/08/2026 às 08:30'
+    })
+  })
+
+  it('passes forcarNovo through as gerarQrCode, and logs only when it actually requests a QR', async () => {
+    loggerInfo.mockClear()
+    const buscaPixQrCodeTdv = vi.fn().mockResolvedValue(pixResult('1'))
+    const service = buildService({
+      buscaTdv: vi.fn().mockResolvedValue({ result: { nomeComprador: 'Maria', estado: '7' } }),
+      buscaDebitosTdv: vi.fn().mockResolvedValue(debitosResult),
+      buscaPixQrCodeTdv
+    })
+
+    await service.run(authorizationHeader, { codigoTransferencia: 'TDV1', gerarQrCode: true })
+
+    expect(buscaPixQrCodeTdv).toHaveBeenCalledWith(expect.anything(), 'TDV1', true)
+    expect(loggerInfo).toHaveBeenCalledWith(
+      { codigoTransferencia: 'TDV1' },
+      'Solicitando geração/renovação do QR code PIX da TDV'
+    )
+  })
+
+  it('does not request or log a QR code on the débitos-list screen (gerarQrCode: false)', async () => {
+    loggerInfo.mockClear()
+    const buscaPixQrCodeTdv = vi.fn().mockResolvedValue(undefined)
+    const service = buildService({
+      buscaTdv: vi.fn().mockResolvedValue({ result: { nomeComprador: 'Maria', estado: '7' } }),
+      buscaDebitosTdv: vi.fn().mockResolvedValue(debitosResult),
+      buscaPixQrCodeTdv
+    })
+
+    const result = await service.run(authorizationHeader, { codigoTransferencia: 'TDV1', gerarQrCode: false })
+
+    expect(buscaPixQrCodeTdv).toHaveBeenCalledWith(expect.anything(), 'TDV1', false)
+    expect(buscaPixQrCodeTdv).toHaveBeenCalledTimes(1)
+    expect(loggerInfo).not.toHaveBeenCalledWith(
+      expect.anything(),
+      'Solicitando geração/renovação do QR code PIX da TDV'
+    )
+    expect(result).toMatchObject({ estado: undefined, qrCode: undefined })
+  })
+
+  it('still reports an already-paid existing charge when resuming with gerarQrCode: false', async () => {
+    const atualizaTdv = vi.fn().mockResolvedValue({ result: { codigoTransferenciaVeiculo: 'TDV1' } })
+    const service = buildService({
+      buscaTdv: vi.fn().mockResolvedValue({ result: { nomeComprador: 'Maria', estado: '7' } }),
+      buscaDebitosTdv: vi.fn().mockResolvedValue(debitosResult),
+      buscaPixQrCodeTdv: vi.fn().mockResolvedValue(pixResult('2')),
+      atualizaTdv
+    })
+
+    const result = await service.run(authorizationHeader, { codigoTransferencia: 'TDV1', gerarQrCode: false })
+
+    expect(result).toMatchObject({ estado: 2 })
+    expect(atualizaTdv).toHaveBeenCalled()
   })
 })

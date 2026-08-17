@@ -13,7 +13,7 @@ describe('ConsultaComprasService', () => {
   it('maps each actionable TDV to its proximaAcao', async () => {
     const listaTdvs = vi.fn().mockResolvedValue({
       result: [
-        { estado: '3', codigoTransferenciaVeiculo: 'TDV-A', placaVeiculo: 'AAA1111', descricaoMarcaVeiculo: 'A', codigoRenavamVeiculo: '1', nomeComprador: 'Maria', valorVendaVeiculo: '90000', kmVeiculo: '13000' },
+        { estado: '3', codigoTransferenciaVeiculo: 'TDV-A', placaVeiculo: 'AAA1111', descricaoMarcaVeiculo: 'A', codigoRenavamVeiculo: '1', nomeComprador: 'Maria', nomeVendedor: 'João', valorVendaVeiculo: '90000', kmVeiculo: '13000' },
         { estado: '7', codigoTransferenciaVeiculo: 'TDV-B', placaVeiculo: 'BBB2222', descricaoMarcaVeiculo: 'B', codigoRenavamVeiculo: '2' },
         { estado: '8', codigoTransferenciaVeiculo: 'TDV-C', placaVeiculo: 'CCC3333', descricaoMarcaVeiculo: 'C', codigoRenavamVeiculo: '3' },
         { estado: '9', codigoTransferenciaVeiculo: 'TDV-D', placaVeiculo: 'DDD4444', descricaoMarcaVeiculo: 'D', codigoRenavamVeiculo: '4' }
@@ -28,6 +28,7 @@ describe('ConsultaComprasService', () => {
       codigoTransferencia: 'TDV-A',
       plate: 'AAA1111',
       nomeComprador: 'Maria',
+      nomeVendedor: 'João',
       valorVenda: formatCurrency(90000),
       quilometragem: '13.000'
     })
@@ -51,5 +52,18 @@ describe('ConsultaComprasService', () => {
     const service = new ConsultaComprasService({ detranSpServiceNowTdv: asClient({ listaTdvs }) })
 
     await expect(service.run(authorizationHeader)).resolves.toEqual({ vehicles: [] })
+  })
+
+  it('reduces nomeComprador to just the first name, title-cased, for the greeting screens', async () => {
+    const listaTdvs = vi.fn().mockResolvedValue({
+      result: [
+        { estado: '3', codigoTransferenciaVeiculo: 'TDV-A', placaVeiculo: 'AAA1111', descricaoMarcaVeiculo: 'A', codigoRenavamVeiculo: '1', nomeComprador: 'MARIA COMPRADORA TESTE' }
+      ]
+    })
+    const service = new ConsultaComprasService({ detranSpServiceNowTdv: asClient({ listaTdvs }) })
+
+    const result = await service.run(authorizationHeader)
+
+    expect(result.vehicles[0]).toMatchObject({ nomeComprador: 'Maria' })
   })
 })
