@@ -80,13 +80,6 @@ export class DetranSpServiceNowHttp {
     this.axios.interceptors.request.use(
       (config) => {
         const fullUrl = `${config.baseURL ?? ''}${config.url ?? ''}`
-        const headers = config.headers?.toJSON?.() ?? config.headers ?? {}
-        let curl = `curl -X ${(config.method ?? 'GET').toUpperCase()} '${fullUrl}'`
-        for (const [key, value] of Object.entries(headers)) {
-          if (value) curl += ` -H '${key}: ${value}'`
-        }
-        if (config.data) curl += ` -d '${typeof config.data === 'string' ? config.data : JSON.stringify(config.data)}'`
-        console.log(curl)
 
         this.logger.debug(
           {
