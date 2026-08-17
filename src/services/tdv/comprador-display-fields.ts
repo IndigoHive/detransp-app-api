@@ -13,7 +13,7 @@ function trimField (value: string | null | undefined): string | undefined {
   return trimmed || undefined
 }
 
-export function formatEnderecoComprador (tdv: ListaTdvsResultData): string | undefined {
+function formatEnderecoComprador (tdv: ListaTdvsResultData): string | undefined {
   const logradouro = trimField(tdv.logradouroComprador)
   const numero = trimField(tdv.numeroComprador)
   const complemento = trimField(tdv.complementoComprador)
