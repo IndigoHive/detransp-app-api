@@ -63,6 +63,10 @@ export type Config = {
     // state — with seller, buyer, and sale data all pre-filled — instead of starting empty, so
     // a single step of the flow can be tested without redoing everything before it.
     initialEstado: string
+    // Dev/QA-only escape hatches to exercise error paths that real mock data can't easily
+    // trigger — see AnaliseRequisitosService / ValidacaoVendaService. Never in prod.
+    forceVehicleRestriction: boolean
+    forceCidadesDiferentes: boolean
   }
   rotaCrvPecas: {
     baseUrl: string

@@ -638,66 +638,6 @@
       }
     },
     {
-      "id": "s_37dddfb990e3",
-      "name": "[Vendedor] Veículo com restrição",
-      "content": {
-        "id": "c_0c548ff57b58",
-        "type": "group",
-        "children": [
-          {
-            "id": "c_650c26b32946",
-            "type": "icon_text",
-            "name": null,
-            "data": {
-              "icon": "cancel",
-              "text": "<p><span style=\"font-size:14px;color:#000000\"><strong>Esse veículo tem restrição e não pode ser transferido.</strong></span></p>",
-              "color": "danger",
-              "variant": "vertical"
-            }
-          },
-          {
-            "id": "c_e7263c74a1bd",
-            "type": "rich_text",
-            "name": null,
-            "data": {
-              "html": "<p><span style=\"font-size:14px;color:#262828\">Para resolver, regularize a pendência com o órgão responsável.<br></span></p>"
-            }
-          }
-        ]
-      },
-      "footer": {
-        "id": "c_88d785a49d95",
-        "type": "group",
-        "children": [
-          {
-            "id": "c_094f1b558b5e",
-            "type": "button",
-            "name": null,
-            "data": {
-              "label": "Voltar",
-              "variant": "outline",
-              "clickAction": "back"
-            }
-          }
-        ]
-      },
-      "navbar": {
-        "id": "e5fdda87-887d-4841-bee2-88eef1e22861",
-        "data": {
-          "title": "Análise de requisitos",
-          "showReturn": true
-        },
-        "name": null,
-        "type": "nav_bar"
-      },
-      "data": {
-        "position": {
-          "x": -884,
-          "y": -1716
-        }
-      }
-    },
-    {
       "id": "s_8fefaaacf3d9",
       "name": "[Vendedor] Sucesso requisitos",
       "content": {
@@ -766,23 +706,11 @@
           },
           {
             "id": "c_676202e6fd57",
-            "type": "text_input",
+            "type": "cpf_name_lookup",
             "name": "cpf",
             "data": {
-              "label": "<p><span style=\"color: rgb(17, 20, 20); font-size: 16px;\"><strong>CPF</strong></span></p>",
               "required": true,
-              "helperText": "<p></p>",
-              "placeholder": "123.456.789-10"
-            }
-          },
-          {
-            "id": "c_eb386ba9d15a",
-            "type": "text_input",
-            "name": "nome",
-            "data": {
-              "label": "<p><span style=\"color: rgb(17, 20, 20); font-size: 16px;\"><strong>Nome</strong></span></p>",
-              "required": true,
-              "placeholder": "Car*** *va"
+              "fetchNameUrl": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/comprador-cpf?cpf={cpf}"
             }
           },
           {
@@ -792,6 +720,7 @@
             "data": {
               "label": "<p><span style=\"color: rgb(17, 20, 20); font-size: 16px;\"><strong>E-mail</strong></span></p>",
               "required": true,
+              "inputType": "email",
               "placeholder": "eduardo@gmail.com"
             }
           },
@@ -886,7 +815,7 @@
           },
           {
             "id": "c_95aef308d32f",
-            "type": "text_input",
+            "type": "km_input",
             "name": "km",
             "data": {
               "label": "<p><span style=\"color: rgb(17, 20, 20); font-size: 16px;\"><strong>Quilometragem (km)</strong></span></p>",
@@ -936,14 +865,23 @@
         "type": "group",
         "children": [
           {
-            "id": "c_d058091411ef",
-            "type": "icon_text",
+            "id": "c_59ea02d1b7b6",
+            "type": "icon",
             "name": null,
             "data": {
-              "icon": "cancel",
-              "text": "<p><span style=\"font-size:14px;color:#000000\"><strong>Esse veículo precisa ter placa no padrão Mercosul para a transferência</strong></span></p>",
+              "icon": "info",
+              "size": 24,
               "color": "danger",
-              "variant": "vertical"
+              "background": true,
+              "backgroundSize": 48
+            }
+          },
+          {
+            "id": "c_5f8f5a9a491c",
+            "type": "rich_text",
+            "name": null,
+            "data": {
+              "html": "<p style=\"text-align: center;\"><span style=\"font-size: 16px;\">Esse veículo precisa ter <strong>placa no padrão Mercosul</strong> para a transferência</span></p>"
             }
           },
           {
@@ -951,7 +889,7 @@
             "type": "rich_text",
             "name": null,
             "data": {
-              "html": "<p><span style=\"font-size:14px;color:#262828\">Percebemos que o veículo está registrado em cidade diferente da residência de quem está comprando. Nesse caso, é necessário fazer a troca da placa cinza para o padrão Mercosul.<br><br><br></span></p>"
+              "html": "<p style=\"text-align: center;\"><span style=\"font-size: 16px;\">Percebemos que o veículo está registrado em cidade diferente da residência de quem está comprando. Nesse caso, é necessário <strong>fazer a troca da placa</strong> cinza para o padrão Mercosul.</span></p>"
             }
           },
           {
@@ -960,6 +898,7 @@
             "name": null,
             "data": {
               "size": "md",
+              "align": "center",
               "plate": "EXC1A22",
               "source": "",
               "variant": "default"
@@ -1039,7 +978,7 @@
                 "type": "rich_text",
                 "name": null,
                 "data": {
-                  "html": "<p><span style=\"font-size:12px;color:#7A7F83\"><strong>CPF</strong></span></p><p><span style=\"font-size:14px;color:#111414\">@{node:n_02ec1db459dc.cpfComprador}</span></p>"
+                  "html": "<p><span style=\"font-size:12px;color:#7A7F83\"><strong>CPF</strong></span></p><p><span style=\"font-size:14px;color:#111414\">@{node:n_02ec1db459dc.cpfComprador | formatCpf}</span></p>"
                 }
               },
               {
@@ -1476,7 +1415,7 @@
                 "type": "rich_text",
                 "name": null,
                 "data": {
-                  "html": "<p><span style=\"font-size:12px;color:#7A7F83\"><strong>CPF</strong></span></p><p><span style=\"font-size:14px;color:#111414\">@{node:n_0a7cda804e6d.cpfComprador}</span></p>"
+                  "html": "<p><span style=\"font-size:12px;color:#7A7F83\"><strong>CPF</strong></span></p><p><span style=\"font-size:14px;color:#111414\">@{node:n_0a7cda804e6d.cpfComprador | formatCpf}</span></p>"
                 }
               },
               {
@@ -1634,7 +1573,7 @@
             "type": "rich_text",
             "name": null,
             "data": {
-              "html": "<p style=\"text-align:justify\"><span style=\"font-size:14px;color:#262828\">Eu, @{node:n_0a7cda804e6d.nomeComprador}, inscrito no CPF sob o nº @{node:n_0a7cda804e6d.cpfComprador}, declaro para os devidos fins que resido em @{node:n_0a7cda804e6d.enderecoComprador}.</span></p>"
+              "html": "<p style=\"text-align:justify\"><span style=\"font-size:14px;color:#262828\">Eu, @{node:n_0a7cda804e6d.nomeComprador}, inscrito no CPF sob o nº @{node:n_0a7cda804e6d.cpfComprador | formatCpf}, declaro para os devidos fins que resido em @{node:n_0a7cda804e6d.enderecoComprador}.</span></p>"
             }
           },
           {
@@ -2586,7 +2525,7 @@
             "type": "rich_text",
             "name": null,
             "data": {
-              "html": "<p style=\"text-align: center;\"><span style=\"color: rgb(38, 40, 40); font-size: 16px;\">Olá, @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}.&nbsp;</span></p><p style=\"text-align: center;\"><span style=\"color: rgb(38, 40, 40); font-size: 16px;\"><br>A transferência do veículo <strong>@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.brandModel}, placa @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.plate}&nbsp;</strong>foi realizada com sucesso e o veículo encontra-se em seu nome.<br><br>Acesse o aplicativo da <strong>Carteira Digital de Trânsito - CDT para baixar o documento</strong> do veículo.<br></span></p>"
+              "html": "<p style=\"text-align: center;\"><span style=\"color: rgb(38, 40, 40); font-size: 16px;\">Olá, @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}.&nbsp;</span></p><p style=\"text-align: center;\"><span style=\"color: rgb(38, 40, 40); font-size: 16px;\"><br>A transferência do veículo <strong>@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.brandModel}, placa @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.plate}&nbsp;</strong>foi realizada com sucesso e o veículo encontra-se em seu nome.<br><br>Acesse o aplicativo da <strong>CNH do Brasil para baixar o documento</strong> do veículo.<br></span></p>"
             }
           },
           {
@@ -2661,7 +2600,7 @@
             "type": "rich_text",
             "name": null,
             "data": {
-              "html": "<p style=\"text-align: center;\"><span style=\"color: rgb(38, 40, 40); font-size: 16px;\">Acesse o aplicativo da Carteira Digital de Trânsito - CDT para consultar os veículos em seu nome.</span></p>"
+              "html": "<p style=\"text-align: center;\"><span style=\"color: rgb(38, 40, 40); font-size: 16px;\">Acesse o aplicativo da CNH do Brasil para consultar os veículos em seu nome.</span></p>"
             }
           }
         ]
@@ -3556,7 +3495,7 @@
             "type": "text_body",
             "name": null,
             "data": {
-              "text": "Acesse o aplicativo da Carteira Digital de Trânsito - CDT para consultar os veículos em seu nome.\n"
+              "text": "Acesse o aplicativo da CNH do Brasil para consultar os veículos em seu nome.\n"
             }
           }
         ]
@@ -3615,7 +3554,7 @@
             "type": "text_body",
             "name": null,
             "data": {
-              "text": "Olá, @{node:n_2d9e4b6a8c17.nomeComprador ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}. \nA transferência do veículo @{node:n_2d9e4b6a8c17.vehicle.brandModel ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.brandModel}, placa @{node:n_2d9e4b6a8c17.vehicle.plate ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.plate} foi realizada com sucesso e o veículo encontra-se em seu nome.\n\nAcesse o aplicativo da Carteira Digital de Trânsito - CDT para baixar o documento do veículo.\n",
+              "text": "Olá, @{node:n_2d9e4b6a8c17.nomeComprador ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}. \nA transferência do veículo @{node:n_2d9e4b6a8c17.vehicle.brandModel ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.brandModel}, placa @{node:n_2d9e4b6a8c17.vehicle.plate ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.plate} foi realizada com sucesso e o veículo encontra-se em seu nome.\n\nAcesse o aplicativo da CNH do Brasil para baixar o documento do veículo.\n",
               "align": "left"
             }
           },
@@ -5173,6 +5112,53 @@
           "y": 932
         }
       }
+    },
+    {
+      "id": "s_09b98b41fb85",
+      "name": "Carregamento - Analise de requisitos",
+      "content": {
+        "id": "c_388d0376c35e",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_cb7c3cfc4626",
+            "type": "rich_text",
+            "name": null,
+            "data": {
+              "html": "<p style=\"text-align: center;\"><span style=\"color: rgb(38, 40, 40); font-size: 16px;\">Estamos analisando o resultado para continuar sua solicitação.</span></p>"
+            }
+          },
+          {
+            "id": "c_f9a85b32616a",
+            "type": "spinner",
+            "name": null,
+            "data": {}
+          }
+        ]
+      },
+      "footer": {
+        "id": "c_665fe6662e53",
+        "type": "group",
+        "children": []
+      },
+      "navbar": {
+        "id": "navbar_loading_requisitos",
+        "data": {
+          "steps": 8,
+          "title": "Análise de requisitos",
+          "showReturn": true,
+          "currentStep": 2
+        },
+        "name": null,
+        "type": "nav_bar"
+      },
+      "mode": "loading",
+      "data": {
+        "position": {
+          "x": -3532,
+          "y": 264
+        }
+      }
     }
   ],
   "drawers": [
@@ -5581,8 +5567,8 @@
       "name": "Análise Requisitos",
       "data": {
         "position": {
-          "x": -3444,
-          "y": 604
+          "x": -2976,
+          "y": 600
         },
         "method": "POST",
         "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/analise-requisitos",
@@ -5591,39 +5577,40 @@
           {
             "id": "00ed0db0-44a2-4311-a651-64e4ce12975e",
             "name": "Aprovado (nova TDV)",
-            "value": "{ \"hasRestriction\": false, \"hasActiveTDV\": false, \"proximaAcao\": \"nova_tdv\" }"
+            "value": "{ \"hasActiveTDV\": false, \"proximaAcao\": \"nova_tdv\" }"
           },
           {
             "id": "c8a1f9d2-3b6e-4a7c-9f0d-1e2b3c4d5e6f",
             "name": "Comprador já assinou (vendedor_2)",
-            "value": "{ \"hasRestriction\": false, \"hasActiveTDV\": true, \"codigoTransferencia\": \"TDV-000000\", \"estado\": \"6\", \"proximaAcao\": \"vendedor_2\", \"nomeComprador\": \"Carlos da Silva\", \"descricaoCorVeiculo\": \"Branca\" }"
+            "value": "{ \"hasActiveTDV\": true, \"codigoTransferencia\": \"TDV-000000\", \"estado\": \"6\", \"proximaAcao\": \"vendedor_2\", \"nomeComprador\": \"Carlos da Silva\", \"descricaoCorVeiculo\": \"Branca\" }"
           },
           {
             "id": "c4e8f2a7-1d05-4b6e-8f2a-100000000001",
             "name": "Retomar venda (sem dados ainda, estado 1)",
-            "value": "{ \"hasRestriction\": false, \"hasActiveTDV\": true, \"codigoTransferencia\": \"TDV-000000\", \"estado\": \"1\" }"
+            "value": "{ \"hasActiveTDV\": true, \"codigoTransferencia\": \"TDV-000000\", \"estado\": \"1\" }"
           },
           {
             "id": "c4e8f2a7-1d05-4b6e-8f2a-100000000002",
             "name": "Retomar venda (dados já informados, estado 2)",
-            "value": "{ \"hasRestriction\": false, \"hasActiveTDV\": true, \"codigoTransferencia\": \"TDV-000000\", \"estado\": \"2\" }"
+            "value": "{ \"hasActiveTDV\": true, \"codigoTransferencia\": \"TDV-000000\", \"estado\": \"2\" }"
           },
           {
             "id": "0ad95ca6-eb99-4379-8363-262961c02efc",
             "name": "TDV em andamento (outro estado)",
-            "value": "{ \"hasRestriction\": false, \"hasActiveTDV\": true, \"codigoTransferencia\": \"TDV-000000\", \"estado\": \"7\" }"
+            "value": "{ \"hasActiveTDV\": true, \"codigoTransferencia\": \"TDV-000000\", \"estado\": \"7\" }"
           },
           {
             "id": "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
             "name": "Entrada Renave (origem 5)",
-            "value": "{ \"hasRestriction\": false, \"hasActiveTDV\": true, \"codigoTransferencia\": \"TDV-000000\", \"estado\": \"2\", \"origem\": \"5\", \"cpfComprador\": \"16794464003768\", \"nomeComprador\": \"CAOA MOTOR DO BRASIL LTDA\", \"emailComprador\": \"CERTIDOCPJ@EMAIL.COM\", \"enderecoComprador\": \"Avenida Conselheiro Nébias, 240, Encruzilhada, Santos - SP, 11045001\", \"descricaoCorVeiculo\": \"BRANCA\" }"
+            "value": "{ \"hasActiveTDV\": true, \"codigoTransferencia\": \"TDV-000000\", \"estado\": \"2\", \"origem\": \"5\", \"cpfComprador\": \"16794464003768\", \"nomeComprador\": \"CAOA MOTOR DO BRASIL LTDA\", \"emailComprador\": \"CERTIDOCPJ@EMAIL.COM\", \"enderecoComprador\": \"Avenida Conselheiro Nébias, 240, Encruzilhada, Santos - SP, 11045001\", \"descricaoCorVeiculo\": \"BRANCA\" }"
           },
           {
             "id": "b6f66d6a-af30-4594-b1c0-87a11d2c87be",
             "name": "Veículo com restrição",
-            "value": "{ \"hasRestriction\": true, \"hasActiveTDV\": false }"
+            "value": "{ \"showSnackbar\": { \"variant\": \"error\", \"title\": \"Erro\", \"description\": \"Esse veículo tem restrição e não pode ser transferido. Regularize a pendência com o órgão responsável.\" } }"
           }
-        ]
+        ],
+        "showSnackbar": true
       }
     },
     {
@@ -5638,35 +5625,7 @@
         "condition": {
           "clauses": [
             {
-              "id": "832591d8-1351-4e41-a720-395f77ae7344",
-              "left": "@{node:n_b824c7dd9350.hasRestriction}",
-              "right": "true",
-              "operator": "equals"
-            },
-            {
               "id": "8362e9c7-d3e6-4e38-8ea4-b49e7b4d1f0c",
-              "left": "@{node:n_b824c7dd9350.hasActiveTDV}",
-              "right": "true",
-              "operator": "equals"
-            }
-          ],
-          "combinator": "or"
-        }
-      }
-    },
-    {
-      "id": "n_2def40605e61",
-      "type": "if_node",
-      "name": "TDV aberta?",
-      "data": {
-        "position": {
-          "x": -1244,
-          "y": -744
-        },
-        "condition": {
-          "clauses": [
-            {
-              "id": "03de2d4c-1cb9-4b4b-a0ee-56a58d4cf721",
               "left": "@{node:n_b824c7dd9350.hasActiveTDV}",
               "right": "true",
               "operator": "equals"
@@ -5715,7 +5674,7 @@
         },
         "method": "POST",
         "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/validacao-comprador",
-        "body": "{\n  \"cpfComprador\": \"@{screen:s_2909315de67e.comp:c_676202e6fd57.value}\",\n  \"cepComprador\": \"@{screen:s_2909315de67e.comp:c_24e94a494019.value}\"\n}",
+        "body": "{\n  \"cpfComprador\": \"@{screen:s_2909315de67e.comp:c_676202e6fd57.cpf}\",\n  \"cepComprador\": \"@{screen:s_2909315de67e.comp:c_24e94a494019.value}\"\n}",
         "responseExamples": [
           {
             "id": "e2ef8121-9ccd-477c-8d4a-0c2a82684031",
@@ -5737,12 +5696,12 @@
       "name": "Validação Venda",
       "data": {
         "position": {
-          "x": 2828,
-          "y": -376
+          "x": 2544,
+          "y": -404
         },
         "method": "POST",
         "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/validacao-venda",
-        "body": "{\n  \"placaVeiculo\": \"@{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.plate}\",\n  \"renavamVeiculo\": \"@{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.renavam}\",\n  \"cpfComprador\": \"@{screen:s_2909315de67e.comp:c_676202e6fd57.value}\",\n  \"cepComprador\": \"@{screen:s_2909315de67e.comp:c_24e94a494019.value}\",\n  \"valorVenda\": \"@{screen:s_8ed2db9cbfd7.comp:c_f0a773241106.value}\",\n  \"quilometragem\": \"@{screen:s_8ed2db9cbfd7.comp:c_95aef308d32f.value}\"\n}",
+        "body": "{\n  \"placaVeiculo\": \"@{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.plate}\",\n  \"renavamVeiculo\": \"@{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.renavam}\",\n  \"cpfComprador\": \"@{screen:s_2909315de67e.comp:c_676202e6fd57.cpf}\",\n  \"cepComprador\": \"@{screen:s_2909315de67e.comp:c_24e94a494019.value}\",\n  \"valorVenda\": \"@{screen:s_8ed2db9cbfd7.comp:c_f0a773241106.value}\",\n  \"quilometragem\": \"@{screen:s_8ed2db9cbfd7.comp:c_95aef308d32f.value}\"\n}",
         "responseExamples": [
           {
             "id": "5f6ed066-0770-4256-8f82-50ad40f3620e",
@@ -5763,8 +5722,8 @@
       "name": "Cidade diferente?",
       "data": {
         "position": {
-          "x": 3088,
-          "y": -380
+          "x": 2764,
+          "y": -404
         },
         "condition": {
           "clauses": [
@@ -5961,13 +5920,14 @@
     },
     {
       "id": "n_cab5c7cef409",
-      "type": "web_view_screen",
+      "type": "open_url_node",
       "name": "Placa Mercosul",
       "data": {
         "position": {
           "x": 3884,
           "y": -1168
-        }
+        },
+        "url": "https://www.poupatempo.sp.gov.br/carta/50AAC7E2-1FA2-4B9D-9558-62DC1401971F"
       }
     },
     {
@@ -6305,8 +6265,8 @@
       "name": "Vendedor: TDV pronta para rotear?",
       "data": {
         "position": {
-          "x": -3152,
-          "y": 608
+          "x": -2824,
+          "y": 604
         },
         "condition": {
           "clauses": [
@@ -6326,12 +6286,12 @@
       "name": "Informar Dados Venda",
       "data": {
         "position": {
-          "x": 2608,
-          "y": -380
+          "x": 3004,
+          "y": -392
         },
         "method": "POST",
         "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/informar-dados-venda",
-        "body": "{\n  \"codigoTransferencia\": \"@{node:n_d87067e61ebb.codigo ?? node:n_b824c7dd9350.codigoTransferencia}\",\n  \"cpfComprador\": \"@{screen:s_2909315de67e.comp:c_676202e6fd57.value}\",\n  \"nomeComprador\": \"@{screen:s_2909315de67e.comp:c_eb386ba9d15a.value}\",\n  \"emailComprador\": \"@{screen:s_2909315de67e.comp:c_85fbac00c3aa.value}\",\n  \"cepComprador\": \"@{screen:s_2909315de67e.comp:c_24e94a494019.value}\",\n  \"numeroComprador\": \"@{screen:s_2909315de67e.comp:c_1e15a3ceef7b.value}\",\n  \"complementoComprador\": \"@{screen:s_2909315de67e.comp:c_90a932a96b1f.value}\",\n  \"valorVenda\": \"@{screen:s_8ed2db9cbfd7.comp:c_f0a773241106.value}\",\n  \"quilometragem\": \"@{screen:s_8ed2db9cbfd7.comp:c_95aef308d32f.value}\",\n  \"codigoProvaVidaVendedor\": \"@{node:n_4d4ab6c16ec8.codigoProvaVida ?? node:n_c4e8f2a71d05.codigoProvaVida}\"\n}",
+        "body": "{\n  \"codigoTransferencia\": \"@{node:n_d87067e61ebb.codigo ?? node:n_b824c7dd9350.codigoTransferencia}\",\n  \"cpfComprador\": \"@{screen:s_2909315de67e.comp:c_676202e6fd57.cpf}\",\n  \"nomeComprador\": \"@{screen:s_2909315de67e.comp:c_676202e6fd57.name}\",\n  \"emailComprador\": \"@{screen:s_2909315de67e.comp:c_85fbac00c3aa.value}\",\n  \"cepComprador\": \"@{screen:s_2909315de67e.comp:c_24e94a494019.value}\",\n  \"numeroComprador\": \"@{screen:s_2909315de67e.comp:c_1e15a3ceef7b.value}\",\n  \"complementoComprador\": \"@{screen:s_2909315de67e.comp:c_90a932a96b1f.value}\",\n  \"valorVenda\": \"@{screen:s_8ed2db9cbfd7.comp:c_f0a773241106.value}\",\n  \"quilometragem\": \"@{screen:s_8ed2db9cbfd7.comp:c_95aef308d32f.value}\",\n  \"codigoProvaVidaVendedor\": \"@{node:n_4d4ab6c16ec8.codigoProvaVida ?? node:n_c4e8f2a71d05.codigoProvaVida}\"\n}",
         "responseExamples": [
           {
             "id": "a3f7c1e9-2b04-4d6a-8e1f-000000000001",
@@ -7194,20 +7154,8 @@
       "targetHandle": "input"
     },
     {
-      "sourceId": "n_2def40605e61",
-      "targetId": "s_62e905fb199e",
-      "sourceHandle": "true",
-      "targetHandle": "input"
-    },
-    {
-      "sourceId": "n_2def40605e61",
-      "targetId": "s_37dddfb990e3",
-      "sourceHandle": "false",
-      "targetHandle": "input"
-    },
-    {
       "sourceId": "n_b2c6d93e6c54",
-      "targetId": "n_2def40605e61",
+      "targetId": "s_62e905fb199e",
       "sourceHandle": "true",
       "targetHandle": "input"
     },
@@ -7231,7 +7179,7 @@
     },
     {
       "sourceId": "n_d371d777d048",
-      "targetId": "s_3a0b04432a52",
+      "targetId": "n_a3f7c1e92b04",
       "sourceHandle": "false",
       "targetHandle": "input"
     },
@@ -7374,21 +7322,9 @@
       "targetHandle": "input"
     },
     {
-      "sourceId": "n_cab5c7cef409",
-      "targetId": "n_33825c778fc5",
-      "sourceHandle": "output",
-      "targetHandle": "input"
-    },
-    {
       "sourceId": "s_d1720681ec27",
       "targetId": "n_b92680d39623",
       "sourceHandle": "c_2ee80a561196",
-      "targetHandle": "input"
-    },
-    {
-      "sourceId": "s_83bb5547ec06",
-      "targetId": "n_b824c7dd9350",
-      "sourceHandle": "c_d3be8a364c48",
       "targetHandle": "input"
     },
     {
@@ -7591,13 +7527,13 @@
     },
     {
       "sourceId": "s_8ed2db9cbfd7",
-      "targetId": "n_a3f7c1e92b04",
+      "targetId": "n_4378ea225f58",
       "sourceHandle": "c_6909006a32c0",
       "targetHandle": "input"
     },
     {
       "sourceId": "n_a3f7c1e92b04",
-      "targetId": "n_4378ea225f58",
+      "targetId": "s_3a0b04432a52",
       "sourceHandle": "output",
       "targetHandle": "input"
     },
@@ -8295,6 +8231,18 @@
       "sourceId": "d_0c4e8a5b2f61",
       "targetId": "n_a4d2b5e7f163",
       "sourceHandle": "c_d4e3f2a1b0c9",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_83bb5547ec06",
+      "targetId": "s_09b98b41fb85",
+      "sourceHandle": "c_d3be8a364c48",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_09b98b41fb85",
+      "targetId": "n_b824c7dd9350",
+      "sourceHandle": "output",
       "targetHandle": "input"
     }
   ]

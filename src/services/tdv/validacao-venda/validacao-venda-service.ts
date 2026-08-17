@@ -1,9 +1,11 @@
 import type { DetranSpServiceNowTdvClient } from '../../../clients/detran-sp-service-now/tdv'
+import type { Config } from '../../../types'
 import { formatCityName } from '../../../utils/format-city-name'
 import { extractBearerToken, extractCpfFromToken } from '../../../utils/token'
 
 type Dependencies = {
   detranSpServiceNowTdv: DetranSpServiceNowTdvClient
+  config: Config
 }
 
 export type ValidacaoVendaInput = {
@@ -21,12 +23,20 @@ export type ValidacaoVendaResult = {
 
 export class ValidacaoVendaService {
   private readonly client: DetranSpServiceNowTdvClient
+  private readonly forceCidadesDiferentes: boolean
 
-  constructor ({ detranSpServiceNowTdv }: Dependencies) {
+  constructor ({ detranSpServiceNowTdv, config }: Dependencies) {
     this.client = detranSpServiceNowTdv
+    this.forceCidadesDiferentes = config.tdvMock.forceCidadesDiferentes
   }
 
   async run (authorizationHeader: string | undefined, input: ValidacaoVendaInput): Promise<ValidacaoVendaResult> {
+    // Dev/QA-only escape hatch: real mock vehicles all carry Mercosul plates, so there's no
+    // other way to reach the "troca de placa" error screen without real ServiceNow data.
+    if (this.forceCidadesDiferentes) {
+      return { cidadesDiferentes: true }
+    }
+
     const token = extractBearerToken(authorizationHeader)
     const cpf = extractCpfFromToken(token)
     const auth = { token, cpf }

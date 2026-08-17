@@ -4,10 +4,12 @@ import {
   type CodigoOrigemTDV,
   type ListaTdvsResultData
 } from '../../../clients/detran-sp-service-now/tdv/types'
+import type { Config } from '../../../types'
 import { extractBearerToken, extractCpfFromToken } from '../../../utils/token'
 
 type Dependencies = {
   detranSpServiceNowTdv: DetranSpServiceNowTdvClient
+  config: Config
 }
 
 export type AnaliseRequisitosInput = {
@@ -18,8 +20,7 @@ export type AnaliseRequisitosInput = {
   }
 }
 
-export type AnaliseRequisitosResult = {
-  hasRestriction: boolean
+export type AnaliseRequisitosSuccess = {
   hasActiveTDV: boolean
   codigoTransferencia?: string | undefined
   // Raw ServiceNow estado of the active TDV, if any — lets the flow branch resume
@@ -44,6 +45,14 @@ export type AnaliseRequisitosResult = {
   cpfComprador?: string | undefined
   emailComprador?: string | undefined
   enderecoComprador?: string | undefined
+}
+
+export type AnaliseRequisitosResult = AnaliseRequisitosSuccess | {
+  showSnackbar: {
+    variant: string
+    title: string
+    description: string
+  }
 }
 
 function trimField (value: string | null | undefined): string | undefined {
@@ -73,7 +82,7 @@ function formatEnderecoComprador (tdv: ListaTdvsResultData): string | undefined 
 // The seller only has a forced next step once the buyer has already signed (estado 6) — every
 // other active state, including still filling in buyer/sale data (1-2) or waiting on the buyer
 // (3-5), goes through the "TDV aberta?" prompt so cancellation stays available up to estado 6.
-function proximaAcaoParaVendedor (estado: CodigoEstadoTDV | undefined): AnaliseRequisitosResult['proximaAcao'] {
+function proximaAcaoParaVendedor (estado: CodigoEstadoTDV | undefined): AnaliseRequisitosSuccess['proximaAcao'] {
   switch (estado) {
     case CodigoEstadoTDV.ATPVE_ASSINADA_COMPRADOR: return 'vendedor_2'
     default: return undefined
@@ -82,12 +91,26 @@ function proximaAcaoParaVendedor (estado: CodigoEstadoTDV | undefined): AnaliseR
 
 export class AnaliseRequisitosService {
   private readonly client: DetranSpServiceNowTdvClient
+  private readonly forceVehicleRestriction: boolean
 
-  constructor ({ detranSpServiceNowTdv }: Dependencies) {
+  constructor ({ detranSpServiceNowTdv, config }: Dependencies) {
     this.client = detranSpServiceNowTdv
+    this.forceVehicleRestriction = config.tdvMock.forceVehicleRestriction
   }
 
   async run (authorizationHeader: string | undefined, input: AnaliseRequisitosInput): Promise<AnaliseRequisitosResult> {
+    // Dev/QA-only escape hatch: the real restriction check isn't implemented yet (see TODO
+    // below), so this is the only way to exercise the restriction toast end to end.
+    if (this.forceVehicleRestriction) {
+      return {
+        showSnackbar: {
+          variant: 'error',
+          title: 'Erro',
+          description: 'Esse veículo tem restrição e não pode ser transferido. Regularize a pendência com o órgão responsável.'
+        }
+      }
+    }
+
     const token = extractBearerToken(authorizationHeader)
     const cpf = extractCpfFromToken(token)
     const auth = { token, cpf }
@@ -110,7 +133,6 @@ export class AnaliseRequisitosService {
       const cpfComprador = trimField(activeTdv.codigoComprador)
       const emailComprador = trimField(activeTdv.emailComprador)
       return {
-        hasRestriction: false,
         hasActiveTDV: true,
         codigoTransferencia: activeTdv.codigoTransferenciaVeiculo ?? undefined,
         estado: activeTdv.estado,
@@ -124,12 +146,13 @@ export class AnaliseRequisitosService {
       }
     }
 
-    const hasRestriction = false // TODO: real restriction check not implemented yet
+    // TODO: real restriction check not implemented yet. Once it is, a restricted vehicle
+    // should short-circuit with a snackbar error response (see other tdv services), not a
+    // boolean field here — the seller needs the specific reason, not a generic dead-end screen.
 
     return {
-      hasRestriction,
       hasActiveTDV: false,
-      proximaAcao: hasRestriction ? undefined : 'nova_tdv'
+      proximaAcao: 'nova_tdv'
     }
   }
 }

@@ -85,7 +85,9 @@ export class TdvMockStore {
     buyerCpf: '',
     vehiclePlate: 'ABC1D23',
     vehicleRenavam: '12345678901',
-    initialEstado: ''
+    initialEstado: '',
+    forceVehicleRestriction: false,
+    forceCidadesDiferentes: false
   }
   private counter = 0
 

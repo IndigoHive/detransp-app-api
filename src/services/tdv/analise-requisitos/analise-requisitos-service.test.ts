@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from 'vitest'
 import type { DetranSpServiceNowTdvClient } from '../../../clients/detran-sp-service-now/tdv'
-import { AnaliseRequisitosService } from './analise-requisitos-service'
+import type { Config } from '../../../types'
+import { AnaliseRequisitosService, type AnaliseRequisitosSuccess } from './analise-requisitos-service'
 
 const authorizationHeader = 'Bearer eyJhbGciOiJub25lIn0.eyJwcmVmZXJyZWRfdXNlcm5hbWUiOiIwNTI0NjQ4NzYwMSJ9.'
 
@@ -10,15 +11,24 @@ function asClient (client: Partial<DetranSpServiceNowTdvClient>): DetranSpServic
   return client as DetranSpServiceNowTdvClient
 }
 
+function asConfig (tdvMock: Partial<Config['tdvMock']> = {}): Config {
+  return {
+    tdvMock: {
+      forceVehicleRestriction: false,
+      forceCidadesDiferentes: false,
+      ...tdvMock
+    }
+  } as Config
+}
+
 describe('AnaliseRequisitosService', () => {
   it('routes straight to vendedor_2 when the buyer already signed', async () => {
     const listaTdvs = vi.fn().mockResolvedValue({
       result: [{ estado: '6', codigoTransferenciaVeiculo: 'TDV-1' }]
     })
-    const service = new AnaliseRequisitosService({ detranSpServiceNowTdv: asClient({ listaTdvs }) })
+    const service = new AnaliseRequisitosService({ detranSpServiceNowTdv: asClient({ listaTdvs }), config: asConfig() })
 
     await expect(service.run(authorizationHeader, { selectedVehicle })).resolves.toEqual({
-      hasRestriction: false,
       hasActiveTDV: true,
       codigoTransferencia: 'TDV-1',
       estado: '6',
@@ -30,9 +40,9 @@ describe('AnaliseRequisitosService', () => {
     const listaTdvs = vi.fn().mockResolvedValue({
       result: [{ estado: '1', codigoTransferenciaVeiculo: 'TDV-2' }]
     })
-    const service = new AnaliseRequisitosService({ detranSpServiceNowTdv: asClient({ listaTdvs }) })
+    const service = new AnaliseRequisitosService({ detranSpServiceNowTdv: asClient({ listaTdvs }), config: asConfig() })
 
-    const result = await service.run(authorizationHeader, { selectedVehicle })
+    const result = await service.run(authorizationHeader, { selectedVehicle }) as AnaliseRequisitosSuccess
 
     expect(result.hasActiveTDV).toBe(true)
     expect(result.estado).toBe('1')
@@ -43,9 +53,9 @@ describe('AnaliseRequisitosService', () => {
     const listaTdvs = vi.fn().mockResolvedValue({
       result: [{ estado: '2', codigoTransferenciaVeiculo: 'TDV-3' }]
     })
-    const service = new AnaliseRequisitosService({ detranSpServiceNowTdv: asClient({ listaTdvs }) })
+    const service = new AnaliseRequisitosService({ detranSpServiceNowTdv: asClient({ listaTdvs }), config: asConfig() })
 
-    const result = await service.run(authorizationHeader, { selectedVehicle })
+    const result = await service.run(authorizationHeader, { selectedVehicle }) as AnaliseRequisitosSuccess
 
     expect(result.hasActiveTDV).toBe(true)
     expect(result.estado).toBe('2')
@@ -56,9 +66,9 @@ describe('AnaliseRequisitosService', () => {
     const listaTdvs = vi.fn().mockResolvedValue({
       result: [{ estado: '7', codigoTransferenciaVeiculo: 'TDV-4' }]
     })
-    const service = new AnaliseRequisitosService({ detranSpServiceNowTdv: asClient({ listaTdvs }) })
+    const service = new AnaliseRequisitosService({ detranSpServiceNowTdv: asClient({ listaTdvs }), config: asConfig() })
 
-    const result = await service.run(authorizationHeader, { selectedVehicle })
+    const result = await service.run(authorizationHeader, { selectedVehicle }) as AnaliseRequisitosSuccess
 
     expect(result.hasActiveTDV).toBe(true)
     expect(result.proximaAcao).toBeUndefined()
@@ -66,10 +76,9 @@ describe('AnaliseRequisitosService', () => {
 
   it('routes to nova_tdv when there is no active TDV for the vehicle', async () => {
     const listaTdvs = vi.fn().mockResolvedValue({ result: [] })
-    const service = new AnaliseRequisitosService({ detranSpServiceNowTdv: asClient({ listaTdvs }) })
+    const service = new AnaliseRequisitosService({ detranSpServiceNowTdv: asClient({ listaTdvs }), config: asConfig() })
 
     await expect(service.run(authorizationHeader, { selectedVehicle })).resolves.toEqual({
-      hasRestriction: false,
       hasActiveTDV: false,
       proximaAcao: 'nova_tdv'
     })
@@ -92,10 +101,9 @@ describe('AnaliseRequisitosService', () => {
         cepComprador: '11045001'
       }]
     })
-    const service = new AnaliseRequisitosService({ detranSpServiceNowTdv: asClient({ listaTdvs }) })
+    const service = new AnaliseRequisitosService({ detranSpServiceNowTdv: asClient({ listaTdvs }), config: asConfig() })
 
     await expect(service.run(authorizationHeader, { selectedVehicle })).resolves.toEqual({
-      hasRestriction: false,
       hasActiveTDV: true,
       codigoTransferencia: 'TDV-LOJA',
       estado: '2',
@@ -111,12 +119,28 @@ describe('AnaliseRequisitosService', () => {
     const listaTdvs = vi.fn().mockResolvedValue({
       result: [{ estado: '10', codigoTransferenciaVeiculo: 'TDV-5' }]
     })
-    const service = new AnaliseRequisitosService({ detranSpServiceNowTdv: asClient({ listaTdvs }) })
+    const service = new AnaliseRequisitosService({ detranSpServiceNowTdv: asClient({ listaTdvs }), config: asConfig() })
 
     await expect(service.run(authorizationHeader, { selectedVehicle })).resolves.toEqual({
-      hasRestriction: false,
       hasActiveTDV: false,
       proximaAcao: 'nova_tdv'
     })
+  })
+
+  it('returns the restriction snackbar without hitting the client when forceVehicleRestriction is on', async () => {
+    const listaTdvs = vi.fn()
+    const service = new AnaliseRequisitosService({
+      detranSpServiceNowTdv: asClient({ listaTdvs }),
+      config: asConfig({ forceVehicleRestriction: true })
+    })
+
+    await expect(service.run(authorizationHeader, { selectedVehicle })).resolves.toEqual({
+      showSnackbar: {
+        variant: 'error',
+        title: 'Erro',
+        description: 'Esse veículo tem restrição e não pode ser transferido. Regularize a pendência com o órgão responsável.'
+      }
+    })
+    expect(listaTdvs).not.toHaveBeenCalled()
   })
 })
