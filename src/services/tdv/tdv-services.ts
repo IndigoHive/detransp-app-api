@@ -2,6 +2,7 @@ import { asClass, type NameAndRegistrationPair } from 'awilix'
 import { ConsultaVeiculosService } from './consulta-veiculos'
 import { AnaliseRequisitosService } from './analise-requisitos'
 import { ValidacaoCompradorService } from './validacao-comprador'
+import { CompradorCpfService } from './comprador-cpf'
 import { ValidacaoVendaService } from './validacao-venda'
 import { CriarTdvService } from './criar-tdv'
 import { InformarDadosVendaService } from './informar-dados-venda'
@@ -19,6 +20,7 @@ export type TdvServices = {
   consultaVeiculosTdvService: ConsultaVeiculosService
   analiseRequisitosService: AnaliseRequisitosService
   validacaoCompradorService: ValidacaoCompradorService
+  compradorCpfService: CompradorCpfService
   validacaoVendaService: ValidacaoVendaService
   criarTdvService: CriarTdvService
   informarDadosVendaService: InformarDadosVendaService
@@ -38,6 +40,7 @@ export function getTdvRegistrations (): Required<NameAndRegistrationPair<TdvServ
     consultaVeiculosTdvService: asClass(ConsultaVeiculosService).scoped(),
     analiseRequisitosService: asClass(AnaliseRequisitosService).scoped(),
     validacaoCompradorService: asClass(ValidacaoCompradorService).scoped(),
+    compradorCpfService: asClass(CompradorCpfService).scoped(),
     validacaoVendaService: asClass(ValidacaoVendaService).scoped(),
     criarTdvService: asClass(CriarTdvService).scoped(),
     informarDadosVendaService: asClass(InformarDadosVendaService).scoped(),
