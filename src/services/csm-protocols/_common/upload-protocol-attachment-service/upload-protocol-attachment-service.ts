@@ -33,20 +33,36 @@ export class UploadProtocolAttachmentService {
         throw new BadRequest('É necessário informar um comentário para enviar o anexo')
       }
 
-      const attachment = rawInput.attachment
+      const attachments = rawInput.attachments ?? []
 
-      if (attachment) {
-        await this.serviceNowCsm.uploadAttachment({
-          tableName: 'x_mdpdd_detran_srv_service_case',
-          tableSysId: sysId,
-          fileName: attachment.originalName,
-          fileBuffer: attachment.buffer,
-          contentType: attachment.mimetype ?? undefined,
-        })
+      // API de anexos do ServiceNow é um arquivo por request — mesmo tratamento do
+      // SubmitCsmProtocolService: loga e segue se um anexo falhar, não aborta o comentário.
+      for (const attachment of attachments) {
+        try {
+          await this.serviceNowCsm.uploadAttachment({
+            tableName: 'x_mdpdd_detran_srv_service_case',
+            tableSysId: sysId,
+            fileName: attachment.originalName,
+            fileBuffer: attachment.buffer,
+            contentType: attachment.mimetype ?? undefined,
+          })
+        } catch (attachmentError) {
+          const axiosError = attachmentError as { message?: string; stack?: string; code?: string; response?: { status?: number; data?: unknown } }
+          this.logger.error(
+            {
+              err: { message: axiosError?.message, stack: axiosError?.stack },
+              code: axiosError?.code,
+              status: axiosError?.response?.status,
+              responseData: axiosError?.response?.data,
+              sysId,
+            },
+            'Erro ao enviar anexo para o ServiceNow CSM — comentário será enviado mesmo assim'
+          )
+        }
       }
 
-      const commentWithAttachment = attachment
-        ? `${comment}\n\nAnexo: ${attachment.originalName}`
+      const commentWithAttachment = attachments.length > 0
+        ? `${comment}\n\n${attachments.length > 1 ? 'Anexos' : 'Anexo'}: ${attachments.map((a) => a.originalName).join(', ')}`
         : comment
 
       await this.serviceNowCsm.addComment(sysId, commentWithAttachment)
