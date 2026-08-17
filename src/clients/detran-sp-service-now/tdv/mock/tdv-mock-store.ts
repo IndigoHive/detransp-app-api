@@ -273,7 +273,9 @@ export class TdvMockStore {
     const previousEstado = record.estado
     const source = data as Record<string, unknown>
 
-    record.estado = data.estado
+    if (data.estado !== undefined) {
+      record.estado = data.estado
+    }
 
     for (const field of MERGEABLE_TDV_FIELDS) {
       if (source[field] !== undefined) {
