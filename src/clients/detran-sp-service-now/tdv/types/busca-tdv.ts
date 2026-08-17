@@ -2,7 +2,7 @@ import type { CodigoEstadoTDV, CodigoEstadoQRCode, CodigoOrigemComunicacaoVendaV
 
 export type BuscaTdvResultData = {
   // Despite the swagger doc declaring 'true'/'false', the real API returns '1'/'0' here.
-  ativa?: string
+  ativa?: 'true' | 'false' | '1' | '0'
   estado?: CodigoEstadoTDV
   origem?: CodigoOrigemTDV
   origemComunicacaoVendaVeiculo?: CodigoOrigemComunicacaoVendaVeiculo
