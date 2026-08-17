@@ -5173,6 +5173,53 @@
           "y": 932
         }
       }
+    },
+    {
+      "id": "s_09b98b41fb85",
+      "name": "Carregamento - Analise de requisitos",
+      "content": {
+        "id": "c_388d0376c35e",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_cb7c3cfc4626",
+            "type": "rich_text",
+            "name": null,
+            "data": {
+              "html": "<p style=\"text-align: center;\"><span style=\"color: rgb(38, 40, 40); font-size: 16px;\">Estamos analisando o resultado para continuar sua solicitação.</span></p>"
+            }
+          },
+          {
+            "id": "c_f9a85b32616a",
+            "type": "spinner",
+            "name": null,
+            "data": {}
+          }
+        ]
+      },
+      "footer": {
+        "id": "c_665fe6662e53",
+        "type": "group",
+        "children": []
+      },
+      "navbar": {
+        "id": "navbar_loading_requisitos",
+        "data": {
+          "steps": 8,
+          "title": "Análise de requisitos",
+          "showReturn": true,
+          "currentStep": 2
+        },
+        "name": null,
+        "type": "nav_bar"
+      },
+      "mode": "loading",
+      "data": {
+        "position": {
+          "x": -3532,
+          "y": 264
+        }
+      }
     }
   ],
   "drawers": [
@@ -5581,8 +5628,8 @@
       "name": "Análise Requisitos",
       "data": {
         "position": {
-          "x": -3444,
-          "y": 604
+          "x": -2976,
+          "y": 600
         },
         "method": "POST",
         "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/analise-requisitos",
@@ -6305,8 +6352,8 @@
       "name": "Vendedor: TDV pronta para rotear?",
       "data": {
         "position": {
-          "x": -3152,
-          "y": 608
+          "x": -2824,
+          "y": 604
         },
         "condition": {
           "clauses": [
@@ -7386,12 +7433,6 @@
       "targetHandle": "input"
     },
     {
-      "sourceId": "s_83bb5547ec06",
-      "targetId": "n_b824c7dd9350",
-      "sourceHandle": "c_d3be8a364c48",
-      "targetHandle": "input"
-    },
-    {
       "sourceId": "n_7ca898ea4ec4",
       "targetId": "d_73700eef12bc",
       "sourceHandle": "output",
@@ -8295,6 +8336,18 @@
       "sourceId": "d_0c4e8a5b2f61",
       "targetId": "n_a4d2b5e7f163",
       "sourceHandle": "c_d4e3f2a1b0c9",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_83bb5547ec06",
+      "targetId": "s_09b98b41fb85",
+      "sourceHandle": "c_d3be8a364c48",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_09b98b41fb85",
+      "targetId": "n_b824c7dd9350",
+      "sourceHandle": "output",
       "targetHandle": "input"
     }
   ]
