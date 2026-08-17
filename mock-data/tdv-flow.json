@@ -4960,8 +4960,8 @@
       },
       "data": {
         "position": {
-          "x": 11400,
-          "y": 976
+          "x": 5012,
+          "y": 764
         }
       }
     },
@@ -5044,8 +5044,8 @@
       },
       "data": {
         "position": {
-          "x": 11880,
-          "y": 1220
+          "x": 5492,
+          "y": 1008
         }
       }
     },
@@ -5114,8 +5114,8 @@
       },
       "data": {
         "position": {
-          "x": 12400,
-          "y": 1144
+          "x": 6012,
+          "y": 932
         }
       }
     },
@@ -5169,8 +5169,8 @@
       },
       "data": {
         "position": {
-          "x": 13900,
-          "y": 1144
+          "x": 7512,
+          "y": 932
         }
       }
     }
@@ -5455,8 +5455,8 @@
       },
       "data": {
         "position": {
-          "x": 6388,
-          "y": 5520
+          "x": 3600,
+          "y": 5852
         }
       }
     },
@@ -5510,8 +5510,8 @@
       },
       "data": {
         "position": {
-          "x": 5948,
-          "y": 5344
+          "x": 3092,
+          "y": 5836
         }
       }
     }
@@ -6068,8 +6068,8 @@
       "name": "Criar TDV",
       "data": {
         "position": {
-          "x": -240,
-          "y": 72
+          "x": -304,
+          "y": -40
         },
         "method": "POST",
         "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/criar",
@@ -6603,8 +6603,8 @@
       "name": "Origem 2|3|4|6? (skip liveness + confirmar-compra)",
       "data": {
         "position": {
-          "x": 4664,
-          "y": 3808
+          "x": -3152,
+          "y": 1916
         },
         "condition": {
           "clauses": [
@@ -7043,8 +7043,8 @@
       "name": "Origem 5 (venda para loja)?",
       "data": {
         "position": {
-          "x": 7820,
-          "y": 664
+          "x": 1212,
+          "y": -280
         },
         "condition": {
           "clauses": [
@@ -7065,8 +7065,8 @@
       "name": "End",
       "data": {
         "position": {
-          "x": 14308,
-          "y": 1628
+          "x": 7920,
+          "y": 1416
         }
       }
     },
@@ -7076,8 +7076,8 @@
       "name": "Link Assinatura ITI (Vendedor Loja)",
       "data": {
         "position": {
-          "x": 12800,
-          "y": 1524
+          "x": 6412,
+          "y": 1312
         },
         "method": "GET",
         "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/link-assinatura-iti",
@@ -7096,8 +7096,8 @@
       "name": "Documento",
       "data": {
         "position": {
-          "x": 13020,
-          "y": 1524
+          "x": 6632,
+          "y": 1312
         },
         "url": "@{node:n_b8366e042aa1.link}",
         "callbackPrefix": "@{node:n_b8366e042aa1.redirectUri}"
@@ -7109,8 +7109,8 @@
       "name": "Valida Assinatura",
       "data": {
         "position": {
-          "x": 13240,
-          "y": 1524
+          "x": 6852,
+          "y": 1312
         },
         "method": "POST",
         "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/valida-assinatura",
@@ -7135,8 +7135,8 @@
       "name": "Assinado?",
       "data": {
         "position": {
-          "x": 13480,
-          "y": 1524
+          "x": 7092,
+          "y": 1312
         },
         "condition": {
           "clauses": [
@@ -7157,8 +7157,8 @@
       "name": null,
       "data": {
         "position": {
-          "x": 12580,
-          "y": 1924
+          "x": 6192,
+          "y": 1712
         }
       }
     },
@@ -7168,8 +7168,8 @@
       "name": "Solicitar serviço",
       "data": {
         "position": {
-          "x": 6920,
-          "y": 5344
+          "x": 4112,
+          "y": 5880
         },
         "url": "https://www.detran.sp.gov.br/detransp"
       }
@@ -7180,8 +7180,8 @@
       "name": "End",
       "data": {
         "position": {
-          "x": 6920,
-          "y": 5520
+          "x": 4252,
+          "y": 6264
         }
       }
     }
