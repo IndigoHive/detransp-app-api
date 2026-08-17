@@ -1027,7 +1027,7 @@
                 "type": "rich_text",
                 "name": null,
                 "data": {
-                  "html": "<p><span style=\"font-size:12px;color:#7A7F83\"><strong>CPF</strong></span></p><p><span style=\"font-size:14px;color:#111414\">@{node:n_02ec1db459dc.cpfComprador}</span></p>"
+                  "html": "<p><span style=\"font-size:12px;color:#7A7F83\"><strong>CPF</strong></span></p><p><span style=\"font-size:14px;color:#111414\">@{node:n_02ec1db459dc.cpfComprador | formatCpf}</span></p>"
                 }
               },
               {
@@ -1464,7 +1464,7 @@
                 "type": "rich_text",
                 "name": null,
                 "data": {
-                  "html": "<p><span style=\"font-size:12px;color:#7A7F83\"><strong>CPF</strong></span></p><p><span style=\"font-size:14px;color:#111414\">@{node:n_0a7cda804e6d.cpfComprador}</span></p>"
+                  "html": "<p><span style=\"font-size:12px;color:#7A7F83\"><strong>CPF</strong></span></p><p><span style=\"font-size:14px;color:#111414\">@{node:n_0a7cda804e6d.cpfComprador | formatCpf}</span></p>"
                 }
               },
               {
@@ -1622,7 +1622,7 @@
             "type": "rich_text",
             "name": null,
             "data": {
-              "html": "<p style=\"text-align:justify\"><span style=\"font-size:14px;color:#262828\">Eu, @{node:n_0a7cda804e6d.nomeComprador}, inscrito no CPF sob o nº @{node:n_0a7cda804e6d.cpfComprador}, declaro para os devidos fins que resido em @{node:n_0a7cda804e6d.enderecoComprador}.</span></p>"
+              "html": "<p style=\"text-align:justify\"><span style=\"font-size:14px;color:#262828\">Eu, @{node:n_0a7cda804e6d.nomeComprador}, inscrito no CPF sob o nº @{node:n_0a7cda804e6d.cpfComprador | formatCpf}, declaro para os devidos fins que resido em @{node:n_0a7cda804e6d.enderecoComprador}.</span></p>"
             }
           },
           {
