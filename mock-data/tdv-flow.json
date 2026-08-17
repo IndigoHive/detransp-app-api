@@ -766,23 +766,11 @@
           },
           {
             "id": "c_676202e6fd57",
-            "type": "text_input",
+            "type": "cpf_name_lookup",
             "name": "cpf",
             "data": {
-              "label": "<p><span style=\"color: rgb(17, 20, 20); font-size: 16px;\"><strong>CPF</strong></span></p>",
               "required": true,
-              "helperText": "<p></p>",
-              "placeholder": "123.456.789-10"
-            }
-          },
-          {
-            "id": "c_eb386ba9d15a",
-            "type": "text_input",
-            "name": "nome",
-            "data": {
-              "label": "<p><span style=\"color: rgb(17, 20, 20); font-size: 16px;\"><strong>Nome</strong></span></p>",
-              "required": true,
-              "placeholder": "Car*** *va"
+              "fetchNameUrl": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/comprador-cpf?cpf={cpf}"
             }
           },
           {
@@ -5762,7 +5750,7 @@
         },
         "method": "POST",
         "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/validacao-comprador",
-        "body": "{\n  \"cpfComprador\": \"@{screen:s_2909315de67e.comp:c_676202e6fd57.value}\",\n  \"cepComprador\": \"@{screen:s_2909315de67e.comp:c_24e94a494019.value}\"\n}",
+        "body": "{\n  \"cpfComprador\": \"@{screen:s_2909315de67e.comp:c_676202e6fd57.cpf}\",\n  \"cepComprador\": \"@{screen:s_2909315de67e.comp:c_24e94a494019.value}\"\n}",
         "responseExamples": [
           {
             "id": "e2ef8121-9ccd-477c-8d4a-0c2a82684031",
@@ -5789,7 +5777,7 @@
         },
         "method": "POST",
         "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/validacao-venda",
-        "body": "{\n  \"placaVeiculo\": \"@{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.plate}\",\n  \"renavamVeiculo\": \"@{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.renavam}\",\n  \"cpfComprador\": \"@{screen:s_2909315de67e.comp:c_676202e6fd57.value}\",\n  \"cepComprador\": \"@{screen:s_2909315de67e.comp:c_24e94a494019.value}\",\n  \"valorVenda\": \"@{screen:s_8ed2db9cbfd7.comp:c_f0a773241106.value}\",\n  \"quilometragem\": \"@{screen:s_8ed2db9cbfd7.comp:c_95aef308d32f.value}\"\n}",
+        "body": "{\n  \"placaVeiculo\": \"@{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.plate}\",\n  \"renavamVeiculo\": \"@{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.renavam}\",\n  \"cpfComprador\": \"@{screen:s_2909315de67e.comp:c_676202e6fd57.cpf}\",\n  \"cepComprador\": \"@{screen:s_2909315de67e.comp:c_24e94a494019.value}\",\n  \"valorVenda\": \"@{screen:s_8ed2db9cbfd7.comp:c_f0a773241106.value}\",\n  \"quilometragem\": \"@{screen:s_8ed2db9cbfd7.comp:c_95aef308d32f.value}\"\n}",
         "responseExamples": [
           {
             "id": "5f6ed066-0770-4256-8f82-50ad40f3620e",
@@ -6378,7 +6366,7 @@
         },
         "method": "POST",
         "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/informar-dados-venda",
-        "body": "{\n  \"codigoTransferencia\": \"@{node:n_d87067e61ebb.codigo ?? node:n_b824c7dd9350.codigoTransferencia}\",\n  \"cpfComprador\": \"@{screen:s_2909315de67e.comp:c_676202e6fd57.value}\",\n  \"nomeComprador\": \"@{screen:s_2909315de67e.comp:c_eb386ba9d15a.value}\",\n  \"emailComprador\": \"@{screen:s_2909315de67e.comp:c_85fbac00c3aa.value}\",\n  \"cepComprador\": \"@{screen:s_2909315de67e.comp:c_24e94a494019.value}\",\n  \"numeroComprador\": \"@{screen:s_2909315de67e.comp:c_1e15a3ceef7b.value}\",\n  \"complementoComprador\": \"@{screen:s_2909315de67e.comp:c_90a932a96b1f.value}\",\n  \"valorVenda\": \"@{screen:s_8ed2db9cbfd7.comp:c_f0a773241106.value}\",\n  \"quilometragem\": \"@{screen:s_8ed2db9cbfd7.comp:c_95aef308d32f.value}\",\n  \"codigoProvaVidaVendedor\": \"@{node:n_4d4ab6c16ec8.codigoProvaVida ?? node:n_c4e8f2a71d05.codigoProvaVida}\"\n}",
+        "body": "{\n  \"codigoTransferencia\": \"@{node:n_d87067e61ebb.codigo ?? node:n_b824c7dd9350.codigoTransferencia}\",\n  \"cpfComprador\": \"@{screen:s_2909315de67e.comp:c_676202e6fd57.cpf}\",\n  \"nomeComprador\": \"@{screen:s_2909315de67e.comp:c_676202e6fd57.name}\",\n  \"emailComprador\": \"@{screen:s_2909315de67e.comp:c_85fbac00c3aa.value}\",\n  \"cepComprador\": \"@{screen:s_2909315de67e.comp:c_24e94a494019.value}\",\n  \"numeroComprador\": \"@{screen:s_2909315de67e.comp:c_1e15a3ceef7b.value}\",\n  \"complementoComprador\": \"@{screen:s_2909315de67e.comp:c_90a932a96b1f.value}\",\n  \"valorVenda\": \"@{screen:s_8ed2db9cbfd7.comp:c_f0a773241106.value}\",\n  \"quilometragem\": \"@{screen:s_8ed2db9cbfd7.comp:c_95aef308d32f.value}\",\n  \"codigoProvaVidaVendedor\": \"@{node:n_4d4ab6c16ec8.codigoProvaVida ?? node:n_c4e8f2a71d05.codigoProvaVida}\"\n}",
         "responseExamples": [
           {
             "id": "a3f7c1e9-2b04-4d6a-8e1f-000000000001",

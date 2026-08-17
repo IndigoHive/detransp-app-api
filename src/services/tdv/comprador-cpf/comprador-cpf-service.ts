@@ -14,18 +14,6 @@ export type CompradorCpfResult = {
   errorText: string | null
 }
 
-// Mantém o primeiro e o último caractere visíveis, mascara o resto (espaços
-// preservados para manter o formato do nome legível).
-export function censorName (fullName: string): string {
-  const chars = fullName.split('')
-  return chars
-    .map((char, index) => {
-      if (index === 0 || index === chars.length - 1) return char
-      return char === ' ' ? ' ' : '*'
-    })
-    .join('')
-}
-
 export class CompradorCpfService {
   private readonly client: DetranSpServiceNowTdvClient
 
@@ -47,6 +35,6 @@ export class CompradorCpfService {
       return { name: null, errorText: 'CPF não encontrado' }
     }
 
-    return { name: censorName(cidadaoResult.result.nome), errorText: null }
+    return { name: cidadaoResult.result.nome, errorText: null }
   }
 }
