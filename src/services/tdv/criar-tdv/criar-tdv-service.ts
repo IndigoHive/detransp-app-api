@@ -1,10 +1,16 @@
 import type { DetranSpServiceNowTdvClient } from '../../../clients/detran-sp-service-now/tdv'
-import { CodigoEstadoTDV, CodigoOrigemTDV } from '../../../clients/detran-sp-service-now/tdv/types'
+import {
+  CodigoEstadoTDV,
+  CodigoOrigemTDV,
+  type ListaTdvsResultData
+} from '../../../clients/detran-sp-service-now/tdv/types'
 import { extractBearerToken, extractCpfFromToken, extractNameFromToken, extractEmailFromToken } from '../../../utils/token'
 
 type Dependencies = {
   detranSpServiceNowTdv: DetranSpServiceNowTdvClient
 }
+
+type Auth = { token: string, cpf: string }
 
 export type CriarTdvInput = {
   placaVeiculo: string
@@ -13,6 +19,7 @@ export type CriarTdvInput = {
 
 export type CriarTdvResult = {
   codigo: string
+  origem?: CodigoOrigemTDV
 }
 
 // Creates the TDV as soon as the seller passes the vehicle eligibility check (state 1,
@@ -43,7 +50,7 @@ export class CriarTdvService {
     const tdvAtiva = tdvsAtivas?.result?.find(tdv => tdv.estado !== CodigoEstadoTDV.TRANSFERENCIA_CANCELADA)
 
     if (tdvAtiva?.codigoTransferenciaVeiculo) {
-      return { codigo: tdvAtiva.codigoTransferenciaVeiculo }
+      return this.toResult(tdvAtiva.codigoTransferenciaVeiculo, tdvAtiva.origem)
     }
 
     const createResult = await this.client.criaTdv(auth, {
@@ -60,6 +67,34 @@ export class CriarTdvService {
       throw new Error('Falha ao criar transferência')
     }
 
-    return { codigo }
+    const created = await this.findCreatedTdv(auth, cpfVendedor, input)
+    return this.toResult(codigo, created?.origem)
+  }
+
+  private async findCreatedTdv (
+    auth: Auth,
+    cpfVendedor: string,
+    input: CriarTdvInput
+  ): Promise<ListaTdvsResultData | undefined> {
+    const listed = await this.client.listaTdvs(auth, {
+      ativa: 'true',
+      codigoVendedor: cpfVendedor,
+      placaVeiculo: input.placaVeiculo
+    }).catch(() => undefined)
+
+    return listed?.result?.find(tdv =>
+      tdv.estado !== CodigoEstadoTDV.TRANSFERENCIA_CANCELADA
+      && (
+        tdv.placaVeiculo === input.placaVeiculo
+        || tdv.codigoRenavamVeiculo === input.renavamVeiculo
+      )
+    )
+  }
+
+  private toResult (codigo: string, origem?: CodigoOrigemTDV | null): CriarTdvResult {
+    return {
+      codigo,
+      ...(origem != null ? { origem } : {})
+    }
   }
 }

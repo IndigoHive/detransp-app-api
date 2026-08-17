@@ -1,9 +1,11 @@
-import type { CodigoEstadoTDV, CodigoEstadoQRCode } from './_common'
+import type { CodigoEstadoTDV, CodigoEstadoQRCode, CodigoOrigemComunicacaoVendaVeiculo, CodigoOrigemTDV } from './_common'
 
 export type BuscaTdvResultData = {
   // Despite the swagger doc declaring 'true'/'false', the real API returns '1'/'0' here.
   ativa?: string
   estado?: CodigoEstadoTDV
+  origem?: CodigoOrigemTDV
+  origemComunicacaoVendaVeiculo?: CodigoOrigemComunicacaoVendaVeiculo
   codigoTransferenciaVeiculo?: string
   placaVeiculo?: string
   placaMercosul?: 'true' | 'false'

@@ -13,7 +13,9 @@ import type {
   CriaTdvResult,
   ListaTdvsResult,
   ListTdvsQuery,
-  ListaVeiculosProprietarioResult
+  ListaVeiculosProprietarioResult,
+  ValidarTdvCommand,
+  ValidarTdvResult
 } from './types'
 
 export type DetranSpServiceNowTdvClientParams = {
@@ -45,11 +47,18 @@ export class DetranSpServiceNowTdvClient extends DetranSpServiceNowHttp {
     ).data
   }
 
-  async buscaTdv (auth: DetranSpServiceNowAuth, codigoTransferenciaVeiculo: string): Promise<BuscaTdvResult> {
+  async buscaTdv (
+    auth: DetranSpServiceNowAuth,
+    codigoTransferenciaVeiculo: string,
+    campos?: string
+  ): Promise<BuscaTdvResult> {
     return (
       await this.axios.get<BuscaTdvResult>(
         `/transferencias-de-veiculos/${codigoTransferenciaVeiculo}`,
-        this.withAuth(auth)
+        {
+          ...(campos ? { params: { campos } } : {}),
+          ...this.withAuth(auth)
+        }
       )
     ).data
   }
@@ -105,12 +114,25 @@ export class DetranSpServiceNowTdvClient extends DetranSpServiceNowHttp {
     ).data
   }
 
-  async buscaPixQrCodeTdv (auth: DetranSpServiceNowAuth, codigoTransferenciaVeiculo: string, forcarNovo: boolean): Promise<BuscaPixQrCodeTdvResult> {
-    const authConfig = this.withAuth(auth)
+  async buscaPixQrCodeTdv (
+    auth: DetranSpServiceNowAuth,
+    codigoTransferenciaVeiculo: string,
+    forcarNovo: boolean
+  ): Promise<BuscaPixQrCodeTdvResult> {
     return (
       await this.axios.get<BuscaPixQrCodeTdvResult>(
         `/transferencias-de-veiculos/${codigoTransferenciaVeiculo}/qr-code`,
-        { ...authConfig, params: { forcarNovo } }
+        { ...this.withAuth(auth), params: { forcarNovo } }
+      )
+    ).data
+  }
+
+  async validarTdv (auth: DetranSpServiceNowAuth, data: ValidarTdvCommand): Promise<ValidarTdvResult> {
+    return (
+      await this.axios.post<ValidarTdvResult>(
+        '/transferencias-de-veiculos/validar-tdv',
+        data,
+        this.withAuth(auth)
       )
     ).data
   }

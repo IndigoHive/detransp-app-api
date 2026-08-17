@@ -88,6 +88,20 @@ export function tdvRouter (): Router {
     res.status(200).json(result)
   })
 
+  router.post('/criar-compra', async (req, res) => {
+    const { accessToken } = req.session!
+    const service = req.scope.resolve('criarCompraService')
+    const result = await service.run(accessToken, req.body)
+    res.status(200).json(result)
+  })
+
+  router.post('/validar-tdv', async (req, res) => {
+    const { accessToken } = req.session!
+    const service = req.scope.resolve('validarTdvService')
+    const result = await service.run(accessToken, req.body)
+    res.status(200).json(result)
+  })
+
   router.post('/valida-assinatura', async (req, res) => {
     const { accessToken } = req.session!
     const service = req.scope.resolve('validaAssinaturaService')
@@ -104,6 +118,13 @@ export function tdvRouter (): Router {
     // PIX's short expiration window starts ticking before the QR is ever shown.
     const gerarQrCode = req.query.gerarQrCode === 'true'
     const result = await service.run(accessToken, { codigoTransferencia, gerarQrCode })
+    res.status(200).json(result)
+  })
+
+  router.get('/enderecos/:cep', async (req, res) => {
+    const { accessToken } = req.session!
+    const service = req.scope.resolve('buscaEnderecoService')
+    const result = await service.run(accessToken, { cep: req.params.cep })
     res.status(200).json(result)
   })
 

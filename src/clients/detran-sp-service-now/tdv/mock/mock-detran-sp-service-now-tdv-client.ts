@@ -16,7 +16,9 @@ import type {
   CriaTdvResult,
   ListaTdvsResult,
   ListTdvsQuery,
-  ListaVeiculosProprietarioResult
+  ListaVeiculosProprietarioResult,
+  ValidarTdvCommand,
+  ValidarTdvResult
 } from '../types'
 import { tdvMockStore } from './tdv-mock-store'
 
@@ -100,7 +102,11 @@ export class MockDetranSpServiceNowTdvClient extends DetranSpServiceNowTdvClient
       { vendedor: auth.cpf, placa: record.placaVeiculo },
       `\n🟢 [TDV-MOCK] ${record.codigoTransferenciaVeiculo} criada  →  ${estadoLabel(record.estado)}  (vendedor ${auth.cpf})`
     )
-    return { result: { codigoTransferenciaVeiculo: record.codigoTransferenciaVeiculo! } }
+    return {
+      result: {
+        codigoTransferenciaVeiculo: record.codigoTransferenciaVeiculo!
+      }
+    }
   }
 
   async atualizaTdv (
@@ -185,5 +191,10 @@ export class MockDetranSpServiceNowTdvClient extends DetranSpServiceNowTdvClient
   ): Promise<BuscaPixQrCodeTdvResult> {
     this.seed()
     return tdvMockStore.getPixQrCode(codigoTransferenciaVeiculo, forcarNovo)
+  }
+
+  async validarTdv (_auth: DetranSpServiceNowAuth, _data: ValidarTdvCommand): Promise<ValidarTdvResult> {
+    this.seed()
+    return { result: {} }
   }
 }

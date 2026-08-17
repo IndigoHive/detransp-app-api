@@ -54,6 +54,15 @@ export type AtualizaTdvCancelada = {
   ativa: 'false'
 }
 
+export type AtualizaTdvEnderecoComprador = {
+  cepComprador: string
+  bairroComprador: string
+  logradouroComprador: string
+  numeroComprador: string
+  complementoComprador: string
+  estado?: CodigoEstadoTDV.ATPVE_ASSINADA_VENDEDOR_COMUNICACAO_VENDA_GERADA
+}
+
 export type AtualizaTdvCommand =
   | AtualizaTdvDadosVendaInformados
   | AtualizaTdvAtpveCriada
@@ -63,6 +72,7 @@ export type AtualizaTdvCommand =
   | AtualizaTdvAtpveAssinadaVendedor
   | AtualizaTdvTaxaServicoPaga
   | AtualizaTdvCancelada
+  | AtualizaTdvEnderecoComprador
 
 export type AtualizaTdvResultSuccess = {
   result: {

@@ -1,5 +1,7 @@
+import { BadRequest } from 'http-errors'
 import type { DetranSpServiceNowTdvClient } from '../../../clients/detran-sp-service-now/tdv'
-import { CodigoEstadoTDV } from '../../../clients/detran-sp-service-now/tdv/types'
+import { CodigoEstadoTDV, type CodigoOrigemTDV } from '../../../clients/detran-sp-service-now/tdv/types'
+import { formatCurrency } from '../../../utils/currency'
 import { extractBearerToken, extractCpfFromToken } from '../../../utils/token'
 
 type Dependencies = {
@@ -8,15 +10,15 @@ type Dependencies = {
 
 export type ConfirmarCompraInput = {
   codigoTransferencia: string
-  codigoProvaVidaComprador: string
+  codigoProvaVidaComprador?: string
 }
 
 export type ConfirmarCompraResult = {
   nomeComprador: string
   cpfComprador: string
   enderecoComprador: string
-  valorVenda: string
-  quilometragem: string
+  origem?: CodigoOrigemTDV
+  estado?: CodigoEstadoTDV
   vehicle: {
     id: string
     plate: string
@@ -28,7 +30,16 @@ export type ConfirmarCompraResult = {
     lastLicensing: string
     yearFab: string
     yearMod: string
+    valorVenda?: string
+    quilometragem?: string
   }
+}
+
+function formatNumericDisplay (value: string | undefined, format: (n: number) => string): string | undefined {
+  const trimmed = value?.trim()
+  if (!trimmed) return undefined
+  const n = Number(trimmed)
+  return Number.isFinite(n) ? format(n) : trimmed
 }
 
 export class ConfirmarCompraService {
@@ -43,32 +54,45 @@ export class ConfirmarCompraService {
     const cpf = extractCpfFromToken(token)
     const auth = { token, cpf }
 
-    const tdvAtual = (await this.client.buscaTdv(auth, input.codigoTransferencia))?.result
-    let estadoAtual = tdvAtual?.estado
+    const codigoTransferencia = input.codigoTransferencia?.trim() ?? ''
 
-    if (estadoAtual === CodigoEstadoTDV.ATPVE_CRIADA) {
-      // Advance to state 4 (INTENCAO_COMPRA_CONFIRMADA)
-      await this.client.atualizaTdv(auth, input.codigoTransferencia, {
-        estado: CodigoEstadoTDV.INTENCAO_COMPRA_CONFIRMADA,
-        codigoProvaVidaComprador: input.codigoProvaVidaComprador,
-        tipoProvaVidaComprador: '2' // LIVENESS
-      })
-      estadoAtual = CodigoEstadoTDV.INTENCAO_COMPRA_CONFIRMADA
+    if (!codigoTransferencia) {
+      throw BadRequest('codigoTransferencia é obrigatório')
     }
 
-    if (estadoAtual === CodigoEstadoTDV.INTENCAO_COMPRA_CONFIRMADA) {
-      // Advance to state 5 (AUTODECLARACAO_RESIDENCIA_CONFIRMADA)
-      // This prepares the TDV for ITI signing (state 5 → 6 by ITI callback)
-      await this.client.atualizaTdv(auth, input.codigoTransferencia, {
-        estado: CodigoEstadoTDV.AUTODECLARACAO_RESIDENCIA_CONFIRMADA,
-        codigoProvaVidaComprador: input.codigoProvaVidaComprador,
-        tipoProvaVidaComprador: '2',
-        confirmacaoAutodeclaracaoResidenciaComprador: 'true'
-      })
+    const current = await this.client.buscaTdv(auth, codigoTransferencia)
+    let estadoAtual = current?.result?.estado
+    const needsAdvance = estadoAtual === CodigoEstadoTDV.ATPVE_CRIADA
+      || estadoAtual === CodigoEstadoTDV.INTENCAO_COMPRA_CONFIRMADA
+
+    if (needsAdvance) {
+      const codigoProvaVidaComprador = input.codigoProvaVidaComprador?.trim()
+      if (!codigoProvaVidaComprador) {
+        throw BadRequest('codigoProvaVidaComprador é obrigatório para avançar a compra')
+      }
+
+      if (estadoAtual === CodigoEstadoTDV.ATPVE_CRIADA) {
+        await this.client.atualizaTdv(auth, codigoTransferencia, {
+          estado: CodigoEstadoTDV.INTENCAO_COMPRA_CONFIRMADA,
+          codigoProvaVidaComprador,
+          tipoProvaVidaComprador: '2' // LIVENESS
+        })
+        estadoAtual = CodigoEstadoTDV.INTENCAO_COMPRA_CONFIRMADA
+      }
+
+      if (estadoAtual === CodigoEstadoTDV.INTENCAO_COMPRA_CONFIRMADA) {
+        await this.client.atualizaTdv(auth, codigoTransferencia, {
+          estado: CodigoEstadoTDV.AUTODECLARACAO_RESIDENCIA_CONFIRMADA,
+          codigoProvaVidaComprador,
+          tipoProvaVidaComprador: '2',
+          confirmacaoAutodeclaracaoResidenciaComprador: 'true'
+        })
+      }
     }
 
-    // Fetch the updated TDV to get buyer and vehicle data
-    const tdv = await this.client.buscaTdv(auth, input.codigoTransferencia)
+    const tdv = needsAdvance
+      ? await this.client.buscaTdv(auth, codigoTransferencia)
+      : current
     const data = tdv?.result
 
     const enderecoComprador = [
@@ -78,12 +102,15 @@ export class ConfirmarCompraService {
       data?.nomeMunicipioComprador ? `${data.nomeMunicipioComprador} - ${data.ufComprador ?? 'SP'}` : undefined
     ].filter(Boolean).join(', ')
 
+    const valorVenda = formatNumericDisplay(data?.valorVendaVeiculo, formatCurrency)
+    const quilometragem = formatNumericDisplay(data?.kmVeiculo, n => n.toLocaleString('pt-BR'))
+
     return {
       nomeComprador: data?.nomeComprador ?? '',
       cpfComprador: data?.codigoComprador ?? '',
       enderecoComprador,
-      valorVenda: data?.valorVendaVeiculo ?? '',
-      quilometragem: data?.kmVeiculo ?? '',
+      ...(data?.origem !== undefined ? { origem: data.origem } : {}),
+      ...(data?.estado !== undefined ? { estado: data.estado } : {}),
       vehicle: {
         id: '1',
         plate: data?.placaVeiculo ?? '',
@@ -94,7 +121,9 @@ export class ConfirmarCompraService {
         renavam: data?.codigoRenavamVeiculo ?? '',
         lastLicensing: '',
         yearFab: '',
-        yearMod: ''
+        yearMod: '',
+        ...(valorVenda ? { valorVenda } : {}),
+        ...(quilometragem ? { quilometragem } : {})
       }
     }
   }

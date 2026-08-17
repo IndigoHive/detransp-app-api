@@ -13,6 +13,8 @@
 
 Application code lives in `src/`. `src/app/` holds Express routers and middleware; `src/services/` contains use cases grouped by domain. Put integrations in `src/clients/`, PostgreSQL access in `src/repositories/` and `src/db/`, dependency-injection wiring in `src/container/`, and shared contracts or helpers in `src/types/` and `src/utils/`. Mock fixtures are in `mock-data/`; builds go to `dist/`. Keep tests beside their subject as `*.test.ts` or under `src/test/`.
 
+Any time that you need to understand how TDV is wired on the mobile frontend, look at mock-data/tdv-flow.json. That json is what builds the app in detransp-app. This api is what the API calls defined on that JSON land
+
 ## Build, Test, and Development Commands
 
 - `npm ci`: install the exact dependency versions from `package-lock.json`.
@@ -38,3 +40,4 @@ Recent commits use short, imperative English subjects such as `Remove unused log
 ## Security & Configuration
 
 Use `.env.development.local` for local secrets and `.env.test` for test-only values. Never commit credentials, session encryption keys, database URLs, or tokens. When adding configuration, update the typed config loader and document the variable without publishing its value.
+

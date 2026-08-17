@@ -19,21 +19,22 @@ export type ConsultaDebitosInput = {
   gerarQrCode: boolean
 }
 
+export type DebitoItem = {
+  descricao: string
+  valor: number
+  valorFormatado: string
+}
+
 export type ConsultaDebitosResult = {
   nomeComprador: string
+  debitos: DebitoItem[]
+  valorTotal: number
   taxaTransferencia: string
   taxaLicenciamento: string
   totalDebitos: string
-  // Named to match the flow runtime's generic pix_screen contract (see
-  // CriaQRCodeLicenciamentoService, the other working pix flow) — the app reads
-  // `qrCode`/`expiresAt` off the pix node's own response, not TDV-specific names.
   qrCode?: string | undefined
   expiresAt?: string | undefined
-  // Numeric CodigoEstadoQRCode ('2' = pago) — polled by the app every 5s (useFlowRuntime.ts)
-  // to detect when the PIX has been paid and advance the flow.
   estado?: number | undefined
-  // Read by useFlowRuntime.ts's poll handler and by the "[Comprador] Pagamento concluído"
-  // screen (@{node:...comprovante}/@{node:...confirmedDate}) once estado reaches PAGO.
   comprovante?: string | undefined
   confirmedDate?: string | undefined
 }
@@ -104,17 +105,23 @@ export class ConsultaDebitosService {
       pixResult = polledPix
     }
 
-    const debitos = debitosResult?.result?.debitos ?? []
+    const rawDebitos = debitosResult?.result?.debitos ?? []
 
-    const taxaTransferencia = debitos.find(d =>
+    const debitos = rawDebitos.map((d) => ({
+      descricao: d.descricao,
+      valor: d.valor,
+      valorFormatado: formatCurrency(d.valor)
+    }))
+
+    const taxaTransferencia = rawDebitos.find(d =>
       d.descricao.toLowerCase().includes('transferência') || d.descricao.toLowerCase().includes('transferencia')
     )?.valor ?? 0
 
-    const taxaLicenciamento = debitos.find(d =>
+    const taxaLicenciamento = rawDebitos.find(d =>
       d.descricao.toLowerCase().includes('licenciamento')
     )?.valor ?? 0
 
-    const totalDebitos = debitosResult?.result?.valorTotal ?? 0
+    const valorTotal = debitosResult?.result?.valorTotal ?? 0
     const estadoQRCode = pixResult?.result?.estadoQRCode
 
     // Temporary (do not ship): txid for mock-paying via the SEFAZ homolog
@@ -123,7 +130,7 @@ export class ConsultaDebitosService {
     // screen) and no prior charge, pixResult is legitimately undefined.
     if (pixResult?.result?.idQRCode) {
       this.logger.warn(
-        { action: 'mock-pay-txid', codigoTransferencia: input.codigoTransferencia, txid: pixResult.result.idQRCode, valor: totalDebitos },
+        { action: 'mock-pay-txid', codigoTransferencia: input.codigoTransferencia, txid: pixResult.result.idQRCode, valor: valorTotal },
         'QR TDV débitos criado — txid para pagamento mock em homolog'
       )
     }
@@ -154,9 +161,11 @@ export class ConsultaDebitosService {
 
     return {
       nomeComprador: tdvResult?.result?.nomeComprador ?? '',
+      debitos,
+      valorTotal,
       taxaTransferencia: formatCurrency(taxaTransferencia),
       taxaLicenciamento: formatCurrency(taxaLicenciamento),
-      totalDebitos: formatCurrency(totalDebitos),
+      totalDebitos: formatCurrency(valorTotal),
       qrCode: pixResult?.result?.qrCode,
       expiresAt: pixResult?.result?.dataExpiracaoQRCode
         ? normalizeUtcDateTime(pixResult.result.dataExpiracaoQRCode)

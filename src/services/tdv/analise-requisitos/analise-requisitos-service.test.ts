@@ -75,6 +75,38 @@ describe('AnaliseRequisitosService', () => {
     })
   })
 
+  it('surfaces origem 5 and loja buyer fields so the seller flow can branch to Confirmação dados loja', async () => {
+    const listaTdvs = vi.fn().mockResolvedValue({
+      result: [{
+        estado: '2',
+        codigoTransferenciaVeiculo: 'TDV-LOJA',
+        origem: '5',
+        codigoComprador: '16794464003768',
+        nomeComprador: 'CAOA MOTOR DO BRASIL LTDA',
+        emailComprador: 'CERTIDOCPJ@EMAIL.COM',
+        logradouroComprador: 'Avenida Conselheiro Nébias',
+        numeroComprador: '240',
+        bairroComprador: 'Encruzilhada',
+        nomeMunicipioComprador: 'Santos',
+        ufComprador: 'SP',
+        cepComprador: '11045001'
+      }]
+    })
+    const service = new AnaliseRequisitosService({ detranSpServiceNowTdv: asClient({ listaTdvs }) })
+
+    await expect(service.run(authorizationHeader, { selectedVehicle })).resolves.toEqual({
+      hasRestriction: false,
+      hasActiveTDV: true,
+      codigoTransferencia: 'TDV-LOJA',
+      estado: '2',
+      origem: '5',
+      cpfComprador: '16794464003768',
+      nomeComprador: 'CAOA MOTOR DO BRASIL LTDA',
+      emailComprador: 'CERTIDOCPJ@EMAIL.COM',
+      enderecoComprador: 'Avenida Conselheiro Nébias, 240, Encruzilhada, Santos - SP, 11045001'
+    })
+  })
+
   it('ignores cancelled TDVs when looking for an active one', async () => {
     const listaTdvs = vi.fn().mockResolvedValue({
       result: [{ estado: '10', codigoTransferenciaVeiculo: 'TDV-5' }]
