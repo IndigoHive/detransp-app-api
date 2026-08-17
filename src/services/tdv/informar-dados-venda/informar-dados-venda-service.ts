@@ -1,9 +1,9 @@
-import { UnprocessableEntity } from 'http-errors'
 import type { DetranSpServiceNowTdvClient } from '../../../clients/detran-sp-service-now/tdv'
 import { CodigoEstadoTDV } from '../../../clients/detran-sp-service-now/tdv/types'
 import { centsToReais } from '../../../utils/cents-to-reais'
 import { sanitizeEnderecoComplemento } from '../../../utils/sanitize-endereco-complemento'
 import { extractBearerToken, extractCpfFromToken } from '../../../utils/token'
+import { assertKmValida } from '../valida-km'
 
 type Dependencies = {
   detranSpServiceNowTdv: DetranSpServiceNowTdvClient
@@ -43,15 +43,7 @@ export class InformarDadosVendaService {
     const tdvAtual = (await this.client.buscaTdv(auth, input.codigoTransferencia))?.result
     const valorVendaReais = centsToReais(input.valorVenda)
 
-    if (!tdvAtual?.kmVistoriadaVeiculo) {
-      throw new UnprocessableEntity('O veículo precisa ser vistoriado antes de prosseguir com a venda.')
-    }
-
-    if (Number(tdvAtual.kmVistoriadaVeiculo) > Number(input.quilometragem)) {
-      throw new UnprocessableEntity(
-        'A quilometragem do veículo não pode ser menor que a quilometragem vistoriada.'
-      )
-    }
+    assertKmValida(tdvAtual, input.quilometragem)
 
     // Idempotency guard: only move the state machine forward from the exact state this
     // transition expects. If the seller (or a retry/resume) calls this again after the TDV
