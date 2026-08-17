@@ -638,66 +638,6 @@
       }
     },
     {
-      "id": "s_37dddfb990e3",
-      "name": "[Vendedor] Veículo com restrição",
-      "content": {
-        "id": "c_0c548ff57b58",
-        "type": "group",
-        "children": [
-          {
-            "id": "c_650c26b32946",
-            "type": "icon_text",
-            "name": null,
-            "data": {
-              "icon": "cancel",
-              "text": "<p><span style=\"font-size:14px;color:#000000\"><strong>Esse veículo tem restrição e não pode ser transferido.</strong></span></p>",
-              "color": "danger",
-              "variant": "vertical"
-            }
-          },
-          {
-            "id": "c_e7263c74a1bd",
-            "type": "rich_text",
-            "name": null,
-            "data": {
-              "html": "<p><span style=\"font-size:14px;color:#262828\">Para resolver, regularize a pendência com o órgão responsável.<br></span></p>"
-            }
-          }
-        ]
-      },
-      "footer": {
-        "id": "c_88d785a49d95",
-        "type": "group",
-        "children": [
-          {
-            "id": "c_094f1b558b5e",
-            "type": "button",
-            "name": null,
-            "data": {
-              "label": "Voltar",
-              "variant": "outline",
-              "clickAction": "back"
-            }
-          }
-        ]
-      },
-      "navbar": {
-        "id": "e5fdda87-887d-4841-bee2-88eef1e22861",
-        "data": {
-          "title": "Análise de requisitos",
-          "showReturn": true
-        },
-        "name": null,
-        "type": "nav_bar"
-      },
-      "data": {
-        "position": {
-          "x": -884,
-          "y": -1716
-        }
-      }
-    },
-    {
       "id": "s_8fefaaacf3d9",
       "name": "[Vendedor] Sucesso requisitos",
       "content": {
@@ -5626,39 +5566,40 @@
           {
             "id": "00ed0db0-44a2-4311-a651-64e4ce12975e",
             "name": "Aprovado (nova TDV)",
-            "value": "{ \"hasRestriction\": false, \"hasActiveTDV\": false, \"proximaAcao\": \"nova_tdv\" }"
+            "value": "{ \"hasActiveTDV\": false, \"proximaAcao\": \"nova_tdv\" }"
           },
           {
             "id": "c8a1f9d2-3b6e-4a7c-9f0d-1e2b3c4d5e6f",
             "name": "Comprador já assinou (vendedor_2)",
-            "value": "{ \"hasRestriction\": false, \"hasActiveTDV\": true, \"codigoTransferencia\": \"TDV-000000\", \"estado\": \"6\", \"proximaAcao\": \"vendedor_2\", \"nomeComprador\": \"Carlos da Silva\", \"descricaoCorVeiculo\": \"Branca\" }"
+            "value": "{ \"hasActiveTDV\": true, \"codigoTransferencia\": \"TDV-000000\", \"estado\": \"6\", \"proximaAcao\": \"vendedor_2\", \"nomeComprador\": \"Carlos da Silva\", \"descricaoCorVeiculo\": \"Branca\" }"
           },
           {
             "id": "c4e8f2a7-1d05-4b6e-8f2a-100000000001",
             "name": "Retomar venda (sem dados ainda, estado 1)",
-            "value": "{ \"hasRestriction\": false, \"hasActiveTDV\": true, \"codigoTransferencia\": \"TDV-000000\", \"estado\": \"1\" }"
+            "value": "{ \"hasActiveTDV\": true, \"codigoTransferencia\": \"TDV-000000\", \"estado\": \"1\" }"
           },
           {
             "id": "c4e8f2a7-1d05-4b6e-8f2a-100000000002",
             "name": "Retomar venda (dados já informados, estado 2)",
-            "value": "{ \"hasRestriction\": false, \"hasActiveTDV\": true, \"codigoTransferencia\": \"TDV-000000\", \"estado\": \"2\" }"
+            "value": "{ \"hasActiveTDV\": true, \"codigoTransferencia\": \"TDV-000000\", \"estado\": \"2\" }"
           },
           {
             "id": "0ad95ca6-eb99-4379-8363-262961c02efc",
             "name": "TDV em andamento (outro estado)",
-            "value": "{ \"hasRestriction\": false, \"hasActiveTDV\": true, \"codigoTransferencia\": \"TDV-000000\", \"estado\": \"7\" }"
+            "value": "{ \"hasActiveTDV\": true, \"codigoTransferencia\": \"TDV-000000\", \"estado\": \"7\" }"
           },
           {
             "id": "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
             "name": "Entrada Renave (origem 5)",
-            "value": "{ \"hasRestriction\": false, \"hasActiveTDV\": true, \"codigoTransferencia\": \"TDV-000000\", \"estado\": \"2\", \"origem\": \"5\", \"cpfComprador\": \"16794464003768\", \"nomeComprador\": \"CAOA MOTOR DO BRASIL LTDA\", \"emailComprador\": \"CERTIDOCPJ@EMAIL.COM\", \"enderecoComprador\": \"Avenida Conselheiro Nébias, 240, Encruzilhada, Santos - SP, 11045001\", \"descricaoCorVeiculo\": \"BRANCA\" }"
+            "value": "{ \"hasActiveTDV\": true, \"codigoTransferencia\": \"TDV-000000\", \"estado\": \"2\", \"origem\": \"5\", \"cpfComprador\": \"16794464003768\", \"nomeComprador\": \"CAOA MOTOR DO BRASIL LTDA\", \"emailComprador\": \"CERTIDOCPJ@EMAIL.COM\", \"enderecoComprador\": \"Avenida Conselheiro Nébias, 240, Encruzilhada, Santos - SP, 11045001\", \"descricaoCorVeiculo\": \"BRANCA\" }"
           },
           {
             "id": "b6f66d6a-af30-4594-b1c0-87a11d2c87be",
             "name": "Veículo com restrição",
-            "value": "{ \"hasRestriction\": true, \"hasActiveTDV\": false }"
+            "value": "{ \"showSnackbar\": { \"variant\": \"error\", \"title\": \"Erro\", \"description\": \"Esse veículo tem restrição e não pode ser transferido. Regularize a pendência com o órgão responsável.\" } }"
           }
-        ]
+        ],
+        "showSnackbar": true
       }
     },
     {
@@ -5673,35 +5614,7 @@
         "condition": {
           "clauses": [
             {
-              "id": "832591d8-1351-4e41-a720-395f77ae7344",
-              "left": "@{node:n_b824c7dd9350.hasRestriction}",
-              "right": "true",
-              "operator": "equals"
-            },
-            {
               "id": "8362e9c7-d3e6-4e38-8ea4-b49e7b4d1f0c",
-              "left": "@{node:n_b824c7dd9350.hasActiveTDV}",
-              "right": "true",
-              "operator": "equals"
-            }
-          ],
-          "combinator": "or"
-        }
-      }
-    },
-    {
-      "id": "n_2def40605e61",
-      "type": "if_node",
-      "name": "TDV aberta?",
-      "data": {
-        "position": {
-          "x": -1244,
-          "y": -744
-        },
-        "condition": {
-          "clauses": [
-            {
-              "id": "03de2d4c-1cb9-4b4b-a0ee-56a58d4cf721",
               "left": "@{node:n_b824c7dd9350.hasActiveTDV}",
               "right": "true",
               "operator": "equals"
@@ -7229,20 +7142,8 @@
       "targetHandle": "input"
     },
     {
-      "sourceId": "n_2def40605e61",
-      "targetId": "s_62e905fb199e",
-      "sourceHandle": "true",
-      "targetHandle": "input"
-    },
-    {
-      "sourceId": "n_2def40605e61",
-      "targetId": "s_37dddfb990e3",
-      "sourceHandle": "false",
-      "targetHandle": "input"
-    },
-    {
       "sourceId": "n_b2c6d93e6c54",
-      "targetId": "n_2def40605e61",
+      "targetId": "s_62e905fb199e",
       "sourceHandle": "true",
       "targetHandle": "input"
     },

@@ -18,7 +18,6 @@ describe('AnaliseRequisitosService', () => {
     const service = new AnaliseRequisitosService({ detranSpServiceNowTdv: asClient({ listaTdvs }) })
 
     await expect(service.run(authorizationHeader, { selectedVehicle })).resolves.toEqual({
-      hasRestriction: false,
       hasActiveTDV: true,
       codigoTransferencia: 'TDV-1',
       estado: '6',
@@ -69,7 +68,6 @@ describe('AnaliseRequisitosService', () => {
     const service = new AnaliseRequisitosService({ detranSpServiceNowTdv: asClient({ listaTdvs }) })
 
     await expect(service.run(authorizationHeader, { selectedVehicle })).resolves.toEqual({
-      hasRestriction: false,
       hasActiveTDV: false,
       proximaAcao: 'nova_tdv'
     })
@@ -95,7 +93,6 @@ describe('AnaliseRequisitosService', () => {
     const service = new AnaliseRequisitosService({ detranSpServiceNowTdv: asClient({ listaTdvs }) })
 
     await expect(service.run(authorizationHeader, { selectedVehicle })).resolves.toEqual({
-      hasRestriction: false,
       hasActiveTDV: true,
       codigoTransferencia: 'TDV-LOJA',
       estado: '2',
@@ -114,7 +111,6 @@ describe('AnaliseRequisitosService', () => {
     const service = new AnaliseRequisitosService({ detranSpServiceNowTdv: asClient({ listaTdvs }) })
 
     await expect(service.run(authorizationHeader, { selectedVehicle })).resolves.toEqual({
-      hasRestriction: false,
       hasActiveTDV: false,
       proximaAcao: 'nova_tdv'
     })

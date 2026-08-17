@@ -19,7 +19,6 @@ export type AnaliseRequisitosInput = {
 }
 
 export type AnaliseRequisitosResult = {
-  hasRestriction: boolean
   hasActiveTDV: boolean
   codigoTransferencia?: string | undefined
   // Raw ServiceNow estado of the active TDV, if any — lets the flow branch resume
@@ -110,7 +109,6 @@ export class AnaliseRequisitosService {
       const cpfComprador = trimField(activeTdv.codigoComprador)
       const emailComprador = trimField(activeTdv.emailComprador)
       return {
-        hasRestriction: false,
         hasActiveTDV: true,
         codigoTransferencia: activeTdv.codigoTransferenciaVeiculo ?? undefined,
         estado: activeTdv.estado,
@@ -124,12 +122,13 @@ export class AnaliseRequisitosService {
       }
     }
 
-    const hasRestriction = false // TODO: real restriction check not implemented yet
+    // TODO: real restriction check not implemented yet. Once it is, a restricted vehicle
+    // should short-circuit with a snackbar error response (see other tdv services), not a
+    // boolean field here — the seller needs the specific reason, not a generic dead-end screen.
 
     return {
-      hasRestriction,
       hasActiveTDV: false,
-      proximaAcao: hasRestriction ? undefined : 'nova_tdv'
+      proximaAcao: 'nova_tdv'
     }
   }
 }
