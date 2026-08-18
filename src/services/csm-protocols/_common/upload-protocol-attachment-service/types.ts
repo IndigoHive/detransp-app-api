@@ -1,9 +1,7 @@
+import type { ServiceNowFormAttachment } from '../submit-csm-protocol-service/types'
+
 export type UploadProtocolAttachmentInput = Record<string, unknown> & {
-  attachment?: {
-    buffer: Buffer
-    originalName: string
-    mimetype?: string
-  }
+  attachments?: ServiceNowFormAttachment[]
 }
 
 export type UploadProtocolAttachmentResponse =
