@@ -5,7 +5,7 @@ import {
 } from '../../../clients/detran-sp-service-now/tdv/types'
 import type { Config } from '../../../types'
 import { extractBearerToken, extractCpfFromToken } from '../../../utils/token'
-import { compradorDisplayFieldsFromTdv } from '../comprador-display-fields'
+import { compradorDisplayFieldsFromTdv, chassiVeiculoFrom } from '../comprador-display-fields'
 
 type Dependencies = {
   detranSpServiceNowTdv: DetranSpServiceNowTdvClient
@@ -45,6 +45,9 @@ export type AnaliseRequisitosSuccess = {
   cpfComprador?: string | undefined
   emailComprador?: string | undefined
   enderecoComprador?: string | undefined
+  // Chassis, same rationale as descricaoCorVeiculo — Confirmação dados loja reads it from
+  // this node (and Criar TDV), not from the vehicle picker.
+  chassiVeiculo?: string | undefined
 }
 
 export type AnaliseRequisitosResult = AnaliseRequisitosSuccess | {
@@ -105,13 +108,16 @@ export class AnaliseRequisitosService {
     )
 
     if (activeTdv) {
+      const chassiVeiculo = chassiVeiculoFrom(activeTdv, input.selectedVehicle)
+
       return {
         hasActiveTDV: true,
         codigoTransferencia: activeTdv.codigoTransferenciaVeiculo ?? undefined,
         estado: activeTdv.estado,
         proximaAcao: proximaAcaoParaVendedor(activeTdv.estado),
         ...(activeTdv.origem != null ? { origem: activeTdv.origem } : {}),
-        ...compradorDisplayFieldsFromTdv(activeTdv)
+        ...compradorDisplayFieldsFromTdv(activeTdv),
+        ...(chassiVeiculo ? { chassiVeiculo } : {})
       }
     }
 
@@ -119,9 +125,12 @@ export class AnaliseRequisitosService {
     // should short-circuit with a snackbar error response (see other tdv services), not a
     // boolean field here — the seller needs the specific reason, not a generic dead-end screen.
 
+    const chassiVeiculo = chassiVeiculoFrom(undefined, input.selectedVehicle)
+
     return {
       hasActiveTDV: false,
-      proximaAcao: 'nova_tdv'
+      proximaAcao: 'nova_tdv',
+      ...(chassiVeiculo ? { chassiVeiculo } : {})
     }
   }
 }

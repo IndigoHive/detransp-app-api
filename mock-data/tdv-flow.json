@@ -4902,7 +4902,7 @@
                 "type": "rich_text",
                 "name": null,
                 "data": {
-                  "html": "<p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>Chassi</strong></span></p><p><span style=\"color: rgb(17, 20, 20); font-size: 14px;\">@{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.chassi}</span></p>"
+                  "html": "<p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>Chassi</strong></span></p><p><span style=\"color: rgb(17, 20, 20); font-size: 14px;\">@{node:n_d87067e61ebb.chassiVeiculo ?? node:n_b824c7dd9350.chassiVeiculo ?? screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.chassi}</span></p>"
                 }
               },
               {
@@ -4991,7 +4991,7 @@
             "type": "rich_text",
             "name": null,
             "data": {
-              "html": "<p><span style=\"font-size:14px;color:#262828\">Eu, @{node:n_21da615e160d.full_name}, inscrito no CPF sob o nº @{node:n_21da615e160d.cpf}, declaro para os devidos fins que estou transferindo a propriedade do veículo de minha titularidade, de placa @{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.plate}, marca/modelo @{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.brandModel}, ano de fabricação @{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.yearFab}, Renavam @{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.renavam}, para a empresa @{node:n_d87067e61ebb.nomeComprador ?? node:n_b824c7dd9350.nomeComprador}, inscrita no CNPJ sob o nº @{node:n_d87067e61ebb.cpfComprador ?? node:n_b824c7dd9350.cpfComprador}, localizada em @{node:n_d87067e61ebb.enderecoComprador ?? node:n_b824c7dd9350.enderecoComprador}.</span></p><p><span style=\"font-size:14px;color:#262828\">Estou ciente de que a veracidade das informações fornecidas é de minha total responsabilidade e que a falsidade destas informações poderá acarretar penalidades previstas em lei.</span></p>"
+              "html": "<p><span style=\"font-size:14px;color:#262828\">Eu, @{node:n_21da615e160d.full_name}, inscrito no CPF sob o nº @{node:n_21da615e160d.cpf}, declaro para os devidos fins que estou transferindo a propriedade do veículo de minha titularidade, de placa @{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.plate}, marca/modelo @{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.brandModel}, ano de fabricação @{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.yearFab}, Renavam @{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.renavam}, para a empresa @{node:n_d87067e61ebb.nomeComprador ?? node:n_b824c7dd9350.nomeComprador}, inscrita no CNPJ sob o nº @{node:n_d87067e61ebb.cpfComprador ?? node:n_b824c7dd9350.cpfComprador}, localizada em @{node:n_d87067e61ebb.enderecoComprador ?? node:n_b824c7dd9350.enderecoComprador}.</span></p><p><span style=\"font-size:14px;color:#262828\"><br>Estou ciente de que a veracidade das informações fornecidas é de minha total responsabilidade e que a falsidade destas informações poderá acarretar penalidades previstas em lei.</span></p>"
             }
           },
           {
@@ -5673,7 +5673,7 @@
           {
             "id": "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
             "name": "Entrada Renave (origem 5)",
-            "value": "{ \"hasActiveTDV\": true, \"codigoTransferencia\": \"TDV-000000\", \"estado\": \"2\", \"origem\": \"5\", \"cpfComprador\": \"16794464003768\", \"nomeComprador\": \"CAOA MOTOR DO BRASIL LTDA\", \"emailComprador\": \"CERTIDOCPJ@EMAIL.COM\", \"enderecoComprador\": \"Avenida Conselheiro Nébias, 240, Encruzilhada, Santos - SP, 11045001\", \"descricaoCorVeiculo\": \"BRANCA\" }"
+            "value": "{ \"hasActiveTDV\": true, \"codigoTransferencia\": \"TDV-000000\", \"estado\": \"2\", \"origem\": \"5\", \"cpfComprador\": \"16794464003768\", \"nomeComprador\": \"CAOA MOTOR DO BRASIL LTDA\", \"emailComprador\": \"CERTIDOCPJ@EMAIL.COM\", \"enderecoComprador\": \"Avenida Conselheiro Nébias, 240, Encruzilhada, Santos - SP, 11045001\", \"descricaoCorVeiculo\": \"BRANCA\", \"chassiVeiculo\": \"9BWZZZ377VT004251\" }"
           },
           {
             "id": "b6f66d6a-af30-4594-b1c0-87a11d2c87be",
@@ -6104,7 +6104,7 @@
         },
         "method": "POST",
         "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/criar",
-        "body": "{\n  \"placaVeiculo\": \"@{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.plate}\",\n  \"renavamVeiculo\": \"@{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.renavam}\"\n}",
+        "body": "{\n  \"placaVeiculo\": \"@{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.plate}\",\n  \"renavamVeiculo\": \"@{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.renavam}\",\n  \"chassiVeiculo\": \"@{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.chassi}\"\n}",
         "responseExamples": [
           {
             "id": "f0c3aea6-736b-4662-a6ff-a468f5c7fa53",
@@ -6114,7 +6114,7 @@
           {
             "id": "a5e1c7d0-4b29-4f8a-9c31-6d2e8b0a4f17",
             "name": "Entrada Renave (origem 5)",
-            "value": "{ \"codigo\": \"TDV-000000\", \"origem\": \"5\", \"cpfComprador\": \"16794464003768\", \"nomeComprador\": \"CAOA MOTOR DO BRASIL LTDA\", \"emailComprador\": \"CERTIDOCPJ@EMAIL.COM\", \"enderecoComprador\": \"Avenida Conselheiro Nébias, 240, Encruzilhada, Santos - SP, 11045001\", \"descricaoCorVeiculo\": \"BRANCA\" }"
+            "value": "{ \"codigo\": \"TDV-000000\", \"origem\": \"5\", \"cpfComprador\": \"16794464003768\", \"nomeComprador\": \"CAOA MOTOR DO BRASIL LTDA\", \"emailComprador\": \"CERTIDOCPJ@EMAIL.COM\", \"enderecoComprador\": \"Avenida Conselheiro Nébias, 240, Encruzilhada, Santos - SP, 11045001\", \"descricaoCorVeiculo\": \"BRANCA\", \"chassiVeiculo\": \"9BWZZZ377VT004251\" }"
           }
         ]
       }

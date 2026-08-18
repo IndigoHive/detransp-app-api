@@ -78,7 +78,8 @@ describe('CriarTdvService', () => {
         nomeMunicipioComprador: 'Santos',
         ufComprador: 'SP',
         cepComprador: '11045001',
-        descricaoCorVeiculo: 'BEGE'
+        descricaoCorVeiculo: 'BEGE',
+        chassiVeiculo: '9BWZZZ377VT004251'
       }]
     })
     const service = new CriarTdvService({ detranSpServiceNowTdv: asClient({ listaTdvs, criaTdv: vi.fn() }) })
@@ -90,7 +91,25 @@ describe('CriarTdvService', () => {
       nomeComprador: 'CAOA MOTOR DO BRASIL LTDA',
       emailComprador: 'CERTIDOCPJ@EMAIL.COM',
       enderecoComprador: 'Avenida Conselheiro Nébias, 240, Encruzilhada, Santos - SP, 11045001',
-      descricaoCorVeiculo: 'BEGE'
+      descricaoCorVeiculo: 'BEGE',
+      chassiVeiculo: '9BWZZZ377VT004251'
+    })
+  })
+
+  it('echoes chassiVeiculo from the request when the TDV record omits it', async () => {
+    const listaTdvs = vi.fn().mockResolvedValue({
+      result: [{ estado: '2', codigoTransferenciaVeiculo: 'TDV-EXISTING', origem: '5' }]
+    })
+    const service = new CriarTdvService({
+      detranSpServiceNowTdv: asClient({ listaTdvs, criaTdv: vi.fn() })
+    })
+
+    await expect(service.run(authorizationHeader, {
+      ...input,
+      chassiVeiculo: '9BWZZZ377VT004251'
+    })).resolves.toMatchObject({
+      codigo: 'TDV-EXISTING',
+      chassiVeiculo: '9BWZZZ377VT004251'
     })
   })
 

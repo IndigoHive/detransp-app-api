@@ -6,6 +6,7 @@ export type CompradorDisplayFields = {
   emailComprador?: string
   enderecoComprador?: string
   descricaoCorVeiculo?: string
+  chassiVeiculo?: string
 }
 
 function trimField (value: string | null | undefined): string | undefined {
@@ -32,18 +33,32 @@ function formatEnderecoComprador (tdv: ListaTdvsResultData): string | undefined 
   return endereco || undefined
 }
 
+export function chassiVeiculoFrom (
+  tdv?: Pick<ListaTdvsResultData, 'chassiVeiculo'> | undefined,
+  selectedVehicle?: { chassi?: unknown, chassiVeiculo?: unknown } | undefined
+): string | undefined {
+  const fromSelected = (value: unknown): string | undefined =>
+    typeof value === 'string' ? trimField(value) : undefined
+
+  return trimField(tdv?.chassiVeiculo)
+    ?? fromSelected(selectedVehicle?.chassiVeiculo)
+    ?? fromSelected(selectedVehicle?.chassi)
+}
+
 export function compradorDisplayFieldsFromTdv (tdv: ListaTdvsResultData): CompradorDisplayFields {
   const cpfComprador = trimField(tdv.codigoComprador)
   const nomeComprador = trimField(tdv.nomeComprador)
   const emailComprador = trimField(tdv.emailComprador)
   const enderecoComprador = formatEnderecoComprador(tdv)
   const descricaoCorVeiculo = trimField(tdv.descricaoCorVeiculo)
+  const chassiVeiculo = trimField(tdv.chassiVeiculo)
 
   return {
     ...(cpfComprador ? { cpfComprador } : {}),
     ...(nomeComprador ? { nomeComprador } : {}),
     ...(emailComprador ? { emailComprador } : {}),
     ...(enderecoComprador ? { enderecoComprador } : {}),
-    ...(descricaoCorVeiculo ? { descricaoCorVeiculo } : {})
+    ...(descricaoCorVeiculo ? { descricaoCorVeiculo } : {}),
+    ...(chassiVeiculo ? { chassiVeiculo } : {})
   }
 }

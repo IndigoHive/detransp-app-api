@@ -798,6 +798,7 @@ app.post('/api/tdv/analise-requisitos', (req, res) => {
       emailComprador: 'CERTIDOCPJ@EMAIL.COM',
       enderecoComprador: 'Avenida Conselheiro Nébias, 240, Encruzilhada, Santos - SP, 11045001',
       descricaoCorVeiculo: 'BRANCA',
+      chassiVeiculo: '9BWZZZ377VT004255',
     })
     return
   }
@@ -831,6 +832,7 @@ app.post('/api/tdv/criar', (req, res) => {
       emailComprador: 'CERTIDOCPJ@EMAIL.COM',
       enderecoComprador: 'Avenida Conselheiro Nébias, 240, Encruzilhada, Santos - SP, 11045001',
       descricaoCorVeiculo: 'BRANCA',
+      chassiVeiculo: '9BWZZZ377VT004255',
     })
     return
   }
