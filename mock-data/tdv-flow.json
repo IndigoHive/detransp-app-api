@@ -6411,6 +6411,28 @@
       }
     },
     {
+      "id": "n_9b4d6e8a1c20",
+      "type": "if_node",
+      "name": "Origem 5 (retomar venda para loja)?",
+      "data": {
+        "position": {
+          "x": 372,
+          "y": 60
+        },
+        "condition": {
+          "clauses": [
+            {
+              "id": "9b4d6e8a-1c20-4f7b-8d3e-origem5-resume-01",
+              "left": "@{node:n_b824c7dd9350.origem}",
+              "right": "5",
+              "operator": "equals"
+            }
+          ],
+          "combinator": "or"
+        }
+      }
+    },
+    {
       "id": "n_d5f9a3b82e16",
       "type": "if_node",
       "name": "Retomar: dados da venda já informados?",
@@ -7084,6 +7106,12 @@
               "left": "@{node:n_d87067e61ebb.origem}",
               "right": "5",
               "operator": "equals"
+            },
+            {
+              "id": "8e2f4a6c-1b3d-4e5f-9a0b-2c3d4e5f6a7c",
+              "left": "@{node:n_b824c7dd9350.origem}",
+              "right": "5",
+              "operator": "equals"
             }
           ],
           "combinator": "or"
@@ -7145,7 +7173,7 @@
         },
         "method": "POST",
         "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/valida-assinatura",
-        "body": "{\n  \"codigoTransferencia\": \"@{node:n_b824c7dd9350.codigoTransferencia}\",\n  \"itiCode\": \"@{node:n_034c402d0d07.code}\"\n}\n",
+        "body": "{\n  \"codigoTransferencia\": \"@{node:n_d87067e61ebb.codigo ?? node:n_b824c7dd9350.codigoTransferencia}\",\n  \"itiCode\": \"@{node:n_034c402d0d07.code}\"\n}\n",
         "responseExamples": [
           {
             "id": "0803de88-773f-4674-a48e-ee4440814586",
@@ -7628,8 +7656,20 @@
     },
     {
       "sourceId": "n_c4e8f2a71d05",
-      "targetId": "n_d5f9a3b82e16",
+      "targetId": "n_9b4d6e8a1c20",
       "sourceHandle": "output",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_9b4d6e8a1c20",
+      "targetId": "s_5d25c3769fdc",
+      "sourceHandle": "true",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_9b4d6e8a1c20",
+      "targetId": "n_d5f9a3b82e16",
+      "sourceHandle": "false",
       "targetHandle": "input"
     },
     {
