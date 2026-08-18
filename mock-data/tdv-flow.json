@@ -5095,7 +5095,8 @@
             "type": "button",
             "name": null,
             "data": {
-              "label": "Assinar"
+              "label": "Assinar",
+              "secondaryIcon": "check"
             }
           },
           {
@@ -5103,8 +5104,9 @@
             "type": "button",
             "name": null,
             "data": {
-              "label": "Cancelar",
-              "variant": "outline"
+              "label": "Cancelar venda",
+              "variant": "outline",
+              "secondaryIcon": "close"
             }
           }
         ]
