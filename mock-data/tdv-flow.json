@@ -5142,7 +5142,7 @@
             "name": null,
             "data": {
               "icon": "check",
-              "text": "<p><span style=\"font-size:14px;color:#000000\"><strong>Tudo certo!</strong></span></p>",
+              "text": "<p style=\"text-align: center;\"><span style=\"font-size:14px;color:#000000\"><strong>Tudo certo!</strong></span></p>",
               "color": "success",
               "variant": "vertical"
             }
@@ -5152,7 +5152,7 @@
             "type": "rich_text",
             "name": null,
             "data": {
-              "html": "<p><span style=\"font-size:14px;color:#262828\"><strong>Você concluiu a venda do veículo!</strong><br><br>A partir de agora, a responsabilidade do veículo @{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.brandModel}, cor @{node:n_d87067e61ebb.descricaoCorVeiculo ?? node:n_b824c7dd9350.descricaoCorVeiculo ?? screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.descricaoCorVeiculo}, placa @{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.plate} é do comprador. A empresa já foi notificada e o processo está em andamento.<br><br>O veículo está registrado em nome da empresa que está comprando.</span></p>"
+              "html": "<p style=\"text-align: center;\"><span style=\"font-size:14px;color:#262828\"><strong>Você concluiu a venda do veículo!</strong><br><br>A partir de agora, a responsabilidade do veículo @{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.brandModel}, cor @{node:n_d87067e61ebb.descricaoCorVeiculo ?? node:n_b824c7dd9350.descricaoCorVeiculo ?? screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.descricaoCorVeiculo}, placa @{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.plate} é do comprador. A empresa já foi notificada e o processo está em andamento.<br><br>O veículo está registrado em nome da empresa que está comprando.</span></p>"
             }
           }
         ]
