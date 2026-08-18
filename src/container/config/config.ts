@@ -153,6 +153,8 @@ export const config: Config = {
     vehiclePlate: env.TDV_MOCK_VEHICLE_PLATE || 'ABC1D23',
     vehicleRenavam: env.TDV_MOCK_VEHICLE_RENAVAM || '12345678901',
     initialEstado: env.TDV_MOCK_INITIAL_ESTADO || '',
+    forceVehicleRestriction: env.TDV_MOCK_FORCE_VEHICLE_RESTRICTION === 'true' && isNonProduction,
+    forceCidadesDiferentes: env.TDV_MOCK_FORCE_CIDADES_DIFERENTES === 'true' && isNonProduction,
   }
 }
 

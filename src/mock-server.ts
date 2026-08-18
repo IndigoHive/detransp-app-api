@@ -786,7 +786,6 @@ app.post('/api/tdv/analise-requisitos', (req, res) => {
   const plate = req.body?.selectedVehicle?.plate
   if (plate === MOCK_TDV_ENTRADA_RENAVE.plate) {
     res.json({
-      hasRestriction: false,
       hasActiveTDV: false,
       proximaAcao: 'nova_tdv',
       cpfComprador: '16794464003768',
@@ -798,7 +797,6 @@ app.post('/api/tdv/analise-requisitos', (req, res) => {
     return
   }
   res.json({
-    hasRestriction: false,
     hasActiveTDV: false,
   })
 })
