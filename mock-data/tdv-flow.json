@@ -7163,6 +7163,28 @@
       }
     },
     {
+      "id": "n_e4b7c91a2f08",
+      "type": "http_node",
+      "name": "Confirmar Termo Ciência",
+      "data": {
+        "position": {
+          "x": 5752,
+          "y": 1008
+        },
+        "method": "POST",
+        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/confirmar-termo-ciencia",
+        "body": "{\n  \"codigoTransferencia\": \"@{node:n_d87067e61ebb.codigo ?? node:n_b824c7dd9350.codigoTransferencia}\"\n}",
+        "responseExamples": [
+          {
+            "id": "e4b7c91a-2f08-4d3e-9a1b-7c6d5e4f3a21",
+            "name": "Sucesso",
+            "value": "{}"
+          }
+        ],
+        "showSnackbar": true
+      }
+    },
+    {
       "id": "n_a56ddf102a2a",
       "type": "http_node",
       "name": "Valida Assinatura",
@@ -8226,8 +8248,14 @@
     },
     {
       "sourceId": "s_800e39d059b5",
-      "targetId": "s_0807856fe2c1",
+      "targetId": "n_e4b7c91a2f08",
       "sourceHandle": "c_bcbcfed95b18",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_e4b7c91a2f08",
+      "targetId": "s_0807856fe2c1",
+      "sourceHandle": "output",
       "targetHandle": "input"
     },
     {

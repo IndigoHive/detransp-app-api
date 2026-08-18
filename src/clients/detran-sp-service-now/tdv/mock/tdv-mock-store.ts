@@ -297,6 +297,16 @@ export class TdvMockStore {
       record.ativa = source.ativa === 'false' ? '0' : '1'
     }
 
+    if (source.confirmacaoTermoCienciaResponsabilidade !== undefined) {
+      const confirmed = source.confirmacaoTermoCienciaResponsabilidade === true
+        || source.confirmacaoTermoCienciaResponsabilidade === 'true'
+        || source.confirmacaoTermoCienciaResponsabilidade === '1'
+      record.confirmacaoTermoCienciaResponsabilidade = confirmed ? '1' : '0'
+      if (confirmed) {
+        record.codigoAnexoTermoCienciaResponsabilidade ??= 'MOCK-ANEXO-TCR'
+      }
+    }
+
     return { previousEstado, record }
   }
 

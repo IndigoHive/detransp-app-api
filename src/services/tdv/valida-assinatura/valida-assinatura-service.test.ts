@@ -67,6 +67,25 @@ describe('ValidaAssinaturaService', () => {
     })
   })
 
+  it('advances origem 5 seller from estado 6 to 7 with the ITI code', async () => {
+    const buscaTdv = vi.fn().mockResolvedValue({
+      result: { estado: '6', origem: '5', codigoVendedor: sellerCpf }
+    })
+    const atualizaTdv = vi.fn().mockResolvedValue({ result: {} })
+    const service = new ValidaAssinaturaService({ detranSpServiceNowTdv: asClient({ buscaTdv, atualizaTdv }) })
+
+    await expect(service.run(authorizationHeader, {
+      codigoTransferencia: 'TDV-LOJA',
+      itiCode
+    })).resolves.toEqual({ valid: true })
+
+    expect(atualizaTdv).toHaveBeenCalledTimes(1)
+    expect(atualizaTdv).toHaveBeenCalledWith(clientAuth, 'TDV-LOJA', {
+      estado: '7',
+      itiCode
+    })
+  })
+
   it('does not PATCH origem 1 seller when estado is 2 (buyer has not signed yet)', async () => {
     const buscaTdv = vi.fn().mockResolvedValue({
       result: { estado: '2', origem: '1', codigoVendedor: sellerCpf }

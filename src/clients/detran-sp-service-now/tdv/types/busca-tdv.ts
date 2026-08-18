@@ -35,6 +35,9 @@ export type BuscaTdvResultData = {
   qrCode?: string
   dataExpiracaoQRCode?: string
   autodeclaracaoResidenciaComprador?: string
+  termoCienciaResponsabilidade?: string | null
+  confirmacaoTermoCienciaResponsabilidade?: 'true' | 'false' | '1' | '0' | null
+  codigoAnexoTermoCienciaResponsabilidade?: string | null
 }
 
 export type BuscaTdvResultSuccess = {

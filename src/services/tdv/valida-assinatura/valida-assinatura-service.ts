@@ -36,7 +36,6 @@ export class ValidaAssinaturaService {
   }
 
   async run (authorizationHeader: string | undefined, input: ValidaAssinaturaInput): Promise<ValidaAssinaturaResult> {
-    console.log('run', authorizationHeader, input)
     const token = extractBearerToken(authorizationHeader)
     const cpf = extractCpfFromToken(token)
     const auth = { token, cpf }
@@ -56,7 +55,7 @@ export class ValidaAssinaturaService {
     // ServiceNow itself performs the ITI code exchange; we only attach it to the right transition.
     // TDV 1.0: buyer 5 -> 6, seller 6 -> 7.
     // Origem 5 (Entrada Renave): the loja already opened the intent, so the seller signs from
-    // estado 1/2 straight to 7 and must NOT then jump to 8 (taxa paga).
+    // estado 1/2/6 straight to 7 and must NOT then jump to 8 (taxa paga).
     const isOrigem5 = tdv.result?.origem === CodigoOrigemTDV.ENTRADA_RENAVE
     let effectiveEstado = estado
     if (input.itiCode) {

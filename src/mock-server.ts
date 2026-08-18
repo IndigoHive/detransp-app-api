@@ -848,6 +848,10 @@ app.post('/api/tdv/confirmar-intencao-venda', (req, res) => {
   res.json({})
 })
 
+app.post('/api/tdv/confirmar-termo-ciencia', (_req, res) => {
+  res.json({})
+})
+
 app.post('/api/tdv/cancelar', (req, res) => {
   res.json({
     success: true,
@@ -1123,6 +1127,7 @@ app.listen(PORT, () => {
   console.log('    POST /api/tdv/criar')
   console.log('    POST /api/tdv/informar-dados-venda')
   console.log('    POST /api/tdv/confirmar-intencao-venda')
+  console.log('    POST /api/tdv/confirmar-termo-ciencia')
   console.log('    POST /api/tdv/cancelar')
   console.log('    GET  /api/tdv/compras')
   console.log('    POST /api/tdv/confirmar-compra')
