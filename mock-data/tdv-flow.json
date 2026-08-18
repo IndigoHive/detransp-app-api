@@ -502,6 +502,7 @@
                   "title": "VOLKS/GOL GTI 1.0",
                   "status": "REGULAR",
                   "renavam": "00001002003",
+                  "chassi": "9BWZZZ377VT004251",
                   "yearFab": "2014",
                   "yearMod": "2015",
                   "brandModel": "VOLKS/GOL GTI 1.0",
@@ -515,6 +516,7 @@
                   "title": "ONIX LT - GM",
                   "status": "A VENCER",
                   "renavam": "00002003004",
+                  "chassi": "9BR53ZEC2P020030",
                   "yearFab": "2021",
                   "yearMod": "2022",
                   "brandModel": "ONIX LT - GM",
@@ -528,6 +530,7 @@
                   "title": "FIAT/UNO MILLE",
                   "status": "VENCIDO",
                   "renavam": "00003004005",
+                  "chassi": "9BWZZZ377VT030040",
                   "yearFab": "2008",
                   "yearMod": "2009",
                   "brandModel": "FIAT/UNO MILLE",
@@ -4719,7 +4722,7 @@
             "type": "rich_text",
             "name": null,
             "data": {
-              "html": "<p><span style=\"font-size:14px;color:#262828\">Confirme os dados informados para a venda do veículo<br></span></p>"
+              "html": "<p><span style=\"font-size:14px;color:#262828\">Confirme as informações para a venda do veículo<br></span></p>"
             }
           },
           {
@@ -4744,6 +4747,12 @@
                 }
               },
               {
+                "id": "c_8f02b3c4d5e6",
+                "type": "divider",
+                "name": null,
+                "data": {}
+              },
+              {
                 "id": "c_68e7be6249ca",
                 "type": "rich_text",
                 "name": null,
@@ -4752,12 +4761,24 @@
                 }
               },
               {
+                "id": "c_9013c4d5e6f7",
+                "type": "divider",
+                "name": null,
+                "data": {}
+              },
+              {
                 "id": "c_0348d174e41e",
                 "type": "rich_text",
                 "name": null,
                 "data": {
                   "html": "<p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>E-mail</strong></span></p><p><span style=\"color: rgb(17, 20, 20); font-size: 14px;\">@{node:n_d87067e61ebb.emailComprador ?? node:n_b824c7dd9350.emailComprador}</span></p>"
                 }
+              },
+              {
+                "id": "c_a124d5e6f708",
+                "type": "divider",
+                "name": null,
+                "data": {}
               },
               {
                 "id": "c_41b1c632c907",
@@ -4774,7 +4795,7 @@
                 "data": {
                   "icon": "info",
                   "text": "<div data-space-between-row=\"\" style=\"display: flex; flex-direction: row; align-items: flex-start; gap: 16px; width: 100%; min-width: 0px;\"><div data-space-between-cell=\"\" style=\"flex: 100 100 0%; min-width: 0px; overflow-wrap: break-word;\"><p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>Se os dados estiverem incorretos, cancele a solicitação e ajuste as informações antes de prosseguir.</strong></span></p></div><div data-space-between-cell=\"\" style=\"flex: 0 0 0%; min-width: 0px; overflow-wrap: break-word;\"><p></p></div></div><p></p>",
-                  "color": "info",
+                  "color": "neutral",
                   "variant": "horizontal",
                   "alignment": "start"
                 }
@@ -4788,12 +4809,26 @@
             "name": null,
             "children": [
               {
+                "id": "c_7e91a2b3c4d5",
+                "type": "rich_text",
+                "name": null,
+                "data": {
+                  "html": "<p><span style=\"font-size: 16px;\"><strong>Dados do Veículo</strong></span></p>"
+                }
+              },
+              {
                 "id": "c_86cd4a4f71e0",
                 "type": "rich_text",
                 "name": null,
                 "data": {
                   "html": "<p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>Renavam</strong></span></p><p><span style=\"color: rgb(17, 20, 20); font-size: 14px;\">@{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.renavam}</span></p>"
                 }
+              },
+              {
+                "id": "c_b235e6f70819",
+                "type": "divider",
+                "name": null,
+                "data": {}
               },
               {
                 "id": "c_6d38fda1e628",
@@ -4815,12 +4850,24 @@
                 }
               },
               {
+                "id": "c_c346f708192a",
+                "type": "divider",
+                "name": null,
+                "data": {}
+              },
+              {
                 "id": "c_d186275e2517",
                 "type": "rich_text",
                 "name": null,
                 "data": {
                   "html": "<p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>Ano</strong></span></p><p><span style=\"color: rgb(17, 20, 20); font-size: 14px;\">@{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.yearFab}</span></p>"
                 }
+              },
+              {
+                "id": "c_d45708192a3b",
+                "type": "divider",
+                "name": null,
+                "data": {}
               },
               {
                 "id": "c_51eb3d0b11f8",
@@ -4831,12 +4878,24 @@
                 }
               },
               {
+                "id": "c_e568192a3b4c",
+                "type": "divider",
+                "name": null,
+                "data": {}
+              },
+              {
                 "id": "c_c6c1b0f719cf",
                 "type": "rich_text",
                 "name": null,
                 "data": {
                   "html": "<p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>Cor</strong></span></p><p><span style=\"color: rgb(17, 20, 20); font-size: 14px;\">@{node:n_d87067e61ebb.descricaoCorVeiculo ?? node:n_b824c7dd9350.descricaoCorVeiculo ?? screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.descricaoCorVeiculo}</span></p>"
                 }
+              },
+              {
+                "id": "c_f6792a3b4c5d",
+                "type": "divider",
+                "name": null,
+                "data": {}
               },
               {
                 "id": "c_6c0414a9f03d",
@@ -4853,7 +4912,7 @@
                 "data": {
                   "icon": "info",
                   "text": "<div data-space-between-row=\"\" style=\"display: flex; flex-direction: row; align-items: flex-start; gap: 16px; width: 100%; min-width: 0px;\"><div data-space-between-cell=\"\" style=\"flex: 100 100 0%; min-width: 0px; overflow-wrap: break-word;\"><p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>Se os dados estiverem incorretos, cancele a solicitação e ajuste as informações antes de prosseguir.</strong></span></p></div><div data-space-between-cell=\"\" style=\"flex: 0 0 0%; min-width: 0px; overflow-wrap: break-word;\"><p></p></div></div><p></p>",
-                  "color": "info",
+                  "color": "neutral",
                   "variant": "horizontal",
                   "alignment": "start"
                 }
@@ -5550,7 +5609,7 @@
           {
             "id": "aec85839-8e5f-43c4-a716-86b9bf8897eb",
             "name": "Lista 3 veículos",
-            "value": "{\n  \"vehicles\": [\n    {\n      \"id\": \"1\",\n      \"title\": \"VOLKS/GOL GTI 1.0\",\n      \"plate\": \"BXG3U71\",\n      \"status\": \"REGULAR\",\n      \"licensingExpirationDate\": \"31/12/2025\",\n      \"type\": \"Utilitario\",\n      \"brandModel\": \"VOLKS/GOL GTI 1.0\",\n      \"renavam\": \"00001002003\",\n      \"lastLicensing\": \"03/12/2025\",\n      \"yearFab\": \"2014\",\n      \"yearMod\": \"2015\"\n    },\n    {\n      \"id\": \"2\",\n      \"title\": \"ONIX LT - GM\",\n      \"plate\": \"CED3J65\",\n      \"status\": \"A VENCER\",\n      \"licensingExpirationDate\": \"31/12/2024\",\n      \"type\": \"Passeio\",\n      \"brandModel\": \"ONIX LT - GM\",\n      \"renavam\": \"00002003004\",\n      \"lastLicensing\": \"15/01/2024\",\n      \"yearFab\": \"2021\",\n      \"yearMod\": \"2022\"\n    },\n    {\n      \"id\": \"3\",\n      \"title\": \"FIAT/UNO MILLE\",\n      \"plate\": \"RNI4Z30\",\n      \"status\": \"VENCIDO\",\n      \"licensingExpirationDate\": \"31/07/2023\",\n      \"type\": \"Utilitario\",\n      \"brandModel\": \"FIAT/UNO MILLE\",\n      \"renavam\": \"00003004005\",\n      \"lastLicensing\": \"20/08/2022\",\n      \"yearFab\": \"2008\",\n      \"yearMod\": \"2009\"\n    }\n  ]\n}"
+            "value": "{\n  \"vehicles\": [\n    {\n      \"id\": \"1\",\n      \"title\": \"VOLKS/GOL GTI 1.0\",\n      \"plate\": \"BXG3U71\",\n      \"status\": \"REGULAR\",\n      \"licensingExpirationDate\": \"31/12/2025\",\n      \"type\": \"Utilitario\",\n      \"brandModel\": \"VOLKS/GOL GTI 1.0\",\n      \"renavam\": \"00001002003\",\n      \"chassi\": \"9BWZZZ377VT004251\",\n      \"lastLicensing\": \"03/12/2025\",\n      \"yearFab\": \"2014\",\n      \"yearMod\": \"2015\"\n    },\n    {\n      \"id\": \"2\",\n      \"title\": \"ONIX LT - GM\",\n      \"plate\": \"CED3J65\",\n      \"status\": \"A VENCER\",\n      \"licensingExpirationDate\": \"31/12/2024\",\n      \"type\": \"Passeio\",\n      \"brandModel\": \"ONIX LT - GM\",\n      \"renavam\": \"00002003004\",\n      \"chassi\": \"9BR53ZEC2P020030\",\n      \"lastLicensing\": \"15/01/2024\",\n      \"yearFab\": \"2021\",\n      \"yearMod\": \"2022\"\n    },\n    {\n      \"id\": \"3\",\n      \"title\": \"FIAT/UNO MILLE\",\n      \"plate\": \"RNI4Z30\",\n      \"status\": \"VENCIDO\",\n      \"licensingExpirationDate\": \"31/07/2023\",\n      \"type\": \"Utilitario\",\n      \"brandModel\": \"FIAT/UNO MILLE\",\n      \"renavam\": \"00003004005\",\n      \"chassi\": \"9BWZZZ377VT030040\",\n      \"lastLicensing\": \"20/08/2022\",\n      \"yearFab\": \"2008\",\n      \"yearMod\": \"2009\"\n    }\n  ]\n}"
           },
           {
             "id": "f35db1c4-5587-4c79-a239-6551c1a6b6cf",
