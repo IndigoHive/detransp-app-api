@@ -87,10 +87,10 @@ describe('CriarTdvService', () => {
     await expect(service.run(authorizationHeader, input)).resolves.toEqual({
       codigo: 'TDV0508623',
       origem: '5',
-      cpfComprador: '16794464003768',
+      cpfComprador: '16.794.464/0037-68',
       nomeComprador: 'CAOA MOTOR DO BRASIL LTDA',
       emailComprador: 'CERTIDOCPJ@EMAIL.COM',
-      enderecoComprador: 'Avenida Conselheiro Nébias, 240, Encruzilhada, Santos - SP, 11045001',
+      enderecoComprador: 'Avenida Conselheiro Nébias, 240, Encruzilhada, Santos - SP, 11045-001',
       descricaoCorVeiculo: 'BEGE',
       chassiVeiculo: '9BWZZZ377VT004251'
     })

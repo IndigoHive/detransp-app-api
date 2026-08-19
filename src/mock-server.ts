@@ -793,10 +793,10 @@ app.post('/api/tdv/analise-requisitos', (req, res) => {
     res.json({
       hasActiveTDV: false,
       proximaAcao: 'nova_tdv',
-      cpfComprador: '16794464003768',
+      cpfComprador: '16.794.464/0037-68',
       nomeComprador: 'CAOA MOTOR DO BRASIL LTDA',
       emailComprador: 'CERTIDOCPJ@EMAIL.COM',
-      enderecoComprador: 'Avenida Conselheiro Nébias, 240, Encruzilhada, Santos - SP, 11045001',
+      enderecoComprador: 'Avenida Conselheiro Nébias, 240, Encruzilhada, Santos - SP, 11045-001',
       descricaoCorVeiculo: 'BRANCA',
       chassiVeiculo: '9BWZZZ377VT004255',
     })
@@ -827,10 +827,10 @@ app.post('/api/tdv/criar', (req, res) => {
     res.status(201).json({
       codigo: 'TDV-MOCK-O5',
       origem: '5',
-      cpfComprador: '16794464003768',
+      cpfComprador: '16.794.464/0037-68',
       nomeComprador: 'CAOA MOTOR DO BRASIL LTDA',
       emailComprador: 'CERTIDOCPJ@EMAIL.COM',
-      enderecoComprador: 'Avenida Conselheiro Nébias, 240, Encruzilhada, Santos - SP, 11045001',
+      enderecoComprador: 'Avenida Conselheiro Nébias, 240, Encruzilhada, Santos - SP, 11045-001',
       descricaoCorVeiculo: 'BRANCA',
       chassiVeiculo: '9BWZZZ377VT004255',
     })

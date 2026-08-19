@@ -1,4 +1,5 @@
 import type { ListaTdvsResultData } from '../../clients/detran-sp-service-now/tdv/types'
+import { formatCep, formatCpfCnpj } from '../../utils/format-document'
 
 export type CompradorDisplayFields = {
   cpfComprador?: string
@@ -22,11 +23,12 @@ function formatEnderecoComprador (tdv: ListaTdvsResultData): string | undefined 
   const municipio = trimField(tdv.nomeMunicipioComprador)
   const uf = trimField(tdv.ufComprador)
   const cep = trimField(tdv.cepComprador)
+  const cepFormatado = cep ? formatCep(cep) : undefined
   const municipioUf = municipio
     ? (uf ? `${municipio} - ${uf}` : municipio)
     : uf
 
-  const endereco = [logradouro, numero, complemento, bairro, municipioUf, cep]
+  const endereco = [logradouro, numero, complemento, bairro, municipioUf, cepFormatado]
     .filter(Boolean)
     .join(', ')
 
@@ -46,7 +48,8 @@ export function chassiVeiculoFrom (
 }
 
 export function compradorDisplayFieldsFromTdv (tdv: ListaTdvsResultData): CompradorDisplayFields {
-  const cpfComprador = trimField(tdv.codigoComprador)
+  const cpfCompradorRaw = trimField(tdv.codigoComprador)
+  const cpfComprador = cpfCompradorRaw ? formatCpfCnpj(cpfCompradorRaw) : undefined
   const nomeComprador = trimField(tdv.nomeComprador)
   const emailComprador = trimField(tdv.emailComprador)
   const enderecoComprador = formatEnderecoComprador(tdv)
