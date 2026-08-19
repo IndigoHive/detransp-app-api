@@ -15,6 +15,7 @@ export type ConsultaVeiculosResult = {
     type: string
     brandModel: string
     renavam: string
+    chassi: string
     lastLicensing: string
     yearFab: string
     yearMod: string
@@ -48,6 +49,7 @@ export class ConsultaVeiculosService {
       type: 'Passeio',
       brandModel: v.descricaoMarca,
       renavam: v.codigoRenavam,
+      chassi: v.chassi ?? '',
       lastLicensing: v.dataEmissao ?? '',
       yearFab: v.anoFabricacao,
       yearMod: v.anoModelo

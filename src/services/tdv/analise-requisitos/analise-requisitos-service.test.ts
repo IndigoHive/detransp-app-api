@@ -98,7 +98,8 @@ describe('AnaliseRequisitosService', () => {
         bairroComprador: 'Encruzilhada',
         nomeMunicipioComprador: 'Santos',
         ufComprador: 'SP',
-        cepComprador: '11045001'
+        cepComprador: '11045001',
+        chassiVeiculo: '9BWZZZ377VT004251'
       }]
     })
     const service = new AnaliseRequisitosService({ detranSpServiceNowTdv: asClient({ listaTdvs }), config: asConfig() })
@@ -108,10 +109,24 @@ describe('AnaliseRequisitosService', () => {
       codigoTransferencia: 'TDV-LOJA',
       estado: '2',
       origem: '5',
-      cpfComprador: '16794464003768',
+      cpfComprador: '16.794.464/0037-68',
       nomeComprador: 'CAOA MOTOR DO BRASIL LTDA',
       emailComprador: 'CERTIDOCPJ@EMAIL.COM',
-      enderecoComprador: 'Avenida Conselheiro Nébias, 240, Encruzilhada, Santos - SP, 11045001'
+      enderecoComprador: 'Avenida Conselheiro Nébias, 240, Encruzilhada, Santos - SP, 11045-001',
+      chassiVeiculo: '9BWZZZ377VT004251'
+    })
+  })
+
+  it('fills chassiVeiculo from the selected vehicle when starting a new sale', async () => {
+    const listaTdvs = vi.fn().mockResolvedValue({ result: [] })
+    const service = new AnaliseRequisitosService({ detranSpServiceNowTdv: asClient({ listaTdvs }), config: asConfig() })
+
+    await expect(service.run(authorizationHeader, {
+      selectedVehicle: { ...selectedVehicle, chassi: '9BWZZZ377VT004251' }
+    })).resolves.toEqual({
+      hasActiveTDV: false,
+      proximaAcao: 'nova_tdv',
+      chassiVeiculo: '9BWZZZ377VT004251'
     })
   })
 

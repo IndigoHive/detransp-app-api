@@ -5,6 +5,7 @@ import {
   type ListaTdvsResultData
 } from '../../../clients/detran-sp-service-now/tdv/types'
 import { extractBearerToken, extractCpfFromToken, extractNameFromToken, extractEmailFromToken } from '../../../utils/token'
+import { compradorDisplayFieldsFromTdv, chassiVeiculoFrom, type CompradorDisplayFields } from '../comprador-display-fields'
 
 type Dependencies = {
   detranSpServiceNowTdv: DetranSpServiceNowTdvClient
@@ -15,12 +16,13 @@ type Auth = { token: string, cpf: string }
 export type CriarTdvInput = {
   placaVeiculo: string
   renavamVeiculo: string
+  chassiVeiculo?: string
 }
 
 export type CriarTdvResult = {
   codigo: string
   origem?: CodigoOrigemTDV
-}
+} & CompradorDisplayFields
 
 // Creates the TDV as soon as the seller passes the vehicle eligibility check (state 1,
 // VEICULO_SELECIONADO) — before facial liveness or any buyer/sale data exists. Buyer and
@@ -50,7 +52,7 @@ export class CriarTdvService {
     const tdvAtiva = tdvsAtivas?.result?.find(tdv => tdv.estado !== CodigoEstadoTDV.TRANSFERENCIA_CANCELADA)
 
     if (tdvAtiva?.codigoTransferenciaVeiculo) {
-      return this.toResult(tdvAtiva.codigoTransferenciaVeiculo, tdvAtiva.origem)
+      return this.toResult(tdvAtiva.codigoTransferenciaVeiculo, tdvAtiva, input)
     }
 
     const createResult = await this.client.criaTdv(auth, {
@@ -59,7 +61,8 @@ export class CriarTdvService {
       nomeVendedor,
       emailVendedor,
       codigoVendedor: cpfVendedor,
-      origem: CodigoOrigemTDV.TDV
+      origem: CodigoOrigemTDV.TDV,
+      ...(input.chassiVeiculo?.trim() ? { chassiVeiculo: input.chassiVeiculo.trim() } : {})
     })
 
     const codigo = createResult?.result?.codigoTransferenciaVeiculo
@@ -68,7 +71,7 @@ export class CriarTdvService {
     }
 
     const created = await this.findCreatedTdv(auth, cpfVendedor, input)
-    return this.toResult(codigo, created?.origem)
+    return this.toResult(codigo, created, input)
   }
 
   private async findCreatedTdv (
@@ -91,10 +94,19 @@ export class CriarTdvService {
     )
   }
 
-  private toResult (codigo: string, origem?: CodigoOrigemTDV | null): CriarTdvResult {
+  private toResult (
+    codigo: string,
+    tdv: ListaTdvsResultData | undefined,
+    input: CriarTdvInput
+  ): CriarTdvResult {
+    const display = tdv ? compradorDisplayFieldsFromTdv(tdv) : {}
+    const chassiVeiculo = chassiVeiculoFrom(tdv, input)
+
     return {
       codigo,
-      ...(origem != null ? { origem } : {})
+      ...(tdv?.origem != null ? { origem: tdv.origem } : {}),
+      ...display,
+      ...(chassiVeiculo ? { chassiVeiculo } : {})
     }
   }
 }

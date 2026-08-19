@@ -1,11 +1,11 @@
 import type { DetranSpServiceNowTdvClient } from '../../../clients/detran-sp-service-now/tdv'
 import {
   CodigoEstadoTDV,
-  type CodigoOrigemTDV,
-  type ListaTdvsResultData
+  type CodigoOrigemTDV
 } from '../../../clients/detran-sp-service-now/tdv/types'
 import type { Config } from '../../../types'
 import { extractBearerToken, extractCpfFromToken } from '../../../utils/token'
+import { compradorDisplayFieldsFromTdv, chassiVeiculoFrom } from '../comprador-display-fields'
 
 type Dependencies = {
   detranSpServiceNowTdv: DetranSpServiceNowTdvClient
@@ -45,6 +45,9 @@ export type AnaliseRequisitosSuccess = {
   cpfComprador?: string | undefined
   emailComprador?: string | undefined
   enderecoComprador?: string | undefined
+  // Chassis, same rationale as descricaoCorVeiculo — Confirmação dados loja reads it from
+  // this node (and Criar TDV), not from the vehicle picker.
+  chassiVeiculo?: string | undefined
 }
 
 export type AnaliseRequisitosResult = AnaliseRequisitosSuccess | {
@@ -53,30 +56,6 @@ export type AnaliseRequisitosResult = AnaliseRequisitosSuccess | {
     title: string
     description: string
   }
-}
-
-function trimField (value: string | null | undefined): string | undefined {
-  const trimmed = value?.trim()
-  return trimmed || undefined
-}
-
-function formatEnderecoComprador (tdv: ListaTdvsResultData): string | undefined {
-  const logradouro = trimField(tdv.logradouroComprador)
-  const numero = trimField(tdv.numeroComprador)
-  const complemento = trimField(tdv.complementoComprador)
-  const bairro = trimField(tdv.bairroComprador)
-  const municipio = trimField(tdv.nomeMunicipioComprador)
-  const uf = trimField(tdv.ufComprador)
-  const cep = trimField(tdv.cepComprador)
-  const municipioUf = municipio
-    ? (uf ? `${municipio} - ${uf}` : municipio)
-    : uf
-
-  const endereco = [logradouro, numero, complemento, bairro, municipioUf, cep]
-    .filter(Boolean)
-    .join(', ')
-
-  return endereco || undefined
 }
 
 // The seller only has a forced next step once the buyer has already signed (estado 6) — every
@@ -129,20 +108,16 @@ export class AnaliseRequisitosService {
     )
 
     if (activeTdv) {
-      const enderecoComprador = formatEnderecoComprador(activeTdv)
-      const cpfComprador = trimField(activeTdv.codigoComprador)
-      const emailComprador = trimField(activeTdv.emailComprador)
+      const chassiVeiculo = chassiVeiculoFrom(activeTdv, input.selectedVehicle)
+
       return {
         hasActiveTDV: true,
         codigoTransferencia: activeTdv.codigoTransferenciaVeiculo ?? undefined,
         estado: activeTdv.estado,
         proximaAcao: proximaAcaoParaVendedor(activeTdv.estado),
-        nomeComprador: activeTdv.nomeComprador ?? undefined,
-        descricaoCorVeiculo: activeTdv.descricaoCorVeiculo ?? undefined,
         ...(activeTdv.origem != null ? { origem: activeTdv.origem } : {}),
-        ...(cpfComprador ? { cpfComprador } : {}),
-        ...(emailComprador ? { emailComprador } : {}),
-        ...(enderecoComprador ? { enderecoComprador } : {})
+        ...compradorDisplayFieldsFromTdv(activeTdv),
+        ...(chassiVeiculo ? { chassiVeiculo } : {})
       }
     }
 
@@ -150,9 +125,12 @@ export class AnaliseRequisitosService {
     // should short-circuit with a snackbar error response (see other tdv services), not a
     // boolean field here — the seller needs the specific reason, not a generic dead-end screen.
 
+    const chassiVeiculo = chassiVeiculoFrom(undefined, input.selectedVehicle)
+
     return {
       hasActiveTDV: false,
-      proximaAcao: 'nova_tdv'
+      proximaAcao: 'nova_tdv',
+      ...(chassiVeiculo ? { chassiVeiculo } : {})
     }
   }
 }

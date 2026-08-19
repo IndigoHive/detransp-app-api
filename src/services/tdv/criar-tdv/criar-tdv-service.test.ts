@@ -63,6 +63,56 @@ describe('CriarTdvService', () => {
     expect(listaTdvs).toHaveBeenCalledTimes(1)
   })
 
+  it('surfaces loja buyer fields when reusing an origem 5 TDV so Confirmação dados loja can render them', async () => {
+    const listaTdvs = vi.fn().mockResolvedValue({
+      result: [{
+        estado: '6',
+        codigoTransferenciaVeiculo: 'TDV0508623',
+        origem: '5',
+        codigoComprador: '16794464003768',
+        nomeComprador: 'CAOA MOTOR DO BRASIL LTDA',
+        emailComprador: 'CERTIDOCPJ@EMAIL.COM',
+        logradouroComprador: 'Avenida Conselheiro Nébias',
+        numeroComprador: '240',
+        bairroComprador: 'Encruzilhada',
+        nomeMunicipioComprador: 'Santos',
+        ufComprador: 'SP',
+        cepComprador: '11045001',
+        descricaoCorVeiculo: 'BEGE',
+        chassiVeiculo: '9BWZZZ377VT004251'
+      }]
+    })
+    const service = new CriarTdvService({ detranSpServiceNowTdv: asClient({ listaTdvs, criaTdv: vi.fn() }) })
+
+    await expect(service.run(authorizationHeader, input)).resolves.toEqual({
+      codigo: 'TDV0508623',
+      origem: '5',
+      cpfComprador: '16.794.464/0037-68',
+      nomeComprador: 'CAOA MOTOR DO BRASIL LTDA',
+      emailComprador: 'CERTIDOCPJ@EMAIL.COM',
+      enderecoComprador: 'Avenida Conselheiro Nébias, 240, Encruzilhada, Santos - SP, 11045-001',
+      descricaoCorVeiculo: 'BEGE',
+      chassiVeiculo: '9BWZZZ377VT004251'
+    })
+  })
+
+  it('echoes chassiVeiculo from the request when the TDV record omits it', async () => {
+    const listaTdvs = vi.fn().mockResolvedValue({
+      result: [{ estado: '2', codigoTransferenciaVeiculo: 'TDV-EXISTING', origem: '5' }]
+    })
+    const service = new CriarTdvService({
+      detranSpServiceNowTdv: asClient({ listaTdvs, criaTdv: vi.fn() })
+    })
+
+    await expect(service.run(authorizationHeader, {
+      ...input,
+      chassiVeiculo: '9BWZZZ377VT004251'
+    })).resolves.toMatchObject({
+      codigo: 'TDV-EXISTING',
+      chassiVeiculo: '9BWZZZ377VT004251'
+    })
+  })
+
   it('ignores cancelled TDVs when looking for one to reuse', async () => {
     const listaTdvs = vi.fn()
       .mockResolvedValueOnce({

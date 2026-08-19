@@ -1,5 +1,5 @@
 import type { DetranSpServiceNowTdvClient } from '../../../clients/detran-sp-service-now/tdv'
-import { CodigoEstadoTDV } from '../../../clients/detran-sp-service-now/tdv/types'
+import { CodigoEstadoTDV, CodigoOrigemTDV } from '../../../clients/detran-sp-service-now/tdv/types'
 import { extractBearerToken, extractCpfFromToken } from '../../../utils/token'
 
 type Dependencies = {
@@ -51,9 +51,12 @@ export class ValidaAssinaturaService {
     const isSeller = tdv.result?.codigoVendedor === cpf
 
     // The ITI WebView hands back a signing authorization code, not a signed/unsigned flag.
-    // Forward it to ServiceNow so it can advance the TDV to the next signature state
-    // (5 -> 6 when the buyer signs, 6 -> 7 when the seller signs). ServiceNow itself
-    // performs the ITI code exchange; we only need to attach it to the right transition.
+    // Forward it to ServiceNow so it can advance the TDV to the next signature state.
+    // ServiceNow itself performs the ITI code exchange; we only attach it to the right transition.
+    // TDV 1.0: buyer 5 -> 6, seller 6 -> 7.
+    // Origem 5 (Entrada Renave): the loja already opened the intent, so the seller signs from
+    // estado 1/2/6 straight to 7 and must NOT then jump to 8 (taxa paga).
+    const isOrigem5 = tdv.result?.origem === CodigoOrigemTDV.ENTRADA_RENAVE
     let effectiveEstado = estado
     if (input.itiCode) {
       if (!isSeller && estado === CodigoEstadoTDV.AUTODECLARACAO_RESIDENCIA_CONFIRMADA) {
@@ -62,6 +65,16 @@ export class ValidaAssinaturaService {
           itiCode: input.itiCode
         })
         effectiveEstado = CodigoEstadoTDV.ATPVE_ASSINADA_COMPRADOR
+      } else if (
+        isSeller
+        && isOrigem5
+        && !SELLER_SIGNED_STATES.includes(estado)
+      ) {
+        await this.client.atualizaTdv(auth, input.codigoTransferencia, {
+          estado: CodigoEstadoTDV.ATPVE_ASSINADA_VENDEDOR_COMUNICACAO_VENDA_GERADA,
+          itiCode: input.itiCode
+        })
+        effectiveEstado = CodigoEstadoTDV.ATPVE_ASSINADA_VENDEDOR_COMUNICACAO_VENDA_GERADA
       } else if (isSeller && estado === CodigoEstadoTDV.ATPVE_ASSINADA_COMPRADOR) {
         await this.client.atualizaTdv(auth, input.codigoTransferencia, {
           estado: CodigoEstadoTDV.ATPVE_ASSINADA_VENDEDOR_COMUNICACAO_VENDA_GERADA,

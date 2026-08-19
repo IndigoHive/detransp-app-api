@@ -134,6 +134,7 @@ export class TdvMockStore {
       descricaoMarcaVeiculo: vehicle.descricaoMarca,
       descricaoCorVeiculo: VEHICLE_COLOR,
       codigoRenavamVeiculo: vehicle.codigoRenavam,
+      chassiVeiculo: vehicle.chassi,
       codigoMunicipioVeiculo: vehicle.codigoMunicipio,
       nomeMunicipioVeiculo: vehicle.nomeMunicipio,
       codigoVendedor: this.cfg.sellerCpf,
@@ -254,6 +255,7 @@ export class TdvMockStore {
       descricaoMarcaVeiculo: vehicle.descricaoMarca,
       descricaoCorVeiculo: VEHICLE_COLOR,
       codigoRenavamVeiculo: command.codigoRenavamVeiculo,
+      chassiVeiculo: command.chassiVeiculo || vehicle.chassi,
       codigoMunicipioVeiculo: MUNICIPIO_CODIGO,
       nomeMunicipioVeiculo: MUNICIPIO_NOME,
       codigoVendedor: command.codigoVendedor,
@@ -295,6 +297,16 @@ export class TdvMockStore {
 
     if (source.ativa !== undefined) {
       record.ativa = source.ativa === 'false' ? '0' : '1'
+    }
+
+    if (source.confirmacaoTermoCienciaResponsabilidade !== undefined) {
+      const confirmed = source.confirmacaoTermoCienciaResponsabilidade === true
+        || source.confirmacaoTermoCienciaResponsabilidade === 'true'
+        || source.confirmacaoTermoCienciaResponsabilidade === '1'
+      record.confirmacaoTermoCienciaResponsabilidade = confirmed ? '1' : '0'
+      if (confirmed) {
+        record.codigoAnexoTermoCienciaResponsabilidade ??= 'MOCK-ANEXO-TCR'
+      }
     }
 
     return { previousEstado, record }

@@ -11,6 +11,7 @@ export type BuscaTdvResultData = {
   placaMercosul?: 'true' | 'false'
   descricaoMarcaVeiculo?: string
   descricaoCorVeiculo?: string
+  chassiVeiculo?: string
   codigoRenavamVeiculo?: string
   codigoMunicipioVeiculo?: string
   nomeMunicipioVeiculo?: string
@@ -35,6 +36,9 @@ export type BuscaTdvResultData = {
   qrCode?: string
   dataExpiracaoQRCode?: string
   autodeclaracaoResidenciaComprador?: string
+  termoCienciaResponsabilidade?: string | null
+  confirmacaoTermoCienciaResponsabilidade?: 'true' | 'false' | '1' | '0' | null
+  codigoAnexoTermoCienciaResponsabilidade?: string | null
 }
 
 export type BuscaTdvResultSuccess = {

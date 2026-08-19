@@ -40,6 +40,11 @@ export type AtualizaTdvAtpveAssinadaComprador = {
   itiCode: string
 }
 
+export type AtualizaTdvTermoCienciaConfirmado = {
+  estado: CodigoEstadoTDV.ATPVE_ASSINADA_COMPRADOR
+  confirmacaoTermoCienciaResponsabilidade: true
+}
+
 export type AtualizaTdvAtpveAssinadaVendedor = {
   estado: CodigoEstadoTDV.ATPVE_ASSINADA_VENDEDOR_COMUNICACAO_VENDA_GERADA
   itiCode: string
@@ -69,6 +74,7 @@ export type AtualizaTdvCommand =
   | AtualizaTdvIntencaoCompraConfirmada
   | AtualizaTdvAutodeclaracaoResidenciaConfirmada
   | AtualizaTdvAtpveAssinadaComprador
+  | AtualizaTdvTermoCienciaConfirmado
   | AtualizaTdvAtpveAssinadaVendedor
   | AtualizaTdvTaxaServicoPaga
   | AtualizaTdvCancelada

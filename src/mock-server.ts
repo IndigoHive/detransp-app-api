@@ -42,6 +42,7 @@ const MOCK_VEHICLES = [
     licensingStatus: 'REGULAR' as const,
     brandModel: 'TOYOTA/COROLLA CROSS XRE',
     renavam: '00123456789',
+    chassi: '9BWZZZ377VT004251',
     lastLicensing: '2025',
     yearFab: '2023',
     yearMod: '2024',
@@ -55,6 +56,7 @@ const MOCK_VEHICLES = [
     licensingStatus: 'A VENCER' as const,
     brandModel: 'HONDA/CIVIC TOURING',
     renavam: '00987654321',
+    chassi: '9BR53ZEC2P987654',
     lastLicensing: '2024',
     yearFab: '2022',
     yearMod: '2023',
@@ -68,6 +70,7 @@ const MOCK_VEHICLES = [
     licensingStatus: 'VENCIDO' as const,
     brandModel: 'VW/GOL 1.0',
     renavam: '00555666777',
+    chassi: '9BWZZZ377VT004253',
     lastLicensing: '2023',
     yearFab: '2018',
     yearMod: '2019',
@@ -757,6 +760,7 @@ const MOCK_TDV_ENTRADA_RENAVE = {
   licensingStatus: 'REGULAR' as const,
   brandModel: 'HYUNDAI/HB20 (5 · Entrada Renave)',
   renavam: '00010020035',
+  chassi: '9BWZZZ377VT004255',
   lastLicensing: '2025',
   yearFab: '2022',
   yearMod: '2023',
@@ -775,6 +779,7 @@ app.get('/api/tdv/veiculos', (_req, res) => {
       type: v.type,
       brandModel: v.brandModel,
       renavam: v.renavam,
+      chassi: v.chassi,
       lastLicensing: v.lastLicensing,
       yearFab: v.yearFab,
       yearMod: v.yearMod,
@@ -788,11 +793,12 @@ app.post('/api/tdv/analise-requisitos', (req, res) => {
     res.json({
       hasActiveTDV: false,
       proximaAcao: 'nova_tdv',
-      cpfComprador: '16794464003768',
+      cpfComprador: '16.794.464/0037-68',
       nomeComprador: 'CAOA MOTOR DO BRASIL LTDA',
       emailComprador: 'CERTIDOCPJ@EMAIL.COM',
-      enderecoComprador: 'Avenida Conselheiro Nébias, 240, Encruzilhada, Santos - SP, 11045001',
+      enderecoComprador: 'Avenida Conselheiro Nébias, 240, Encruzilhada, Santos - SP, 11045-001',
       descricaoCorVeiculo: 'BRANCA',
+      chassiVeiculo: '9BWZZZ377VT004255',
     })
     return
   }
@@ -821,6 +827,12 @@ app.post('/api/tdv/criar', (req, res) => {
     res.status(201).json({
       codigo: 'TDV-MOCK-O5',
       origem: '5',
+      cpfComprador: '16.794.464/0037-68',
+      nomeComprador: 'CAOA MOTOR DO BRASIL LTDA',
+      emailComprador: 'CERTIDOCPJ@EMAIL.COM',
+      enderecoComprador: 'Avenida Conselheiro Nébias, 240, Encruzilhada, Santos - SP, 11045-001',
+      descricaoCorVeiculo: 'BRANCA',
+      chassiVeiculo: '9BWZZZ377VT004255',
     })
     return
   }
@@ -835,6 +847,10 @@ app.post('/api/tdv/informar-dados-venda', (req, res) => {
 })
 
 app.post('/api/tdv/confirmar-intencao-venda', (req, res) => {
+  res.json({})
+})
+
+app.post('/api/tdv/confirmar-termo-ciencia', (_req, res) => {
   res.json({})
 })
 
@@ -1113,6 +1129,7 @@ app.listen(PORT, () => {
   console.log('    POST /api/tdv/criar')
   console.log('    POST /api/tdv/informar-dados-venda')
   console.log('    POST /api/tdv/confirmar-intencao-venda')
+  console.log('    POST /api/tdv/confirmar-termo-ciencia')
   console.log('    POST /api/tdv/cancelar')
   console.log('    GET  /api/tdv/compras')
   console.log('    POST /api/tdv/confirmar-compra')
