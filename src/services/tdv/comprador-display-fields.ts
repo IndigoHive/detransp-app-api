@@ -37,7 +37,7 @@ function formatEnderecoComprador (tdv: ListaTdvsResultData): string | undefined 
 
 export function chassiVeiculoFrom (
   tdv?: Pick<ListaTdvsResultData, 'chassiVeiculo'> | undefined,
-  selectedVehicle?: { chassi?: unknown, chassiVeiculo?: unknown } | undefined
+  selectedVehicle?: { chassi?: unknown, chassiVeiculo?: unknown, [key: string]: unknown } | undefined
 ): string | undefined {
   const fromSelected = (value: unknown): string | undefined =>
     typeof value === 'string' ? trimField(value) : undefined

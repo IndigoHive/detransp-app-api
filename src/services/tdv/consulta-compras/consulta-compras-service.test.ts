@@ -14,6 +14,8 @@ describe('ConsultaComprasService', () => {
     const listaTdvs = vi.fn().mockResolvedValue({
       result: [
         { estado: '3', codigoTransferenciaVeiculo: 'TDV-A', placaVeiculo: 'AAA1111', descricaoMarcaVeiculo: 'A', codigoRenavamVeiculo: '1', nomeComprador: 'Maria', nomeVendedor: 'João', valorVendaVeiculo: '90000', kmVeiculo: '13000' },
+        { estado: '4', codigoTransferenciaVeiculo: 'TDV-A4', placaVeiculo: 'AAA4444', descricaoMarcaVeiculo: 'A', codigoRenavamVeiculo: '14' },
+        { estado: '5', codigoTransferenciaVeiculo: 'TDV-A5', placaVeiculo: 'AAA5555', descricaoMarcaVeiculo: 'A', codigoRenavamVeiculo: '15' },
         { estado: '7', codigoTransferenciaVeiculo: 'TDV-B', placaVeiculo: 'BBB2222', descricaoMarcaVeiculo: 'B', codigoRenavamVeiculo: '2' },
         { estado: '8', codigoTransferenciaVeiculo: 'TDV-C', placaVeiculo: 'CCC3333', descricaoMarcaVeiculo: 'C', codigoRenavamVeiculo: '3' },
         { estado: '9', codigoTransferenciaVeiculo: 'TDV-D', placaVeiculo: 'DDD4444', descricaoMarcaVeiculo: 'D', codigoRenavamVeiculo: '4' }
@@ -23,7 +25,7 @@ describe('ConsultaComprasService', () => {
 
     const result = await service.run(authorizationHeader)
 
-    expect(result.vehicles.map(v => v.proximaAcao)).toEqual(['comprador', 'comprador_2', 'pagamento_confirmado', 'concluido'])
+    expect(result.vehicles.map(v => v.proximaAcao)).toEqual(['comprador', 'comprador', 'comprador', 'comprador_2', 'pagamento_confirmado', 'concluido'])
     expect(result.vehicles[0]).toMatchObject({
       codigoTransferencia: 'TDV-A',
       plate: 'AAA1111',
@@ -34,11 +36,12 @@ describe('ConsultaComprasService', () => {
     })
   })
 
-  it('omits TDVs still waiting on the seller — nothing for the buyer to act on yet', async () => {
+  it('omits TDVs waiting on the seller (1, 2, 6) or cancelled (10) — nothing for the buyer to act on', async () => {
     const listaTdvs = vi.fn().mockResolvedValue({
       result: [
         { estado: '1', codigoTransferenciaVeiculo: 'TDV-E' },
         { estado: '2', codigoTransferenciaVeiculo: 'TDV-F' },
+        { estado: '6', codigoTransferenciaVeiculo: 'TDV-H' },
         { estado: '10', codigoTransferenciaVeiculo: 'TDV-G' }
       ]
     })
