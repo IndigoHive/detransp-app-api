@@ -91,14 +91,18 @@ const GOVBR_SCOPES = [
 ]
 const dashboardUrl = 'api/x_mdpdd_dashboard/v1/dashboard/'
 
-const isNonProduction = (env.NODE_ENV || 'development') !== 'production'
+// Deployment environment of this instance. Kept separate from NODE_ENV because the Heroku
+// Node buildpack forces NODE_ENV='production' on every dyno, which would disable the dev/QA
+// escape hatches below even on homolog. Falls back to NODE_ENV for local runs.
+const appEnvironment = (env.APP_ENV || env.NODE_ENV || 'development') as ApplicationEnvironment
+const isNonProduction = appEnvironment !== 'production'
 // Dev/QA-only TDV mock mode: swaps the ServiceNow TDV client for an in-memory stateful mock.
 // Gated to non-production regardless of the env var value.
 const tdvMockEnabled = env.TDV_MOCK_ENABLED === 'true' && isNonProduction
 
 export const config: Config = {
   application: {
-    environment: (env.NODE_ENV || 'development') as ApplicationEnvironment,
+    environment: appEnvironment,
     port: env.PORT ? parseInt(env.PORT) : DEFAULT_PORT,
   },
   idsp: getIdspConfig(),
@@ -127,8 +131,9 @@ export const config: Config = {
     vidaBaseUrl: env.ROTA_VIDA_BASE_URL || '',
     arquivosBaseUrl: env.ROTA_ARQUIVOS_BASE_URL || '',
     // Dev/QA-only escape hatch to test downstream TDV flows without a real biometric match.
-    // Never honored in production, regardless of the env var value. Also implied by TDV mock
-    // mode, so the mocked prova-vida returns its fake code without an upload/match round-trip.
+    // Never honored when APP_ENV is 'production', regardless of the env var value. Also implied
+    // by TDV mock mode, so the mocked prova-vida returns its fake code without an upload/match
+    // round-trip.
     bypassMatch: (env.LIVENESS_BYPASS_MATCH === 'true' || tdvMockEnabled) && isNonProduction,
   },
   rotaCrvPecas: {
