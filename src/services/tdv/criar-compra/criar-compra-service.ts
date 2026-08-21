@@ -8,6 +8,7 @@ import {
   type CodigoOrigemTDV
 } from '../../../clients/detran-sp-service-now/tdv/types'
 import { extractBearerToken, extractCpfFromToken, extractEmailFromToken } from '../../../utils/token'
+import { NAO_INFORMADO } from '../comprador-display-fields'
 import { mapPendenciaError, type PendenciaResult } from '../map-pendencia-error'
 
 type Dependencies = {
@@ -77,20 +78,6 @@ export type CriarCompraResult = CriarCompraSuccessResult | CriarCompraPendenciaR
 }
 
 const TDV_ATIVA_EXISTENTE = 'TDVAtivaExistenteError'
-
-const STUB_ENRICH_CAMPOS = [
-  'placaVeiculo',
-  'codigoRenavamVeiculo',
-  'chassiVeiculo',
-  'kmVeiculo',
-  'kmVistoriadaVeiculo',
-  'cepComprador',
-  'logradouroComprador',
-  'bairroComprador',
-  'numeroComprador',
-  'complementoComprador',
-  'codigoTransferenciaVeiculo'
-].join(',')
 
 function mapProximaAcao (
   estado: CodigoEstadoTDV | undefined,
@@ -168,16 +155,20 @@ function normalizeAtiva (ativa: CriarCompraInput['ativa']): 'true' | 'false' | u
   return undefined
 }
 
-function hasFullAddress (input: {
-  cepComprador?: string
-  logradouroComprador?: string
-  bairroComprador?: string
-}): boolean {
-  return Boolean(
-    normalizeCep(input.cepComprador)
-    && input.logradouroComprador?.trim()
-    && input.bairroComprador?.trim()
-  )
+function pickAddressFields (input: CriarCompraInput) {
+  const cepComprador = normalizeCep(input.cepComprador)
+  const bairroComprador = input.bairroComprador?.trim() ?? ''
+  const logradouroComprador = input.logradouroComprador?.trim() ?? ''
+  if (!cepComprador || !bairroComprador || !logradouroComprador) {
+    throw BadRequest('cepComprador, bairroComprador e logradouroComprador são obrigatórios')
+  }
+  return {
+    cepComprador,
+    bairroComprador,
+    logradouroComprador,
+    numeroComprador: input.numeroComprador?.trim() ?? '',
+    complementoComprador: input.complementoComprador?.trim() ?? ''
+  }
 }
 
 function resolveKmVistoriada (input: {
@@ -190,10 +181,23 @@ function resolveKmVistoriada (input: {
   return kmVeiculo || undefined
 }
 
+function digitsOnly (value: string | undefined): string | undefined {
+  const digits = value?.replace(/\D/g, '')
+  return digits || undefined
+}
+
+function omitNaoInformado (value: string | undefined): string | undefined {
+  const trimmed = value?.trim()
+  if (!trimmed || trimmed === NAO_INFORMADO) return undefined
+  return trimmed
+}
+
 function pickOptionalListingFields (input: CriarCompraInput) {
   const kmVistoriada = resolveKmVistoriada(input)
   const kmVeiculo = input.kmVeiculo?.trim()
   const ativa = normalizeAtiva(input.ativa)
+  const codigoComprador = digitsOnly(input.codigoComprador)
+  const nomeComprador = omitNaoInformado(input.nomeComprador)
   return {
     ...(ativa ? { ativa } : {}),
     ...(input.estado ? { estado: input.estado } : {}),
@@ -206,8 +210,8 @@ function pickOptionalListingFields (input: CriarCompraInput) {
     ...(input.descricaoMarcaVeiculo?.trim()
       ? { descricaoMarcaVeiculo: input.descricaoMarcaVeiculo.trim() }
       : {}),
-    ...(input.codigoComprador?.trim() ? { codigoComprador: input.codigoComprador.trim() } : {}),
-    ...(input.nomeComprador?.trim() ? { nomeComprador: input.nomeComprador.trim() } : {}),
+    ...(codigoComprador ? { codigoComprador } : {}),
+    ...(nomeComprador ? { nomeComprador } : {}),
     ...(input.nomeMunicipioVeiculo?.trim()
       ? { nomeMunicipioVeiculo: input.nomeMunicipioVeiculo.trim() }
       : {}),
@@ -250,18 +254,14 @@ export class CriarCompraService {
       throw BadRequest('placaVeiculo, renavamVeiculo, origem, nomeVendedor e codigoVendedor são obrigatórios')
     }
 
-    const enriched = await this.enrichFromStub(auth, cpf, {
+    const prepared: CriarCompraInput = {
       ...input,
       placaVeiculo,
       renavamVeiculo
-    })
-
-    const addressFields = await this.resolveAddressFields(auth, enriched)
-    if (!hasFullAddress(addressFields)) {
-      throw BadRequest('cepComprador, bairroComprador e logradouroComprador são obrigatórios')
     }
 
-    const optionalFields = pickOptionalListingFields(enriched)
+    const addressFields = pickAddressFields(prepared)
+    const optionalFields = pickOptionalListingFields(prepared)
     const criaTdvPayload = {
       ...optionalFields,
       ...addressFields,
@@ -285,12 +285,12 @@ export class CriarCompraService {
       } else {
         const pendencia = mapPendenciaError(error)
         if (!pendencia) throw error
-        return this.buildPendenciaResult(auth, cpf, enriched, pendencia)
+        return this.buildPendenciaResult(auth, cpf, prepared, pendencia)
       }
     }
 
     if (!codigoTransferencia) {
-      throw new Error('Falha ao criar transferência')
+      throw new Error('Falha ao criar transferência: codigoTransferencia não encontrado')
     }
 
     const tdv = await this.client.buscaTdv(
@@ -298,7 +298,7 @@ export class CriarCompraService {
       codigoTransferencia,
       'placaVeiculo,descricaoMarcaVeiculo,descricaoCorVeiculo,nomeComprador,estado,codigoRenavamVeiculo'
     )
-    return mapProximaAcao(tdv?.result?.estado, codigoTransferencia, tdv?.result, enriched)
+    return mapProximaAcao(tdv?.result?.estado, codigoTransferencia, tdv?.result, prepared)
   }
 
   private async buildPendenciaResult (
@@ -346,117 +346,5 @@ export class CriarCompraService {
       && Boolean(tdv.codigoTransferenciaVeiculo?.trim())
     )
     return match?.codigoTransferenciaVeiculo?.trim()
-  }
-
-  private async enrichFromStub (
-    auth: Auth,
-    cpf: string,
-    input: CriarCompraInput
-  ): Promise<CriarCompraInput> {
-    const needsChassi = !input.chassiVeiculo?.trim()
-    const needsKmVistoriada = !resolveKmVistoriada(input)
-    const needsKmVeiculo = !input.kmVeiculo?.trim()
-    const needsCep = !normalizeCep(input.cepComprador)
-    const needsLogradouro = !input.logradouroComprador?.trim()
-    const needsBairro = !input.bairroComprador?.trim()
-    const needsNumero = !input.numeroComprador?.trim()
-    const needsComplemento = !input.complementoComprador?.trim()
-    const needsCodigoTransferencia = !input.codigoTransferenciaVeiculo?.trim()
-    if (
-      !needsChassi
-      && !needsKmVistoriada
-      && !needsKmVeiculo
-      && !needsCep
-      && !needsLogradouro
-      && !needsBairro
-      && !needsNumero
-      && !needsComplemento
-      && !needsCodigoTransferencia
-    ) {
-      return input
-    }
-
-    const listed = await this.client.listaTdvs(auth, {
-      ativa: 'true',
-      codigoComprador: cpf,
-      campos: STUB_ENRICH_CAMPOS
-    }).catch(() => undefined)
-    const stub = listed?.result?.find((tdv) =>
-      (tdv.placaVeiculo ?? '') === input.placaVeiculo
-      && (tdv.codigoRenavamVeiculo ?? '') === input.renavamVeiculo
-    )
-
-    if (!stub) return input
-
-    const stubKmVistoriada = resolveKmVistoriada(stub)
-    const stubCep = normalizeCep(stub.cepComprador ?? undefined)
-
-    return {
-      ...input,
-      ...(needsChassi && stub.chassiVeiculo?.trim()
-        ? { chassiVeiculo: stub.chassiVeiculo.trim() }
-        : {}),
-      ...(needsKmVeiculo && stub.kmVeiculo?.trim()
-        ? { kmVeiculo: stub.kmVeiculo.trim() }
-        : {}),
-      ...(needsKmVistoriada && stubKmVistoriada
-        ? { kmVistoriadaVeiculo: stubKmVistoriada }
-        : {}),
-      ...(needsCep && stubCep
-        ? { cepComprador: stubCep }
-        : {}),
-      ...(needsLogradouro && stub.logradouroComprador?.trim()
-        ? { logradouroComprador: stub.logradouroComprador.trim() }
-        : {}),
-      ...(needsBairro && stub.bairroComprador?.trim()
-        ? { bairroComprador: stub.bairroComprador.trim() }
-        : {}),
-      ...(needsNumero && stub.numeroComprador?.trim()
-        ? { numeroComprador: stub.numeroComprador.trim() }
-        : {}),
-      ...(needsComplemento && stub.complementoComprador?.trim()
-        ? { complementoComprador: stub.complementoComprador.trim() }
-        : {}),
-      ...(needsCodigoTransferencia && stub.codigoTransferenciaVeiculo?.trim()
-        ? { codigoTransferenciaVeiculo: stub.codigoTransferenciaVeiculo.trim() }
-        : {})
-    }
-  }
-
-  private async resolveAddressFields (auth: Auth, input: CriarCompraInput) {
-    if (hasFullAddress(input)) {
-      const cep = normalizeCep(input.cepComprador)!
-      return {
-        cepComprador: cep,
-        bairroComprador: input.bairroComprador!.trim(),
-        logradouroComprador: input.logradouroComprador!.trim(),
-        numeroComprador: input.numeroComprador?.trim() ?? '',
-        complementoComprador: input.complementoComprador?.trim() ?? ''
-      }
-    }
-
-    const cep = normalizeCep(input.cepComprador)
-    if (!cep) {
-      return {
-        ...(input.numeroComprador?.trim() ? { numeroComprador: input.numeroComprador.trim() } : {}),
-        ...(input.complementoComprador?.trim()
-          ? { complementoComprador: input.complementoComprador.trim() }
-          : {})
-      }
-    }
-
-    const enderecoResult = await this.client.buscaEndereco(auth, cep)
-    const endereco = enderecoResult?.result
-
-    return {
-      cepComprador: cep,
-      bairroComprador: input.bairroComprador?.trim() || endereco?.bairro || '',
-      logradouroComprador: input.logradouroComprador?.trim()
-        || endereco?.logradouro
-        || endereco?.endereco
-        || '',
-      numeroComprador: input.numeroComprador?.trim() ?? '',
-      complementoComprador: input.complementoComprador?.trim() || endereco?.complemento || ''
-    }
   }
 }
