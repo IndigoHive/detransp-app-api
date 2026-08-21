@@ -32,6 +32,14 @@ export function tdvRouter (): Router {
     res.status(200).json(result)
   })
 
+  router.get('/comprador-cep', async (req, res) => {
+    const { accessToken } = req.session!
+    const service = req.scope.resolve('compradorCepService')
+    const cep = req.query.cep as string
+    const result = await service.run(accessToken, { cep })
+    res.status(200).json(result)
+  })
+
   router.post('/validacao-venda', async (req, res) => {
     const { accessToken } = req.session!
     const service = req.scope.resolve('validacaoVendaService')
