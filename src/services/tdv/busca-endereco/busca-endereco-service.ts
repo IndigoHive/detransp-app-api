@@ -3,6 +3,7 @@ import type {
   BuscaEnderecoResultSuccess,
   DetranSpServiceNowTdvClient
 } from '../../../clients/detran-sp-service-now/tdv'
+import { formatCep } from '../../../utils/format-document'
 import { extractBearerToken, extractCpfFromToken } from '../../../utils/token'
 
 type Dependencies = {
@@ -40,6 +41,12 @@ export class BuscaEnderecoService {
       throw createError(404, 'CEP não encontrado', { expose: true })
     }
 
-    return result
+    return {
+      ...result,
+      result: {
+        ...result.result,
+        cep: formatCep(result.result.cep)
+      }
+    }
   }
 }

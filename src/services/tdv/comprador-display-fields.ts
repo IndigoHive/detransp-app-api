@@ -1,6 +1,8 @@
 import type { ListaTdvsResultData } from '../../clients/detran-sp-service-now/tdv/types'
 import { formatCep, formatCpfCnpj } from '../../utils/format-document'
 
+export const NAO_INFORMADO = 'Não informado'
+
 export type CompradorDisplayFields = {
   cpfComprador?: string
   nomeComprador?: string
@@ -15,7 +17,11 @@ function trimField (value: string | null | undefined): string | undefined {
   return trimmed || undefined
 }
 
-function formatEnderecoComprador (tdv: ListaTdvsResultData): string | undefined {
+export function displayOrNaoInformado (value: string | undefined): string {
+  return value?.trim() || NAO_INFORMADO
+}
+
+export function formatEnderecoComprador (tdv: ListaTdvsResultData): string | undefined {
   const logradouro = trimField(tdv.logradouroComprador)
   const numero = trimField(tdv.numeroComprador)
   const complemento = trimField(tdv.complementoComprador)

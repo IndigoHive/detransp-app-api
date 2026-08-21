@@ -30,7 +30,12 @@ describe('BuscaEnderecoService', () => {
       detranSpServiceNowTdv: { buscaEndereco } as unknown as DetranSpServiceNowTdvClient
     })
 
-    await expect(service.run(authHeader, { cep: '01310-100' })).resolves.toEqual(enderecoPayload)
+    await expect(service.run(authHeader, { cep: '01310-100' })).resolves.toEqual({
+      result: {
+        ...enderecoPayload.result,
+        cep: '01310-100'
+      }
+    })
     expect(buscaEndereco).toHaveBeenCalledWith(clientAuth, '01310100')
   })
 

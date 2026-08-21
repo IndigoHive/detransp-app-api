@@ -2991,7 +2991,7 @@
                         "name": null,
                         "data": {
                           "text": "@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.enderecoComprador}",
-                          "label": "Nome"
+                          "label": "Endereço"
                         }
                       }
                     ],
@@ -3333,7 +3333,7 @@
             "type": "text_body",
             "name": null,
             "data": {
-              "text": "Eu, @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}, inscrito no CPF sob o nº @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoComprador}, declaro para os devidos fins que resido em @{node:n_f5aacdb3ca97.result.tipoLogradouro} @{screen:s_7e2a1c9b4f08.comp:c_a8f3e21b9c40.value ?? node:n_f5aacdb3ca97.result.endereco}, @{screen:s_7e2a1c9b4f08.comp:c_b7d4e12a8f31.value}, @{screen:s_7e2a1c9b4f08.comp:c_d5f6a14c6b13.value ?? node:n_f5aacdb3ca97.result.bairro}, @{screen:s_7e2a1c9b4f08.comp:c_4a2614e0e9fb.value ?? node:n_f5aacdb3ca97.result.localidade} - @{node:n_f5aacdb3ca97.result.uf}, @{screen:s_85ba93c2e996.comp:c_6a5c088eac53.value ?? node:n_f5aacdb3ca97.result.cep}.",
+              "text": "Eu, @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}, inscrito no CPF sob o nº @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoComprador}, declaro para os devidos fins que resido em @{node:n_f5aacdb3ca97.result.tipoLogradouro} @{screen:s_7e2a1c9b4f08.comp:c_a8f3e21b9c40.value ?? node:n_f5aacdb3ca97.result.endereco}, @{screen:s_7e2a1c9b4f08.comp:c_b7d4e12a8f31.value}, @{screen:s_7e2a1c9b4f08.comp:c_d5f6a14c6b13.value ?? node:n_f5aacdb3ca97.result.bairro}, @{screen:s_7e2a1c9b4f08.comp:c_4a2614e0e9fb.value ?? node:n_f5aacdb3ca97.result.localidade} - @{node:n_f5aacdb3ca97.result.uf}, @{node:n_f5aacdb3ca97.result.cep ?? screen:s_85ba93c2e996.comp:c_6a5c088eac53.value}.",
               "align": "justify",
               "visibilityCondition": {
                 "clauses": [
@@ -3357,7 +3357,7 @@
             "type": "text_body",
             "name": null,
             "data": {
-              "text": "Eu, @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}, inscrito no CPF sob o nº @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoComprador}, declaro para os devidos fins que resido em @{node:n_f5aacdb3ca97.result.tipoLogradouro} @{screen:s_7e2a1c9b4f08.comp:c_a8f3e21b9c40.value ?? node:n_f5aacdb3ca97.result.endereco}, @{screen:s_7e2a1c9b4f08.comp:c_b7d4e12a8f31.value}, @{screen:s_7e2a1c9b4f08.comp:c_c6e5f03b7a22.value}, @{screen:s_7e2a1c9b4f08.comp:c_d5f6a14c6b13.value ?? node:n_f5aacdb3ca97.result.bairro}, @{screen:s_7e2a1c9b4f08.comp:c_4a2614e0e9fb.value ?? node:n_f5aacdb3ca97.result.localidade} - @{node:n_f5aacdb3ca97.result.uf}, @{screen:s_85ba93c2e996.comp:c_6a5c088eac53.value ?? node:n_f5aacdb3ca97.result.cep}.",
+              "text": "Eu, @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}, inscrito no CPF sob o nº @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoComprador}, declaro para os devidos fins que resido em @{node:n_f5aacdb3ca97.result.tipoLogradouro} @{screen:s_7e2a1c9b4f08.comp:c_a8f3e21b9c40.value ?? node:n_f5aacdb3ca97.result.endereco}, @{screen:s_7e2a1c9b4f08.comp:c_b7d4e12a8f31.value}, @{screen:s_7e2a1c9b4f08.comp:c_c6e5f03b7a22.value}, @{screen:s_7e2a1c9b4f08.comp:c_d5f6a14c6b13.value ?? node:n_f5aacdb3ca97.result.bairro}, @{screen:s_7e2a1c9b4f08.comp:c_4a2614e0e9fb.value ?? node:n_f5aacdb3ca97.result.localidade} - @{node:n_f5aacdb3ca97.result.uf}, @{node:n_f5aacdb3ca97.result.cep ?? screen:s_85ba93c2e996.comp:c_6a5c088eac53.value}.",
               "align": "justify",
               "visibilityCondition": {
                 "clauses": [
@@ -3409,7 +3409,7 @@
             "type": "opt_in",
             "name": null,
             "data": {
-              "title": "Aceite",
+              "title": "",
               "options": [
                 {
                   "id": "1",
@@ -6843,7 +6843,7 @@
           {
             "id": "fab4f0e4-ffc5-43e2-9eb9-ee7bc9019491",
             "name": "Endereço retornado",
-            "value": "{\n  \"result\": {\n    \"cep\": \"08060283\",\n    \"bairro\": \"Vila Jacuí\",\n    \"tipoLogradouro\": \"Rua\",\n    \"endereco\": \"Aulide Carini\",\n    \"complemento\": \"\",\n    \"tipoLogradouroAbrev\": \"R\",\n    \"enderecoAbrev\": \"R Aulide Carini\",\n    \"tipoLogradouroAbrevDNE\": \"R\",\n    \"localidade\": \"São Paulo\",\n    \"estado\": \"São Paulo\",\n    \"uf\": \"SP\",\n    \"numeroIBGE\": 3550308,\n    \"logradouro\": null,\n    \"cdTipoCEP\": 1,\n    \"tipoCEP\": \"CEP Padrão\",\n    \"municipio\": \"São Paulo\",\n    \"tipoLocalidade\": null,\n    \"codigoMunicipio\": 9668,\n    \"codigoLocalRel\": 9668,\n    \"latitude\": null,\n    \"longitude\": null,\n    \"codigoDne\": 580843,\n    \"tipoLogradouroDne\": 81,\n    \"codigoBairro\": 26812\n  }\n}"
+            "value": "{\n  \"result\": {\n    \"cep\": \"08060-283\",\n    \"bairro\": \"Vila Jacuí\",\n    \"tipoLogradouro\": \"Rua\",\n    \"endereco\": \"Aulide Carini\",\n    \"complemento\": \"\",\n    \"tipoLogradouroAbrev\": \"R\",\n    \"enderecoAbrev\": \"R Aulide Carini\",\n    \"tipoLogradouroAbrevDNE\": \"R\",\n    \"localidade\": \"São Paulo\",\n    \"estado\": \"São Paulo\",\n    \"uf\": \"SP\",\n    \"numeroIBGE\": 3550308,\n    \"logradouro\": null,\n    \"cdTipoCEP\": 1,\n    \"tipoCEP\": \"CEP Padrão\",\n    \"municipio\": \"São Paulo\",\n    \"tipoLocalidade\": null,\n    \"codigoMunicipio\": 9668,\n    \"codigoLocalRel\": 9668,\n    \"latitude\": null,\n    \"longitude\": null,\n    \"codigoDne\": 580843,\n    \"tipoLogradouroDne\": 81,\n    \"codigoBairro\": 26812\n  }\n}"
           }
         ]
       }
