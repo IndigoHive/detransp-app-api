@@ -326,13 +326,21 @@ export class TdvMockStore {
   }
 
   getDebitos (): BuscaDebitosTdvResultSuccess {
+    const debitos = [
+      { descricao: 'Transferência de Veículo', valor: 295.83 },
+      { descricao: 'Licenciamento', valor: 648.41 },
+      { descricao: 'IPVA 2026', valor: 303.62 },
+      { descricao: 'IPVA 2025', valor: 329.08 },
+      { descricao: 'IPVA 2024', valor: 335.13 },
+      { descricao: 'IPVA 2023', valor: 427.56 },
+      { descricao: 'IPVA 2022', valor: 427.40 },
+      { descricao: 'IPVA 2021', valor: 355.20 }
+    ]
+
     return {
       result: {
-        valorTotal: 234.56,
-        debitos: [
-          { descricao: 'Taxa de Transferência', valor: 200.00 },
-          { descricao: 'Licenciamento', valor: 34.56 }
-        ]
+        valorTotal: Number(debitos.reduce((total, debito) => total + debito.valor, 0).toFixed(2)),
+        debitos
       }
     }
   }

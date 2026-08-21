@@ -40,7 +40,7 @@ export type ConsultaDebitosResult = {
 }
 
 function formatCurrency (value: number): string {
-  return `R$ ${value.toFixed(2).replace('.', ',')}`
+  return `R$ ${value.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
 }
 
 function sleep (ms: number): Promise<void> {

@@ -174,6 +174,34 @@ describe('ConsultaDebitosService', () => {
     expect(result).toMatchObject({ estado: undefined, qrCode: undefined })
   })
 
+  it('returns every débito the DETRAN lists, not just the transferência and o licenciamento', async () => {
+    const service = buildService({
+      buscaTdv: vi.fn().mockResolvedValue({ result: { nomeComprador: 'Maria', estado: '7' } }),
+      buscaDebitosTdv: vi.fn().mockResolvedValue({
+        result: {
+          debitos: [
+            { descricao: 'Transferência de Veículo', valor: 295.83 },
+            { descricao: 'Licenciamento', valor: 648.41 },
+            { descricao: 'IPVA 2026', valor: 303.62 },
+            { descricao: 'IPVA 2025', valor: 329.08 }
+          ],
+          valorTotal: 1576.94
+        }
+      }),
+      buscaPixQrCodeTdv: vi.fn().mockResolvedValue(pixResult('1'))
+    })
+
+    const result = await service.run(authorizationHeader, input)
+
+    expect(result.debitos).toEqual([
+      { descricao: 'Transferência de Veículo', valor: 295.83, valorFormatado: 'R$ 295,83' },
+      { descricao: 'Licenciamento', valor: 648.41, valorFormatado: 'R$ 648,41' },
+      { descricao: 'IPVA 2026', valor: 303.62, valorFormatado: 'R$ 303,62' },
+      { descricao: 'IPVA 2025', valor: 329.08, valorFormatado: 'R$ 329,08' }
+    ])
+    expect(result.totalDebitos).toBe('R$ 1.576,94')
+  })
+
   it('still reports an already-paid existing charge when resuming with gerarQrCode: false', async () => {
     const atualizaTdv = vi.fn().mockResolvedValue({ result: { codigoTransferenciaVeiculo: 'TDV1' } })
     const service = buildService({

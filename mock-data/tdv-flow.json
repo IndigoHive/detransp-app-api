@@ -1983,32 +1983,28 @@
                 "data": {}
               },
               {
-                "id": "c_90d48ffc11dd",
-                "type": "rich_text",
+                "id": "c_a0130d47eff6",
+                "type": "iterator",
                 "name": null,
+                "children": [
+                  {
+                    "id": "c_dbd3680e23a4",
+                    "type": "rich_text",
+                    "name": null,
+                    "data": {
+                      "html": "<p><span style=\"font-size:12px;color:#7A7F83\"><strong>@{item.descricao}</strong></span></p><p><span style=\"font-size:14px;color:#111414\">@{item.valorFormatado}</span></p>"
+                    }
+                  },
+                  {
+                    "id": "c_7593c6c6eaa5",
+                    "type": "divider",
+                    "name": null,
+                    "data": {}
+                  }
+                ],
                 "data": {
-                  "html": "<p><span style=\"font-size:12px;color:#7A7F83\"><strong>Transferência do veículo</strong></span></p><p><span style=\"font-size:14px;color:#111414\">@{node:n_b685a31ed52c.taxaTransferencia}</span></p>"
+                  "source": "@{node:n_b685a31ed52c.debitos}"
                 }
-              },
-              {
-                "id": "c_381e0ff4556e",
-                "type": "divider",
-                "name": null,
-                "data": {}
-              },
-              {
-                "id": "c_9db5f315559a",
-                "type": "rich_text",
-                "name": null,
-                "data": {
-                  "html": "<p><span style=\"font-size:12px;color:#7A7F83\"><strong>Licenciamento</strong></span></p><p><span style=\"font-size:14px;color:#111414\">@{node:n_b685a31ed52c.taxaLicenciamento}</span></p>"
-                }
-              },
-              {
-                "id": "c_f6b5788ae741",
-                "type": "divider",
-                "name": null,
-                "data": {}
               },
               {
                 "id": "c_161e9c548d0b",
@@ -4529,34 +4525,29 @@
                 "data": {}
               },
               {
-                "id": "c_e4fa5aed4737",
-                "type": "label_text",
+                "id": "c_c3a8936677a5",
+                "type": "iterator",
                 "name": null,
+                "children": [
+                  {
+                    "id": "c_f2e61beea753",
+                    "type": "label_text",
+                    "name": null,
+                    "data": {
+                      "text": "@{item.valorFormatado}",
+                      "label": "@{item.descricao}"
+                    }
+                  },
+                  {
+                    "id": "c_881e2bf70786",
+                    "type": "divider",
+                    "name": null,
+                    "data": {}
+                  }
+                ],
                 "data": {
-                  "text": "@{node:n_b8e4d02f3c15.taxaTransferencia}",
-                  "label": "Transferência do veículo"
+                  "source": "@{node:n_b8e4d02f3c15.debitos}"
                 }
-              },
-              {
-                "id": "c_ab7baa09bfe6",
-                "type": "divider",
-                "name": null,
-                "data": {}
-              },
-              {
-                "id": "c_1bcbd1d9c76c",
-                "type": "label_text",
-                "name": null,
-                "data": {
-                  "text": "@{node:n_b8e4d02f3c15.taxaLicenciamento}",
-                  "label": "Licenciamento"
-                }
-              },
-              {
-                "id": "c_d96a47e76b7c",
-                "type": "divider",
-                "name": null,
-                "data": {}
               },
               {
                 "id": "c_7414e47a684b",
@@ -6180,7 +6171,7 @@
           {
             "id": "662e4b72-b520-47e2-a222-bd21ed66959a",
             "name": "Com débitos",
-            "value": "{\n  \"nomeComprador\": \"Carlos da Silva\",\n  \"taxaTransferencia\": \"R$ 243,77\",\n  \"taxaLicenciamento\": \"R$ 120,50\",\n  \"totalDebitos\": \"R$ 364,27\"\n}"
+            "value": "{\n  \"nomeComprador\": \"Carlos da Silva\",\n  \"debitos\": [\n    {\n      \"descricao\": \"Transferência de Veículo\",\n      \"valor\": 295.83,\n      \"valorFormatado\": \"R$ 295,83\"\n    },\n    {\n      \"descricao\": \"Licenciamento\",\n      \"valor\": 648.41,\n      \"valorFormatado\": \"R$ 648,41\"\n    },\n    {\n      \"descricao\": \"IPVA 2026\",\n      \"valor\": 303.62,\n      \"valorFormatado\": \"R$ 303,62\"\n    },\n    {\n      \"descricao\": \"IPVA 2025\",\n      \"valor\": 329.08,\n      \"valorFormatado\": \"R$ 329,08\"\n    },\n    {\n      \"descricao\": \"IPVA 2024\",\n      \"valor\": 335.13,\n      \"valorFormatado\": \"R$ 335,13\"\n    },\n    {\n      \"descricao\": \"IPVA 2023\",\n      \"valor\": 427.56,\n      \"valorFormatado\": \"R$ 427,56\"\n    },\n    {\n      \"descricao\": \"IPVA 2022\",\n      \"valor\": 427.4,\n      \"valorFormatado\": \"R$ 427,40\"\n    },\n    {\n      \"descricao\": \"IPVA 2021\",\n      \"valor\": 355.2,\n      \"valorFormatado\": \"R$ 355,20\"\n    }\n  ],\n  \"valorTotal\": 3122.23,\n  \"taxaTransferencia\": \"R$ 295,83\",\n  \"taxaLicenciamento\": \"R$ 648,41\",\n  \"totalDebitos\": \"R$ 3122,23\"\n}"
           }
         ]
       }
@@ -6890,7 +6881,7 @@
           {
             "id": "662e4b72-b520-47e2-a222-bd21ed66959a",
             "name": "Com débitos",
-            "value": "{\n  \"nomeComprador\": \"Carlos da Silva\",\n  \"debitos\": [\n    {\n      \"descricao\": \"Transferência de Veículo\",\n      \"valor\": 243.77,\n      \"valorFormatado\": \"R$ 243,77\"\n    },\n    {\n      \"descricao\": \"Licenciamento\",\n      \"valor\": 120.5,\n      \"valorFormatado\": \"R$ 120,50\"\n    }\n  ],\n  \"valorTotal\": 364.27,\n  \"taxaTransferencia\": \"R$ 243,77\",\n  \"taxaLicenciamento\": \"R$ 120,50\",\n  \"totalDebitos\": \"R$ 364,27\"\n}"
+            "value": "{\n  \"nomeComprador\": \"Carlos da Silva\",\n  \"debitos\": [\n    {\n      \"descricao\": \"Transferência de Veículo\",\n      \"valor\": 295.83,\n      \"valorFormatado\": \"R$ 295,83\"\n    },\n    {\n      \"descricao\": \"Licenciamento\",\n      \"valor\": 648.41,\n      \"valorFormatado\": \"R$ 648,41\"\n    },\n    {\n      \"descricao\": \"IPVA 2026\",\n      \"valor\": 303.62,\n      \"valorFormatado\": \"R$ 303,62\"\n    },\n    {\n      \"descricao\": \"IPVA 2025\",\n      \"valor\": 329.08,\n      \"valorFormatado\": \"R$ 329,08\"\n    },\n    {\n      \"descricao\": \"IPVA 2024\",\n      \"valor\": 335.13,\n      \"valorFormatado\": \"R$ 335,13\"\n    },\n    {\n      \"descricao\": \"IPVA 2023\",\n      \"valor\": 427.56,\n      \"valorFormatado\": \"R$ 427,56\"\n    },\n    {\n      \"descricao\": \"IPVA 2022\",\n      \"valor\": 427.4,\n      \"valorFormatado\": \"R$ 427,40\"\n    },\n    {\n      \"descricao\": \"IPVA 2021\",\n      \"valor\": 355.2,\n      \"valorFormatado\": \"R$ 355,20\"\n    }\n  ],\n  \"valorTotal\": 3122.23,\n  \"taxaTransferencia\": \"R$ 295,83\",\n  \"taxaLicenciamento\": \"R$ 648,41\",\n  \"totalDebitos\": \"R$ 3122,23\"\n}"
           }
         ]
       }
@@ -6909,7 +6900,7 @@
           {
             "id": "662e4b72-b520-47e2-a222-bd21ed66959a",
             "name": "Com débitos",
-            "value": "{\n  \"nomeComprador\": \"Carlos da Silva\",\n  \"debitos\": [\n    {\n      \"descricao\": \"Transferência de Veículo\",\n      \"valor\": 243.77,\n      \"valorFormatado\": \"R$ 243,77\"\n    },\n    {\n      \"descricao\": \"Licenciamento\",\n      \"valor\": 120.5,\n      \"valorFormatado\": \"R$ 120,50\"\n    }\n  ],\n  \"valorTotal\": 364.27,\n  \"taxaTransferencia\": \"R$ 243,77\",\n  \"taxaLicenciamento\": \"R$ 120,50\",\n  \"totalDebitos\": \"R$ 364,27\"\n}"
+            "value": "{\n  \"nomeComprador\": \"Carlos da Silva\",\n  \"debitos\": [\n    {\n      \"descricao\": \"Transferência de Veículo\",\n      \"valor\": 295.83,\n      \"valorFormatado\": \"R$ 295,83\"\n    },\n    {\n      \"descricao\": \"Licenciamento\",\n      \"valor\": 648.41,\n      \"valorFormatado\": \"R$ 648,41\"\n    },\n    {\n      \"descricao\": \"IPVA 2026\",\n      \"valor\": 303.62,\n      \"valorFormatado\": \"R$ 303,62\"\n    },\n    {\n      \"descricao\": \"IPVA 2025\",\n      \"valor\": 329.08,\n      \"valorFormatado\": \"R$ 329,08\"\n    },\n    {\n      \"descricao\": \"IPVA 2024\",\n      \"valor\": 335.13,\n      \"valorFormatado\": \"R$ 335,13\"\n    },\n    {\n      \"descricao\": \"IPVA 2023\",\n      \"valor\": 427.56,\n      \"valorFormatado\": \"R$ 427,56\"\n    },\n    {\n      \"descricao\": \"IPVA 2022\",\n      \"valor\": 427.4,\n      \"valorFormatado\": \"R$ 427,40\"\n    },\n    {\n      \"descricao\": \"IPVA 2021\",\n      \"valor\": 355.2,\n      \"valorFormatado\": \"R$ 355,20\"\n    }\n  ],\n  \"valorTotal\": 3122.23,\n  \"taxaTransferencia\": \"R$ 295,83\",\n  \"taxaLicenciamento\": \"R$ 648,41\",\n  \"totalDebitos\": \"R$ 3122,23\"\n}"
           }
         ]
       }
@@ -6951,7 +6942,7 @@
           {
             "id": "662e4b72-b520-47e2-a222-bd21ed66959a",
             "name": "Com débitos",
-            "value": "{\n  \"nomeComprador\": \"Carlos da Silva\",\n  \"debitos\": [\n    {\n      \"descricao\": \"Transferência de Veículo\",\n      \"valor\": 243.77,\n      \"valorFormatado\": \"R$ 243,77\"\n    },\n    {\n      \"descricao\": \"Licenciamento\",\n      \"valor\": 120.5,\n      \"valorFormatado\": \"R$ 120,50\"\n    }\n  ],\n  \"valorTotal\": 364.27,\n  \"taxaTransferencia\": \"R$ 243,77\",\n  \"taxaLicenciamento\": \"R$ 120,50\",\n  \"totalDebitos\": \"R$ 364,27\"\n}"
+            "value": "{\n  \"nomeComprador\": \"Carlos da Silva\",\n  \"debitos\": [\n    {\n      \"descricao\": \"Transferência de Veículo\",\n      \"valor\": 295.83,\n      \"valorFormatado\": \"R$ 295,83\"\n    },\n    {\n      \"descricao\": \"Licenciamento\",\n      \"valor\": 648.41,\n      \"valorFormatado\": \"R$ 648,41\"\n    },\n    {\n      \"descricao\": \"IPVA 2026\",\n      \"valor\": 303.62,\n      \"valorFormatado\": \"R$ 303,62\"\n    },\n    {\n      \"descricao\": \"IPVA 2025\",\n      \"valor\": 329.08,\n      \"valorFormatado\": \"R$ 329,08\"\n    },\n    {\n      \"descricao\": \"IPVA 2024\",\n      \"valor\": 335.13,\n      \"valorFormatado\": \"R$ 335,13\"\n    },\n    {\n      \"descricao\": \"IPVA 2023\",\n      \"valor\": 427.56,\n      \"valorFormatado\": \"R$ 427,56\"\n    },\n    {\n      \"descricao\": \"IPVA 2022\",\n      \"valor\": 427.4,\n      \"valorFormatado\": \"R$ 427,40\"\n    },\n    {\n      \"descricao\": \"IPVA 2021\",\n      \"valor\": 355.2,\n      \"valorFormatado\": \"R$ 355,20\"\n    }\n  ],\n  \"valorTotal\": 3122.23,\n  \"taxaTransferencia\": \"R$ 295,83\",\n  \"taxaLicenciamento\": \"R$ 648,41\",\n  \"totalDebitos\": \"R$ 3122,23\"\n}"
           }
         ]
       }
