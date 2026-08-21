@@ -993,12 +993,32 @@ const tdvPixPayments: Record<string, {
   confirmedDate: string | null
 }> = {}
 
+const tdvTaxaTransferencia = { descricao: 'Transferência de Veículo', valor: 295.83 }
+const tdvTaxaLicenciamento = { descricao: 'Licenciamento', valor: 648.41 }
+
+const tdvDebitos = [
+  tdvTaxaTransferencia,
+  tdvTaxaLicenciamento,
+  { descricao: 'IPVA 2026', valor: 303.62 },
+  { descricao: 'IPVA 2025', valor: 329.08 },
+  { descricao: 'IPVA 2024', valor: 335.13 },
+  { descricao: 'IPVA 2023', valor: 427.56 },
+  { descricao: 'IPVA 2022', valor: 427.40 },
+  { descricao: 'IPVA 2021', valor: 355.20 }
+]
+
+const tdvValorTotal = Number(tdvDebitos.reduce((total, debito) => total + debito.valor, 0).toFixed(2))
+
+function formatTdvCurrency (valor: number): string {
+  return `R$ ${valor.toFixed(2).replace('.', ',')}`
+}
+
 app.get('/api/tdv/consulta-debitos', (req, res) => {
   const codigoTransferencia = (req.query.codigoTransferencia as string) || 'TDV-MOCK'
 
   if (!tdvPixPayments[codigoTransferencia]) {
     const expiresAt = new Date(Date.now() + 15 * 60 * 1000).toISOString()
-    const qrCode = `00020126580014br.gov.bcb.pix0136mock-tdv-pix-${codigoTransferencia}520400005303986540364.275802BR5925DETRAN SP6009SAO PAULO`
+    const qrCode = `00020126580014br.gov.bcb.pix0136mock-tdv-pix-${codigoTransferencia}5204000053039865407${tdvValorTotal.toFixed(2)}5802BR5925DETRAN SP6009SAO PAULO`
     tdvPixPayments[codigoTransferencia] = {
       qrCode,
       expiresAt,
@@ -1028,19 +1048,31 @@ app.get('/api/tdv/consulta-debitos', (req, res) => {
   const payment = tdvPixPayments[codigoTransferencia]
   res.json({
     nomeComprador: 'Maria Oliveira Souza',
-    debitos: [
-      { descricao: 'Transferência de Veículo', valor: 243.77, valorFormatado: 'R$ 243,77' },
-      { descricao: 'Licenciamento', valor: 120.50, valorFormatado: 'R$ 120,50' }
-    ],
-    valorTotal: 364.27,
-    taxaTransferencia: 'R$ 243,77',
-    taxaLicenciamento: 'R$ 120,50',
-    totalDebitos: 'R$ 364,27',
+    debitos: tdvDebitos.map(debito => ({ ...debito, valorFormatado: formatTdvCurrency(debito.valor) })),
+    valorTotal: tdvValorTotal,
+    taxaTransferencia: formatTdvCurrency(tdvTaxaTransferencia.valor),
+    taxaLicenciamento: formatTdvCurrency(tdvTaxaLicenciamento.valor),
+    totalDebitos: formatTdvCurrency(tdvValorTotal),
     qrCode: payment.qrCode,
     expiresAt: payment.expiresAt,
     estado: payment.estado,
     ...(payment.comprovante ? { comprovante: payment.comprovante } : {}),
     ...(payment.confirmedDate ? { confirmedDate: payment.confirmedDate } : {})
+  })
+})
+
+app.get('/api/tdv/comprador-cep', (req, res) => {
+  const cep = String(req.query.cep ?? '').replace(/\D/g, '')
+  if (cep.length !== 8) {
+    res.json({ cidade: null, bairro: null, logradouro: null, errorText: 'CEP inválido' })
+    return
+  }
+
+  res.json({
+    cidade: 'São Paulo',
+    bairro: 'Vila Jacuí',
+    logradouro: 'Aulide Carini',
+    errorText: null
   })
 })
 
@@ -1125,6 +1157,7 @@ app.listen(PORT, () => {
   console.log('    GET  /api/tdv/veiculos')
   console.log('    POST /api/tdv/analise-requisitos')
   console.log('    POST /api/tdv/validacao-comprador')
+  console.log('    GET  /api/tdv/comprador-cep')
   console.log('    POST /api/tdv/validacao-venda')
   console.log('    POST /api/tdv/criar')
   console.log('    POST /api/tdv/informar-dados-venda')
