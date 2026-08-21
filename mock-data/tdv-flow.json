@@ -502,6 +502,7 @@
                   "title": "VOLKS/GOL GTI 1.0",
                   "status": "REGULAR",
                   "renavam": "00001002003",
+                  "chassi": "9BWZZZ377VT004251",
                   "yearFab": "2014",
                   "yearMod": "2015",
                   "brandModel": "VOLKS/GOL GTI 1.0",
@@ -515,6 +516,7 @@
                   "title": "ONIX LT - GM",
                   "status": "A VENCER",
                   "renavam": "00002003004",
+                  "chassi": "9BR53ZEC2P020030",
                   "yearFab": "2021",
                   "yearMod": "2022",
                   "brandModel": "ONIX LT - GM",
@@ -528,6 +530,7 @@
                   "title": "FIAT/UNO MILLE",
                   "status": "VENCIDO",
                   "renavam": "00003004005",
+                  "chassi": "9BWZZZ377VT030040",
                   "yearFab": "2008",
                   "yearMod": "2009",
                   "brandModel": "FIAT/UNO MILLE",
@@ -4714,7 +4717,7 @@
             "type": "rich_text",
             "name": null,
             "data": {
-              "html": "<p><span style=\"font-size:14px;color:#262828\">Confirme os dados informados para a venda do veículo<br></span></p>"
+              "html": "<p><span style=\"font-size:14px;color:#262828\">Confirme as informações para a venda do veículo<br></span></p>"
             }
           },
           {
@@ -4735,31 +4738,49 @@
                 "type": "rich_text",
                 "name": null,
                 "data": {
-                  "html": "<p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>CNPJ</strong></span></p><p><span style=\"color: rgb(17, 20, 20); font-size: 14px;\">@{node:n_b824c7dd9350.cpfComprador}</span></p>"
+                  "html": "<p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>CNPJ</strong></span></p><p><span style=\"color: rgb(17, 20, 20); font-size: 14px;\">@{node:n_d87067e61ebb.cpfComprador ?? node:n_b824c7dd9350.cpfComprador}</span></p>"
                 }
+              },
+              {
+                "id": "c_8f02b3c4d5e6",
+                "type": "divider",
+                "name": null,
+                "data": {}
               },
               {
                 "id": "c_68e7be6249ca",
                 "type": "rich_text",
                 "name": null,
                 "data": {
-                  "html": "<p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>Empresa</strong></span></p><p><span style=\"color: rgb(17, 20, 20); font-size: 14px;\">@{node:n_b824c7dd9350.nomeComprador}</span></p>"
+                  "html": "<p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>Empresa</strong></span></p><p><span style=\"color: rgb(17, 20, 20); font-size: 14px;\">@{node:n_d87067e61ebb.nomeComprador ?? node:n_b824c7dd9350.nomeComprador}</span></p>"
                 }
+              },
+              {
+                "id": "c_9013c4d5e6f7",
+                "type": "divider",
+                "name": null,
+                "data": {}
               },
               {
                 "id": "c_0348d174e41e",
                 "type": "rich_text",
                 "name": null,
                 "data": {
-                  "html": "<p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>E-mail</strong></span></p><p><span style=\"color: rgb(17, 20, 20); font-size: 14px;\">@{node:n_b824c7dd9350.emailComprador}</span></p>"
+                  "html": "<p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>E-mail</strong></span></p><p><span style=\"color: rgb(17, 20, 20); font-size: 14px;\">@{node:n_d87067e61ebb.emailComprador ?? node:n_b824c7dd9350.emailComprador}</span></p>"
                 }
+              },
+              {
+                "id": "c_a124d5e6f708",
+                "type": "divider",
+                "name": null,
+                "data": {}
               },
               {
                 "id": "c_41b1c632c907",
                 "type": "rich_text",
                 "name": null,
                 "data": {
-                  "html": "<p><span style=\"font-size:12px;color:#7A7F83\"><strong>Endereço</strong></span></p><p><span style=\"font-size:14px;color:#111414\">@{node:n_b824c7dd9350.enderecoComprador}</span></p>"
+                  "html": "<p><span style=\"font-size:12px;color:#7A7F83\"><strong>Endereço</strong></span></p><p><span style=\"font-size:14px;color:#111414\">@{node:n_d87067e61ebb.enderecoComprador ?? node:n_b824c7dd9350.enderecoComprador}</span></p>"
                 }
               },
               {
@@ -4769,7 +4790,7 @@
                 "data": {
                   "icon": "info",
                   "text": "<div data-space-between-row=\"\" style=\"display: flex; flex-direction: row; align-items: flex-start; gap: 16px; width: 100%; min-width: 0px;\"><div data-space-between-cell=\"\" style=\"flex: 100 100 0%; min-width: 0px; overflow-wrap: break-word;\"><p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>Se os dados estiverem incorretos, cancele a solicitação e ajuste as informações antes de prosseguir.</strong></span></p></div><div data-space-between-cell=\"\" style=\"flex: 0 0 0%; min-width: 0px; overflow-wrap: break-word;\"><p></p></div></div><p></p>",
-                  "color": "info",
+                  "color": "neutral",
                   "variant": "horizontal",
                   "alignment": "start"
                 }
@@ -4783,12 +4804,26 @@
             "name": null,
             "children": [
               {
+                "id": "c_7e91a2b3c4d5",
+                "type": "rich_text",
+                "name": null,
+                "data": {
+                  "html": "<p><span style=\"font-size: 16px;\"><strong>Dados do Veículo</strong></span></p>"
+                }
+              },
+              {
                 "id": "c_86cd4a4f71e0",
                 "type": "rich_text",
                 "name": null,
                 "data": {
                   "html": "<p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>Renavam</strong></span></p><p><span style=\"color: rgb(17, 20, 20); font-size: 14px;\">@{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.renavam}</span></p>"
                 }
+              },
+              {
+                "id": "c_b235e6f70819",
+                "type": "divider",
+                "name": null,
+                "data": {}
               },
               {
                 "id": "c_6d38fda1e628",
@@ -4810,12 +4845,24 @@
                 }
               },
               {
+                "id": "c_c346f708192a",
+                "type": "divider",
+                "name": null,
+                "data": {}
+              },
+              {
                 "id": "c_d186275e2517",
                 "type": "rich_text",
                 "name": null,
                 "data": {
                   "html": "<p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>Ano</strong></span></p><p><span style=\"color: rgb(17, 20, 20); font-size: 14px;\">@{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.yearFab}</span></p>"
                 }
+              },
+              {
+                "id": "c_d45708192a3b",
+                "type": "divider",
+                "name": null,
+                "data": {}
               },
               {
                 "id": "c_51eb3d0b11f8",
@@ -4826,19 +4873,31 @@
                 }
               },
               {
+                "id": "c_e568192a3b4c",
+                "type": "divider",
+                "name": null,
+                "data": {}
+              },
+              {
                 "id": "c_c6c1b0f719cf",
                 "type": "rich_text",
                 "name": null,
                 "data": {
-                  "html": "<p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>Cor</strong></span></p><p><span style=\"color: rgb(17, 20, 20); font-size: 14px;\">@{node:n_b824c7dd9350.descricaoCorVeiculo ?? screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.descricaoCorVeiculo}</span></p>"
+                  "html": "<p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>Cor</strong></span></p><p><span style=\"color: rgb(17, 20, 20); font-size: 14px;\">@{node:n_d87067e61ebb.descricaoCorVeiculo ?? node:n_b824c7dd9350.descricaoCorVeiculo ?? screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.descricaoCorVeiculo}</span></p>"
                 }
+              },
+              {
+                "id": "c_f6792a3b4c5d",
+                "type": "divider",
+                "name": null,
+                "data": {}
               },
               {
                 "id": "c_6c0414a9f03d",
                 "type": "rich_text",
                 "name": null,
                 "data": {
-                  "html": "<p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>Chassi</strong></span></p><p><span style=\"color: rgb(17, 20, 20); font-size: 14px;\">@{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.chassi}</span></p>"
+                  "html": "<p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>Chassi</strong></span></p><p><span style=\"color: rgb(17, 20, 20); font-size: 14px;\">@{node:n_d87067e61ebb.chassiVeiculo ?? node:n_b824c7dd9350.chassiVeiculo ?? screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.chassi}</span></p>"
                 }
               },
               {
@@ -4848,7 +4907,7 @@
                 "data": {
                   "icon": "info",
                   "text": "<div data-space-between-row=\"\" style=\"display: flex; flex-direction: row; align-items: flex-start; gap: 16px; width: 100%; min-width: 0px;\"><div data-space-between-cell=\"\" style=\"flex: 100 100 0%; min-width: 0px; overflow-wrap: break-word;\"><p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>Se os dados estiverem incorretos, cancele a solicitação e ajuste as informações antes de prosseguir.</strong></span></p></div><div data-space-between-cell=\"\" style=\"flex: 0 0 0%; min-width: 0px; overflow-wrap: break-word;\"><p></p></div></div><p></p>",
-                  "color": "info",
+                  "color": "neutral",
                   "variant": "horizontal",
                   "alignment": "start"
                 }
@@ -4927,7 +4986,7 @@
             "type": "rich_text",
             "name": null,
             "data": {
-              "html": "<p><span style=\"font-size:14px;color:#262828\">Eu, @{node:n_21da615e160d.full_name}, inscrito no CPF sob o nº @{node:n_21da615e160d.cpf}, declaro para os devidos fins que estou transferindo a propriedade do veículo de minha titularidade, de placa @{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.plate}, marca/modelo @{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.brandModel}, ano de fabricação @{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.yearFab}, Renavam @{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.renavam}, para a empresa @{node:n_b824c7dd9350.nomeComprador}, inscrita no CNPJ sob o nº @{node:n_b824c7dd9350.cpfComprador}, localizada em @{node:n_b824c7dd9350.enderecoComprador}.<br>Estou ciente de que a veracidade das informações fornecidas é de minha total responsabilidade e que a falsidade destas informações poderá acarretar penalidades previstas em lei.</span></p>"
+              "html": "<p><span style=\"font-size:14px;color:#262828\">Eu, @{node:n_21da615e160d.full_name}, inscrito no CPF sob o nº @{node:n_21da615e160d.cpf}, declaro para os devidos fins que estou transferindo a propriedade do veículo de minha titularidade, de placa @{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.plate}, marca/modelo @{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.brandModel}, ano de fabricação @{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.yearFab}, Renavam @{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.renavam}, para a empresa @{node:n_d87067e61ebb.nomeComprador ?? node:n_b824c7dd9350.nomeComprador}, inscrita no CNPJ sob o nº @{node:n_d87067e61ebb.cpfComprador ?? node:n_b824c7dd9350.cpfComprador}, localizada em @{node:n_d87067e61ebb.enderecoComprador ?? node:n_b824c7dd9350.enderecoComprador}.</span></p><p><span style=\"font-size:14px;color:#262828\"><br>Estou ciente de que a veracidade das informações fornecidas é de minha total responsabilidade e que a falsidade destas informações poderá acarretar penalidades previstas em lei.</span></p>"
             }
           },
           {
@@ -4961,6 +5020,16 @@
             "name": null,
             "data": {
               "label": "Confirmar"
+            }
+          },
+          {
+            "id": "c_a7f3e1b82904",
+            "type": "button",
+            "name": null,
+            "data": {
+              "label": "Voltar",
+              "variant": "outline",
+              "clickAction": "back"
             }
           }
         ]
@@ -5021,7 +5090,8 @@
             "type": "button",
             "name": null,
             "data": {
-              "label": "Assinar"
+              "label": "Assinar",
+              "secondaryIcon": "check"
             }
           },
           {
@@ -5029,8 +5099,9 @@
             "type": "button",
             "name": null,
             "data": {
-              "label": "Cancelar",
-              "variant": "outline"
+              "label": "Cancelar venda",
+              "variant": "outline",
+              "secondaryIcon": "close"
             }
           }
         ]
@@ -5066,7 +5137,7 @@
             "name": null,
             "data": {
               "icon": "check",
-              "text": "<p><span style=\"font-size:14px;color:#000000\"><strong>Tudo certo!</strong></span></p>",
+              "text": "<p style=\"text-align: center;\"><span style=\"font-size:14px;color:#000000\"><strong>Tudo certo!</strong></span></p>",
               "color": "success",
               "variant": "vertical"
             }
@@ -5076,7 +5147,7 @@
             "type": "rich_text",
             "name": null,
             "data": {
-              "html": "<p><span style=\"font-size:14px;color:#262828\"><strong>Você concluiu a venda do veículo!</strong><br><br>A partir de agora, a responsabilidade do veículo @{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.brandModel}, cor @{node:n_b824c7dd9350.descricaoCorVeiculo ?? screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.descricaoCorVeiculo}, placa @{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.plate} é do comprador. A empresa já foi notificada e o processo está em andamento.<br><br>O veículo está registrado em nome da empresa que está comprando.</span></p>"
+              "html": "<p style=\"text-align: center;\"><span style=\"font-size:14px;color:#262828\"><strong>Você concluiu a venda do veículo!</strong><br><br>A partir de agora, a responsabilidade do veículo @{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.brandModel}, cor @{node:n_d87067e61ebb.descricaoCorVeiculo ?? node:n_b824c7dd9350.descricaoCorVeiculo ?? screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.descricaoCorVeiculo}, placa @{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.plate} é do comprador. A empresa já foi notificada e o processo está em andamento.<br><br>O veículo está registrado em nome da empresa que está comprando.</span></p>"
             }
           }
         ]
@@ -5545,7 +5616,7 @@
           {
             "id": "aec85839-8e5f-43c4-a716-86b9bf8897eb",
             "name": "Lista 3 veículos",
-            "value": "{\n  \"vehicles\": [\n    {\n      \"id\": \"1\",\n      \"title\": \"VOLKS/GOL GTI 1.0\",\n      \"plate\": \"BXG3U71\",\n      \"status\": \"REGULAR\",\n      \"licensingExpirationDate\": \"31/12/2025\",\n      \"type\": \"Utilitario\",\n      \"brandModel\": \"VOLKS/GOL GTI 1.0\",\n      \"renavam\": \"00001002003\",\n      \"lastLicensing\": \"03/12/2025\",\n      \"yearFab\": \"2014\",\n      \"yearMod\": \"2015\"\n    },\n    {\n      \"id\": \"2\",\n      \"title\": \"ONIX LT - GM\",\n      \"plate\": \"CED3J65\",\n      \"status\": \"A VENCER\",\n      \"licensingExpirationDate\": \"31/12/2024\",\n      \"type\": \"Passeio\",\n      \"brandModel\": \"ONIX LT - GM\",\n      \"renavam\": \"00002003004\",\n      \"lastLicensing\": \"15/01/2024\",\n      \"yearFab\": \"2021\",\n      \"yearMod\": \"2022\"\n    },\n    {\n      \"id\": \"3\",\n      \"title\": \"FIAT/UNO MILLE\",\n      \"plate\": \"RNI4Z30\",\n      \"status\": \"VENCIDO\",\n      \"licensingExpirationDate\": \"31/07/2023\",\n      \"type\": \"Utilitario\",\n      \"brandModel\": \"FIAT/UNO MILLE\",\n      \"renavam\": \"00003004005\",\n      \"lastLicensing\": \"20/08/2022\",\n      \"yearFab\": \"2008\",\n      \"yearMod\": \"2009\"\n    }\n  ]\n}"
+            "value": "{\n  \"vehicles\": [\n    {\n      \"id\": \"1\",\n      \"title\": \"VOLKS/GOL GTI 1.0\",\n      \"plate\": \"BXG3U71\",\n      \"status\": \"REGULAR\",\n      \"licensingExpirationDate\": \"31/12/2025\",\n      \"type\": \"Utilitario\",\n      \"brandModel\": \"VOLKS/GOL GTI 1.0\",\n      \"renavam\": \"00001002003\",\n      \"chassi\": \"9BWZZZ377VT004251\",\n      \"lastLicensing\": \"03/12/2025\",\n      \"yearFab\": \"2014\",\n      \"yearMod\": \"2015\"\n    },\n    {\n      \"id\": \"2\",\n      \"title\": \"ONIX LT - GM\",\n      \"plate\": \"CED3J65\",\n      \"status\": \"A VENCER\",\n      \"licensingExpirationDate\": \"31/12/2024\",\n      \"type\": \"Passeio\",\n      \"brandModel\": \"ONIX LT - GM\",\n      \"renavam\": \"00002003004\",\n      \"chassi\": \"9BR53ZEC2P020030\",\n      \"lastLicensing\": \"15/01/2024\",\n      \"yearFab\": \"2021\",\n      \"yearMod\": \"2022\"\n    },\n    {\n      \"id\": \"3\",\n      \"title\": \"FIAT/UNO MILLE\",\n      \"plate\": \"RNI4Z30\",\n      \"status\": \"VENCIDO\",\n      \"licensingExpirationDate\": \"31/07/2023\",\n      \"type\": \"Utilitario\",\n      \"brandModel\": \"FIAT/UNO MILLE\",\n      \"renavam\": \"00003004005\",\n      \"chassi\": \"9BWZZZ377VT030040\",\n      \"lastLicensing\": \"20/08/2022\",\n      \"yearFab\": \"2008\",\n      \"yearMod\": \"2009\"\n    }\n  ]\n}"
           },
           {
             "id": "f35db1c4-5587-4c79-a239-6551c1a6b6cf",
@@ -5597,7 +5668,7 @@
           {
             "id": "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
             "name": "Entrada Renave (origem 5)",
-            "value": "{ \"hasActiveTDV\": true, \"codigoTransferencia\": \"TDV-000000\", \"estado\": \"2\", \"origem\": \"5\", \"cpfComprador\": \"16794464003768\", \"nomeComprador\": \"CAOA MOTOR DO BRASIL LTDA\", \"emailComprador\": \"CERTIDOCPJ@EMAIL.COM\", \"enderecoComprador\": \"Avenida Conselheiro Nébias, 240, Encruzilhada, Santos - SP, 11045001\", \"descricaoCorVeiculo\": \"BRANCA\" }"
+            "value": "{ \"hasActiveTDV\": true, \"codigoTransferencia\": \"TDV-000000\", \"estado\": \"2\", \"origem\": \"5\", \"cpfComprador\": \"16.794.464/0037-68\", \"nomeComprador\": \"CAOA MOTOR DO BRASIL LTDA\", \"emailComprador\": \"CERTIDOCPJ@EMAIL.COM\", \"enderecoComprador\": \"Avenida Conselheiro Nébias, 240, Encruzilhada, Santos - SP, 11045-001\", \"descricaoCorVeiculo\": \"BRANCA\", \"chassiVeiculo\": \"9BWZZZ377VT004251\" }"
           },
           {
             "id": "b6f66d6a-af30-4594-b1c0-87a11d2c87be",
@@ -6028,7 +6099,7 @@
         },
         "method": "POST",
         "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/criar",
-        "body": "{\n  \"placaVeiculo\": \"@{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.plate}\",\n  \"renavamVeiculo\": \"@{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.renavam}\"\n}",
+        "body": "{\n  \"placaVeiculo\": \"@{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.plate}\",\n  \"renavamVeiculo\": \"@{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.renavam}\",\n  \"chassiVeiculo\": \"@{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.chassi}\"\n}",
         "responseExamples": [
           {
             "id": "f0c3aea6-736b-4662-a6ff-a468f5c7fa53",
@@ -6038,7 +6109,7 @@
           {
             "id": "a5e1c7d0-4b29-4f8a-9c31-6d2e8b0a4f17",
             "name": "Entrada Renave (origem 5)",
-            "value": "{ \"codigo\": \"TDV-000000\", \"origem\": \"5\" }"
+            "value": "{ \"codigo\": \"TDV-000000\", \"origem\": \"5\", \"cpfComprador\": \"16.794.464/0037-68\", \"nomeComprador\": \"CAOA MOTOR DO BRASIL LTDA\", \"emailComprador\": \"CERTIDOCPJ@EMAIL.COM\", \"enderecoComprador\": \"Avenida Conselheiro Nébias, 240, Encruzilhada, Santos - SP, 11045-001\", \"descricaoCorVeiculo\": \"BRANCA\", \"chassiVeiculo\": \"9BWZZZ377VT004251\" }"
           }
         ]
       }
@@ -6331,6 +6402,28 @@
         "position": {
           "x": 256,
           "y": 60
+        }
+      }
+    },
+    {
+      "id": "n_9b4d6e8a1c20",
+      "type": "if_node",
+      "name": "Origem 5 (retomar venda para loja)?",
+      "data": {
+        "position": {
+          "x": 372,
+          "y": 60
+        },
+        "condition": {
+          "clauses": [
+            {
+              "id": "9b4d6e8a-1c20-4f7b-8d3e-origem5-resume-01",
+              "left": "@{node:n_b824c7dd9350.origem}",
+              "right": "5",
+              "operator": "equals"
+            }
+          ],
+          "combinator": "or"
         }
       }
     },
@@ -7008,6 +7101,12 @@
               "left": "@{node:n_d87067e61ebb.origem}",
               "right": "5",
               "operator": "equals"
+            },
+            {
+              "id": "8e2f4a6c-1b3d-4e5f-9a0b-2c3d4e5f6a7c",
+              "left": "@{node:n_b824c7dd9350.origem}",
+              "right": "5",
+              "operator": "equals"
             }
           ],
           "combinator": "or"
@@ -7059,6 +7158,28 @@
       }
     },
     {
+      "id": "n_e4b7c91a2f08",
+      "type": "http_node",
+      "name": "Confirmar Termo Ciência",
+      "data": {
+        "position": {
+          "x": 5752,
+          "y": 1008
+        },
+        "method": "POST",
+        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/confirmar-termo-ciencia",
+        "body": "{\n  \"codigoTransferencia\": \"@{node:n_d87067e61ebb.codigo ?? node:n_b824c7dd9350.codigoTransferencia}\"\n}",
+        "responseExamples": [
+          {
+            "id": "e4b7c91a-2f08-4d3e-9a1b-7c6d5e4f3a21",
+            "name": "Sucesso",
+            "value": "{}"
+          }
+        ],
+        "showSnackbar": true
+      }
+    },
+    {
       "id": "n_a56ddf102a2a",
       "type": "http_node",
       "name": "Valida Assinatura",
@@ -7069,7 +7190,7 @@
         },
         "method": "POST",
         "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/valida-assinatura",
-        "body": "{\n  \"codigoTransferencia\": \"@{node:n_b824c7dd9350.codigoTransferencia}\",\n  \"itiCode\": \"@{node:n_034c402d0d07.code}\"\n}\n",
+        "body": "{\n  \"codigoTransferencia\": \"@{node:n_d87067e61ebb.codigo ?? node:n_b824c7dd9350.codigoTransferencia}\",\n  \"itiCode\": \"@{node:n_034c402d0d07.code}\"\n}\n",
         "responseExamples": [
           {
             "id": "0803de88-773f-4674-a48e-ee4440814586",
@@ -7552,8 +7673,20 @@
     },
     {
       "sourceId": "n_c4e8f2a71d05",
-      "targetId": "n_d5f9a3b82e16",
+      "targetId": "n_9b4d6e8a1c20",
       "sourceHandle": "output",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_9b4d6e8a1c20",
+      "targetId": "s_5d25c3769fdc",
+      "sourceHandle": "true",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_9b4d6e8a1c20",
+      "targetId": "n_d5f9a3b82e16",
+      "sourceHandle": "false",
       "targetHandle": "input"
     },
     {
@@ -8110,8 +8243,14 @@
     },
     {
       "sourceId": "s_800e39d059b5",
-      "targetId": "s_0807856fe2c1",
+      "targetId": "n_e4b7c91a2f08",
       "sourceHandle": "c_bcbcfed95b18",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_e4b7c91a2f08",
+      "targetId": "s_0807856fe2c1",
+      "sourceHandle": "output",
       "targetHandle": "input"
     },
     {
