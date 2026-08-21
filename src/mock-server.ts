@@ -1044,6 +1044,21 @@ app.get('/api/tdv/consulta-debitos', (req, res) => {
   })
 })
 
+app.get('/api/tdv/comprador-cep', (req, res) => {
+  const cep = String(req.query.cep ?? '').replace(/\D/g, '')
+  if (cep.length !== 8) {
+    res.json({ cidade: null, bairro: null, logradouro: null, errorText: 'CEP inválido' })
+    return
+  }
+
+  res.json({
+    cidade: 'São Paulo',
+    bairro: 'Vila Jacuí',
+    logradouro: 'Aulide Carini',
+    errorText: null
+  })
+})
+
 app.get('/api/tdv/enderecos/:cep', (req, res) => {
   res.json({
     result: {
@@ -1125,6 +1140,7 @@ app.listen(PORT, () => {
   console.log('    GET  /api/tdv/veiculos')
   console.log('    POST /api/tdv/analise-requisitos')
   console.log('    POST /api/tdv/validacao-comprador')
+  console.log('    GET  /api/tdv/comprador-cep')
   console.log('    POST /api/tdv/validacao-venda')
   console.log('    POST /api/tdv/criar')
   console.log('    POST /api/tdv/informar-dados-venda')
