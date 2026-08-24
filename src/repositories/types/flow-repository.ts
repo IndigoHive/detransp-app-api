@@ -5,6 +5,7 @@ type Flow = {
   slug: string
   name: string
   description: string | null
+  category: string | null
   status: FlowStatus
   authorId: string
   publishedFlowVersionId: string | null
@@ -13,7 +14,7 @@ type Flow = {
   updatedAt: Date
 }
 
-export type ListFlowResultData = Pick<Flow, 'id' | 'slug' | 'name' | 'description' | 'iconName'>
+export type ListFlowResultData = Pick<Flow, 'id' | 'slug' | 'name' | 'description' | 'category' | 'iconName'>
 
 export type GetPublishedFlowVersionByFlowIdResultData = {
   flowVersionId: string
