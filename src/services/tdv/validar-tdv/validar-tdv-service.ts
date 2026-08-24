@@ -82,15 +82,14 @@ export class ValidarTdvService {
     input: ValidarTdvInput
   ): Promise<ValidarTdvResult> {
     const command = toCommand(input)
-    const codigoTransferenciaVeiculo = command.codigoTransferenciaVeiculo
     const placaVeiculo = command.placaVeiculo
     const codigoRenavamVeiculo = command.codigoRenavamVeiculo
     const origem = command.origem
     const estado = command.estado
 
-    if (!codigoTransferenciaVeiculo || !placaVeiculo || !codigoRenavamVeiculo || !origem || !estado) {
+    if (!placaVeiculo || !codigoRenavamVeiculo || !origem || !estado) {
       throw BadRequest(
-        'codigoTransferenciaVeiculo, placaVeiculo, codigoRenavamVeiculo, origem e estado são obrigatórios'
+        'placaVeiculo, codigoRenavamVeiculo, origem e estado são obrigatórios'
       )
     }
 
@@ -101,7 +100,6 @@ export class ValidarTdvService {
     try {
       await this.client.validarTdv(auth, {
         ...command,
-        codigoTransferenciaVeiculo,
         placaVeiculo,
         codigoRenavamVeiculo,
         origem,
