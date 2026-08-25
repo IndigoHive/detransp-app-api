@@ -747,7 +747,7 @@ const MOCK_TDV_COMPRAS = [
     yearMod: '2022',
     origem: '6',
     origemComunicacaoVendaVeiculo: '4',
-    codigoTransferencia: "null",
+    codigoTransferencia: 'TDV-MOCK-O6',
     estado: '7',
     ativa: 'true',
   }),
@@ -915,6 +915,10 @@ app.post('/api/tdv/criar-compra', (req, res) => {
         proximaAcao: 'pagamento_pendente',
         detail: 'Pagamento de taxa não localizado'
       },
+      vistoria_pendente: {
+        proximaAcao: 'vistoria_pendente',
+        detail: 'Laudo de vistoria não localizado'
+      },
       vistoria_pagamento_pendentes: {
         proximaAcao: 'vistoria_pagamento_pendentes',
         detail: 'Pagamento de taxa não localizado,Laudo de vistoria não localizado'
@@ -952,6 +956,7 @@ app.post('/api/tdv/criar-compra', (req, res) => {
   // return res.json({ proximaAcao: 'concluido', estado: '9', codigoTransferencia, vehicle, nomeComprador })
   // return res.json({ proximaAcao: 'pagamento_pendente', detail: 'Pagamento de taxa não localizado', codigoTransferencia, vehicle, nomeComprador })
   // return res.json({ proximaAcao: 'vistoria_pagamento_pendentes', detail: 'Pagamento de taxa não localizado,Laudo de vistoria não localizado', codigoTransferencia, vehicle })
+  // return res.json({ proximaAcao: 'vistoria_pendente', detail: 'Laudo de vistoria não localizado', codigoTransferencia, vehicle })
   // return res.json({ proximaAcao: 'administrativa_pendente', detail: 'Veículo com bloqueio - Baixa permanente', codigoTransferencia, vehicle })
   // return res.json({ proximaAcao: 'judicial_pendente', detail: 'Veículo com Restrição Judicial', codigoTransferencia, vehicle })
   // return res.json({ proximaAcao: 'administrativa_judicial_pendentes', detail: 'Veículo com bloqueio - Baixa permanente,Veículo com Restrição Judicial', codigoTransferencia, vehicle })
@@ -959,9 +964,9 @@ app.post('/api/tdv/criar-compra', (req, res) => {
 })
 
 app.post('/api/tdv/validar-tdv', (_req, res) => {
-  // Uncomment one return to test each TDV 6.0 path:
-  // return res.json({ proximaAcao: 'enotariado' })
-  return res.json({ proximaAcao: 'duas_assinaturas' })
+  // Default is the happy path; uncomment one return to test each TDV 6.0 rejection:
+  return res.json({ proximaAcao: 'enotariado' })
+  // return res.json({ proximaAcao: 'duas_assinaturas' })
   // return res.json({ proximaAcao: 'duas_pessoas_fisicas' })
 })
 
@@ -1074,6 +1079,20 @@ app.get('/api/tdv/comprador-cep', (req, res) => {
     bairro: 'Vila Jacuí',
     logradouro: 'Aulide Carini',
     errorText: null
+  })
+})
+
+// Same wording ServiceNow renders — the address screen shows this verbatim.
+app.post('/api/tdv/autodeclaracao-residencia', (req, res) => {
+  const { logradouro, numero, complemento, bairro, municipio, uf, nomeUF } = req.body ?? {}
+  const comComplemento = complemento ? ` ${complemento}` : ''
+  res.json({
+    autodeclaracaoResidencia:
+      `Eu, João da Silva Santos, inscrito no CPF sob o nº 123.456.789-00, declaro para os` +
+      ` devidos fins que resido em ${logradouro ?? ''} nº ${numero ?? ''}${comComplemento},` +
+      ` Bairro ${bairro ?? ''}, no município de ${municipio ?? ''},` +
+      ` no estado de ${nomeUF || uf || 'São Paulo'}.` +
+      `\nSob pena da lei, estou ciente de que a falsidade destas informações implicará em penalidades.`,
   })
 })
 

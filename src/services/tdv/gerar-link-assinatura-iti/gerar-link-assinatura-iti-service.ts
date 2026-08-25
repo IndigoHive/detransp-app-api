@@ -41,14 +41,6 @@ export class GerarLinkAssinaturaItiService {
     const url = new URL('/oauth2.0/authorize', baseUrl)
     url.search = params.toString()
 
-    console.log('url', url.toString())
-    console.log('params', params.toString())
-    console.log('clientId', clientId)
-    console.log('redirectUri', redirectUri)
-    console.log('baseUrl', baseUrl)
-    console.log('response_type', 'code')
-    console.log('scope', 'sign')
-
     return {
       link: url.toString(),
       redirectUri

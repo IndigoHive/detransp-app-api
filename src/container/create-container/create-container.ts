@@ -128,14 +128,33 @@ export function createContainer (
         })
       ).scoped(),
     })
-    console.log('⚠️  TDV MOCK MODE ATIVO — TDV rodando em memória (in-memory, stateful). Nunca use em produção.')
+    console.log(
+      `⚠️  TDV MOCK MODE ATIVO — TDV ${config.tdvMock.versao} rodando em memória (in-memory, stateful). Nunca use em produção.`
+    )
 
     const seeded = tdvMockStore.ensureSeeded(config.tdvMock)
     if (seeded) {
       console.log(
-        `⚠️  TDV MOCK: massa iniciada com ${seeded.record.codigoTransferenciaVeiculo} já em ${estadoLabel(seeded.record.estado)} ` +
+        `⚠️  TDV MOCK: massa da TDV ${seeded.versao} ` +
         `(vendedor ${config.tdvMock.sellerCpf}, comprador ${config.tdvMock.buyerCpf})`
       )
+      for (const record of seeded.records) {
+        const identidade = record.codigoTransferenciaVeiculo
+          ? `${record.numeroTransferenciaVeiculo} · ${estadoLabel(record.estado)}`
+          : 'comunicação de venda (sem TDV ainda)'
+        console.log(`   • ${record.placaVeiculo}  origem ${record.origem}  →  ${identidade}`)
+      }
+    } else {
+      console.log(
+        `⚠️  TDV MOCK: massa da TDV ${config.tdvMock.versao} inicia vazia — o fluxo cria a TDV do zero.`
+      )
+    }
+
+    if (config.tdvMock.pendencia) {
+      console.log(`⚠️  TDV MOCK: criaTdv vai falhar com a pendência "${config.tdvMock.pendencia}".`)
+    }
+    if (config.tdvMock.validarTdv) {
+      console.log(`⚠️  TDV MOCK: validar-tdv vai falhar com "${config.tdvMock.validarTdv}".`)
     }
   }
 

@@ -117,6 +117,28 @@ describe('AnaliseRequisitosService', () => {
     })
   })
 
+  it('routes an origem 5 seller at estado 6 to their own signature, not to "comprador assinou"', async () => {
+    const listaTdvs = vi.fn().mockResolvedValue({
+      result: [{ estado: '6', origem: '5', codigoTransferenciaVeiculo: 'TDV-LOJA' }]
+    })
+    const service = new AnaliseRequisitosService({ detranSpServiceNowTdv: asClient({ listaTdvs }), config: asConfig() })
+
+    await expect(service.run(authorizationHeader, { selectedVehicle })).resolves.toMatchObject({
+      proximaAcao: 'vendedor_loja_assinar'
+    })
+  })
+
+  it('keeps routing an origem 1 seller at estado 6 to vendedor_2', async () => {
+    const listaTdvs = vi.fn().mockResolvedValue({
+      result: [{ estado: '6', origem: '1', codigoTransferenciaVeiculo: 'TDV-PF' }]
+    })
+    const service = new AnaliseRequisitosService({ detranSpServiceNowTdv: asClient({ listaTdvs }), config: asConfig() })
+
+    await expect(service.run(authorizationHeader, { selectedVehicle })).resolves.toMatchObject({
+      proximaAcao: 'vendedor_2'
+    })
+  })
+
   it('fills chassiVeiculo from the selected vehicle when starting a new sale', async () => {
     const listaTdvs = vi.fn().mockResolvedValue({ result: [] })
     const service = new AnaliseRequisitosService({ detranSpServiceNowTdv: asClient({ listaTdvs }), config: asConfig() })

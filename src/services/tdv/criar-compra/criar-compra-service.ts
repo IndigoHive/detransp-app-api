@@ -5,9 +5,11 @@ import {
   CodigoEstadoTDV,
   type BuscaTdvResultData,
   type CodigoOrigemComunicacaoVendaVeiculo,
-  type CodigoOrigemTDV
+  type CodigoOrigemTDV,
+  type CriaTdvCommand,
+  type ListaTdvsResultData
 } from '../../../clients/detran-sp-service-now/tdv/types'
-import { extractBearerToken, extractCpfFromToken, extractEmailFromToken } from '../../../utils/token'
+import { extractBearerToken, extractCpfFromToken } from '../../../utils/token'
 import { NAO_INFORMADO } from '../comprador-display-fields'
 import { mapPendenciaError, type PendenciaResult } from '../map-pendencia-error'
 
@@ -225,6 +227,14 @@ function pickOptionalListingFields (input: CriarCompraInput) {
   }
 }
 
+// The app in production serializes the record with Gson, which omits null fields and keeps empty
+// strings — mirroring that keeps the payload equivalent to the one ServiceNow already accepts.
+function semCamposNulos (registro: ListaTdvsResultData): ListaTdvsResultData {
+  return Object.fromEntries(
+    Object.entries(registro).filter(([, value]) => value != null)
+  ) as ListaTdvsResultData
+}
+
 function isTdvAtivaExistenteError (error: unknown): boolean {
   return error instanceof DetranSpServiceNowError
     && error.type.toLowerCase() === TDV_ATIVA_EXISTENTE.toLowerCase()
@@ -240,14 +250,15 @@ export class CriarCompraService {
   async run (authorizationHeader: string | undefined, input: CriarCompraInput): Promise<CriarCompraResult> {
     const token = extractBearerToken(authorizationHeader)
     const cpf = extractCpfFromToken(token)
-    const email = extractEmailFromToken(token)
     const auth = { token, cpf }
 
     const placaVeiculo = input.placaVeiculo?.trim() ?? ''
     const renavamVeiculo = input.renavamVeiculo?.trim() ?? ''
     const nomeVendedor = input.nomeVendedor?.trim() ?? ''
     const codigoVendedor = input.codigoVendedor?.trim() ?? ''
-    const emailVendedor = input.emailVendedor?.trim() ?? email
+    // Never falls back to the token's e-mail: this runs on the buyer's session, so that
+    // would file the buyer's address as the seller's. Omitted when unknown instead.
+    const emailVendedor = input.emailVendedor?.trim() || undefined
     const origem = input.origem
 
     if (!placaVeiculo || !renavamVeiculo || !nomeVendedor || !codigoVendedor || !origem) {
@@ -260,19 +271,39 @@ export class CriarCompraService {
       renavamVeiculo
     }
 
-    const addressFields = pickAddressFields(prepared)
-    const optionalFields = pickOptionalListingFields(prepared)
-    const criaTdvPayload = {
-      ...optionalFields,
-      ...addressFields,
-      codigoRenavamVeiculo: renavamVeiculo,
-      placaVeiculo,
-      nomeVendedor,
-      emailVendedor,
-      codigoVendedor,
-      origem,
-      confirmacaoAutodeclaracaoResidenciaComprador: 'true' as const
+    // ServiceNow expects the comunicação de venda echoed back whole: the app in production posts
+    // the listed record as it came, marking only the residence confirmation. Re-reading it here
+    // (instead of rebuilding it from what the flow sent) keeps every field — including the ones no
+    // screen shows — and keeps values like the zero-padded CPF byte-identical. Falls back to the
+    // assembled payload when the record can't be found.
+    const registro = await this.findRegistroAtivo(auth, cpf, placaVeiculo, renavamVeiculo)
+      .catch(() => undefined)
+
+    // The TDV already exists: read it and route, never create again. This is what the app in
+    // production does (ConfirmarEnderecoScreen.kt:700 only creates when the code is empty), and
+    // it is what keeps this endpoint safe to re-enter — landing back on the address screen after
+    // the TDV was created must not turn into an invalid-transition error.
+    const codigoExistente = registro?.codigoTransferenciaVeiculo?.trim()
+    if (codigoExistente) {
+      return this.lerEmapear(auth, codigoExistente, prepared)
     }
+
+    const criaTdvPayload: CriaTdvCommand = registro
+      ? {
+          ...semCamposNulos(registro),
+          confirmacaoAutodeclaracaoResidenciaComprador: 'true' as const
+        }
+      : {
+          ...pickOptionalListingFields(prepared),
+          ...pickAddressFields(prepared),
+          codigoRenavamVeiculo: renavamVeiculo,
+          placaVeiculo,
+          nomeVendedor,
+          ...(emailVendedor ? { emailVendedor } : {}),
+          codigoVendedor,
+          origem,
+          confirmacaoAutodeclaracaoResidenciaComprador: 'true' as const
+        }
 
     let codigoTransferencia: string | undefined
 
@@ -280,25 +311,39 @@ export class CriarCompraService {
       const createResult = await this.client.criaTdv(auth, criaTdvPayload)
       codigoTransferencia = createResult?.result?.codigoTransferenciaVeiculo
     } catch (error) {
-      if (isTdvAtivaExistenteError(error)) {
-        codigoTransferencia = await this.resolveExistingCodigo(auth, cpf, placaVeiculo, renavamVeiculo)
-      } else {
+      if (!isTdvAtivaExistenteError(error)) {
         const pendencia = mapPendenciaError(error)
         if (!pendencia) throw error
         return this.buildPendenciaResult(auth, cpf, prepared, pendencia)
       }
     }
 
+    // ServiceNow answers the create with 201 and no body whenever the TDV was already there —
+    // the same outcome as TDVAtivaExistenteError (spec, "Sem pendências"). Both land here, and the
+    // code is read back: from the record when the CV already carried one, otherwise by relisting.
+    if (!codigoTransferencia) {
+      codigoTransferencia = registro?.codigoTransferenciaVeiculo?.trim()
+        || await this.resolveExistingCodigo(auth, cpf, placaVeiculo, renavamVeiculo)
+    }
+
     if (!codigoTransferencia) {
       throw new Error('Falha ao criar transferência: codigoTransferencia não encontrado')
     }
 
+    return this.lerEmapear(auth, codigoTransferencia, prepared)
+  }
+
+  private async lerEmapear (
+    auth: Auth,
+    codigoTransferencia: string,
+    input: CriarCompraInput
+  ): Promise<CriarCompraResult> {
     const tdv = await this.client.buscaTdv(
       auth,
       codigoTransferencia,
       'placaVeiculo,descricaoMarcaVeiculo,descricaoCorVeiculo,nomeComprador,estado,codigoRenavamVeiculo'
     )
-    return mapProximaAcao(tdv?.result?.estado, codigoTransferencia, tdv?.result, prepared)
+    return mapProximaAcao(tdv?.result?.estado, codigoTransferencia, tdv?.result, input)
   }
 
   private async buildPendenciaResult (
@@ -329,22 +374,32 @@ export class CriarCompraService {
     }
   }
 
+  // No `campos` here on purpose: the create echoes this record back, so it has to come whole.
+  private async findRegistroAtivo (
+    auth: Auth,
+    cpf: string,
+    placaVeiculo: string,
+    renavamVeiculo: string
+  ): Promise<ListaTdvsResultData | undefined> {
+    const listed = await this.client.listaTdvs(auth, {
+      ativa: 'true',
+      codigoComprador: cpf,
+      placaVeiculo
+    })
+
+    return listed?.result?.find((tdv) =>
+      (tdv.placaVeiculo ?? '') === placaVeiculo
+      && (tdv.codigoRenavamVeiculo ?? '') === renavamVeiculo
+    )
+  }
+
   private async resolveExistingCodigo (
     auth: Auth,
     cpf: string,
     placaVeiculo: string,
     renavamVeiculo: string
   ): Promise<string | undefined> {
-    const listed = await this.client.listaTdvs(auth, {
-      ativa: 'true',
-      codigoComprador: cpf,
-      placaVeiculo
-    })
-    const match = listed?.result?.find((tdv) =>
-      (tdv.placaVeiculo ?? '') === placaVeiculo
-      && (tdv.codigoRenavamVeiculo ?? '') === renavamVeiculo
-      && Boolean(tdv.codigoTransferenciaVeiculo?.trim())
-    )
-    return match?.codigoTransferenciaVeiculo?.trim()
+    const registro = await this.findRegistroAtivo(auth, cpf, placaVeiculo, renavamVeiculo)
+    return registro?.codigoTransferenciaVeiculo?.trim() || undefined
   }
 }

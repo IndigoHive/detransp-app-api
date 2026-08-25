@@ -27,6 +27,21 @@ describe('ConfirmarTermoCienciaService', () => {
     })
   })
 
+  it('sends only estado and the TCR flag — the liveness code has no slot on this journey', async () => {
+    const buscaTdv = vi.fn().mockResolvedValue({
+      result: { estado: '2', origem: '5', confirmacaoTermoCienciaResponsabilidade: '0' }
+    })
+    const atualizaTdv = vi.fn().mockResolvedValue({ result: {} })
+    const service = new ConfirmarTermoCienciaService({ detranSpServiceNowTdv: asClient({ buscaTdv, atualizaTdv }) })
+
+    await service.run(authorizationHeader, { codigoTransferencia: 'TDV-LOJA' })
+
+    expect(atualizaTdv).toHaveBeenCalledWith(clientAuth, 'TDV-LOJA', {
+      estado: '6',
+      confirmacaoTermoCienciaResponsabilidade: true
+    })
+  })
+
   it('confirms the TCR when origem 5 is already at estado 6 without the document', async () => {
     const buscaTdv = vi.fn().mockResolvedValue({
       result: { estado: '6', origem: '5', confirmacaoTermoCienciaResponsabilidade: '0', codigoAnexoTermoCienciaResponsabilidade: null }

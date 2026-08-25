@@ -27,10 +27,44 @@ export function formatCep (cep: string): string {
   return `${digits.slice(0, 5)}-${digits.slice(5)}`
 }
 
+function cpfCheckDigit (digits: string): number {
+  const weight = digits.length + 1
+  const sum = [...digits].reduce((acc, digit, i) => acc + Number(digit) * (weight - i), 0)
+  const remainder = (sum * 10) % 11
+  return remainder === 10 ? 0 : remainder
+}
+
+function isCpf (digits: string): boolean {
+  if (digits.length !== 11 || /^(\d)\1{10}$/.test(digits)) return false
+  return cpfCheckDigit(digits.slice(0, 9)) === Number(digits[9])
+    && cpfCheckDigit(digits.slice(0, 10)) === Number(digits[10])
+}
+
+function cnpjCheckDigit (digits: string): number {
+  const weights = [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2].slice(-digits.length)
+  const sum = [...digits].reduce((acc, digit, i) => acc + Number(digit) * weights[i]!, 0)
+  const remainder = sum % 11
+  return remainder < 2 ? 0 : 11 - remainder
+}
+
+function isCnpj (digits: string): boolean {
+  if (digits.length !== 14) return false
+  return cnpjCheckDigit(digits.slice(0, 12)) === Number(digits[12])
+    && cnpjCheckDigit(digits.slice(0, 13)) === Number(digits[13])
+}
+
+// ServiceNow zero-pads CPFs to 14 characters — exactly a CNPJ's width — so length alone
+// cannot tell the two apart, and reading a padded CPF as a CNPJ silently drops its first
+// three digits. Check digits settle it, and a real CNPJ wins the tie: some low-numbered
+// ones (e.g. 00.000.000/0001-91) are also valid CPFs once the padding is stripped.
 export function formatCpfCnpj (value: string): string {
   const digits = onlyDigits(value)
   if (digits.length === 11) return formatCpf(value)
-  if (digits.length === 14) return formatCnpj(value)
+  if (digits.length === 14) {
+    if (isCnpj(digits)) return formatCnpj(value)
+    if (isCpf(digits.slice(-11))) return formatCpf(digits.slice(-11))
+    return formatCnpj(value)
+  }
   const asCpf = formatCpf(value)
   if (asCpf !== value) return asCpf
   return value

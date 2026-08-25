@@ -1,11 +1,11 @@
 import type { DetranSpServiceNowTdvClient } from '../../../clients/detran-sp-service-now/tdv'
-import type {
-  CodigoEstadoTDV,
-  CodigoOrigemComunicacaoVendaVeiculo,
-  CodigoOrigemTDV
+import {
+  CodigoOrigemTDV,
+  type CodigoEstadoTDV,
+  type CodigoOrigemComunicacaoVendaVeiculo
 } from '../../../clients/detran-sp-service-now/tdv/types'
 import { formatCurrency } from '../../../utils/currency'
-import { formatCep, formatCpf } from '../../../utils/format-document'
+import { formatCep, formatCpfCnpj } from '../../../utils/format-document'
 import { extractBearerToken, extractCpfFromToken } from '../../../utils/token'
 import {
   displayOrNaoInformado,
@@ -27,6 +27,7 @@ const LISTA_COMPRAS_CAMPOS = [
   'codigoComprador',
   'nomeVendedor',
   'codigoVendedor',
+  'emailVendedor',
   'nomeMunicipioVeiculo',
   'nomeMunicipioComprador',
   'logradouroComprador',
@@ -58,9 +59,10 @@ type CompraVehicle = {
   yearFab: string
   yearMod: string
   codigoTransferencia: string
-  proximaAcao: ProximaAcaoComprador
+  proximaAcao?: ProximaAcaoComprador
   nomeComprador: string
   nomeVendedor: string
+  emailVendedor?: string
   descricaoCorVeiculo: string
   ativa?: 'true' | 'false' | '1' | '0'
   estado?: CodigoEstadoTDV
@@ -88,6 +90,20 @@ type CompraVehicle = {
 
 export type ConsultaComprasResult = {
   vehicles: CompraVehicle[]
+}
+
+// TDV 2.0 (e-Notariado/CDT), 3.0 (Renave saída) and 6.0 (Cartório/SEFAZ): the sale was
+// registered outside the app, so the listed record is a comunicação de venda that may not
+// have a TDV — and therefore no estado — behind it yet.
+const ORIGENS_COMUNICACAO_VENDA_EXTERNA: readonly string[] = [
+  CodigoOrigemTDV.E_NOTARIADO,
+  CodigoOrigemTDV.CDT,
+  CodigoOrigemTDV.RENAVE,
+  CodigoOrigemTDV.CARTORIO
+]
+
+function isComunicacaoVendaExterna (origem: CodigoOrigemTDV | null | undefined): boolean {
+  return origem != null && ORIGENS_COMUNICACAO_VENDA_EXTERNA.includes(origem)
 }
 
 // "MARIA COMPRADORA TESTE" -> "Maria" — greeting screens only use the first
@@ -134,10 +150,13 @@ export class ConsultaComprasService {
     }
 
     // Only list purchases the buyer can actually act on right now — a TDV still waiting on
-    // the seller has nothing for this screen to route into once picked.
+    // the seller has nothing for this screen to route into once picked. Comunicações de
+    // venda registered outside the app are the exception: the buyer's whole journey is to
+    // pick one and drive it, so they must be listed even before a TDV exists for them (no
+    // estado yet) — the flow routes those by origem, never by proximaAcao.
     const vehicles = result.result.flatMap((tdv, index) => {
       const proximaAcao = acaoComoComprador(tdv.estado)
-      if (!proximaAcao) return []
+      if (!proximaAcao && !isComunicacaoVendaExterna(tdv.origem)) return []
 
       const codigoTransferencia = trimField(tdv.codigoTransferenciaVeiculo) ?? ''
       const plate = trimField(tdv.placaVeiculo) ?? ''
@@ -157,10 +176,11 @@ export class ConsultaComprasService {
       const descricaoCorVeiculo = trimField(tdv.descricaoCorVeiculo) ?? ''
       const codigoComprador = trimField(tdv.codigoComprador)
       const cpfComprador = displayOrNaoInformado(
-        codigoComprador ? formatCpf(codigoComprador) : undefined
+        codigoComprador ? formatCpfCnpj(codigoComprador) : undefined
       )
       const nomeVendedor = trimField(tdv.nomeVendedor) ?? ''
       const codigoVendedor = trimField(tdv.codigoVendedor)
+      const emailVendedor = trimField(tdv.emailVendedor)
       const nomeMunicipioVeiculo = trimField(tdv.nomeMunicipioVeiculo)
       const nomeMunicipioComprador = trimField(tdv.nomeMunicipioComprador)
       const logradouroComprador = trimField(tdv.logradouroComprador)
@@ -184,9 +204,10 @@ export class ConsultaComprasService {
         yearFab: '',
         yearMod: '',
         codigoTransferencia,
-        proximaAcao,
+        ...(proximaAcao ? { proximaAcao } : {}),
         nomeComprador: displayOrNaoInformado(firstName(tdv.nomeComprador ?? '') || undefined),
         nomeVendedor,
+        ...(emailVendedor ? { emailVendedor } : {}),
         descricaoCorVeiculo,
         ...(tdv.ativa != null ? { ativa: tdv.ativa } : {}),
         ...(tdv.estado != null ? { estado: tdv.estado } : {}),

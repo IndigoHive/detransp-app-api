@@ -70,7 +70,7 @@ describe('InformarDadosVendaService', () => {
     const atualizaTdv = vi.fn()
     const service = new InformarDadosVendaService({ detranSpServiceNowTdv: asClient({ buscaTdv, atualizaTdv }) })
 
-    await expect(service.run(authorizationHeader, input)).rejects.toThrow('quilometragem')
+    await expect(service.run(authorizationHeader, input)).rejects.toThrow('Revise e informe a km correta.')
     expect(atualizaTdv).not.toHaveBeenCalled()
   })
 })
