@@ -29,6 +29,11 @@ function trimField (value: string | null | undefined): string | undefined {
   return trimmed || undefined
 }
 
+function digitsOnly (value: string | null | undefined): string | undefined {
+  const digits = value?.replace(/\D/g, '')
+  return digits || undefined
+}
+
 function asServiceNowError (error: unknown): DetranSpServiceNowError | undefined {
   if (error instanceof DetranSpServiceNowError) return error
   if (
@@ -59,12 +64,14 @@ function toCommand (input: ValidarTdvInput): ListaTdvsResultData {
   const placaVeiculo = trimField(input.placaVeiculo)
   const codigoRenavamVeiculo = trimField(input.codigoRenavamVeiculo)
     ?? trimField(renavamVeiculo)
+  const codigoComprador = digitsOnly(input.codigoComprador)
 
   return {
     ...rest,
     ...(codigoTransferenciaVeiculo ? { codigoTransferenciaVeiculo } : {}),
     ...(placaVeiculo ? { placaVeiculo } : {}),
     ...(codigoRenavamVeiculo ? { codigoRenavamVeiculo } : {}),
+    ...(codigoComprador ? { codigoComprador } : {}),
     ...(input.origem ? { origem: input.origem } : {}),
     ...(input.estado ? { estado: input.estado } : {})
   }
