@@ -176,6 +176,32 @@ describe('CriarCompraService', () => {
     expect(criaTdv.mock.calls[0]?.[1]).not.toHaveProperty('nomeComprador')
   })
 
+  it('keeps the leading zeros the listing sends in codigoComprador', async () => {
+    const criaTdv = vi.fn().mockResolvedValue({
+      result: { codigoTransferenciaVeiculo: 'TDV-NEW' }
+    })
+    const buscaTdv = vi.fn().mockResolvedValue({
+      result: {
+        estado: CodigoEstadoTDV.ATPVE_ASSINADA_VENDEDOR_COMUNICACAO_VENDA_GERADA,
+        placaVeiculo: 'GHI8J90',
+        codigoRenavamVeiculo: '00010020031'
+      }
+    })
+
+    const service = new CriarCompraService({
+      detranSpServiceNowTdv: asClient({ criaTdv, buscaTdv })
+    })
+
+    await service.run(authHeader, {
+      ...baseInput,
+      codigoComprador: '00034324084807'
+    })
+
+    expect(criaTdv).toHaveBeenCalledWith(clientAuth, expect.objectContaining({
+      codigoComprador: '00034324084807'
+    }))
+  })
+
   it('does not list TDVs to fill missing optional fields before create', async () => {
     const listaTdvs = vi.fn()
     const criaTdv = vi.fn().mockResolvedValue({
