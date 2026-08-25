@@ -34,7 +34,7 @@ describe('ConsultaComprasService', () => {
       nomeVendedor: 'João',
       valorVenda: formatCurrency(90000),
       quilometragem: '13.000',
-      codigoComprador: NAO_INFORMADO,
+      cpfComprador: NAO_INFORMADO,
       enderecoComprador: NAO_INFORMADO
     })
   })
@@ -73,7 +73,7 @@ describe('ConsultaComprasService', () => {
     expect(result.vehicles[0]).toMatchObject({ nomeComprador: 'Maria' })
   })
 
-  it('masks CPF and CEP on the vehicle used by Confirmação de compra/endereço', async () => {
+  it('keeps codigoComprador as ServiceNow sent it and masks CPF/CEP for Confirmação de compra/endereço', async () => {
     const listaTdvs = vi.fn().mockResolvedValue({
       result: [{
         estado: '3',
@@ -95,7 +95,8 @@ describe('ConsultaComprasService', () => {
     const result = await service.run(authorizationHeader)
 
     expect(result.vehicles[0]).toMatchObject({
-      codigoComprador: '052.464.876-01',
+      codigoComprador: '00005246487601',
+      cpfComprador: '052.464.876-01',
       cepComprador: '08060-283',
       enderecoComprador: 'Rua Aulide Carini, 345, Vila Jacuí, São Paulo - SP, 08060-283'
     })
@@ -116,11 +117,12 @@ describe('ConsultaComprasService', () => {
 
     expect(result.vehicles[0]).toMatchObject({
       brandModel: NAO_INFORMADO,
-      codigoComprador: NAO_INFORMADO,
+      cpfComprador: NAO_INFORMADO,
       nomeComprador: NAO_INFORMADO,
       enderecoComprador: NAO_INFORMADO,
       valorVenda: NAO_INFORMADO,
       quilometragem: NAO_INFORMADO
     })
+    expect(result.vehicles[0]).not.toHaveProperty('codigoComprador')
   })
 })

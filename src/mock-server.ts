@@ -638,7 +638,8 @@ app.post('/api/services/solicitar-vistoria-em-transito', (req, res) => {
 // TDV (Transferência Digital de Veículo)
 // ---------------------------------------------------------------------------
 const MOCK_TDV_COMPRA_ENDERECO = {
-  codigoComprador: '123.456.789-00',
+  codigoComprador: '00012345678900',
+  cpfComprador: '123.456.789-00',
   nomeComprador: 'João da Silva Santos',
   logradouroComprador: 'RUA BOA VISTA',
   numeroComprador: '10',

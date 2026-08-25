@@ -64,6 +64,19 @@ describe('ValidarTdvService', () => {
     expect(payload).not.toHaveProperty('renavamVeiculo')
   })
 
+  it('keeps the leading zeros the listing sends in codigoComprador', async () => {
+    const validarTdv = vi.fn().mockResolvedValue({ result: {} })
+    const service = new ValidarTdvService({
+      detranSpServiceNowTdv: asClient({ validarTdv })
+    })
+
+    await service.run(authHeader, { ...baseInput, codigoComprador: '00034324084807' })
+
+    expect(validarTdv).toHaveBeenCalledWith(clientAuth, expect.objectContaining({
+      codigoComprador: '00034324084807'
+    }))
+  })
+
   it('maps DuasAssinaturasError to duas_assinaturas', async () => {
     const error = createError(
       406,

@@ -68,6 +68,7 @@ type CompraVehicle = {
   origemComunicacaoVendaVeiculo?: CodigoOrigemComunicacaoVendaVeiculo
   descricaoMarcaVeiculo?: string
   codigoComprador?: string
+  cpfComprador: string
   codigoVendedor?: string
   nomeMunicipioVeiculo?: string
   nomeMunicipioComprador?: string
@@ -154,9 +155,9 @@ export class ConsultaComprasService {
       )
       const descricaoMarcaVeiculo = trimField(tdv.descricaoMarcaVeiculo)
       const descricaoCorVeiculo = trimField(tdv.descricaoCorVeiculo) ?? ''
-      const codigoCompradorRaw = trimField(tdv.codigoComprador)
-      const codigoComprador = displayOrNaoInformado(
-        codigoCompradorRaw ? formatCpf(codigoCompradorRaw) : undefined
+      const codigoComprador = trimField(tdv.codigoComprador)
+      const cpfComprador = displayOrNaoInformado(
+        codigoComprador ? formatCpf(codigoComprador) : undefined
       )
       const nomeVendedor = trimField(tdv.nomeVendedor) ?? ''
       const codigoVendedor = trimField(tdv.codigoVendedor)
@@ -194,7 +195,8 @@ export class ConsultaComprasService {
           ? { origemComunicacaoVendaVeiculo: tdv.origemComunicacaoVendaVeiculo }
           : {}),
         ...(descricaoMarcaVeiculo ? { descricaoMarcaVeiculo } : {}),
-        codigoComprador,
+        ...(codigoComprador ? { codigoComprador } : {}),
+        cpfComprador,
         ...(codigoVendedor ? { codigoVendedor } : {}),
         ...(nomeMunicipioVeiculo ? { nomeMunicipioVeiculo } : {}),
         ...(nomeMunicipioComprador ? { nomeMunicipioComprador } : {}),
