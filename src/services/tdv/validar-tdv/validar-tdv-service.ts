@@ -94,9 +94,12 @@ export class ValidarTdvService {
     const origem = command.origem
     const estado = command.estado
 
-    if (!placaVeiculo || !codigoRenavamVeiculo || !origem || !estado) {
+    // `estado` is deliberately not required: a comunicação de venda registered outside the
+    // app (TDV 6.0) is validated before any TDV exists for it, so it legitimately arrives
+    // without one. It is still forwarded whenever present.
+    if (!placaVeiculo || !codigoRenavamVeiculo || !origem) {
       throw BadRequest(
-        'placaVeiculo, codigoRenavamVeiculo, origem e estado são obrigatórios'
+        'placaVeiculo, codigoRenavamVeiculo e origem são obrigatórios'
       )
     }
 
@@ -110,7 +113,7 @@ export class ValidarTdvService {
         placaVeiculo,
         codigoRenavamVeiculo,
         origem,
-        estado
+        ...(estado ? { estado } : {})
       })
       return { proximaAcao: 'enotariado' }
     } catch (error) {

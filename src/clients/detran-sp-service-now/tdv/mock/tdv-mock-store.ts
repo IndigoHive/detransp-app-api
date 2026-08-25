@@ -1,29 +1,46 @@
 import type { Config } from '../../../../types'
-import { CodigoEstadoQRCode, CodigoEstadoTDV } from '../types'
+import { formatCpf } from '../../../../utils/format-document'
+import { CodigoEstadoQRCode, CodigoEstadoTDV, CodigoOrigemTDV } from '../types'
 import type {
   AtualizaTdvCommand,
   BuscaCidadaoResultData,
   BuscaDebitosTdvResultSuccess,
   BuscaEnderecoResultData,
   BuscaPixQrCodeTdvResultSuccess,
-  BuscaTdvResultData,
+  CriaAutodeclaracaoResidenciaCommand,
   CriaTdvCommand,
   ListTdvsQuery,
   ListaTdvsResultData,
   ListaVeiculosProprietarioResultData
 } from '../types'
+import { throwTdvMockError } from './service-now-mock-error'
+import {
+  buildRecord,
+  MOCK_MUNICIPIO,
+  numeroTransferencia,
+  primaryVehicle,
+  seedSpecs,
+  sysId,
+  toListaVeiculos,
+  type MockTdvRecord,
+  type SeedSpec
+} from './tdv-mock-seeds'
 
 type TdvMockConfig = Config['tdvMock']
 
-// A single São Paulo municipality is used for both the seeded vehicle and every buyer address,
-// so ValidacaoVendaService always resolves to cidadesDiferentes: false on the happy path.
-const MUNICIPIO_NOME = 'SAO PAULO'
-const MUNICIPIO_CODIGO = '9668'
-const MUNICIPIO_IBGE = 3550308
+const MUNICIPIO_NOME = MOCK_MUNICIPIO.nome
+const MUNICIPIO_CODIGO = MOCK_MUNICIPIO.codigo
+const MUNICIPIO_IBGE = MOCK_MUNICIPIO.ibge
 
-// Fixed alongside the seeded vehicle's brand/model — real ServiceNow TDV records carry
-// descricaoCorVeiculo, but it isn't part of CriaTdvCommand, so it's set here like descricaoMarca.
-const VEHICLE_COLOR = 'BRANCA'
+// Journeys where the sale was registered outside the app: creating the TDV from the comunicação
+// de venda lands straight on estado 7 (ATPV-e assinada e CV gerada), because both parties already
+// signed elsewhere — there is no in-app signature step to walk through.
+const ORIGENS_COMUNICACAO_VENDA_EXTERNA: readonly string[] = [
+  CodigoOrigemTDV.E_NOTARIADO,
+  CodigoOrigemTDV.CDT,
+  CodigoOrigemTDV.RENAVE,
+  CodigoOrigemTDV.CARTORIO
+]
 
 // Fields the AtualizaTdv discriminated union may carry onto the stored TDV record. Copied over
 // generically on each update so the mock doesn't need a branch per transition type.
@@ -76,119 +93,91 @@ const VALID_ESTADOS: ReadonlySet<string> = new Set([
  * logins for the full flow to be exercised. Note: a `tsx watch` reload resets everything.
  */
 export class TdvMockStore {
-  private readonly tdvs = new Map<string, BuscaTdvResultData>()
+  private readonly tdvs = new Map<string, MockTdvRecord>()
+  // Comunicações de venda that have no TDV behind them yet — listed for the buyer, but with no
+  // codigoTransferenciaVeiculo, so they cannot live in `tdvs` (which is keyed by that code).
+  private comunicacoesVenda: MockTdvRecord[] = []
   private readonly pixByTdv = new Map<string, PixMockState>()
   private seeded = false
   private cfg: TdvMockConfig = {
     enabled: false,
+    versao: '1.0',
     sellerCpf: '',
     buyerCpf: '',
-    vehiclePlate: 'ABC1D23',
-    vehicleRenavam: '12345678901',
+    vehiclePlate: '',
+    vehicleRenavam: '',
     initialEstado: '',
     forceVehicleRestriction: false,
-    forceCidadesDiferentes: false
+    forceCidadesDiferentes: false,
+    pendencia: '',
+    validarTdv: ''
   }
-  private counter = 0
+  private specs: SeedSpec[] = []
 
-  // Seeds the module-level mass once (idempotent — later calls no-op). When
-  // `cfg.initialEstado` is set, also creates one TDV already at that state (seller, buyer, and
-  // sale data pre-filled) so a single step of the flow can be tested directly. Returns the
-  // created record only the one time it's actually created, so the caller can log it once.
-  ensureSeeded (cfg: TdvMockConfig): { record: BuscaTdvResultData } | null {
+  // Seeds the module-level mass once (idempotent — later calls no-op) with the records
+  // ServiceNow would return for `cfg.versao`. TDV_MOCK_INITIAL_ESTADO overrides where each
+  // record starts; without it every version starts where its journey really begins — empty for
+  // TDV 1.0, a bare comunicação de venda for 2.0/3.0/6.0, estado 1 for 4.0.
+  ensureSeeded (cfg: TdvMockConfig): { versao: string; records: MockTdvRecord[] } | null {
     if (this.seeded) return null
     this.cfg = cfg
     this.seeded = true
-
-    if (!cfg.initialEstado) return null
-
-    if (!VALID_ESTADOS.has(cfg.initialEstado)) {
-      console.warn(`⚠️  TDV_MOCK_INITIAL_ESTADO="${cfg.initialEstado}" inválido (use um código de 1 a 10) — ignorando, massa inicia vazia.`)
-      return null
-    }
+    this.specs = seedSpecs(cfg)
 
     if (!cfg.sellerCpf || !cfg.buyerCpf) {
-      console.warn('⚠️  TDV_MOCK_INITIAL_ESTADO definido, mas TDV_MOCK_SELLER_CPF/TDV_MOCK_BUYER_CPF não configurados — ignorando, massa inicia vazia.')
+      console.warn('⚠️  TDV_MOCK_SELLER_CPF/TDV_MOCK_BUYER_CPF não configurados — massa inicia vazia.')
       return null
     }
 
-    const record = this.buildSeedTdv(cfg.initialEstado as CodigoEstadoTDV)
-    this.tdvs.set(record.codigoTransferenciaVeiculo!, record)
-    return { record }
+    const estadoForcado = this.resolveInitialEstado(cfg)
+    const records: MockTdvRecord[] = []
+
+    for (const spec of this.specs) {
+      const estado = estadoForcado ?? spec.estadoPadrao
+      // TDV 1.0 with no forced estado has nothing to seed: the seller starts from an empty slate.
+      if (estado === undefined && spec.jornada === 'vendedor') continue
+
+      // The "estado without codigo" shape only makes sense for the seeded default; a forced
+      // TDV_MOCK_INITIAL_ESTADO means the tester wants a real TDV at that state.
+      const record = buildRecord(spec, estado, {
+        semCodigo: spec.estadoSemCodigo === true && estadoForcado === undefined
+      })
+      if (record.codigoTransferenciaVeiculo) {
+        this.tdvs.set(record.codigoTransferenciaVeiculo, record)
+      } else {
+        this.comunicacoesVenda.push(record)
+      }
+      records.push(record)
+    }
+
+    return records.length ? { versao: cfg.versao, records } : null
   }
 
-  // Builds a TDV as if it had organically progressed through the flow up to `estado` — seller,
-  // buyer, sale data, and address fields are all pre-filled the same way updateTdv would have
-  // left them, so any endpoint for that state (or later) works without missing-data errors.
-  private buildSeedTdv (estado: CodigoEstadoTDV): BuscaTdvResultData {
-    const codigo = `TDV-MOCK-${String(++this.counter).padStart(4, '0')}`
-    const vehicle = this.buildVehicle()
-    const comprador = this.getCitizen(this.cfg.buyerCpf)
-
-    return {
-      ativa: estado === CodigoEstadoTDV.TRANSFERENCIA_CANCELADA ? '0' : '1',
-      estado,
-      codigoTransferenciaVeiculo: codigo,
-      placaVeiculo: vehicle.placa,
-      placaMercosul: vehicle.placaMercosul,
-      descricaoMarcaVeiculo: vehicle.descricaoMarca,
-      descricaoCorVeiculo: VEHICLE_COLOR,
-      codigoRenavamVeiculo: vehicle.codigoRenavam,
-      chassiVeiculo: vehicle.chassi,
-      codigoMunicipioVeiculo: vehicle.codigoMunicipio,
-      nomeMunicipioVeiculo: vehicle.nomeMunicipio,
-      codigoVendedor: this.cfg.sellerCpf,
-      nomeVendedor: 'VENDEDOR TESTE',
-      emailVendedor: 'vendedor.teste@example.com',
-      // Pre-vistoriado so InformarDadosVendaService's km guard passes for any km >= 10000.
-      kmVistoriadaVeiculo: '10000',
-      codigoComprador: this.cfg.buyerCpf,
-      nomeComprador: comprador.nome,
-      emailComprador: 'comprador.teste@example.com',
-      cepComprador: comprador.cep,
-      bairroComprador: comprador.bairro,
-      logradouroComprador: `${comprador.tipoLogradouro} ${comprador.logradouro}`.trim(),
-      numeroComprador: comprador.numeroLogradouro,
-      complementoComprador: '',
-      valorVendaVeiculo: '50000',
-      kmVeiculo: '55000',
-      nomeMunicipioComprador: MUNICIPIO_NOME,
-      codigoMunicipioComprador: MUNICIPIO_CODIGO,
-      ufComprador: 'SP'
+  private resolveInitialEstado (cfg: TdvMockConfig): CodigoEstadoTDV | undefined {
+    if (!cfg.initialEstado) return undefined
+    if (!VALID_ESTADOS.has(cfg.initialEstado)) {
+      console.warn(`⚠️  TDV_MOCK_INITIAL_ESTADO="${cfg.initialEstado}" inválido (use um código de 1 a 10) — ignorando.`)
+      return undefined
     }
+    return cfg.initialEstado as CodigoEstadoTDV
   }
 
   reset (): void {
     this.tdvs.clear()
+    this.comunicacoesVenda = []
     this.pixByTdv.clear()
     this.seeded = false
-    this.counter = 0
+    this.specs = []
   }
 
-  private buildVehicle (): ListaVeiculosProprietarioResultData {
-    return {
-      placa: this.cfg.vehiclePlate,
-      placaMercosul: 'true',
-      nomeProprietario: 'VENDEDOR TESTE',
-      chassi: '9BWZZZ377VT004251',
-      codigoRenavam: this.cfg.vehicleRenavam,
-      codigoMunicipio: MUNICIPIO_CODIGO,
-      nomeMunicipio: MUNICIPIO_NOME,
-      codigoMarca: '1',
-      descricaoMarca: 'FIAT/ARGO DRIVE 1.0',
-      anoFabricacao: '2021',
-      anoModelo: '2022',
-      anoExercicio: '2025',
-      dataEmissao: '2022-01-10',
-      uf: 'SP'
-    }
-  }
-
-  // Empty when the caller is the seeded buyer, so switching to "Sou vendedor" with the buyer's
-  // CPF exercises the empty-state screen instead of always finding a vehicle to sell.
+  // Only the versions where the citizen is the seller (TDV 1.0 and 4.0) put a vehicle in their
+  // name — on the buyer-side versions the seller is someone else, so "Sou vendedor" correctly
+  // hits the empty-state screen.
   getVehicles (cpf?: string): ListaVeiculosProprietarioResultData[] {
-    if (cpf && this.cfg.buyerCpf && cpf === this.cfg.buyerCpf) return []
-    return [this.buildVehicle()]
+    const spec = this.specs.find(s => s.jornada === 'vendedor')
+    if (!spec) return []
+    if (cpf && this.cfg.sellerCpf && cpf !== this.cfg.sellerCpf) return []
+    return [toListaVeiculos(spec.vehicle, spec.vendedor.nome)]
   }
 
   getCitizen (cpf: string): BuscaCidadaoResultData {
@@ -227,8 +216,26 @@ export class TdvMockStore {
     }
   }
 
+  // Mirrors the wording ServiceNow renders — the screen shows this verbatim, so a mock that
+  // returned a placeholder would hide layout problems the real text causes.
+  getAutodeclaracao (cpf: string, endereco: CriaAutodeclaracaoResidenciaCommand): string {
+    const nome = this.getCitizen(cpf).nome
+    const complemento = endereco.complemento ? ` ${endereco.complemento}` : ''
+    return [
+      `Eu, ${nome}, inscrito no CPF sob o nº ${formatCpf(cpf)}, declaro para os devidos fins`,
+      ` que resido em ${endereco.logradouro} nº ${endereco.numero}${complemento},`,
+      ` Bairro ${endereco.bairro}, no município de ${endereco.municipio},`,
+      ` no estado de ${endereco.nomeUF || endereco.uf}.`,
+      '\nSob pena da lei, estou ciente de que a falsidade destas informações implicará em penalidades.'
+    ].join('')
+  }
+
   listTdvs (query: ListTdvsQuery): ListaTdvsResultData[] {
-    return [...this.tdvs.values()].filter(tdv => {
+    // Comunicações de venda are listed alongside real TDVs — that is exactly what the buyer
+    // journeys of TDV 2.0/3.0/6.0 pick from before any TDV exists.
+    const candidates = [...this.tdvs.values(), ...this.comunicacoesVenda]
+
+    return candidates.filter(tdv => {
       if (query.ativa === 'true' && tdv.ativa !== '1') return false
       if (query.ativa === 'false' && tdv.ativa !== '0') return false
       if (query.codigoVendedor && tdv.codigoVendedor !== query.codigoVendedor) return false
@@ -238,39 +245,122 @@ export class TdvMockStore {
     })
   }
 
-  getTdv (codigo: string): BuscaTdvResultData | undefined {
+  getTdv (codigo: string): MockTdvRecord | undefined {
     return this.tdvs.get(codigo)
   }
 
-  createTdv (command: CriaTdvCommand): BuscaTdvResultData {
-    const codigo = `TDV-MOCK-${String(++this.counter).padStart(4, '0')}`
-    const vehicle = this.buildVehicle()
+  createTdv (command: CriaTdvCommand): MockTdvRecord {
+    // Opt-in failure: reproduces the pendência the real API raises when the vehicle is not
+    // clear to transfer, so the buyer-journey pendência screens can be reached.
+    if (this.cfg.pendencia) throwTdvMockError(this.cfg.pendencia)
 
-    const record: BuscaTdvResultData = {
-      ativa: '1',
-      estado: CodigoEstadoTDV.VEICULO_SELECIONADO,
-      codigoTransferenciaVeiculo: codigo,
-      placaVeiculo: command.placaVeiculo,
-      placaMercosul: 'true',
-      descricaoMarcaVeiculo: vehicle.descricaoMarca,
-      descricaoCorVeiculo: VEHICLE_COLOR,
-      codigoRenavamVeiculo: command.codigoRenavamVeiculo,
-      chassiVeiculo: command.chassiVeiculo || vehicle.chassi,
-      codigoMunicipioVeiculo: MUNICIPIO_CODIGO,
-      nomeMunicipioVeiculo: MUNICIPIO_NOME,
-      codigoVendedor: command.codigoVendedor,
-      nomeVendedor: command.nomeVendedor || 'VENDEDOR TESTE',
-      emailVendedor: command.emailVendedor,
-      // Pre-vistoriado so InformarDadosVendaService's km guard passes for any km >= 10000.
-      kmVistoriadaVeiculo: '10000'
+    const jaAtiva = [...this.tdvs.values()].find(tdv =>
+      tdv.ativa === '1'
+      && tdv.placaVeiculo === command.placaVeiculo
+      && tdv.estado !== CodigoEstadoTDV.TRANSFERENCIA_CANCELADA
+    )
+    if (jaAtiva) throwTdvMockError('tdv_ativa_existente')
+
+    const externa = ORIGENS_COMUNICACAO_VENDA_EXTERNA.includes(command.origem ?? '')
+    const pendente = this.takeComunicacaoVenda(command)
+
+    // A comunicação de venda is not created from nothing — it is promoted in place, keeping the
+    // notary's data and gaining the code and estado the TDV now has.
+    const record: MockTdvRecord = pendente ?? this.buildRecordFromCommand(command)
+
+    record.codigoTransferenciaVeiculo = sysId()
+    record.numeroTransferenciaVeiculo = numeroTransferencia()
+    record.ativa = '1'
+    record.estado = externa
+      ? CodigoEstadoTDV.ATPVE_ASSINADA_VENDEDOR_COMUNICACAO_VENDA_GERADA
+      : CodigoEstadoTDV.VEICULO_SELECIONADO
+
+    this.applyCommandFields(record, command)
+
+    if (externa) {
+      record.numeroAtpveVeiculo ??= '243763996337278'
+      record.codigoAnexoAtpve ??= sysId()
+      record.codigoAnexoAssinaturaComprador ??= sysId()
+      record.codigoAnexoAssinaturaVendedor ??= sysId()
+      record.dataInicialPagamento ??= new Date().toISOString()
     }
 
-    this.tdvs.set(codigo, record)
+    this.tdvs.set(record.codigoTransferenciaVeiculo, record)
     return record
   }
 
+  // Pulls the matching comunicação de venda out of the pending list, so it is not listed twice
+  // once it has become a TDV.
+  private takeComunicacaoVenda (command: CriaTdvCommand): MockTdvRecord | undefined {
+    const index = this.comunicacoesVenda.findIndex(cv =>
+      cv.placaVeiculo === command.placaVeiculo
+      && cv.codigoRenavamVeiculo === command.codigoRenavamVeiculo
+    )
+    if (index < 0) return undefined
+    return this.comunicacoesVenda.splice(index, 1)[0]
+  }
+
+  private buildRecordFromCommand (command: CriaTdvCommand): MockTdvRecord {
+    const spec = this.specs[0]!
+    const vehicle = primaryVehicle(this.cfg)
+
+    // The buyer journeys echo the whole listed record back, so every field here is optional from
+    // the type's point of view — fall back to the seeded vehicle/seller when one is missing.
+    return buildRecord(
+      {
+        ...spec,
+        ...(command.origem ? { origem: command.origem } : {}),
+        vehicle: {
+          ...vehicle,
+          placa: command.placaVeiculo ?? vehicle.placa,
+          codigoRenavam: command.codigoRenavamVeiculo ?? vehicle.codigoRenavam,
+          ...(command.chassiVeiculo ? { chassi: command.chassiVeiculo } : {})
+        },
+        vendedor: {
+          codigo: command.codigoVendedor ?? spec.vendedor?.codigo ?? '',
+          nome: command.nomeVendedor ?? spec.vendedor?.nome ?? '',
+          email: command.emailVendedor ?? ''
+        }
+      },
+      undefined
+    )
+  }
+
+  // Everything the caller actually sent wins over the seeded values — a wrong or missing field
+  // in a service payload has to show up here, not be papered over by the seed.
+  private applyCommandFields (record: MockTdvRecord, command: CriaTdvCommand): void {
+    const source = command as unknown as Record<string, unknown>
+    const overridable = [
+      ...MERGEABLE_TDV_FIELDS,
+      'origem',
+      'origemComunicacaoVendaVeiculo',
+      'descricaoMarcaVeiculo',
+      'nomeVendedor',
+      'emailVendedor',
+      'codigoVendedor',
+      'nomeMunicipioVeiculo',
+      'nomeMunicipioComprador',
+      'chassiVeiculo',
+      'kmVistoriadaVeiculo',
+      'confirmacaoAutodeclaracaoResidenciaComprador'
+    ] as const
+
+    for (const field of overridable) {
+      const value = source[field]
+      if (value !== undefined && value !== '') {
+        (record as Record<string, unknown>)[field] = value
+      }
+    }
+
+    if (command.cepComprador) {
+      record.nomeMunicipioComprador ??= MUNICIPIO_NOME
+      record.codigoMunicipioComprador ??= MUNICIPIO_CODIGO
+      record.ufComprador ??= 'SP'
+    }
+  }
+
   // Returns the previous estado (for logging) and the mutated record, or null if unknown codigo.
-  updateTdv (codigo: string, data: AtualizaTdvCommand): { previousEstado?: CodigoEstadoTDV | undefined; record: BuscaTdvResultData } | null {
+  updateTdv (codigo: string, data: AtualizaTdvCommand): { previousEstado?: CodigoEstadoTDV | undefined; record: MockTdvRecord } | null {
     const record = this.tdvs.get(codigo)
     if (!record) return null
 
@@ -316,7 +406,7 @@ export class TdvMockStore {
   // from state 8 to state 9 asynchronously, outside of any client-triggered request — no service
   // in this codebase ever sends estado 9 via AtualizaTdvCommand, so this bypasses that type on
   // purpose. Only called by the mock client's auto-conclusao timer.
-  forceEstado (codigo: string, estado: CodigoEstadoTDV): { previousEstado?: CodigoEstadoTDV | undefined; record: BuscaTdvResultData } | null {
+  forceEstado (codigo: string, estado: CodigoEstadoTDV): { previousEstado?: CodigoEstadoTDV | undefined; record: MockTdvRecord } | null {
     const record = this.tdvs.get(codigo)
     if (!record) return null
 

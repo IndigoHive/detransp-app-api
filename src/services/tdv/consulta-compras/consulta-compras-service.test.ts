@@ -53,6 +53,54 @@ describe('ConsultaComprasService', () => {
     await expect(service.run(authorizationHeader)).resolves.toEqual({ vehicles: [] })
   })
 
+  it('lists comunicações de venda from origens 2, 3, 4 and 6 even without an estado', async () => {
+    const listaTdvs = vi.fn().mockResolvedValue({
+      result: [
+        { origem: '2', placaVeiculo: 'DEF2B22', codigoRenavamVeiculo: '32', descricaoMarcaVeiculo: 'HONDA/CIVIC' },
+        { origem: '3', placaVeiculo: 'GHI3C33', codigoRenavamVeiculo: '33', descricaoMarcaVeiculo: 'VW/GOL' },
+        { origem: '4', placaVeiculo: 'JKL4D44', codigoRenavamVeiculo: '34', descricaoMarcaVeiculo: 'TOYOTA/COROLLA' },
+        { origem: '6', placaVeiculo: 'MNO6E66', codigoRenavamVeiculo: '36', descricaoMarcaVeiculo: 'CHEV/ONIX' }
+      ]
+    })
+    const service = new ConsultaComprasService({ detranSpServiceNowTdv: asClient({ listaTdvs }) })
+
+    const result = await service.run(authorizationHeader)
+
+    expect(result.vehicles.map(v => v.plate)).toEqual(['DEF2B22', 'GHI3C33', 'JKL4D44', 'MNO6E66'])
+    expect(result.vehicles.every(v => v.proximaAcao === undefined)).toBe(true)
+  })
+
+  it('still omits an origem 1 TDV with no actionable estado', async () => {
+    const listaTdvs = vi.fn().mockResolvedValue({
+      result: [{ origem: '1', estado: '1', codigoTransferenciaVeiculo: 'TDV-I', placaVeiculo: 'III1111' }]
+    })
+    const service = new ConsultaComprasService({ detranSpServiceNowTdv: asClient({ listaTdvs }) })
+
+    await expect(service.run(authorizationHeader)).resolves.toEqual({ vehicles: [] })
+  })
+
+  it('surfaces emailVendedor and formats a CNPJ seller/buyer without mangling it', async () => {
+    const listaTdvs = vi.fn().mockResolvedValue({
+      result: [{
+        origem: '4',
+        placaVeiculo: 'JKL4D44',
+        codigoRenavamVeiculo: '34',
+        codigoComprador: '16794464003768',
+        emailVendedor: 'loja@example.com'
+      }]
+    })
+    const service = new ConsultaComprasService({ detranSpServiceNowTdv: asClient({ listaTdvs }) })
+
+    const result = await service.run(authorizationHeader)
+
+    expect(result.vehicles[0]).toMatchObject({
+      emailVendedor: 'loja@example.com',
+      codigoComprador: '16794464003768',
+      cpfComprador: '16.794.464/0037-68'
+    })
+    expect(listaTdvs.mock.calls[0]?.[1]?.campos).toContain('emailVendedor')
+  })
+
   it('returns an empty list when the API returns no result', async () => {
     const listaTdvs = vi.fn().mockResolvedValue(undefined)
     const service = new ConsultaComprasService({ detranSpServiceNowTdv: asClient({ listaTdvs }) })

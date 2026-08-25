@@ -38,6 +38,8 @@ export class ConfirmarTermoCienciaService {
       && !isTermoCienciaConfirmado(tdv)
       && !SELLER_SIGNED_STATES.includes(tdv.estado ?? '')
     ) {
+      // The store journey never sends the liveness code: the app in production PATCHes the TCR
+      // with these two fields only, and ServiceNow is picky about what each transition accepts.
       await this.client.atualizaTdv(auth, input.codigoTransferencia, {
         estado: CodigoEstadoTDV.ATPVE_ASSINADA_COMPRADOR,
         confirmacaoTermoCienciaResponsabilidade: true

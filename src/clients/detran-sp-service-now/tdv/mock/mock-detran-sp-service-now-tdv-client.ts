@@ -12,6 +12,8 @@ import type {
   BuscaEnderecoResult,
   BuscaPixQrCodeTdvResult,
   BuscaTdvResult,
+  CriaAutodeclaracaoResidenciaCommand,
+  CriaAutodeclaracaoResidenciaResult,
   CriaTdvCommand,
   CriaTdvResult,
   ListaTdvsResult,
@@ -20,6 +22,7 @@ import type {
   ValidarTdvCommand,
   ValidarTdvResult
 } from '../types'
+import { throwTdvMockError } from './service-now-mock-error'
 import { tdvMockStore } from './tdv-mock-store'
 
 const ESTADO_NOME: Record<string, string> = {
@@ -99,8 +102,8 @@ export class MockDetranSpServiceNowTdvClient extends DetranSpServiceNowTdvClient
     this.seed()
     const record = tdvMockStore.createTdv(data)
     this.logger.info(
-      { vendedor: auth.cpf, placa: record.placaVeiculo },
-      `\n🟢 [TDV-MOCK] ${record.codigoTransferenciaVeiculo} criada  →  ${estadoLabel(record.estado)}  (vendedor ${auth.cpf})`
+      { vendedor: auth.cpf, placa: record.placaVeiculo, origem: record.origem },
+      `\n🟢 [TDV-MOCK] ${record.numeroTransferenciaVeiculo} criada (origem ${record.origem})  →  ${estadoLabel(record.estado)}  (por ${auth.cpf})`
     )
     return {
       result: {
@@ -193,8 +196,27 @@ export class MockDetranSpServiceNowTdvClient extends DetranSpServiceNowTdvClient
     return tdvMockStore.getPixQrCode(codigoTransferenciaVeiculo, forcarNovo)
   }
 
-  async validarTdv (_auth: DetranSpServiceNowAuth, _data: ValidarTdvCommand): Promise<ValidarTdvResult> {
+  async criaAutodeclaracaoResidencia (
+    _auth: DetranSpServiceNowAuth,
+    cpf: string,
+    data: CriaAutodeclaracaoResidenciaCommand
+  ): Promise<CriaAutodeclaracaoResidenciaResult> {
     this.seed()
+    return { result: { autodeclaracaoResidencia: tdvMockStore.getAutodeclaracao(cpf, data) } }
+  }
+
+  // TDV 6.0 only: the two pre-requisites the cartório integration checks (both parties signed,
+  // both are pessoa física). TDV_MOCK_VALIDAR_TDV picks which one fails; empty means it passes.
+  async validarTdv (_auth: DetranSpServiceNowAuth, data: ValidarTdvCommand): Promise<ValidarTdvResult> {
+    this.seed()
+    const falha = this.params.config.tdvMock.validarTdv
+
+    this.logger.info(
+      { placa: data.placaVeiculo, origem: data.origem, estado: data.estado },
+      `\n🔎 [TDV-MOCK] validar-tdv  →  ${falha || 'aprovado'}`
+    )
+
+    if (falha) throwTdvMockError(falha)
     return { result: {} }
   }
 }

@@ -3329,6 +3329,25 @@
             }
           },
           {
+            "id": "c_autodeclaracao_servidor",
+            "type": "text_body",
+            "name": null,
+            "data": {
+              "text": "@{node:n_a1d5c7e93b60.autodeclaracaoResidencia}",
+              "align": "justify",
+              "visibilityCondition": {
+                "clauses": [
+                  {
+                    "id": "c_autodeclaracao_servidor_if",
+                    "left": "@{node:n_a1d5c7e93b60.autodeclaracaoResidencia}",
+                    "operator": "is_not_empty"
+                  }
+                ],
+                "combinator": "or"
+              }
+            }
+          },
+          {
             "id": "c_61aa261b7bc9_edited",
             "type": "text_body",
             "name": null,
@@ -3345,6 +3364,11 @@
                   {
                     "id": "c_61aa261b7bc9_edited_if_comp",
                     "left": "@{screen:s_7e2a1c9b4f08.comp:c_c6e5f03b7a22.value}",
+                    "operator": "is_empty"
+                  },
+                  {
+                    "id": "c_61aa261b7bc9_edited_sem_texto_servidor",
+                    "left": "@{node:n_a1d5c7e93b60.autodeclaracaoResidencia}",
                     "operator": "is_empty"
                   }
                 ],
@@ -3370,6 +3394,11 @@
                     "id": "c_61aa261b7bc9_edited_comp_if_comp",
                     "left": "@{screen:s_7e2a1c9b4f08.comp:c_c6e5f03b7a22.value}",
                     "operator": "is_not_empty"
+                  },
+                  {
+                    "id": "c_61aa261b7bc9_edited_comp_sem_texto_servidor",
+                    "left": "@{node:n_a1d5c7e93b60.autodeclaracaoResidencia}",
+                    "operator": "is_empty"
                   }
                 ],
                 "combinator": "and"
@@ -3389,9 +3418,14 @@
                     "id": "c_61aa261b7bc9_stub_if",
                     "left": "@{screen:s_7e2a1c9b4f08.comp:c_b7d4e12a8f31.value}",
                     "operator": "is_empty"
+                  },
+                  {
+                    "id": "c_61aa261b7bc9_stub_sem_texto_servidor",
+                    "left": "@{node:n_a1d5c7e93b60.autodeclaracaoResidencia}",
+                    "operator": "is_empty"
                   }
                 ],
-                "combinator": "or"
+                "combinator": "and"
               }
             }
           },
@@ -4982,11 +5016,40 @@
             }
           },
           {
+            "id": "c_termo_ciencia_servidor",
+            "type": "text_body",
+            "name": null,
+            "data": {
+              "text": "@{node:n_b824c7dd9350.termoCienciaResponsabilidade}",
+              "align": "justify",
+              "visibilityCondition": {
+                "clauses": [
+                  {
+                    "id": "c_termo_ciencia_servidor_if",
+                    "left": "@{node:n_b824c7dd9350.termoCienciaResponsabilidade}",
+                    "operator": "is_not_empty"
+                  }
+                ],
+                "combinator": "or"
+              }
+            }
+          },
+          {
             "id": "c_fe7cbff88d92",
             "type": "rich_text",
             "name": null,
             "data": {
-              "html": "<p><span style=\"font-size:14px;color:#262828\">Eu, @{node:n_21da615e160d.full_name}, inscrito no CPF sob o nº @{node:n_21da615e160d.cpf}, declaro para os devidos fins que estou transferindo a propriedade do veículo de minha titularidade, de placa @{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.plate}, marca/modelo @{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.brandModel}, ano de fabricação @{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.yearFab}, Renavam @{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.renavam}, para a empresa @{node:n_d87067e61ebb.nomeComprador ?? node:n_b824c7dd9350.nomeComprador}, inscrita no CNPJ sob o nº @{node:n_d87067e61ebb.cpfComprador ?? node:n_b824c7dd9350.cpfComprador}, localizada em @{node:n_d87067e61ebb.enderecoComprador ?? node:n_b824c7dd9350.enderecoComprador}.</span></p><p><span style=\"font-size:14px;color:#262828\"><br>Estou ciente de que a veracidade das informações fornecidas é de minha total responsabilidade e que a falsidade destas informações poderá acarretar penalidades previstas em lei.</span></p>"
+              "html": "<p><span style=\"font-size:14px;color:#262828\">Eu, @{node:n_21da615e160d.full_name}, inscrito no CPF sob o nº @{node:n_21da615e160d.cpf}, declaro para os devidos fins que estou transferindo a propriedade do veículo de minha titularidade, de placa @{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.plate}, marca/modelo @{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.brandModel}, ano de fabricação @{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.yearFab}, Renavam @{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.renavam}, para a empresa @{node:n_d87067e61ebb.nomeComprador ?? node:n_b824c7dd9350.nomeComprador}, inscrita no CNPJ sob o nº @{node:n_d87067e61ebb.cpfComprador ?? node:n_b824c7dd9350.cpfComprador}, localizada em @{node:n_d87067e61ebb.enderecoComprador ?? node:n_b824c7dd9350.enderecoComprador}.</span></p><p><span style=\"font-size:14px;color:#262828\"><br>Estou ciente de que a veracidade das informações fornecidas é de minha total responsabilidade e que a falsidade destas informações poderá acarretar penalidades previstas em lei.</span></p>",
+              "visibilityCondition": {
+                "clauses": [
+                  {
+                    "id": "c_fe7cbff88d92_sem_texto_servidor",
+                    "left": "@{node:n_b824c7dd9350.termoCienciaResponsabilidade}",
+                    "operator": "is_empty"
+                  }
+                ],
+                "combinator": "or"
+              }
             }
           },
           {
@@ -5674,6 +5737,11 @@
             "id": "b6f66d6a-af30-4594-b1c0-87a11d2c87be",
             "name": "Veículo com restrição",
             "value": "{ \"showSnackbar\": { \"variant\": \"error\", \"title\": \"Erro\", \"description\": \"Esse veículo tem restrição e não pode ser transferido. Regularize a pendência com o órgão responsável.\" } }"
+          },
+          {
+            "id": "ex-analise-origem5-tcr",
+            "name": "Entrada Renave (origem 5) com TCR",
+            "value": "{\n  \"hasActiveTDV\": true,\n  \"codigoTransferencia\": \"TDV-000000\",\n  \"estado\": \"1\",\n  \"origem\": \"5\",\n  \"cpfComprador\": \"16.794.464/0037-68\",\n  \"nomeComprador\": \"CAOA MOTOR DO BRASIL LTDA\",\n  \"emailComprador\": \"CERTIDOCPJ@EMAIL.COM\",\n  \"enderecoComprador\": \"Avenida Conselheiro Nébias, 240, Encruzilhada, Santos - SP, 11045-001\",\n  \"descricaoCorVeiculo\": \"BRANCA\",\n  \"chassiVeiculo\": \"9BWZZZ377VT004251\",\n  \"termoCienciaResponsabilidade\": \"Eu, JOSE DA SILVA, inscrito no CPF sob o nº 316.847.550-50, declaro para os devidos fins que estou transferindo a propriedade do veículo de minha titularidade, de placa CAR0A09, para a empresa CAOA MOTOR DO BRASIL LTDA, inscrita no CNPJ sob o nº 16.794.464/0037-68.\"\n}"
           }
         ],
         "showSnackbar": true
@@ -6046,11 +6114,6 @@
             "value": "nova_tdv"
           },
           {
-            "id": "c4e8f2a7-1d05-4b6e-8f2a-000000000001",
-            "label": "Continuar Venda",
-            "value": "continuar_venda"
-          },
-          {
             "id": "fb741670-fa17-498b-b9c9-cc00349ea0be",
             "label": "Comprador 1",
             "value": "comprador"
@@ -6059,6 +6122,11 @@
             "id": "d5bb251f-200e-4547-879e-c20202b5042d",
             "label": "Vendedor 2",
             "value": "vendedor_2"
+          },
+          {
+            "id": "r_vendedor_loja_assinar_01",
+            "label": "Vendedor Loja — Assinar",
+            "value": "vendedor_loja_assinar"
           },
           {
             "id": "1394b265-113e-4c2a-af0c-c950abbdf258",
@@ -6074,16 +6142,6 @@
             "id": "3f5213c7-0029-4f08-9683-f70d379c9f5b",
             "label": "Concluído",
             "value": "concluido"
-          },
-          {
-            "id": "5a63bc3a-59bb-4258-9927-d496147f49a2",
-            "label": "Comprador Cancelou",
-            "value": "comprador_cancelou"
-          },
-          {
-            "id": "38c9ab5b-70a0-4a55-b7c2-a1a8e49a2e9c",
-            "label": "Vendedor Cancelou",
-            "value": "vendedor_cancelou"
           }
         ]
       }
@@ -6384,7 +6442,7 @@
         },
         "method": "POST",
         "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/confirmar-intencao-venda",
-        "body": "{\n  \"codigoTransferencia\": \"@{node:n_d87067e61ebb.codigo ?? node:n_b824c7dd9350.codigoTransferencia}\",\n  \"codigoProvaVidaVendedor\": \"@{node:n_4d4ab6c16ec8.codigoProvaVida ?? node:n_c4e8f2a71d05.codigoProvaVida}\"\n}",
+        "body": "{\n  \"codigoTransferencia\": \"@{node:n_d87067e61ebb.codigo ?? node:n_b824c7dd9350.codigoTransferencia}\"\n}",
         "responseExamples": [
           {
             "id": "b8d2e4f6-1c37-4a9e-8b2d-000000000001",
@@ -6806,6 +6864,21 @@
         "value": "@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.estado}",
         "routes": [
           {
+            "id": "r_estado_5_01",
+            "label": "Estado 5 — retoma como comprador",
+            "value": "5"
+          },
+          {
+            "id": "r_estado_4_01",
+            "label": "Estado 4 — retoma como comprador",
+            "value": "4"
+          },
+          {
+            "id": "r_estado_3_01",
+            "label": "Estado 3 — retoma como comprador",
+            "value": "3"
+          },
+          {
             "id": "r_estado_7_01",
             "label": "Estado 7 — Aviso pagamento",
             "value": "7"
@@ -6854,7 +6927,7 @@
         },
         "method": "POST",
         "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/criar-compra",
-        "body": "{\n  \"placaVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.plate}\",\n  \"renavamVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.renavam}\",\n  \"origem\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.origem}\",\n  \"nomeVendedor\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeVendedor}\",\n  \"codigoVendedor\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoVendedor}\",\n  \"emailVendedor\": \"\",\n  \"cepComprador\": \"@{node:n_f5aacdb3ca97.result.cep ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.cepComprador}\",\n  \"logradouroComprador\": \"@{node:n_f5aacdb3ca97.result.endereco ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.logradouroComprador}\",\n  \"numeroComprador\": \"@{screen:s_7e2a1c9b4f08.comp:c_b7d4e12a8f31.value ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.numeroComprador}\",\n  \"complementoComprador\": \"@{screen:s_7e2a1c9b4f08.comp:c_c6e5f03b7a22.value ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.complementoComprador}\",\n  \"bairroComprador\": \"@{node:n_f5aacdb3ca97.result.bairro ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.bairroComprador}\",\n  \"ativa\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.ativa}\",\n  \"estado\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.estado}\",\n  \"origemComunicacaoVendaVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.origemComunicacaoVendaVeiculo}\",\n  \"codigoTransferenciaVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoTransferencia}\",\n  \"descricaoMarcaVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.descricaoMarcaVeiculo}\",\n  \"codigoComprador\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoComprador}\",\n  \"nomeComprador\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}\",\n  \"nomeMunicipioVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeMunicipioVeiculo}\",\n  \"nomeMunicipioComprador\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeMunicipioComprador}\",\n  \"chassiVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.chassiVeiculo}\",\n  \"kmVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.kmVeiculo}\",\n  \"kmVistoriadaVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.kmVistoriadaVeiculo}\"\n}",
+        "body": "{\n  \"placaVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.plate}\",\n  \"renavamVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.renavam}\",\n  \"origem\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.origem}\",\n  \"nomeVendedor\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeVendedor}\",\n  \"codigoVendedor\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoVendedor}\",\n  \"emailVendedor\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.emailVendedor}\",\n  \"cepComprador\": \"@{node:n_f5aacdb3ca97.result.cep ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.cepComprador}\",\n  \"logradouroComprador\": \"@{node:n_f5aacdb3ca97.result.endereco ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.logradouroComprador}\",\n  \"numeroComprador\": \"@{screen:s_7e2a1c9b4f08.comp:c_b7d4e12a8f31.value ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.numeroComprador}\",\n  \"complementoComprador\": \"@{screen:s_7e2a1c9b4f08.comp:c_c6e5f03b7a22.value ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.complementoComprador}\",\n  \"bairroComprador\": \"@{node:n_f5aacdb3ca97.result.bairro ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.bairroComprador}\",\n  \"ativa\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.ativa}\",\n  \"estado\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.estado}\",\n  \"origemComunicacaoVendaVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.origemComunicacaoVendaVeiculo}\",\n  \"codigoTransferenciaVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoTransferencia}\",\n  \"descricaoMarcaVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.descricaoMarcaVeiculo}\",\n  \"codigoComprador\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoComprador}\",\n  \"nomeComprador\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}\",\n  \"nomeMunicipioVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeMunicipioVeiculo}\",\n  \"nomeMunicipioComprador\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeMunicipioComprador}\",\n  \"chassiVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.chassiVeiculo}\",\n  \"kmVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.kmVeiculo}\",\n  \"kmVistoriadaVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.kmVistoriadaVeiculo}\"\n}",
         "responseExamples": [
           {
             "id": "ex-criar-compra-7",
@@ -6880,6 +6953,11 @@
             "id": "ex-criar-compra-pag-pend",
             "name": "Pagamento pendente",
             "value": "{\n  \"proximaAcao\": \"pagamento_pendente\",\n  \"detail\": \"Pagamento de taxa não localizado\",\n  \"codigoTransferencia\": \"TDV-MOCK-NEW\",\n  \"vehicle\": {\n    \"id\": \"1\",\n    \"plate\": \"GHI8J90\",\n    \"title\": \"VW/GOL 1.0\",\n    \"licensingStatus\": \"REGULAR\",\n    \"brandModel\": \"VW/GOL 1.0\",\n    \"licensingExpirationDate\": \"\",\n    \"renavam\": \"00010020031\",\n    \"lastLicensing\": \"\",\n    \"yearFab\": \"\",\n    \"yearMod\": \"\"\n  },\n  \"nomeComprador\": \"Maria Compradora\"\n}"
+          },
+          {
+            "id": "ex-criar-compra-vistoria",
+            "name": "Vistoria pendente",
+            "value": "{\n  \"proximaAcao\": \"vistoria_pendente\",\n  \"detail\": \"Laudo de vistoria não localizado\",\n  \"codigoTransferencia\": \"TDV-MOCK-NEW\",\n  \"vehicle\": {\n    \"id\": \"1\",\n    \"plate\": \"GHI8J90\",\n    \"title\": \"VW/GOL 1.0\",\n    \"licensingStatus\": \"REGULAR\",\n    \"brandModel\": \"VW/GOL 1.0\",\n    \"licensingExpirationDate\": \"\",\n    \"renavam\": \"00010020031\",\n    \"lastLicensing\": \"\",\n    \"yearFab\": \"\",\n    \"yearMod\": \"\"\n  },\n  \"nomeComprador\": \"Maria Compradora\"\n}"
           },
           {
             "id": "ex-criar-compra-vist-pag",
@@ -6945,6 +7023,11 @@
             "id": "r_adm_jud_pendentes_01",
             "label": "Administrativa e judicial pendentes",
             "value": "administrativa_judicial_pendentes"
+          },
+          {
+            "id": "r_vistoria_pendente_01",
+            "label": "Vistoria pendente",
+            "value": "vistoria_pendente"
           },
           {
             "id": "r_vistoria_pagamento_01",
@@ -7168,7 +7251,7 @@
         },
         "method": "POST",
         "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/confirmar-termo-ciencia",
-        "body": "{\n  \"codigoTransferencia\": \"@{node:n_d87067e61ebb.codigo ?? node:n_b824c7dd9350.codigoTransferencia}\"\n}",
+        "body": "{\n  \"codigoTransferencia\": \"@{node:n_d87067e61ebb.codigo ?? node:n_b824c7dd9350.codigoTransferencia}\",\n  \"codigoProvaVidaVendedor\": \"@{node:n_4d4ab6c16ec8.codigoProvaVida ?? node:n_c4e8f2a71d05.codigoProvaVida}\"\n}",
         "responseExamples": [
           {
             "id": "e4b7c91a-2f08-4d3e-9a1b-7c6d5e4f3a21",
@@ -7259,6 +7342,28 @@
           "x": 4252,
           "y": 6264
         }
+      }
+    },
+    {
+      "id": "n_a1d5c7e93b60",
+      "type": "http_node",
+      "name": "Autodeclaração de residência",
+      "data": {
+        "position": {
+          "x": 8060,
+          "y": 4040
+        },
+        "method": "POST",
+        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/autodeclaracao-residencia",
+        "body": "{\n  \"logradouro\": \"@{screen:s_7e2a1c9b4f08.comp:c_a8f3e21b9c40.value ?? node:n_f5aacdb3ca97.result.endereco ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.logradouroComprador}\",\n  \"numero\": \"@{screen:s_7e2a1c9b4f08.comp:c_b7d4e12a8f31.value ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.numeroComprador}\",\n  \"complemento\": \"@{screen:s_7e2a1c9b4f08.comp:c_c6e5f03b7a22.value ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.complementoComprador}\",\n  \"bairro\": \"@{screen:s_7e2a1c9b4f08.comp:c_d5f6a14c6b13.value ?? node:n_f5aacdb3ca97.result.bairro ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.bairroComprador}\",\n  \"municipio\": \"@{screen:s_7e2a1c9b4f08.comp:c_4a2614e0e9fb.value ?? node:n_f5aacdb3ca97.result.localidade ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeMunicipioComprador}\",\n  \"uf\": \"@{node:n_f5aacdb3ca97.result.uf ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.ufComprador}\",\n  \"nomeUF\": \"@{node:n_f5aacdb3ca97.result.estado}\"\n}",
+        "responseExamples": [
+          {
+            "id": "ex-autodeclaracao-ok",
+            "name": "Texto gerado",
+            "value": "{\n  \"autodeclaracaoResidencia\": \"Eu, MARIA COMPRADORA TESTE, inscrito no CPF sob o nº 052.464.876-01, declaro para os devidos fins que resido em PRACA VISCONDE DE MAUA nº 209 CASA 2, Bairro CENTRO, no município de SANTOS, no estado de São Paulo.\\nSob pena da lei, estou ciente de que a falsidade destas informações implicará em penalidades.\"\n}"
+          }
+        ],
+        "showSnackbar": true
       }
     }
   ],
@@ -7625,9 +7730,9 @@
     },
     {
       "sourceId": "n_b2c6d93e6c54",
-      "targetId": "s_8fefaaacf3d9",
+      "targetId": "n_4fa4749270c6",
       "sourceHandle": "false",
-      "targetHandle": "input"
+      "targetHandle": "right-target"
     },
     {
       "sourceId": "n_cd7b779a01a0",
@@ -7663,12 +7768,6 @@
       "sourceId": "n_b8d2e4f61c37",
       "targetId": "s_8080e0ac9d2e",
       "sourceHandle": "output",
-      "targetHandle": "input"
-    },
-    {
-      "sourceId": "n_cd7b779a01a0",
-      "targetId": "n_c4e8f2a71d05",
-      "sourceHandle": "c4e8f2a7-1d05-4b6e-8f2a-000000000001",
       "targetHandle": "input"
     },
     {
@@ -7829,12 +7928,6 @@
     },
     {
       "sourceId": "n_cd7b779a01a0",
-      "targetId": "s_e28e30972542",
-      "sourceHandle": "5a63bc3a-59bb-4258-9927-d496147f49a2",
-      "targetHandle": "input"
-    },
-    {
-      "sourceId": "n_cd7b779a01a0",
       "targetId": "s_f0ef50595f87",
       "sourceHandle": "d5bb251f-200e-4547-879e-c20202b5042d",
       "targetHandle": "input"
@@ -7843,12 +7936,6 @@
       "sourceId": "n_cd7b779a01a0",
       "targetId": "s_fb22aac48147",
       "sourceHandle": "1394b265-113e-4c2a-af0c-c950abbdf258",
-      "targetHandle": "input"
-    },
-    {
-      "sourceId": "n_cd7b779a01a0",
-      "targetId": "s_89a40a2ddf9a",
-      "sourceHandle": "38c9ab5b-70a0-4a55-b7c2-a1a8e49a2e9c",
       "targetHandle": "input"
     },
     {
@@ -8141,13 +8228,13 @@
     },
     {
       "sourceId": "s_3593782b12c5",
-      "targetId": "s_b650bf1fea21",
+      "targetId": "n_a1d5c7e93b60",
       "sourceHandle": "c_76535dccc44e",
       "targetHandle": "input"
     },
     {
       "sourceId": "s_7e2a1c9b4f08",
-      "targetId": "s_b650bf1fea21",
+      "targetId": "n_a1d5c7e93b60",
       "sourceHandle": "c_9d3f7a1e5b20",
       "targetHandle": "input"
     },
@@ -8376,6 +8463,42 @@
     {
       "sourceId": "s_09b98b41fb85",
       "targetId": "n_b824c7dd9350",
+      "sourceHandle": "output",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_a4e7b1c9d205",
+      "targetId": "n_cd7b779a01a0",
+      "sourceHandle": "r_estado_3_01",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_a4e7b1c9d205",
+      "targetId": "n_cd7b779a01a0",
+      "sourceHandle": "r_estado_4_01",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_a4e7b1c9d205",
+      "targetId": "n_cd7b779a01a0",
+      "sourceHandle": "r_estado_5_01",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_cd7b779a01a0",
+      "targetId": "s_0807856fe2c1",
+      "sourceHandle": "r_vendedor_loja_assinar_01",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_5a7c9e1b3d46",
+      "targetId": "s_p2b2c3d4e5f7",
+      "sourceHandle": "r_vistoria_pendente_01",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "n_a1d5c7e93b60",
+      "targetId": "s_b650bf1fea21",
       "sourceHandle": "output",
       "targetHandle": "input"
     }

@@ -75,7 +75,6 @@ describe('CriarCompraService', () => {
       codigoRenavamVeiculo: '00010020031',
       placaVeiculo: 'GHI8J90',
       nomeVendedor: 'João Vendedor',
-      emailVendedor: '',
       codigoVendedor: '11122233344',
       origem: CodigoOrigemTDV.E_NOTARIADO,
       cepComprador: '01310100',
@@ -86,7 +85,8 @@ describe('CriarCompraService', () => {
       confirmacaoAutodeclaracaoResidenciaComprador: 'true'
     })
     expect(atualizaTdv).not.toHaveBeenCalled()
-    expect(listaTdvs).not.toHaveBeenCalled()
+    // One lookup only: the record echo. Nothing else re-lists.
+    expect(listaTdvs).toHaveBeenCalledTimes(1)
     expect(buscaTdv).toHaveBeenCalledWith(
       clientAuth,
       'TDV-NEW',
@@ -128,7 +128,6 @@ describe('CriarCompraService', () => {
       codigoRenavamVeiculo: '00010020031',
       placaVeiculo: 'GHI8J90',
       nomeVendedor: 'João Vendedor',
-      emailVendedor: '',
       codigoVendedor: '11122233344',
       origem: CodigoOrigemTDV.E_NOTARIADO,
       ativa: 'true',
@@ -176,6 +175,98 @@ describe('CriarCompraService', () => {
     expect(criaTdv.mock.calls[0]?.[1]).not.toHaveProperty('nomeComprador')
   })
 
+  it('resumes on TDVAtivaExistenteError when the TDV appeared between the lookup and the create', async () => {
+    const cv = { placaVeiculo: 'GHI8J90', codigoRenavamVeiculo: '00010020031' }
+    const listaTdvs = vi.fn()
+      .mockResolvedValueOnce({ result: [cv] })
+      .mockResolvedValue({ result: [{ ...cv, codigoTransferenciaVeiculo: 'TDV-CORRIDA' }] })
+    const criaTdv = vi.fn().mockRejectedValue(
+      createError(500, new DetranSpServiceNowError('tdvativaexistenteerror', 'Já existe TDV ativa'), { expose: true })
+    )
+    const buscaTdv = vi.fn().mockResolvedValue({
+      result: {
+        estado: CodigoEstadoTDV.TAXA_SERVICO_PAGA,
+        placaVeiculo: 'GHI8J90',
+        codigoRenavamVeiculo: '00010020031'
+      }
+    })
+
+    const service = new CriarCompraService({
+      detranSpServiceNowTdv: asClient({ criaTdv, listaTdvs, buscaTdv })
+    })
+
+    await expect(service.run(authHeader, baseInput)).resolves.toMatchObject({
+      proximaAcao: 'pagamento_confirmado',
+      codigoTransferencia: 'TDV-CORRIDA'
+    })
+  })
+
+  it('echoes the listed comunicação de venda back whole, keeping the address it already had', async () => {
+    const registro = {
+      codigoTransferenciaVeiculo: null,
+      numeroTransferenciaVeiculo: 'TDV1470832',
+      ativa: '1',
+      estado: CodigoEstadoTDV.ATPVE_ASSINADA_VENDEDOR_COMUNICACAO_VENDA_GERADA,
+      origem: CodigoOrigemTDV.CARTORIO,
+      origemComunicacaoVendaVeiculo: CodigoOrigemComunicacaoVendaVeiculo.CARTORIO,
+      placaVeiculo: 'GHI8J90',
+      codigoRenavamVeiculo: '00010020031',
+      chassiVeiculo: '9BWZZZ377VT004251',
+      descricaoMarcaVeiculo: 'VW/GOL 1.0',
+      codigoMunicipioVeiculo: '7107',
+      nomeMunicipioVeiculo: 'SAO PAULO',
+      codigoComprador: '00034324084807',
+      nomeComprador: 'Maria Compradora',
+      emailComprador: 'maria@example.com',
+      codigoMunicipioComprador: '7107',
+      nomeMunicipioComprador: 'SAO PAULO',
+      ufComprador: 'SP',
+      cepComprador: '11010900',
+      logradouroComprador: 'PRACA VISCONDE DE MAUA',
+      numeroComprador: '209',
+      complementoComprador: 'CASA 2',
+      bairroComprador: 'CENTRO',
+      nomeVendedor: 'João Vendedor',
+      codigoVendedor: '00031684755050',
+      dataInicialPagamento: '',
+      numeroCrvVeiculo: null
+    }
+    const listaTdvs = vi.fn().mockResolvedValue({ result: [registro] })
+    const criaTdv = vi.fn().mockResolvedValue({
+      result: { codigoTransferenciaVeiculo: 'TDV-NEW' }
+    })
+    const buscaTdv = vi.fn().mockResolvedValue({
+      result: {
+        estado: CodigoEstadoTDV.ATPVE_ASSINADA_VENDEDOR_COMUNICACAO_VENDA_GERADA,
+        placaVeiculo: 'GHI8J90',
+        codigoRenavamVeiculo: '00010020031'
+      }
+    })
+
+    const service = new CriarCompraService({
+      detranSpServiceNowTdv: asClient({ listaTdvs, criaTdv, buscaTdv })
+    })
+
+    await service.run(authHeader, {
+      ...baseInput,
+      // What the buyer typed on the address screen only regenerates the declaration text — the
+      // record keeps the address the comunicação de venda was registered with.
+      cepComprador: '01310100',
+      logradouroComprador: 'Av. Paulista',
+      bairroComprador: 'Bela Vista',
+      numeroComprador: '1000'
+    })
+
+    const payload = criaTdv.mock.calls[0]?.[1] as Record<string, unknown>
+    expect(payload).toEqual({
+      ...Object.fromEntries(Object.entries(registro).filter(([, v]) => v !== null)),
+      confirmacaoAutodeclaracaoResidenciaComprador: 'true'
+    })
+    expect(payload).not.toHaveProperty('numeroCrvVeiculo')
+    expect(payload).not.toHaveProperty('codigoTransferenciaVeiculo')
+    expect(payload.dataInicialPagamento).toBe('')
+  })
+
   it('keeps the leading zeros the listing sends in codigoComprador', async () => {
     const criaTdv = vi.fn().mockResolvedValue({
       result: { codigoTransferenciaVeiculo: 'TDV-NEW' }
@@ -202,8 +293,8 @@ describe('CriarCompraService', () => {
     }))
   })
 
-  it('does not list TDVs to fill missing optional fields before create', async () => {
-    const listaTdvs = vi.fn()
+  it('assembles the payload when the record lookup finds nothing, without a second listing', async () => {
+    const listaTdvs = vi.fn().mockResolvedValue({ result: [] })
     const criaTdv = vi.fn().mockResolvedValue({
       result: { codigoTransferenciaVeiculo: 'TDV-NEW' }
     })
@@ -224,7 +315,7 @@ describe('CriarCompraService', () => {
       codigoTransferencia: 'TDV-NEW'
     })
 
-    expect(listaTdvs).not.toHaveBeenCalled()
+    expect(listaTdvs).toHaveBeenCalledTimes(1)
     expect(criaTdv).toHaveBeenCalledWith(clientAuth, expect.objectContaining({
       cepComprador: '01310100',
       logradouroComprador: 'Av. Paulista',
@@ -333,10 +424,8 @@ describe('CriarCompraService', () => {
     })
   })
 
-  it('resumes existing TDV on TDVAtivaExistenteError', async () => {
-    const criaTdv = vi.fn().mockRejectedValue(
-      createError(500, new DetranSpServiceNowError('tdvativaexistenteerror', 'Já existe TDV ativa'), { expose: true })
-    )
+  it('never recreates a TDV that already has a codigo — reads it and routes by estado', async () => {
+    const criaTdv = vi.fn()
     const listaTdvs = vi.fn().mockResolvedValue({
       result: [{
         placaVeiculo: 'GHI8J90',
@@ -379,12 +468,23 @@ describe('CriarCompraService', () => {
       'TDV-EXISTING',
       'placaVeiculo,descricaoMarcaVeiculo,descricaoCorVeiculo,nomeComprador,estado,codigoRenavamVeiculo'
     )
+    expect(criaTdv).not.toHaveBeenCalled()
+  })
+
+  it('forwards a known seller e-mail and never falls back to the buyer token e-mail', async () => {
+    const criaTdv = vi.fn().mockResolvedValue({ result: { codigoTransferenciaVeiculo: 'TDV-1' } })
+    const buscaTdv = vi.fn().mockResolvedValue({ result: { estado: '7' } })
+    const service = new CriarCompraService({ detranSpServiceNowTdv: asClient({ criaTdv, buscaTdv }) })
+
+    await service.run(authHeader, { ...baseInput, emailVendedor: 'vendedor@example.com' })
+
+    expect(criaTdv.mock.calls[0]?.[1]).toMatchObject({ emailVendedor: 'vendedor@example.com' })
   })
 
   it('rejects when address fields are missing', async () => {
     const criaTdv = vi.fn()
     const buscaEndereco = vi.fn()
-    const listaTdvs = vi.fn()
+    const listaTdvs = vi.fn().mockResolvedValue({ result: [] })
 
     const service = new CriarCompraService({
       detranSpServiceNowTdv: asClient({ criaTdv, buscaEndereco, listaTdvs })
@@ -425,7 +525,6 @@ describe('CriarCompraService', () => {
     })
 
     expect(buscaEndereco).not.toHaveBeenCalled()
-    expect(listaTdvs).not.toHaveBeenCalled()
     expect(criaTdv).not.toHaveBeenCalled()
   })
 
@@ -523,16 +622,18 @@ describe('CriarCompraService', () => {
       'Veículo com bloqueio - Baixa permanente,Veículo com Restrição Judicial'
     ]
   ] as const)('maps %s to proximaAcao %s with detail', async (type, proximaAcao, detail) => {
-    const listaTdvs = vi.fn().mockResolvedValue({
-      result: [{
-        placaVeiculo: 'GHI8J90',
-        codigoRenavamVeiculo: '00010020031',
-        codigoTransferenciaVeiculo: 'TDV-PEND',
-        chassiVeiculo: '9BWZZZ377VT004251',
-        kmVistoriadaVeiculo: '32009',
-        numeroComprador: '221'
-      }]
-    })
+    const cv = {
+      placaVeiculo: 'GHI8J90',
+      codigoRenavamVeiculo: '00010020031',
+      chassiVeiculo: '9BWZZZ377VT004251',
+      kmVistoriadaVeiculo: '32009',
+      numeroComprador: '221'
+    }
+    // First lookup finds the bare comunicação de venda; after the create raised the pendência the
+    // TDV is there, which is how the payment screen gets a codigo to fetch débitos with.
+    const listaTdvs = vi.fn()
+      .mockResolvedValueOnce({ result: [cv] })
+      .mockResolvedValue({ result: [{ ...cv, codigoTransferenciaVeiculo: 'TDV-PEND' }] })
     const criaTdv = vi.fn().mockRejectedValue(
       createError(500, new DetranSpServiceNowError(type, detail), { expose: true })
     )

@@ -40,6 +40,10 @@ export type AtualizaTdvAtpveAssinadaComprador = {
   itiCode: string
 }
 
+// Origem 5 (Entrada Renave) only: the seller accepting the TCR is the transition that
+// carries their facial liveness, since this journey has no informar-dados-venda /
+// confirmar-intencao-venda step to carry it. Optional so the flow can stop sending it
+// without an API change if ServiceNow ever rejects the pair on this transition.
 export type AtualizaTdvTermoCienciaConfirmado = {
   estado: CodigoEstadoTDV.ATPVE_ASSINADA_COMPRADOR
   confirmacaoTermoCienciaResponsabilidade: true

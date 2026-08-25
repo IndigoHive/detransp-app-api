@@ -52,4 +52,12 @@ describe('formatCpfCnpj', () => {
   it('formats a zero-padded CPF that is longer than 11 digits', () => {
     expect(formatCpfCnpj('0005246487601')).toBe('052.464.876-01')
   })
+
+  it('reads a CPF zero-padded to a CNPJ width as a CPF, not as a CNPJ', () => {
+    expect(formatCpfCnpj('00005246487601')).toBe('052.464.876-01')
+  })
+
+  it('keeps a real CNPJ with leading zeros as a CNPJ', () => {
+    expect(formatCpfCnpj('00000000000191')).toBe('00.000.000/0001-91')
+  })
 })

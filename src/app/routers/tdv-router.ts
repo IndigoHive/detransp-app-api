@@ -136,6 +136,13 @@ export function tdvRouter (): Router {
     res.status(200).json(result)
   })
 
+  router.post('/autodeclaracao-residencia', async (req, res) => {
+    const { accessToken } = req.session!
+    const service = req.scope.resolve('autodeclaracaoResidenciaService')
+    const result = await service.run(accessToken, req.body)
+    res.status(200).json(result)
+  })
+
   router.get('/enderecos/:cep', async (req, res) => {
     const { accessToken } = req.session!
     const service = req.scope.resolve('buscaEnderecoService')

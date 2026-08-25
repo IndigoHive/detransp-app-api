@@ -1,4 +1,13 @@
-import { ApplicationEnvironment, Config } from '../../types'
+import {
+  ApplicationEnvironment,
+  Config,
+  TDV_MOCK_PENDENCIAS,
+  TDV_MOCK_VALIDAR_TDV,
+  TDV_MOCK_VERSOES,
+  type TdvMockPendencia,
+  type TdvMockValidarTdv,
+  type TdvMockVersao
+} from '../../types'
 import { env } from './env'
 
 const DEFAULT_PORT = 3500
@@ -153,6 +162,7 @@ export const config: Config = {
   },
   tdvMock: {
     enabled: tdvMockEnabled,
+    versao: pickFromEnum<TdvMockVersao>('TDV_MOCK_VERSAO', env.TDV_MOCK_VERSAO, TDV_MOCK_VERSOES, '1.0'),
     sellerCpf: env.TDV_MOCK_SELLER_CPF || '',
     buyerCpf: env.TDV_MOCK_BUYER_CPF || '',
     vehiclePlate: env.TDV_MOCK_VEHICLE_PLATE || 'ABC1D23',
@@ -160,7 +170,24 @@ export const config: Config = {
     initialEstado: env.TDV_MOCK_INITIAL_ESTADO || '',
     forceVehicleRestriction: env.TDV_MOCK_FORCE_VEHICLE_RESTRICTION === 'true' && isNonProduction,
     forceCidadesDiferentes: env.TDV_MOCK_FORCE_CIDADES_DIFERENTES === 'true' && isNonProduction,
+    pendencia: pickFromEnum<TdvMockPendencia>('TDV_MOCK_PENDENCIA', env.TDV_MOCK_PENDENCIA, TDV_MOCK_PENDENCIAS, ''),
+    validarTdv: pickFromEnum<TdvMockValidarTdv>('TDV_MOCK_VALIDAR_TDV', env.TDV_MOCK_VALIDAR_TDV, TDV_MOCK_VALIDAR_TDV, ''),
   }
+}
+
+// Keeps a typo in a dev/QA env var from silently changing which scenario the mock reproduces:
+// an unrecognized value warns loudly and falls back instead of being coerced.
+function pickFromEnum <T extends string> (
+  name: string,
+  raw: string | undefined,
+  allowed: readonly string[],
+  fallback: T
+): T {
+  const value = raw?.trim()
+  if (!value) return fallback
+  if (allowed.includes(value)) return value as T
+  console.warn(`⚠️  ${name}="${value}" inválido (use ${allowed.join(' | ')}) — usando "${fallback}".`)
+  return fallback
 }
 
 function getIdspConfig (): Config['idsp'] {

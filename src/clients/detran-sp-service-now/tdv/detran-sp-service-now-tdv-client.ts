@@ -9,6 +9,8 @@ import type {
   BuscaEnderecoResult,
   BuscaPixQrCodeTdvResult,
   BuscaTdvResult,
+  CriaAutodeclaracaoResidenciaCommand,
+  CriaAutodeclaracaoResidenciaResult,
   CriaTdvCommand,
   CriaTdvResult,
   ListaTdvsResult,
@@ -123,6 +125,22 @@ export class DetranSpServiceNowTdvClient extends DetranSpServiceNowHttp {
       await this.axios.get<BuscaPixQrCodeTdvResult>(
         `/transferencias-de-veiculos/${codigoTransferenciaVeiculo}/qr-code`,
         { ...this.withAuth(auth), params: { forcarNovo } }
+      )
+    ).data
+  }
+
+  // Renders the residence self-declaration text server-side, so the wording that ends up stored
+  // on the TDV is the same one the citizen agreed to on screen.
+  async criaAutodeclaracaoResidencia (
+    auth: DetranSpServiceNowAuth,
+    cpf: string,
+    data: CriaAutodeclaracaoResidenciaCommand
+  ): Promise<CriaAutodeclaracaoResidenciaResult> {
+    return (
+      await this.axios.post<CriaAutodeclaracaoResidenciaResult>(
+        `/cidadaos/${cpf}/autodeclaracao-de-residencia`,
+        data,
+        this.withAuth(auth)
       )
     ).data
   }

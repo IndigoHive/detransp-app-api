@@ -6,6 +6,7 @@ import { mapPendenciaError } from './map-pendencia-error'
 describe('mapPendenciaError', () => {
   it.each([
     ['PagamentoPendenteError', 'pagamento_pendente', 'Pagamento de taxa não localizado'],
+    ['VistoriaPendenteError', 'vistoria_pendente', 'Laudo de vistoria não localizado'],
     [
       'PagamentoVistoriaPendentesError',
       'vistoria_pagamento_pendentes',
@@ -40,6 +41,21 @@ describe('mapPendenciaError', () => {
       proximaAcao: 'pagamento_pendente',
       detail: 'Pagamento de taxa não localizado'
     })
+  })
+
+  it('reads the reason from RestricoesEncontradasError when it is a missing service fee', () => {
+    const detail = 'PAGAMENTO DE TAXA DE SERVIÇO NÃO LOCALIZADO'
+
+    expect(mapPendenciaError(new DetranSpServiceNowError('RestricoesEncontradasError', detail)))
+      .toEqual({ proximaAcao: 'pagamento_pendente', detail })
+  })
+
+  it('leaves other RestricoesEncontradasError alone', () => {
+    expect(
+      mapPendenciaError(
+        new DetranSpServiceNowError('RestricoesEncontradasError', 'Veículo com restrição judicial')
+      )
+    ).toBeUndefined()
   })
 
   it('returns undefined for unknown SN errors', () => {

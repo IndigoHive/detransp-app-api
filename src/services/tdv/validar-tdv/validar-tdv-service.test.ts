@@ -136,7 +136,20 @@ describe('ValidarTdvService', () => {
       origem: CodigoOrigemTDV.CARTORIO
     })).rejects.toMatchObject({
       status: 400,
-      message: 'codigoTransferenciaVeiculo, placaVeiculo, codigoRenavamVeiculo, origem e estado são obrigatórios'
+      message: 'placaVeiculo, codigoRenavamVeiculo e origem são obrigatórios'
     })
+  })
+
+  it('validates a comunicação de venda that has no estado yet', async () => {
+    const validarTdv = vi.fn().mockResolvedValue({ result: {} })
+    const service = new ValidarTdvService({ detranSpServiceNowTdv: asClient({ validarTdv }) })
+
+    await expect(service.run(authHeader, {
+      placaVeiculo: 'GHI8J90',
+      codigoRenavamVeiculo: '00010020036',
+      origem: CodigoOrigemTDV.CARTORIO
+    })).resolves.toEqual({ proximaAcao: 'enotariado' })
+
+    expect(validarTdv.mock.calls[0]?.[1]).not.toHaveProperty('estado')
   })
 })

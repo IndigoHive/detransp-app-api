@@ -63,6 +63,8 @@ export type ListaTdvsResultData = {
   cepComprador?: string | null
   codigoProvaVidaComprador?: string | null
   autodeclaracaoResidenciaComprador?: string | null
+  // Origem 5 only: the Termo de Ciência e Responsabilidade text the seller has to accept.
+  termoCienciaResponsabilidade?: string | null
   confirmacaoAutodeclaracaoResidenciaComprador?: 'true' | 'false' | '1' | '0' | null
   codigoAnexoAtpve?: string | null
   codigoAnexoAssinaturaVendedor?: string | null
