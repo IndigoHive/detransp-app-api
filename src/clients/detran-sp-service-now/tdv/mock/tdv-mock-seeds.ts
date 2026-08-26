@@ -234,7 +234,9 @@ export function seedSpecs (cfg: TdvMockConfig): SeedSpec[] {
           nome: LOJA.nome,
           email: LOJA.email
         },
-        comprador,
+        // Origem 4 chega sem o município do comprador em homologação. A massa reproduz isso para
+        // a declaração de residência ser exercitada com a lacuna, que é como ela deve sair.
+        comprador: { ...comprador, municipio: '' },
         estadoPadrao: CodigoEstadoTDV.ATPVE_ASSINADA_VENDEDOR_COMUNICACAO_VENDA_GERADA,
         estadoSemCodigo: true
       }]

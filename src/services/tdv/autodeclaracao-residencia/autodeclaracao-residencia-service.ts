@@ -1,4 +1,3 @@
-import { BadRequest } from 'http-errors'
 import type { DetranSpServiceNowTdvClient } from '../../../clients/detran-sp-service-now/tdv'
 import { extractBearerToken, extractCpfFromToken } from '../../../utils/token'
 
@@ -35,23 +34,16 @@ export class AutodeclaracaoResidenciaService {
     authorizationHeader: string | undefined,
     input: AutodeclaracaoResidenciaInput
   ): Promise<AutodeclaracaoResidenciaResult> {
-    const logradouro = texto(input.logradouro)
-    const municipio = texto(input.municipio)
-
-    if (!logradouro || !municipio) {
-      throw BadRequest('logradouro e municipio são obrigatórios')
-    }
-
     const token = extractBearerToken(authorizationHeader)
     const cpf = extractCpfFromToken(token)
     const auth = { token, cpf }
 
     const result = await this.client.criaAutodeclaracaoResidencia(auth, cpf, {
-      logradouro,
+      logradouro: texto(input.logradouro),
       numero: texto(input.numero),
       complemento: texto(input.complemento),
       bairro: texto(input.bairro),
-      municipio,
+      municipio: texto(input.municipio),
       uf: texto(input.uf),
       nomeUF: texto(input.nomeUF)
     })
