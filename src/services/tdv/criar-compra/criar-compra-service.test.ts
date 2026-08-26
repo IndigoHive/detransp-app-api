@@ -1,4 +1,5 @@
 import createError from 'http-errors'
+import type { Logger } from 'pino'
 import { describe, expect, it, vi } from 'vitest'
 import { DetranSpServiceNowError } from '../../../clients/detran-sp-service-now'
 import type { DetranSpServiceNowTdvClient } from '../../../clients/detran-sp-service-now/tdv'
@@ -35,6 +36,8 @@ const vehicleSummary = {
   yearMod: ''
 }
 
+const logger = { info: vi.fn(), warn: vi.fn(), error: vi.fn() } as unknown as Logger
+
 function asClient (client: Partial<DetranSpServiceNowTdvClient>): DetranSpServiceNowTdvClient {
   return {
     listaTdvs: vi.fn().mockResolvedValue({ result: [] }),
@@ -59,7 +62,7 @@ describe('CriarCompraService', () => {
       }
     })
 
-    const service = new CriarCompraService({
+    const service = new CriarCompraService({ logger,
       detranSpServiceNowTdv: asClient({ criaTdv, atualizaTdv, listaTdvs, buscaTdv })
     })
 
@@ -107,7 +110,7 @@ describe('CriarCompraService', () => {
       }
     })
 
-    const service = new CriarCompraService({
+    const service = new CriarCompraService({ logger,
       detranSpServiceNowTdv: asClient({ criaTdv, buscaTdv })
     })
 
@@ -159,7 +162,7 @@ describe('CriarCompraService', () => {
       }
     })
 
-    const service = new CriarCompraService({
+    const service = new CriarCompraService({ logger,
       detranSpServiceNowTdv: asClient({ criaTdv, buscaTdv })
     })
 
@@ -173,6 +176,154 @@ describe('CriarCompraService', () => {
       codigoComprador: '12345678901'
     }))
     expect(criaTdv.mock.calls[0]?.[1]).not.toHaveProperty('nomeComprador')
+  })
+
+  it('picks the right row out of the buyer\'s whole list', async () => {
+    // The buyer's listing carries every vehicle they are involved with — TDVs and comunicações
+    // de venda alike — so the row has to be found here, not by trusting a server-side filter.
+    const listaTdvs = vi.fn().mockResolvedValue({
+      result: [
+        { placaVeiculo: 'MCK1937', codigoRenavamVeiculo: '01000984815', codigoTransferenciaVeiculo: 'OUTRA-TDV' },
+        { placaVeiculo: 'BXX0D45', codigoRenavamVeiculo: '01001061702', codigoTransferenciaVeiculo: null },
+        { placaVeiculo: 'GHI8J90', codigoRenavamVeiculo: '00010020031', codigoTransferenciaVeiculo: 'TDV-CERTA' },
+        { placaVeiculo: 'CAR0A09', codigoRenavamVeiculo: '01315056345', codigoTransferenciaVeiculo: null }
+      ]
+    })
+    const criaTdv = vi.fn()
+    const buscaTdv = vi.fn().mockResolvedValue({
+      result: { estado: CodigoEstadoTDV.ATPVE_ASSINADA_VENDEDOR_COMUNICACAO_VENDA_GERADA }
+    })
+
+    const service = new CriarCompraService({ logger,
+      detranSpServiceNowTdv: asClient({ listaTdvs, criaTdv, buscaTdv })
+    })
+
+    await expect(service.run(authHeader, baseInput)).resolves.toMatchObject({
+      codigoTransferencia: 'TDV-CERTA'
+    })
+    expect(criaTdv).not.toHaveBeenCalled()
+  })
+
+  it('matches the record even when ServiceNow drops the renavam leading zeros', async () => {
+    const listaTdvs = vi.fn().mockResolvedValue({
+      result: [{
+        placaVeiculo: 'GHI8J90',
+        codigoRenavamVeiculo: '10020031',
+        codigoTransferenciaVeiculo: 'TDV-SEM-ZERO'
+      }]
+    })
+    const criaTdv = vi.fn()
+    const buscaTdv = vi.fn().mockResolvedValue({
+      result: { estado: CodigoEstadoTDV.ATPVE_ASSINADA_VENDEDOR_COMUNICACAO_VENDA_GERADA }
+    })
+
+    const service = new CriarCompraService({ logger,
+      detranSpServiceNowTdv: asClient({ listaTdvs, criaTdv, buscaTdv })
+    })
+
+    await expect(service.run(authHeader, baseInput)).resolves.toMatchObject({
+      codigoTransferencia: 'TDV-SEM-ZERO'
+    })
+    expect(criaTdv).not.toHaveBeenCalled()
+  })
+
+  it('prefers the row that carries the codigo when the CV and the TDV are both listed', async () => {
+    const veiculo = { placaVeiculo: 'GHI8J90', codigoRenavamVeiculo: '00010020031' }
+    const listaTdvs = vi.fn().mockResolvedValue({
+      result: [veiculo, { ...veiculo, codigoTransferenciaVeiculo: 'TDV-PROMOVIDA' }]
+    })
+    const criaTdv = vi.fn()
+    const buscaTdv = vi.fn().mockResolvedValue({
+      result: { estado: CodigoEstadoTDV.ATPVE_ASSINADA_VENDEDOR_COMUNICACAO_VENDA_GERADA }
+    })
+
+    const service = new CriarCompraService({ logger,
+      detranSpServiceNowTdv: asClient({ listaTdvs, criaTdv, buscaTdv })
+    })
+
+    await expect(service.run(authHeader, baseInput)).resolves.toMatchObject({
+      codigoTransferencia: 'TDV-PROMOVIDA'
+    })
+    expect(criaTdv).not.toHaveBeenCalled()
+  })
+
+  it('re-lists the buyer when the TDV reached the listing only after the create', async () => {
+    const veiculo = { placaVeiculo: 'GHI8J90', codigoRenavamVeiculo: '00010020031' }
+    const listaTdvs = vi.fn()
+      .mockResolvedValueOnce({ result: [] })
+      .mockResolvedValue({ result: [{ ...veiculo, codigoTransferenciaVeiculo: 'TDV-ATRASADA' }] })
+    const criaTdv = vi.fn().mockRejectedValue(
+      new DetranSpServiceNowError('TDVAtivaExistenteError', 'Já existe TDV ativa')
+    )
+    const buscaTdv = vi.fn().mockResolvedValue({
+      result: { estado: CodigoEstadoTDV.ATPVE_ASSINADA_VENDEDOR_COMUNICACAO_VENDA_GERADA }
+    })
+
+    const service = new CriarCompraService({ logger,
+      detranSpServiceNowTdv: asClient({ listaTdvs, criaTdv, buscaTdv })
+    })
+
+    await expect(service.run(authHeader, baseInput)).resolves.toMatchObject({
+      codigoTransferencia: 'TDV-ATRASADA'
+    })
+  })
+
+  it('falls back to listing by vehicle — TDVAtivaExistenteError is about the vehicle', async () => {
+    const veiculo = { placaVeiculo: 'GHI8J90', codigoRenavamVeiculo: '00010020031' }
+    const listaTdvs = vi.fn().mockImplementation((_auth, query: Record<string, unknown>) =>
+      // The buyer's own listing keeps showing only the comunicação de venda, with no codigo —
+      // exactly what homologação returned while ServiceNow refused the create as duplicate.
+      query.codigoComprador
+        ? Promise.resolve({ result: [veiculo] })
+        : Promise.resolve({
+            result: [{
+              ...veiculo,
+              codigoTransferenciaVeiculo: 'TDV-DO-VEICULO',
+              codigoComprador: '00012345678901'
+            }]
+          })
+    )
+    const criaTdv = vi.fn().mockRejectedValue(
+      new DetranSpServiceNowError('TDVAtivaExistenteError', 'Já existe uma TDV ativa para o veículo')
+    )
+    const buscaTdv = vi.fn().mockResolvedValue({
+      result: { estado: CodigoEstadoTDV.ATPVE_ASSINADA_VENDEDOR_COMUNICACAO_VENDA_GERADA }
+    })
+
+    const service = new CriarCompraService({ logger,
+      detranSpServiceNowTdv: asClient({ listaTdvs, criaTdv, buscaTdv })
+    })
+
+    await expect(service.run(authHeader, baseInput)).resolves.toMatchObject({
+      codigoTransferencia: 'TDV-DO-VEICULO'
+    })
+    expect(listaTdvs).toHaveBeenCalledWith(clientAuth, { ativa: 'true', placaVeiculo: 'GHI8J90' })
+  })
+
+  it('refuses a vehicle TDV that belongs to another buyer', async () => {
+    const veiculo = { placaVeiculo: 'GHI8J90', codigoRenavamVeiculo: '00010020031' }
+    const listaTdvs = vi.fn().mockImplementation((_auth, query: Record<string, unknown>) =>
+      query.codigoComprador
+        ? Promise.resolve({ result: [veiculo] })
+        : Promise.resolve({
+            result: [{
+              ...veiculo,
+              codigoTransferenciaVeiculo: 'TDV-DE-OUTRO',
+              codigoComprador: '98765432100'
+            }]
+          })
+    )
+    const criaTdv = vi.fn().mockRejectedValue(
+      new DetranSpServiceNowError('TDVAtivaExistenteError', 'Já existe uma TDV ativa para o veículo')
+    )
+
+    const service = new CriarCompraService({ logger,
+      detranSpServiceNowTdv: asClient({ listaTdvs, criaTdv })
+    })
+
+    await expect(service.run(authHeader, baseInput)).resolves.toMatchObject({
+      showSnackbar: expect.objectContaining({ title: 'Transferência já iniciada' })
+    })
   })
 
   it('resumes on TDVAtivaExistenteError when the TDV appeared between the lookup and the create', async () => {
@@ -191,7 +342,7 @@ describe('CriarCompraService', () => {
       }
     })
 
-    const service = new CriarCompraService({
+    const service = new CriarCompraService({ logger,
       detranSpServiceNowTdv: asClient({ criaTdv, listaTdvs, buscaTdv })
     })
 
@@ -243,7 +394,7 @@ describe('CriarCompraService', () => {
       }
     })
 
-    const service = new CriarCompraService({
+    const service = new CriarCompraService({ logger,
       detranSpServiceNowTdv: asClient({ listaTdvs, criaTdv, buscaTdv })
     })
 
@@ -279,7 +430,7 @@ describe('CriarCompraService', () => {
       }
     })
 
-    const service = new CriarCompraService({
+    const service = new CriarCompraService({ logger,
       detranSpServiceNowTdv: asClient({ criaTdv, buscaTdv })
     })
 
@@ -306,7 +457,7 @@ describe('CriarCompraService', () => {
       }
     })
 
-    const service = new CriarCompraService({
+    const service = new CriarCompraService({ logger,
       detranSpServiceNowTdv: asClient({ listaTdvs, criaTdv, buscaTdv })
     })
 
@@ -341,7 +492,7 @@ describe('CriarCompraService', () => {
       }
     })
 
-    const service = new CriarCompraService({
+    const service = new CriarCompraService({ logger,
       detranSpServiceNowTdv: asClient({ criaTdv, buscaTdv })
     })
 
@@ -373,7 +524,7 @@ describe('CriarCompraService', () => {
       }
     })
 
-    const service = new CriarCompraService({
+    const service = new CriarCompraService({ logger,
       detranSpServiceNowTdv: asClient({ criaTdv, buscaEndereco, buscaTdv })
     })
 
@@ -412,7 +563,7 @@ describe('CriarCompraService', () => {
       }
     })
 
-    const service = new CriarCompraService({
+    const service = new CriarCompraService({ logger,
       detranSpServiceNowTdv: asClient({ criaTdv, buscaTdv })
     })
 
@@ -446,7 +597,7 @@ describe('CriarCompraService', () => {
       }
     })
 
-    const service = new CriarCompraService({
+    const service = new CriarCompraService({ logger,
       detranSpServiceNowTdv: asClient({ criaTdv, listaTdvs, buscaTdv })
     })
 
@@ -458,10 +609,11 @@ describe('CriarCompraService', () => {
       nomeComprador: 'Maria Compradora'
     })
 
+    // No plate filter and no `campos`: the same query /api/tdv/compras uses, so the row is
+    // guaranteed to come back — and whole, since the create echoes it.
     expect(listaTdvs).toHaveBeenCalledWith(clientAuth, {
       ativa: 'true',
-      codigoComprador: cpf,
-      placaVeiculo: 'GHI8J90'
+      codigoComprador: cpf
     })
     expect(buscaTdv).toHaveBeenCalledWith(
       clientAuth,
@@ -474,7 +626,7 @@ describe('CriarCompraService', () => {
   it('forwards a known seller e-mail and never falls back to the buyer token e-mail', async () => {
     const criaTdv = vi.fn().mockResolvedValue({ result: { codigoTransferenciaVeiculo: 'TDV-1' } })
     const buscaTdv = vi.fn().mockResolvedValue({ result: { estado: '7' } })
-    const service = new CriarCompraService({ detranSpServiceNowTdv: asClient({ criaTdv, buscaTdv }) })
+    const service = new CriarCompraService({ logger, detranSpServiceNowTdv: asClient({ criaTdv, buscaTdv }) })
 
     await service.run(authHeader, { ...baseInput, emailVendedor: 'vendedor@example.com' })
 
@@ -486,7 +638,7 @@ describe('CriarCompraService', () => {
     const buscaEndereco = vi.fn()
     const listaTdvs = vi.fn().mockResolvedValue({ result: [] })
 
-    const service = new CriarCompraService({
+    const service = new CriarCompraService({ logger,
       detranSpServiceNowTdv: asClient({ criaTdv, buscaEndereco, listaTdvs })
     })
 
@@ -529,7 +681,7 @@ describe('CriarCompraService', () => {
   })
 
   it('returns snackbar error for unexpected estado', async () => {
-    const service = new CriarCompraService({
+    const service = new CriarCompraService({ logger,
       detranSpServiceNowTdv: asClient({
         criaTdv: vi.fn().mockResolvedValue({
           result: { codigoTransferenciaVeiculo: 'TDV-NEW' }
@@ -550,7 +702,7 @@ describe('CriarCompraService', () => {
   })
 
   it('maps estado 9 to concluido', async () => {
-    const service = new CriarCompraService({
+    const service = new CriarCompraService({ logger,
       detranSpServiceNowTdv: asClient({
         criaTdv: vi.fn().mockResolvedValue({
           result: { codigoTransferenciaVeiculo: 'TDV-NEW' }
@@ -574,19 +726,24 @@ describe('CriarCompraService', () => {
     })
   })
 
-  it('throws when create does not return codigoTransferencia', async () => {
-    const service = new CriarCompraService({
+  it('reports the TDV as already started when create returns no codigoTransferencia', async () => {
+    const service = new CriarCompraService({ logger,
       detranSpServiceNowTdv: asClient({
         criaTdv: vi.fn().mockResolvedValue({ result: {} })
       })
     })
 
-    await expect(service.run(authHeader, baseInput))
-      .rejects.toThrow('Falha ao criar transferência')
+    await expect(service.run(authHeader, baseInput)).resolves.toEqual({
+      showSnackbar: {
+        variant: 'error',
+        title: 'Transferência já iniciada',
+        description: 'A transferência deste veículo já foi criada, mas não conseguimos carregá-la agora. Volte para a lista de veículos e selecione-o novamente.'
+      }
+    })
   })
 
-  it('throws when TDVAtivaExistenteError and no active codigo is found', async () => {
-    const service = new CriarCompraService({
+  it('reports the TDV as already started when TDVAtivaExistenteError leaves no codigo', async () => {
+    const service = new CriarCompraService({ logger,
       detranSpServiceNowTdv: asClient({
         criaTdv: vi.fn().mockRejectedValue(
           new DetranSpServiceNowError('TDVAtivaExistenteError', 'Já existe TDV ativa')
@@ -600,7 +757,9 @@ describe('CriarCompraService', () => {
       chassiVeiculo: '9BWZZZ377VT004251',
       kmVistoriadaVeiculo: '32009',
       numeroComprador: '221'
-    })).rejects.toThrow('Falha ao criar transferência')
+    })).resolves.toMatchObject({
+      showSnackbar: expect.objectContaining({ title: 'Transferência já iniciada' })
+    })
   })
 
   it.each([
@@ -638,7 +797,7 @@ describe('CriarCompraService', () => {
       createError(500, new DetranSpServiceNowError(type, detail), { expose: true })
     )
 
-    const service = new CriarCompraService({
+    const service = new CriarCompraService({ logger,
       detranSpServiceNowTdv: asClient({ criaTdv, listaTdvs })
     })
 
@@ -655,7 +814,7 @@ describe('CriarCompraService', () => {
   })
 
   it('returns pendencia without codigo when listaTdvs has no match', async () => {
-    const service = new CriarCompraService({
+    const service = new CriarCompraService({ logger,
       detranSpServiceNowTdv: asClient({
         criaTdv: vi.fn().mockRejectedValue(
           createError(
@@ -685,7 +844,7 @@ describe('CriarCompraService', () => {
   })
 
   it('returns pendencia without codigo when listaTdvs fails during resolution', async () => {
-    const service = new CriarCompraService({
+    const service = new CriarCompraService({ logger,
       detranSpServiceNowTdv: asClient({
         criaTdv: vi.fn().mockRejectedValue(
           createError(
@@ -720,7 +879,7 @@ describe('CriarCompraService', () => {
       new DetranSpServiceNowError('SomeUnknownError', 'falha inesperada'),
       { expose: true }
     )
-    const service = new CriarCompraService({
+    const service = new CriarCompraService({ logger,
       detranSpServiceNowTdv: asClient({
         criaTdv: vi.fn().mockRejectedValue(error),
         listaTdvs: vi.fn().mockResolvedValue({

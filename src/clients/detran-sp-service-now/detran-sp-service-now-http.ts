@@ -6,6 +6,39 @@ import { DetranSpServiceNowError } from './errors/detran-sp-service-now-error'
 const SERVICE_NAME = 'detran-sp-servicenow'
 const DEFAULT_ERROR_DETAIL = 'Tivemos um problema ao processar sua solicitação.'
 
+type ServiceNowErrorBody = { error?: { message?: string, detail?: string } }
+
+// ServiceNow has answered 406 with raw newlines inside JSON strings — invalid JSON, so axios
+// hands the body over as text and the real reason ("Ficha cadastral já registrada anteriormente")
+// would be lost behind the generic message. Turning the control characters into spaces recovers
+// it, and is harmless where they were only formatting.
+export function parseServiceNowErrorBody (data: unknown): ServiceNowErrorBody | undefined {
+  if (typeof data === 'object' && data !== null) return data as ServiceNowErrorBody
+  if (typeof data !== 'string' || !data.trim()) return undefined
+
+  try {
+    return JSON.parse(data) as ServiceNowErrorBody
+  } catch {
+    try {
+      return JSON.parse(data.replace(/[\n\r\t]+/g, ' ')) as ServiceNowErrorBody
+    } catch {
+      return undefined
+    }
+  }
+}
+
+// The error name is sometimes packed into the message together with the reason
+// ("RestricaoEncontradaError: Ficha cadastral já registrada anteriormente"). Everything that
+// matches on the type — mapPendenciaError, ValidarTdvService — needs it split back out.
+function splitTipo (texto: string): { type: string, detalhe?: string } {
+  const separador = texto.indexOf(':')
+  if (separador < 0) return { type: texto.trim() }
+
+  const type = texto.slice(0, separador).trim()
+  const detalhe = texto.slice(separador + 1).trim()
+  return /error$/i.test(type) && detalhe ? { type, detalhe } : { type: texto.trim() }
+}
+
 export type DetranSpServiceNowHttpParams = {
   baseURL: string
   logger: Logger
@@ -56,12 +89,18 @@ export class DetranSpServiceNowHttp {
   }
 
   protected createResponseError (error: AxiosError): Error {
-    const data = error.response?.data as { error?: { message?: string, detail?: string } } | undefined
-    const message = data?.error?.message ?? 'UnknownError'
-    const detail = data?.error?.detail ?? DEFAULT_ERROR_DETAIL
+    const body = parseServiceNowErrorBody(error.response?.data)
+    const rawMessage = body?.error?.message?.trim()
+    const rawDetail = body?.error?.detail?.trim()
+
+    const { type, detalhe } = rawMessage ? splitTipo(rawMessage) : { type: 'UnknownError' }
+    const detail = detalhe
+      ?? (rawDetail ? splitTipo(rawDetail).detalhe ?? rawDetail : undefined)
+      ?? DEFAULT_ERROR_DETAIL
+
     return createError(
       error.response?.status ?? 502,
-      new DetranSpServiceNowError(message, detail, error.response?.data),
+      new DetranSpServiceNowError(type, detail, body ?? error.response?.data),
       { expose: true }
     )
   }
@@ -120,7 +159,7 @@ export class DetranSpServiceNowHttp {
       },
       (error: AxiosError) => {
         const meta = this.buildRequestMeta(error.config)
-        const data = error.response?.data as { error?: { message?: string; detail?: string } } | undefined
+        const data = parseServiceNowErrorBody(error.response?.data) ?? error.response?.data
         const fullUrl = error.config
           ? `${error.config.baseURL ?? ''}${error.config.url ?? ''}`
           : 'unknown'

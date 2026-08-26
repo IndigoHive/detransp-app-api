@@ -148,9 +148,9 @@ export type SeedSpec = {
   // record is a comunicação de venda with no TDV behind it yet — no estado and no
   // codigoTransferenciaVeiculo — which is where the buyer journeys really begin.
   estadoPadrao?: CodigoEstadoTDV
-  // Cartório CVs arrive reporting estado 7 (both parties already signed at the notary) while
-  // still having no codigoTransferenciaVeiculo — the exact shape seen in homologação, and what
-  // makes the flow call validar-tdv before creating the TDV.
+  // Comunicações de venda arrive reporting estado 7 (the sale was already signed outside the
+  // app) while still having no codigoTransferenciaVeiculo — the shape every external CV has in
+  // homologação, and what makes the TDV 6.0 flow call validar-tdv before creating the TDV.
   estadoSemCodigo?: boolean
 }
 
@@ -170,12 +170,16 @@ const VENDEDOR_CIDADAO: Omit<Parte, 'codigo'> = {
   email: 'zecadetran@gmail.com'
 }
 
+// Only the CPF of the side the citizen plays has to match the gov.br token; the counterpart is
+// scenery. Falling back keeps the mass from starting empty because the other var was left unset.
+const CPF_CONTRAPARTE = '05246487601'
+
 // One entry per version — the records ServiceNow would hand back for that scenario.
 export function seedSpecs (cfg: TdvMockConfig): SeedSpec[] {
   const principal = primaryVehicle(cfg)
   const secundario = secondaryVehicle()
-  const comprador: Parte = { ...COMPRADOR_PADRAO, codigo: cfg.buyerCpf }
-  const vendedorCidadao: Parte = { ...VENDEDOR_CIDADAO, codigo: cfg.sellerCpf }
+  const comprador: Parte = { ...COMPRADOR_PADRAO, codigo: cfg.buyerCpf || CPF_CONTRAPARTE }
+  const vendedorCidadao: Parte = { ...VENDEDOR_CIDADAO, codigo: cfg.sellerCpf || CPF_CONTRAPARTE }
 
   switch (cfg.versao) {
     // Nothing is seeded up front: the seller opens the app and creates the TDV from scratch.
@@ -201,7 +205,9 @@ export function seedSpecs (cfg: TdvMockConfig): SeedSpec[] {
           origemComunicacaoVendaVeiculo: CodigoOrigemComunicacaoVendaVeiculo.E_NOTARIADO,
           vehicle: principal,
           vendedor: { ...VENDEDOR_EXTERNO },
-          comprador
+          comprador,
+          estadoPadrao: CodigoEstadoTDV.ATPVE_ASSINADA_VENDEDOR_COMUNICACAO_VENDA_GERADA,
+          estadoSemCodigo: true
         },
         {
           versao: '2.0',
@@ -210,7 +216,9 @@ export function seedSpecs (cfg: TdvMockConfig): SeedSpec[] {
           origemComunicacaoVendaVeiculo: CodigoOrigemComunicacaoVendaVeiculo.VENDA_DIGITAL,
           vehicle: secundario,
           vendedor: { ...VENDEDOR_EXTERNO },
-          comprador
+          comprador,
+          estadoPadrao: CodigoEstadoTDV.ATPVE_ASSINADA_VENDEDOR_COMUNICACAO_VENDA_GERADA,
+          estadoSemCodigo: true
         }
       ]
 
@@ -226,7 +234,9 @@ export function seedSpecs (cfg: TdvMockConfig): SeedSpec[] {
           nome: LOJA.nome,
           email: LOJA.email
         },
-        comprador
+        comprador,
+        estadoPadrao: CodigoEstadoTDV.ATPVE_ASSINADA_VENDEDOR_COMUNICACAO_VENDA_GERADA,
+        estadoSemCodigo: true
       }]
 
     // Entrada Renave: the dealership already opened the intent through SERPRO, so a TDV exists

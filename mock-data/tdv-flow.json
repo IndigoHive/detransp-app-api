@@ -500,9 +500,9 @@
                   "type": "Utilitario",
                   "plate": "BXG3U71",
                   "title": "VOLKS/GOL GTI 1.0",
+                  "chassi": "9BWZZZ377VT004251",
                   "status": "REGULAR",
                   "renavam": "00001002003",
-                  "chassi": "9BWZZZ377VT004251",
                   "yearFab": "2014",
                   "yearMod": "2015",
                   "brandModel": "VOLKS/GOL GTI 1.0",
@@ -514,9 +514,9 @@
                   "type": "Passeio",
                   "plate": "CED3J65",
                   "title": "ONIX LT - GM",
+                  "chassi": "9BR53ZEC2P020030",
                   "status": "A VENCER",
                   "renavam": "00002003004",
-                  "chassi": "9BR53ZEC2P020030",
                   "yearFab": "2021",
                   "yearMod": "2022",
                   "brandModel": "ONIX LT - GM",
@@ -528,9 +528,9 @@
                   "type": "Utilitario",
                   "plate": "RNI4Z30",
                   "title": "FIAT/UNO MILLE",
+                  "chassi": "9BWZZZ377VT030040",
                   "status": "VENCIDO",
                   "renavam": "00003004005",
-                  "chassi": "9BWZZZ377VT030040",
                   "yearFab": "2008",
                   "yearMod": "2009",
                   "brandModel": "FIAT/UNO MILLE",
@@ -733,12 +733,12 @@
             "name": "endereco",
             "data": {
               "cepLabel": "<p><span style=\"color: rgb(17, 20, 20); font-size: 16px;\"><strong>CEP</strong></span></p>",
-              "cepPlaceholder": "08060283",
-              "cidadeLabel": "<p><span style=\"color: rgb(17, 20, 20); font-size: 16px;\"><strong>Cidade</strong></span></p>",
-              "bairroLabel": "<p><span style=\"color: rgb(17, 20, 20); font-size: 16px;\"><strong>Bairro</strong></span></p>",
-              "logradouroLabel": "<p><span style=\"color: rgb(17, 20, 20); font-size: 16px;\"><strong>Logradouro</strong></span></p>",
               "required": true,
-              "fetchAddressUrl": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/comprador-cep?cep={cep}"
+              "bairroLabel": "<p><span style=\"color: rgb(17, 20, 20); font-size: 16px;\"><strong>Bairro</strong></span></p>",
+              "cidadeLabel": "<p><span style=\"color: rgb(17, 20, 20); font-size: 16px;\"><strong>Cidade</strong></span></p>",
+              "cepPlaceholder": "08060283",
+              "fetchAddressUrl": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/comprador-cep?cep={cep}",
+              "logradouroLabel": "<p><span style=\"color: rgb(17, 20, 20); font-size: 16px;\"><strong>Logradouro</strong></span></p>"
             }
           },
           {
@@ -6858,8 +6858,8 @@
       "name": "Rotear por estado (TDV existente)",
       "data": {
         "position": {
-          "x": 7820,
-          "y": 3792
+          "x": 9192,
+          "y": 3596
         },
         "value": "@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.estado}",
         "routes": [
@@ -7090,7 +7090,8 @@
           "x": 12716,
           "y": 6156
         },
-        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/consulta-debitos?codigoTransferencia=@{node:n_2d9e4b6a8c17.codigoTransferencia}"
+        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/consulta-debitos?codigoTransferencia=@{node:n_2d9e4b6a8c17.codigoTransferencia}&gerarQrCode=true",
+        "method": "GET"
       }
     },
     {
@@ -7154,7 +7155,8 @@
           "x": 12072,
           "y": 4336
         },
-        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/consulta-debitos?codigoTransferencia=@{node:n_2d9e4b6a8c17.codigoTransferencia ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoTransferencia}"
+        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/consulta-debitos?codigoTransferencia=@{node:n_2d9e4b6a8c17.codigoTransferencia ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoTransferencia}&gerarQrCode=true",
+        "method": "GET"
       }
     },
     {
@@ -7350,8 +7352,8 @@
       "name": "Autodeclaração de residência",
       "data": {
         "position": {
-          "x": 8060,
-          "y": 4040
+          "x": 8224,
+          "y": 5092
         },
         "method": "POST",
         "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/autodeclaracao-residencia",
