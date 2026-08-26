@@ -7090,7 +7090,8 @@
           "x": 12716,
           "y": 6156
         },
-        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/consulta-debitos?codigoTransferencia=@{node:n_2d9e4b6a8c17.codigoTransferencia}"
+        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/consulta-debitos?codigoTransferencia=@{node:n_2d9e4b6a8c17.codigoTransferencia}&gerarQrCode=true",
+        "method": "GET"
       }
     },
     {
@@ -7154,7 +7155,8 @@
           "x": 12072,
           "y": 4336
         },
-        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/consulta-debitos?codigoTransferencia=@{node:n_2d9e4b6a8c17.codigoTransferencia ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoTransferencia}"
+        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/consulta-debitos?codigoTransferencia=@{node:n_2d9e4b6a8c17.codigoTransferencia ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoTransferencia}&gerarQrCode=true",
+        "method": "GET"
       }
     },
     {
