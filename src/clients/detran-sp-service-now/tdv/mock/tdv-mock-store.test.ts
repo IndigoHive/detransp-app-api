@@ -271,6 +271,29 @@ describe('TdvMockStore — TDV 6.0 (origem 6, Cartório/SEFAZ)', () => {
   })
 })
 
+describe('TdvMockStore — configuração dos CPFs', () => {
+  it('seeds a buyer journey with only TDV_MOCK_BUYER_CPF set', async () => {
+    const app = bootstrap('2.0', { sellerCpf: '' })
+
+    const { vehicles } = await app.compras()
+    expect(vehicles).toHaveLength(2)
+    expect(vehicles.every(v => v.nomeVendedor !== '')).toBe(true)
+  })
+
+  it('seeds a seller journey with only TDV_MOCK_SELLER_CPF set', async () => {
+    const app = bootstrap('4.0', { buyerCpf: '' })
+
+    const { vehicles } = await app.veiculos()
+    expect(vehicles).toHaveLength(1)
+  })
+
+  it('starts empty when the CPF of the played side is missing', async () => {
+    const app = bootstrap('2.0', { buyerCpf: '' })
+
+    await expect(app.compras()).resolves.toEqual({ vehicles: [] })
+  })
+})
+
 describe('TdvMockStore — texto vindo do servidor', () => {
   it('renders the residence self-declaration from the address the buyer confirmed', async () => {
     const app = bootstrap('2.0')

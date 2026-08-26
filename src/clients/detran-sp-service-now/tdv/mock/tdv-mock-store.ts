@@ -124,8 +124,18 @@ export class TdvMockStore {
     this.seeded = true
     this.specs = seedSpecs(cfg)
 
-    if (!cfg.sellerCpf || !cfg.buyerCpf) {
-      console.warn('⚠️  TDV_MOCK_SELLER_CPF/TDV_MOCK_BUYER_CPF não configurados — massa inicia vazia.')
+    // Only the CPF of the side the citizen plays in this version needs to be set: the buyer
+    // journeys (2.0/3.0/6.0) have an external seller, and the seller journeys (1.0/4.0) an
+    // external buyer. Demanding both would leave the mass empty for no reason.
+    const jornadas = new Set(this.specs.map(spec => spec.jornada))
+    const faltando = [
+      ...(jornadas.has('comprador') && !cfg.buyerCpf ? ['TDV_MOCK_BUYER_CPF'] : []),
+      ...(jornadas.has('vendedor') && !cfg.sellerCpf ? ['TDV_MOCK_SELLER_CPF'] : [])
+    ]
+    if (faltando.length > 0) {
+      console.warn(
+        `⚠️  TDV MOCK: ${faltando.join(' e ')} não configurado para a TDV ${cfg.versao} — massa inicia vazia.`
+      )
       return null
     }
 

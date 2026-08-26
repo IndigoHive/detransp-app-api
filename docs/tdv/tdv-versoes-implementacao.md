@@ -387,6 +387,12 @@ Substitui o client ServiceNow por um mock stateful
 | `4.0` | `5` | vendedor | TDV já aberta pelo lojista via SERPRO, no estado 1 |
 | `6.0` | `6` | comprador | CV de cartório **em estado 7 e sem código** (a forma real) — é o que faz o fluxo chamar `validar-tdv` antes |
 
+**Os CPFs são o que faz a massa aparecer**: o filtro casa exatamente com o CPF do token gov.br.
+Basta configurar o CPF da ponta que o cidadão ocupa naquela versão — `TDV_MOCK_BUYER_CPF` nas
+jornadas do comprador (2.0/3.0/6.0), `TDV_MOCK_SELLER_CPF` nas do vendedor (1.0/4.0); a
+contraparte é cenário. Faltando o CPF da jornada, o boot avisa qual variável é e a massa nasce
+vazia.
+
 Knobs: `TDV_MOCK_INITIAL_ESTADO` (1–10), `TDV_MOCK_PENDENCIA` (inclui `vistoria_pendente`),
 `TDV_MOCK_VALIDAR_TDV`
 (só 6.0), `TDV_MOCK_SELLER_CPF`, `TDV_MOCK_BUYER_CPF`, `TDV_MOCK_VEHICLE_PLATE`,
