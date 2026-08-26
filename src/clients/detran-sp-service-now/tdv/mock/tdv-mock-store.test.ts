@@ -64,7 +64,7 @@ function bootstrap (versao: TdvMockVersao, extra: Partial<Config['tdvMock']> = {
     criarTdv: (plate: string, renavam: string) =>
       new CriarTdvService(deps).run(tokenFor(SELLER), { placaVeiculo: plate, renavamVeiculo: renavam }),
     criarCompra: (input: Parameters<CriarCompraService['run']>[1]) =>
-      new CriarCompraService(deps).run(tokenFor(BUYER), input),
+      new CriarCompraService({ ...deps, logger }).run(tokenFor(BUYER), input),
     validarTdv: (input: Parameters<ValidarTdvService['run']>[1]) =>
       new ValidarTdvService(deps).run(tokenFor(BUYER), input),
     autodeclaracao: (input: Parameters<AutodeclaracaoResidenciaService['run']>[1]) =>
@@ -130,15 +130,16 @@ describe('TdvMockStore — TDV 1.0 (origem 1)', () => {
 })
 
 describe('TdvMockStore — TDV 2.0 (origem 2 e 3)', () => {
-  it('lists both comunicações de venda with no estado and no codigo', async () => {
+  it('lists both comunicações de venda in estado 7 with no codigo', async () => {
     const app = bootstrap('2.0')
     const { vehicles } = await app.compras()
 
     expect(vehicles).toHaveLength(2)
     expect(vehicles.map(v => v.origem)).toEqual(['2', '3'])
     expect(vehicles.map(v => v.origemComunicacaoVendaVeiculo)).toEqual(['9', '8'])
-    expect(vehicles.every(v => v.estado === undefined)).toBe(true)
-    expect(vehicles.every(v => v.proximaAcao === undefined)).toBe(true)
+    // The sale was signed outside the app, so the CV already reports estado 7 — and still has
+    // no codigoTransferenciaVeiculo, which is what sends the buyer down the creation path.
+    expect(vehicles.every(v => v.estado === '7')).toBe(true)
     expect(vehicles.every(v => v.codigoTransferencia === '')).toBe(true)
   })
 

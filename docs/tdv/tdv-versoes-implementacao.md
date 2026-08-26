@@ -171,6 +171,15 @@ Edição opcional de endereço: `s_85ba93c2e996` (CEP) → `GET /api/tdv/enderec
 Os nomes de erro do ServiceNow são casados **em minúsculas** pelo dicionário `PENDENCIA_BY_TYPE`
 — se o backend renomear um tipo, a pendência vira 500 silenciosamente.
 
+> **O corpo de erro do ServiceNow nem sempre é JSON válido.** Em homologação um 406 voltou com
+> uma quebra de linha crua dentro da string (`"message": "RestricaoEncontradaError:⏎Ficha
+> cadastral já registrada anteriormente"`), o que faz o axios entregar o corpo como texto — e o
+> motivo real se perdia atrás do "Tivemos um problema ao processar sua solicitação.".
+> `parseServiceNowErrorBody` (em `detran-sp-service-now-http.ts`) tenta o `JSON.parse`, e no
+> fracasso troca os caracteres de controle por espaço e tenta de novo. O mesmo lugar também
+> **separa o tipo do motivo** quando o ServiceNow empacota os dois na mesma string, senão nada
+> que casa por tipo (`mapPendenciaError`, `ValidarTdvService`) reconheceria o erro.
+
 ### 5.3 Pagamento
 `s_a7f3c91e2b04` → `n_b8e4d02f3c15` `GET /api/tdv/consulta-debitos` → `n_c9f5e13a4d26`
 (`estado == 2`? = QR já pago) → `s_d0a6f24b5e37` (lista de débitos) → `n_e1b7a35c6f48`
@@ -400,6 +409,10 @@ Knobs: `TDV_MOCK_INITIAL_ESTADO` (1–10), `TDV_MOCK_PENDENCIA` (inclui `vistori
 `TDV_MOCK_FORCE_CIDADES_DIFERENTES`, `LIVENESS_BYPASS_MATCH`. Valor inválido avisa no boot e cai
 no default; todas são ignoradas quando `APP_ENV=production`.
 
+> **`campos` é ignorado pelo ServiceNow.** Conferido contra homologação: uma listagem pedindo 26
+> campos devolveu 60. O `LISTA_COMPRAS_CAMPOS` do `consulta-compras` continua lá por clareza de
+> intenção, mas não conte com ele para reduzir payload nem para garantir que um campo venha.
+
 **Fidelidade.** A massa vem dos exemplos de resposta real do [`swagger.yaml`](./swagger.yaml):
 sys_id de 32 hex para `codigoTransferenciaVeiculo` e `codigoAnexo*`; `TDV<n>` legível em
 `numeroTransferenciaVeiculo`; CPF com 11 dígitos e CNPJ com 14; `ativa` como `'1'`/`'0'`;
@@ -479,7 +492,7 @@ direto para o ponto certo (§2, §5.1), e se ele voltar para uma tela anterior p
 | Endpoint | Muda estado? | Guarda | Reentrada |
 |---|---|---|---|
 | `POST /criar` (1.0) | 1 | lista TDVs ativas da placa e **devolve a existente** sem criar | ok |
-| `POST /criar-compra` (2.0/3.0/6.0) | → 7 | se o registro já tem `codigoTransferenciaVeiculo`, **não cria**: lê e roteia por estado. Se a TDV nascer entre o lookup e o create, o `TDVAtivaExistenteError` (ou o 201 vazio) recupera o código | ok |
+| `POST /criar-compra` (2.0/3.0/6.0) | → 7 | se o registro já tem `codigoTransferenciaVeiculo`, **não cria**: lê e roteia por estado. Se a TDV nascer entre o lookup e o create, o `TDVAtivaExistenteError` (ou o 201 vazio) recupera o código, com uma repetição da consulta para o caso de a listagem estar atrasada | ok |
 | `POST /validar-tdv` (6.0) | não | validação pura | ok |
 | `POST /confirmar-compra` (1.0, e retomada de 2/3/4/6 nos estados 3–5) | 3→4→5 | só avança a partir de 3 ou 4; em 5+ apenas lê e devolve os dados | ok |
 | `POST /confirmar-termo-ciencia` (4.0) | → 6 | `isTermoCienciaConfirmado` + estados já assinados; não repete o PATCH | ok |
@@ -496,6 +509,28 @@ Duas correções entraram por causa desta auditoria:
   dependia de o ServiceNow responder `TDVAtivaExistenteError` para se recuperar — bastava o
   backend devolver outro erro (por exemplo numa TDV já em 8) para o comprador ver erro em vez da
   tela certa. Agora o caminho normal é o mesmo do app de produção: com código, só lê.
+- **A consulta que sustenta isso é a mesma do `/api/tdv/compras`.** `ativa=true` +
+  `codigoComprador`, **sem `placaVeiculo`** — é a consulta que comprovadamente devolve os
+  registros do comprador em homologação; o filtro por veículo é feito aqui, sobre uma lista de
+  poucas linhas. O casamento é pela **placa**; o renavam só descarta uma linha quando os dois
+  lados têm valor, comparados por dígitos significativos. Quando a CV e a TDV promovida aparecem
+  juntas, ganha a linha que tem código.
+  **Por que o renavam precisa dessa folga:** confirmado em homologação — a CV da placa BXX0D61
+  tinha `codigoRenavamVeiculo: "01001061869"` e a TDV criada a partir dela voltou com
+  `"1001061869"`, sem o zero à esquerda. Com comparação literal, a retomada não encontraria o
+  próprio registro que acabou de criar.
+- **A recuperação pós-create tem dois degraus.** Se a listagem do comprador não devolve o código,
+  cai numa listagem **pelo veículo** (`ativa=true` + `placaVeiculo`, sem `codigoComprador`) — a
+  mesma que o app de produção usa do lado do vendedor. O motivo é que o
+  `TDVAtivaExistenteError` fala do **veículo**, não do comprador: em homologação o ServiceNow
+  recusou a criação por duplicidade enquanto a listagem do comprador ainda mostrava só a
+  comunicação de venda, sem código. Como listar por placa não é escopado ao cidadão logado, o
+  `codigoComprador` do registro é conferido aqui antes de usar o código — devolver a
+  transferência de outra pessoa exporia os dados dela.
+- **Sem código no fim, o comprador recebe instrução, não 500.** Se a TDV existe mas a listagem
+  não entrega o código, a resposta é um snackbar "Transferência já iniciada" pedindo para voltar
+  e selecionar o veículo de novo — e o caso fica registrado em log de erro com placa, renavam e
+  origem.
 - **`cancelar` deixou de disparar PATCH cego.** Na jornada do comprador o botão "Cancelar
   compra" aparece na confirmação de dados, onde a CV **ainda não tem código** — o PATCH ia para
   uma URL sem id. E cancelar duas vezes virava erro de transição inválida.

@@ -1,4 +1,5 @@
 import { BadRequest } from 'http-errors'
+import type { Logger } from 'pino'
 import { DetranSpServiceNowError } from '../../../clients/detran-sp-service-now'
 import type { DetranSpServiceNowTdvClient } from '../../../clients/detran-sp-service-now/tdv'
 import {
@@ -15,6 +16,7 @@ import { mapPendenciaError, type PendenciaResult } from '../map-pendencia-error'
 
 type Dependencies = {
   detranSpServiceNowTdv: DetranSpServiceNowTdvClient
+  logger: Logger
 }
 
 type Auth = { token: string, cpf: string }
@@ -80,6 +82,8 @@ export type CriarCompraResult = CriarCompraSuccessResult | CriarCompraPendenciaR
 }
 
 const TDV_ATIVA_EXISTENTE = 'TDVAtivaExistenteError'
+
+
 
 function mapProximaAcao (
   estado: CodigoEstadoTDV | undefined,
@@ -227,6 +231,26 @@ function pickOptionalListingFields (input: CriarCompraInput) {
   }
 }
 
+function digitosSignificativos (value: string | null | undefined): string {
+  return (value ?? '').replace(/\D/g, '').replace(/^0+/, '')
+}
+
+// The plate is what identifies the vehicle here — the listing is already filtered by buyer,
+// plate and ativa. The renavam only rules a row out when both sides carry a value, because
+// ServiceNow can echo it back without the leading zeros it was stored with.
+function mesmoVeiculo (
+  tdv: ListaTdvsResultData,
+  placaVeiculo: string,
+  renavamVeiculo: string
+): boolean {
+  if ((tdv.placaVeiculo ?? '').trim().toUpperCase() !== placaVeiculo.trim().toUpperCase()) {
+    return false
+  }
+  const renavamTdv = digitosSignificativos(tdv.codigoRenavamVeiculo)
+  const renavamAlvo = digitosSignificativos(renavamVeiculo)
+  return !renavamTdv || !renavamAlvo || renavamTdv === renavamAlvo
+}
+
 // The app in production serializes the record with Gson, which omits null fields and keeps empty
 // strings — mirroring that keeps the payload equivalent to the one ServiceNow already accepts.
 function semCamposNulos (registro: ListaTdvsResultData): ListaTdvsResultData {
@@ -242,9 +266,11 @@ function isTdvAtivaExistenteError (error: unknown): boolean {
 
 export class CriarCompraService {
   private readonly client: DetranSpServiceNowTdvClient
+  private readonly logger: Logger
 
-  constructor ({ detranSpServiceNowTdv }: Dependencies) {
+  constructor ({ detranSpServiceNowTdv, logger }: Dependencies) {
     this.client = detranSpServiceNowTdv
+    this.logger = logger
   }
 
   async run (authorizationHeader: string | undefined, input: CriarCompraInput): Promise<CriarCompraResult> {
@@ -277,7 +303,15 @@ export class CriarCompraService {
     // screen shows — and keeps values like the zero-padded CPF byte-identical. Falls back to the
     // assembled payload when the record can't be found.
     const registro = await this.findRegistroAtivo(auth, cpf, placaVeiculo, renavamVeiculo)
-      .catch(() => undefined)
+      .catch((error: unknown) => {
+        // Swallowed on purpose — without the record we still create from what the flow sent —
+        // but it has to be visible: a failed lookup here is what turns a retry into a duplicate.
+        this.logger.warn(
+          { placaVeiculo, err: error },
+          'Falha ao reler a comunicação de venda antes de criar a TDV'
+        )
+        return undefined
+      })
 
     // The TDV already exists: read it and route, never create again. This is what the app in
     // production does (ConfirmarEnderecoScreen.kt:700 only creates when the code is empty), and
@@ -321,13 +355,28 @@ export class CriarCompraService {
     // ServiceNow answers the create with 201 and no body whenever the TDV was already there —
     // the same outcome as TDVAtivaExistenteError (spec, "Sem pendências"). Both land here, and the
     // code is read back: from the record when the CV already carried one, otherwise by relisting.
+    // The record read before the create had no code (otherwise this would have returned already),
+    // so the code can only come from a fresh listing — the buyer's first, then the vehicle's.
     if (!codigoTransferencia) {
-      codigoTransferencia = registro?.codigoTransferenciaVeiculo?.trim()
-        || await this.resolveExistingCodigo(auth, cpf, placaVeiculo, renavamVeiculo)
+      codigoTransferencia = await this.resolveExistingCodigo(auth, cpf, placaVeiculo, renavamVeiculo)
+        || await this.resolveCodigoPorVeiculo(auth, cpf, placaVeiculo, renavamVeiculo)
     }
 
+    // The TDV is there — ServiceNow either refused a second one or answered the create with no
+    // body — but the listing never gave up its code. Nothing else can be done in this request,
+    // so tell the buyer how to get back on track instead of dropping a 500 on them.
     if (!codigoTransferencia) {
-      throw new Error('Falha ao criar transferência: codigoTransferencia não encontrado')
+      this.logger.error(
+        { placaVeiculo, renavamVeiculo, origem },
+        'TDV existe no ServiceNow mas não apareceu na listagem do comprador'
+      )
+      return {
+        showSnackbar: {
+          variant: 'error',
+          title: 'Transferência já iniciada',
+          description: 'A transferência deste veículo já foi criada, mas não conseguimos carregá-la agora. Volte para a lista de veículos e selecione-o novamente.'
+        }
+      }
     }
 
     return this.lerEmapear(auth, codigoTransferencia, prepared)
@@ -374,7 +423,10 @@ export class CriarCompraService {
     }
   }
 
-  // No `campos` here on purpose: the create echoes this record back, so it has to come whole.
+  // Two deliberate choices in this query, both learned the hard way against homologação:
+  // no `campos` (the create echoes this record back, so it has to come whole) and no
+  // `placaVeiculo` (the same query /api/tdv/compras uses, which is known to return the buyer's
+  // records — filtering by plate is done here, on a list that has a handful of rows).
   private async findRegistroAtivo (
     auth: Auth,
     cpf: string,
@@ -383,14 +435,15 @@ export class CriarCompraService {
   ): Promise<ListaTdvsResultData | undefined> {
     const listed = await this.client.listaTdvs(auth, {
       ativa: 'true',
-      codigoComprador: cpf,
-      placaVeiculo
+      codigoComprador: cpf
     })
 
-    return listed?.result?.find((tdv) =>
-      (tdv.placaVeiculo ?? '') === placaVeiculo
-      && (tdv.codigoRenavamVeiculo ?? '') === renavamVeiculo
-    )
+    const candidatos = (listed?.result ?? [])
+      .filter(tdv => mesmoVeiculo(tdv, placaVeiculo, renavamVeiculo))
+
+    // A comunicação de venda and the TDV promoted from it can both be listed for a while; the
+    // row carrying the code is the one worth having.
+    return candidatos.find(tdv => tdv.codigoTransferenciaVeiculo?.trim()) ?? candidatos[0]
   }
 
   private async resolveExistingCodigo (
@@ -400,6 +453,45 @@ export class CriarCompraService {
     renavamVeiculo: string
   ): Promise<string | undefined> {
     const registro = await this.findRegistroAtivo(auth, cpf, placaVeiculo, renavamVeiculo)
+      .catch((error: unknown) => {
+        this.logger.warn(
+          { placaVeiculo, err: error },
+          'Falha ao listar TDVs do comprador para recuperar o código da transferência'
+        )
+        return undefined
+      })
+
+    return registro?.codigoTransferenciaVeiculo?.trim() || undefined
+  }
+
+  // TDVAtivaExistenteError is about the *vehicle*, not the buyer — and a TDV can be refused as
+  // duplicate while the buyer's own listing still shows only the comunicação de venda. This is
+  // the query the app in production uses on the seller side (getEncontrarTransfVeiculo), and it
+  // is the one that surfaces the TDV that blocked the create.
+  private async resolveCodigoPorVeiculo (
+    auth: Auth,
+    cpf: string,
+    placaVeiculo: string,
+    renavamVeiculo: string
+  ): Promise<string | undefined> {
+    const listed = await this.client.listaTdvs(auth, { ativa: 'true', placaVeiculo })
+      .catch((error: unknown) => {
+        this.logger.warn(
+          { placaVeiculo, err: error },
+          'Falha ao listar TDVs do veículo para recuperar o código da transferência'
+        )
+        return undefined
+      })
+
+    const registro = (listed?.result ?? [])
+      .filter(tdv => mesmoVeiculo(tdv, placaVeiculo, renavamVeiculo))
+      // Listing by plate is not scoped to the logged citizen, so the buyer has to be checked
+      // here — handing back someone else's transfer would expose their data.
+      .find(tdv =>
+        digitosSignificativos(tdv.codigoComprador) === digitosSignificativos(cpf)
+        && Boolean(tdv.codigoTransferenciaVeiculo?.trim())
+      )
+
     return registro?.codigoTransferenciaVeiculo?.trim() || undefined
   }
 }
