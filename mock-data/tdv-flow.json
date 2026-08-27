@@ -2814,6 +2814,66 @@
       }
     },
     {
+      "id": "s_3f8c2d91a7e6",
+      "name": "[Vendedor] Sucesso liveness (retomar venda)",
+      "content": {
+        "id": "c_4e9a1f7b3c85",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_6b2d8e0a4f91",
+            "type": "rich_text",
+            "name": null,
+            "data": {
+              "html": "<p style=\"text-align: center;\"><span style=\"font-size: 16px;\">Está tudo certo, podemos continuar</span></p>"
+            }
+          },
+          {
+            "id": "c_9c1f5a3e7d24",
+            "type": "image",
+            "name": null,
+            "data": {
+              "asset": {
+                "id": "7a645c41-4de3-430b-afd4-6058d4df0033",
+                "url": "https://detransp-app-editor-assets.s3.amazonaws.com/17da1ca4-aecd-4545-ae3c-d0916a0c4e67.png"
+              }
+            }
+          }
+        ]
+      },
+      "footer": {
+        "id": "c_2a7e4c9b1f68",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_8d3b6f2a5e09",
+            "type": "button",
+            "name": null,
+            "data": {
+              "label": "Continuar"
+            }
+          }
+        ]
+      },
+      "navbar": {
+        "id": "4d867ed6-57fc-4fd6-9234-c8bd3523ed78",
+        "data": {
+          "steps": 8,
+          "title": "Análise de requisitos",
+          "showReturn": true,
+          "currentStep": 3
+        },
+        "name": null,
+        "type": "nav_bar"
+      },
+      "data": {
+        "position": {
+          "x": 260,
+          "y": -20
+        }
+      }
+    },
+    {
       "id": "s_0d60f1885598",
       "name": "[Comprador] Sucesso liveness",
       "content": {
@@ -6558,8 +6618,8 @@
       "name": "Liveness (retomar venda)",
       "data": {
         "position": {
-          "x": 256,
-          "y": 60
+          "x": -48,
+          "y": 48
         }
       }
     },
@@ -6569,8 +6629,8 @@
       "name": "Origem 5 (retomar venda para loja)?",
       "data": {
         "position": {
-          "x": 372,
-          "y": 60
+          "x": 732,
+          "y": 356
         },
         "condition": {
           "clauses": [
@@ -6591,8 +6651,8 @@
       "name": "Retomar: dados da venda já informados?",
       "data": {
         "position": {
-          "x": 488,
-          "y": 60
+          "x": 992,
+          "y": 176
         },
         "condition": {
           "clauses": [
@@ -7896,8 +7956,14 @@
     },
     {
       "sourceId": "n_c4e8f2a71d05",
-      "targetId": "n_9b4d6e8a1c20",
+      "targetId": "s_3f8c2d91a7e6",
       "sourceHandle": "output",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_3f8c2d91a7e6",
+      "targetId": "n_9b4d6e8a1c20",
+      "sourceHandle": "c_8d3b6f2a5e09",
       "targetHandle": "input"
     },
     {
