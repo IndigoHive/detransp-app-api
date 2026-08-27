@@ -4911,7 +4911,7 @@
             "type": "rich_text",
             "name": null,
             "data": {
-              "html": "<p><span style=\"font-size:14px;color:#262828\">Confirme as informações para a venda do veículo<br></span></p>"
+              "html": "<p style=\"text-align: center;\"><span style=\"color: rgb(38, 40, 40); font-size: 16px;\">Confirme as informações para a venda do veículo</span></p>"
             }
           },
           {
@@ -4924,7 +4924,7 @@
                 "type": "rich_text",
                 "name": null,
                 "data": {
-                  "html": "<p><span><strong>Dados da empresa que está comprando</strong></span></p>"
+                  "html": "<p><span style=\"font-size: 16px;\"><strong>Dados da empresa que está comprando</strong></span></p>"
                 }
               },
               {
@@ -4978,15 +4978,51 @@
                 }
               },
               {
-                "id": "c_032d38802b4c",
-                "type": "icon_text",
+                "id": "c_c780511c1a48",
+                "type": "split_row",
                 "name": null,
+                "children": [
+                  {
+                    "id": "c_a93e396e0e90",
+                    "type": "group",
+                    "name": null,
+                    "children": [
+                      {
+                        "id": "c_8c7814184d4c",
+                        "type": "icon",
+                        "name": null,
+                        "data": {
+                          "icon": "info",
+                          "size": 24,
+                          "color": "neutral",
+                          "background": false,
+                          "backgroundSize": 40
+                        }
+                      }
+                    ],
+                    "data": {}
+                  },
+                  {
+                    "id": "c_ad9a6416ecc9",
+                    "type": "group",
+                    "name": null,
+                    "children": [
+                      {
+                        "id": "c_10c44d7010c1",
+                        "type": "rich_text",
+                        "name": null,
+                        "data": {
+                          "html": "<div data-space-between-row=\"\" style=\"display: flex; flex-direction: row; align-items: flex-start; gap: 16px; width: 100%; min-width: 0px;\"><div data-space-between-cell=\"\" style=\"flex: 100 100 0%; min-width: 0px; overflow-wrap: break-word;\"><p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>Se os dados estiverem incorretos, cancele a solicitação e ajuste as informações antes de prosseguir.</strong></span></p></div><div data-space-between-cell=\"\" style=\"flex: 0 0 0%; min-width: 0px; overflow-wrap: break-word;\"><p></p></div></div><p></p>"
+                        }
+                      }
+                    ],
+                    "data": {}
+                  }
+                ],
                 "data": {
-                  "icon": "info",
-                  "text": "<div data-space-between-row=\"\" style=\"display: flex; flex-direction: row; align-items: flex-start; gap: 16px; width: 100%; min-width: 0px;\"><div data-space-between-cell=\"\" style=\"flex: 100 100 0%; min-width: 0px; overflow-wrap: break-word;\"><p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>Se os dados estiverem incorretos, cancele a solicitação e ajuste as informações antes de prosseguir.</strong></span></p></div><div data-space-between-cell=\"\" style=\"flex: 0 0 0%; min-width: 0px; overflow-wrap: break-word;\"><p></p></div></div><p></p>",
-                  "color": "neutral",
-                  "variant": "horizontal",
-                  "alignment": "start"
+                  "gap": 8,
+                  "align": "center",
+                  "distribution": "space-between"
                 }
               }
             ],
@@ -5095,15 +5131,51 @@
                 }
               },
               {
-                "id": "c_8470f04cad1b",
-                "type": "icon_text",
+                "id": "c_9e6f921faa86",
+                "type": "split_row",
                 "name": null,
+                "children": [
+                  {
+                    "id": "c_6dfbaf27aae0",
+                    "type": "group",
+                    "name": null,
+                    "children": [
+                      {
+                        "id": "c_9ebce7d0c275",
+                        "type": "icon",
+                        "name": null,
+                        "data": {
+                          "icon": "info",
+                          "size": 24,
+                          "color": "neutral",
+                          "background": false,
+                          "backgroundSize": 40
+                        }
+                      }
+                    ],
+                    "data": {}
+                  },
+                  {
+                    "id": "c_828f71ccd5c1",
+                    "type": "group",
+                    "name": null,
+                    "children": [
+                      {
+                        "id": "c_2b8cbefbbf6e",
+                        "type": "rich_text",
+                        "name": null,
+                        "data": {
+                          "html": "<div data-space-between-row=\"\" style=\"display: flex; flex-direction: row; align-items: flex-start; gap: 16px; width: 100%; min-width: 0px;\"><div data-space-between-cell=\"\" style=\"flex: 100 100 0%; min-width: 0px; overflow-wrap: break-word;\"><p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>Se os dados estiverem incorretos, cancele a solicitação e ajuste as informações antes de prosseguir.</strong></span></p></div><div data-space-between-cell=\"\" style=\"flex: 0 0 0%; min-width: 0px; overflow-wrap: break-word;\"><p></p></div></div><p></p>"
+                        }
+                      }
+                    ],
+                    "data": {}
+                  }
+                ],
                 "data": {
-                  "icon": "info",
-                  "text": "<div data-space-between-row=\"\" style=\"display: flex; flex-direction: row; align-items: flex-start; gap: 16px; width: 100%; min-width: 0px;\"><div data-space-between-cell=\"\" style=\"flex: 100 100 0%; min-width: 0px; overflow-wrap: break-word;\"><p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>Se os dados estiverem incorretos, cancele a solicitação e ajuste as informações antes de prosseguir.</strong></span></p></div><div data-space-between-cell=\"\" style=\"flex: 0 0 0%; min-width: 0px; overflow-wrap: break-word;\"><p></p></div></div><p></p>",
-                  "color": "neutral",
-                  "variant": "horizontal",
-                  "alignment": "start"
+                  "gap": 8,
+                  "align": "center",
+                  "distribution": "space-between"
                 }
               }
             ],
