@@ -4534,19 +4534,18 @@
             "children": [
               {
                 "id": "c_2d076cffa569",
-                "type": "text_heading",
+                "type": "rich_text",
                 "name": null,
                 "data": {
-                  "text": "Transferência de veículo\n"
+                  "html": "<p><span style=\"color: rgb(38, 40, 40); font-size: 16px;\"><strong>Transferência de veículo</strong></span></p>"
                 }
               },
               {
                 "id": "c_1f2593c4e9ad",
-                "type": "label_text",
+                "type": "rich_text",
                 "name": null,
                 "data": {
-                  "text": "@{node:n_b8e4d02f3c15.nomeComprador}",
-                  "label": "Pessoa que assinou a compra"
+                  "html": "<p><span style=\"font-size:12px;color:#7A7F83\"><strong>Pessoa que assinou a compra</strong></span></p><p><span style=\"font-size:14px;color:#111414\">@{node:n_b8e4d02f3c15.nomeComprador}</span></p>"
                 }
               },
               {
@@ -4562,11 +4561,10 @@
                 "children": [
                   {
                     "id": "c_f2e61beea753",
-                    "type": "label_text",
+                    "type": "rich_text",
                     "name": null,
                     "data": {
-                      "text": "@{item.valorFormatado}",
-                      "label": "@{item.descricao}"
+                      "html": "<p><span style=\"font-size:12px;color:#7A7F83\"><strong>@{item.descricao}</strong></span></p><p><span style=\"font-size:14px;color:#111414\">@{item.valorFormatado}</span></p>"
                     }
                   },
                   {
@@ -4582,11 +4580,10 @@
               },
               {
                 "id": "c_7414e47a684b",
-                "type": "label_text",
+                "type": "rich_text",
                 "name": null,
                 "data": {
-                  "text": "@{node:n_b8e4d02f3c15.totalDebitos}",
-                  "label": "Valor total"
+                  "html": "<p><span style=\"color: rgb(0, 88, 175); font-size: 12px;\"><strong>Valor total</strong></span></p><p><span style=\"color: rgb(0, 88, 175); font-size: 14px;\">@{node:n_b8e4d02f3c15.totalDebitos}</span></p>"
                 }
               }
             ],
@@ -4600,11 +4597,46 @@
         "children": [
           {
             "id": "c_bb9ec0192b63",
-            "type": "label_text",
+            "type": "split_row",
             "name": null,
+            "children": [
+              {
+                "id": "c_1a4c6fe6c0d1",
+                "type": "group",
+                "name": null,
+                "children": [
+                  {
+                    "id": "c_3d9b7ea2f851",
+                    "type": "rich_text",
+                    "name": null,
+                    "data": {
+                      "html": "<p><span style=\"color: rgb(38, 40, 40); font-size: 16px;\"><strong>Total de débitos</strong></span></p>"
+                    }
+                  }
+                ],
+                "data": {}
+              },
+              {
+                "id": "c_6b8f2a7d0c94",
+                "type": "group",
+                "name": null,
+                "children": [
+                  {
+                    "id": "c_e5f0a9c2b716",
+                    "type": "rich_text",
+                    "name": null,
+                    "data": {
+                      "html": "<p><span style=\"color: rgb(0, 88, 175); font-size: 16px;\"><strong>@{node:n_b8e4d02f3c15.totalDebitos}</strong></span></p>"
+                    }
+                  }
+                ],
+                "data": {}
+              }
+            ],
             "data": {
-              "text": "@{node:n_b8e4d02f3c15.totalDebitos}",
-              "label": "Total de débitos"
+              "gap": 8,
+              "align": "center",
+              "distribution": "space-between"
             }
           },
           {
