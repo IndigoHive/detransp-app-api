@@ -4434,11 +4434,10 @@
         "children": [
           {
             "id": "c_cec04565cebd",
-            "type": "text_body",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "text": "Olá, @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}.\n\nA transferência do veículo será finalizada após o pagamento da taxa.\n",
-              "align": "left"
+              "html": "<p><span style=\"color: rgb(38, 40, 40); font-size: 16px;\">Olá, @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}.<br><br>A transferência do veículo será <strong>finalizada após o pagamento da taxa</strong>.</span></p>"
             }
           },
           {
@@ -4446,26 +4445,65 @@
             "type": "alert",
             "name": null,
             "data": {
-              "body": "Você tem 30 dias para pagar a taxa de transferência à contar da data de assinatura do vendedor.\n",
-              "title": "Importante",
+              "body": "<p><span style=\"color: rgb(87, 89, 90); font-size: 12px;\">Você tem 30 dias para pagar a taxa de transferência à contar da data de assinatura do vendedor.</span></p>",
+              "title": "<p><span style=\"font-size:12px;color:#111414\"><strong>Importante</strong></span></p>",
               "variant": "warning"
             }
           },
           {
             "id": "c_49b28a59b50b",
-            "type": "vehicle_info",
+            "type": "card",
             "name": null,
-            "data": {
-              "source": "@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle}",
-              "vehicle": {
-                "id": "1",
-                "plate": "EXC1A22",
-                "title": "Veículo 1",
-                "status": "REGULAR",
-                "brandModel": "VOLKS/GOL GTI 1.0",
-                "licensingExpirationDate": "2024-12-31"
+            "children": [
+              {
+                "id": "c_7f2a91c3d508",
+                "type": "vehicle_plate",
+                "name": null,
+                "data": {
+                  "size": "sm",
+                  "align": "left",
+                  "plate": "@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.plate}",
+                  "variant": "default"
+                }
+              },
+              {
+                "id": "c_b3e8d4a7f621",
+                "type": "rich_text",
+                "name": null,
+                "data": {
+                  "html": "<p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>Veículo</strong></span></p><p><span style=\"color: rgb(17, 20, 20); font-size: 14px;\">@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.brandModel}</span></p>"
+                }
+              },
+              {
+                "id": "c_2c9d5f1e8a34",
+                "type": "divider",
+                "name": null,
+                "data": {}
+              },
+              {
+                "id": "c_8a4b6e0d3f97",
+                "type": "rich_text",
+                "name": null,
+                "data": {
+                  "html": "<p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>Cor</strong></span></p><p><span style=\"color: rgb(17, 20, 20); font-size: 14px;\">@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.descricaoCorVeiculo}</span></p>"
+                }
+              },
+              {
+                "id": "c_5e1c7b2a9d46",
+                "type": "divider",
+                "name": null,
+                "data": {}
+              },
+              {
+                "id": "c_d94f3c81b5e2",
+                "type": "rich_text",
+                "name": null,
+                "data": {
+                  "html": "<p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>Pessoa que assinou a venda</strong></span></p><p><span style=\"color: rgb(17, 20, 20); font-size: 14px;\">@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeVendedor}</span></p>"
+                }
               }
-            }
+            ],
+            "data": {}
           },
           {
             "id": "c_684a79391fbb",
@@ -7429,6 +7467,28 @@
         ],
         "showSnackbar": true
       }
+    },
+    {
+      "id": "n_7be575a002eb",
+      "type": "end_node",
+      "name": "End",
+      "data": {
+        "position": {
+          "x": 11104,
+          "y": 8868
+        }
+      }
+    },
+    {
+      "id": "n_3484eee346e4",
+      "type": "end_node",
+      "name": "End",
+      "data": {
+        "position": {
+          "x": 11304,
+          "y": 4244
+        }
+      }
     }
   ],
   "edges": [
@@ -8564,6 +8624,18 @@
       "sourceId": "n_a1d5c7e93b60",
       "targetId": "s_b650bf1fea21",
       "sourceHandle": "output",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_1abd59a0d122",
+      "targetId": "n_7be575a002eb",
+      "sourceHandle": "c_7654fbcc674b",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_92a9313c0809",
+      "targetId": "n_3484eee346e4",
+      "sourceHandle": "c_2440dfec6fb5",
       "targetHandle": "input"
     }
   ]
