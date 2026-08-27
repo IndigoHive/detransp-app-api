@@ -3513,26 +3513,25 @@
             "name": null,
             "data": {
               "icon": "check_circle",
-              "text": "Pagamento confirmado",
+              "text": "<p style=\"text-align: center;\"><span style=\"font-size: 16px;\"><strong>Pagamento confirmado</strong></span></p>",
               "color": "success",
               "variant": "vertical"
             }
           },
           {
             "id": "c_f35dd3087ab7",
-            "type": "text_body",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "text": "Olá, @{node:n_2d9e4b6a8c17.nomeComprador ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}. \n\nFoi confirmado o pagamento da taxa de transferência do veículo @{node:n_2d9e4b6a8c17.vehicle.brandModel ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.brandModel}, placa @{node:n_2d9e4b6a8c17.vehicle.plate ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.plate}.\n\nAguarde enquanto validamos o processo e registramos o veículo em seu nome.\n",
-              "align": "left"
+              "html": "<p style=\"text-align: left;\"><span style=\"color: rgb(38, 40, 40); font-size: 16px;\">Olá, @{node:n_2d9e4b6a8c17.nomeComprador ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}.<br><br>Foi confirmado o pagamento da taxa de transferência do veículo @{node:n_2d9e4b6a8c17.vehicle.brandModel ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.brandModel}, placa @{node:n_2d9e4b6a8c17.vehicle.plate ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.plate}.<br><br>Aguarde enquanto validamos o processo e registramos o veículo em seu nome.</span></p>"
             }
           },
           {
             "id": "c_6dec9c73677b",
-            "type": "text_body",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "text": "Acesse o aplicativo da CNH do Brasil para consultar os veículos em seu nome.\n"
+              "html": "<p style=\"text-align: center;\"><span style=\"color: rgb(38, 40, 40); font-size: 16px;\">Acesse o aplicativo da CNH do Brasil para consultar os veículos em seu nome.</span></p>"
             }
           }
         ]
@@ -3841,7 +3840,7 @@
             "name": null,
             "data": {
               "icon": "error",
-              "text": "Veículo sem laudo de vistoria",
+              "text": "<p style=\"text-align: center;\"><strong>Veículo sem laudo de vistoria</strong></p>",
               "color": "danger",
               "variant": "vertical"
             }
@@ -3902,7 +3901,7 @@
             "name": null,
             "data": {
               "icon": "error",
-              "text": "Veículo com restrição Renajud",
+              "text": "<p style=\"text-align: center;\"><span style=\"font-size: 16px;\"><strong>Veículo com restrição Renajud</strong></span></p>",
               "color": "danger",
               "variant": "vertical"
             }
@@ -3963,7 +3962,7 @@
             "name": null,
             "data": {
               "icon": "error",
-              "text": "Veículo com baixa permanente",
+              "text": "<p style=\"text-align: center;\"><strong>Veículo com baixa permanente</strong></p>",
               "color": "danger",
               "variant": "vertical"
             }
@@ -4024,7 +4023,7 @@
             "name": null,
             "data": {
               "icon": "error",
-              "text": "Veículo com baixa permanente e restrição Renajud",
+              "text": "<p style=\"text-align: center;\"><strong>Veículo com baixa permanente e restrição Renajud</strong></p>",
               "color": "danger",
               "variant": "vertical"
             }
@@ -4216,7 +4215,7 @@
             "name": null,
             "data": {
               "icon": "error",
-              "text": "Veículo com restrição financeira",
+              "text": "<p style=\"text-align: center;\"><strong>Veículo com restrição financeira</strong></p>",
               "color": "danger",
               "variant": "vertical"
             }
@@ -4347,7 +4346,7 @@
             "name": null,
             "data": {
               "icon": "check_circle",
-              "text": "Seu pagamento foi confirmado",
+              "text": "<p style=\"text-align: center;\"><span style=\"font-size: 16px;\"><strong>Seu pagamento foi confirmado</strong></span></p>",
               "color": "success",
               "variant": "vertical"
             }
@@ -7090,8 +7089,8 @@
           "x": 12716,
           "y": 6156
         },
-        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/consulta-debitos?codigoTransferencia=@{node:n_2d9e4b6a8c17.codigoTransferencia}&gerarQrCode=true",
-        "method": "GET"
+        "method": "GET",
+        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/consulta-debitos?codigoTransferencia=@{node:n_2d9e4b6a8c17.codigoTransferencia}&gerarQrCode=true"
       }
     },
     {
@@ -7155,8 +7154,8 @@
           "x": 12072,
           "y": 4336
         },
-        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/consulta-debitos?codigoTransferencia=@{node:n_2d9e4b6a8c17.codigoTransferencia ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoTransferencia}&gerarQrCode=true",
-        "method": "GET"
+        "method": "GET",
+        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/consulta-debitos?codigoTransferencia=@{node:n_2d9e4b6a8c17.codigoTransferencia ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoTransferencia}&gerarQrCode=true"
       }
     },
     {
