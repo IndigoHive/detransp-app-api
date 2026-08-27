@@ -3523,7 +3523,7 @@
             "type": "rich_text",
             "name": null,
             "data": {
-              "html": "<p style=\"text-align: left;\"><span style=\"color: rgb(38, 40, 40); font-size: 16px;\">Olá, @{node:n_2d9e4b6a8c17.nomeComprador ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}.<br><br>Foi confirmado o pagamento da taxa de transferência do veículo @{node:n_2d9e4b6a8c17.vehicle.brandModel ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.brandModel}, placa @{node:n_2d9e4b6a8c17.vehicle.plate ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.plate}.<br><br>Aguarde enquanto validamos o processo e registramos o veículo em seu nome.</span></p>"
+              "html": "<p style=\"text-align: center;\"><span style=\"color: rgb(38, 40, 40); font-size: 16px;\">Olá, @{node:n_2d9e4b6a8c17.nomeComprador ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}.<br><br>Foi confirmado o pagamento da taxa de transferência do veículo <strong>@{node:n_2d9e4b6a8c17.vehicle.brandModel ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.brandModel}, placa @{node:n_2d9e4b6a8c17.vehicle.plate ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.plate}.</strong><br><br>Aguarde enquanto validamos o processo e <strong>registramos o veículo em seu nome.</strong></span></p>"
             }
           },
           {
