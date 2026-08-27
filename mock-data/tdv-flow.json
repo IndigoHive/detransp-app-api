@@ -3601,7 +3601,7 @@
             "type": "button",
             "name": null,
             "data": {
-              "icon": "chevron_left",
+              "icon": "arrow_back_ios",
               "label": "Retornar para a tela inicial"
             }
           }
@@ -3668,7 +3668,7 @@
             "type": "button",
             "name": null,
             "data": {
-              "icon": "chevron_left",
+              "icon": "arrow_back_ios",
               "label": "Retornar para a tela inicial"
             }
           }
@@ -4978,6 +4978,12 @@
                 }
               },
               {
+                "id": "c_217649f9273d",
+                "type": "divider",
+                "name": null,
+                "data": {}
+              },
+              {
                 "id": "c_c780511c1a48",
                 "type": "split_row",
                 "name": null,
@@ -5012,7 +5018,7 @@
                         "type": "rich_text",
                         "name": null,
                         "data": {
-                          "html": "<div data-space-between-row=\"\" style=\"display: flex; flex-direction: row; align-items: flex-start; gap: 16px; width: 100%; min-width: 0px;\"><div data-space-between-cell=\"\" style=\"flex: 100 100 0%; min-width: 0px; overflow-wrap: break-word;\"><p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>Se os dados estiverem incorretos, cancele a solicitação e ajuste as informações antes de prosseguir.</strong></span></p></div><div data-space-between-cell=\"\" style=\"flex: 0 0 0%; min-width: 0px; overflow-wrap: break-word;\"><p></p></div></div><p></p>"
+                          "html": "<p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>Se os dados estiverem incorretos, cancele a solicitação e ajuste as informações antes de prosseguir.</strong></span></p>"
                         }
                       }
                     ],
@@ -5131,6 +5137,12 @@
                 }
               },
               {
+                "id": "c_9dbaf940effb",
+                "type": "divider",
+                "name": null,
+                "data": {}
+              },
+              {
                 "id": "c_9e6f921faa86",
                 "type": "split_row",
                 "name": null,
@@ -5165,7 +5177,7 @@
                         "type": "rich_text",
                         "name": null,
                         "data": {
-                          "html": "<div data-space-between-row=\"\" style=\"display: flex; flex-direction: row; align-items: flex-start; gap: 16px; width: 100%; min-width: 0px;\"><div data-space-between-cell=\"\" style=\"flex: 100 100 0%; min-width: 0px; overflow-wrap: break-word;\"><p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>Se os dados estiverem incorretos, cancele a solicitação e ajuste as informações antes de prosseguir.</strong></span></p></div><div data-space-between-cell=\"\" style=\"flex: 0 0 0%; min-width: 0px; overflow-wrap: break-word;\"><p></p></div></div><p></p>"
+                          "html": "<p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>Se os dados estiverem incorretos, cancele a solicitação e ajuste as informações antes de prosseguir.</strong></span></p>"
                         }
                       }
                     ],
@@ -5236,7 +5248,7 @@
             "type": "rich_text",
             "name": null,
             "data": {
-              "html": "<p><span style=\"font-size:14px;color:#262828\">Leia atentamente e aceite os termos da venda</span></p>"
+              "html": "<p style=\"text-align: center;\"><span style=\"color: rgb(38, 40, 40); font-size: 16px;\">Leia atentamente e aceite os termos da venda</span></p>"
             }
           },
           {
@@ -5371,7 +5383,7 @@
             "type": "rich_text",
             "name": null,
             "data": {
-              "html": "<p><span style=\"font-size:14px;color:#262828\">Precisamos que <strong>confirme a transferência do veículo com sua assinatura eletrônica.</strong></span></p>"
+              "html": "<p style=\"text-align: center;\"><span style=\"color: rgb(38, 40, 40); font-size: 14px;\">Precisamos que <strong>confirme a transferência do veículo com sua assinatura eletrônica.</strong></span></p>"
             }
           }
         ]
@@ -5456,6 +5468,7 @@
             "type": "button",
             "name": null,
             "data": {
+              "icon": "arrow_back_ios",
               "label": "Retornar para a tela inicial"
             }
           }
