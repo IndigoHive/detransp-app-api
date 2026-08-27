@@ -2231,7 +2231,7 @@
             "type": "rich_text",
             "name": null,
             "data": {
-              "html": "<p><span style=\"color: rgb(38, 40, 40); font-size: 12px;\">Saiba que, se o pagamento não for feito no prazo, você receberá uma multa de trânsito por infração média e possível remoção do veículo a um pátio, segundo Código Brasileiro de Trânsito.<br></span></p>"
+              "html": "<p><span style=\"color: rgb(38, 40, 40); font-size: 12px;\">Saiba que, se o pagamento não for feito no prazo, você receberá uma multa de trânsito por infração média e possível remoção do veículo a um pátio, segundo Código Brasileiro de Trânsito.</span></p>"
             }
           }
         ]
@@ -2814,6 +2814,66 @@
       }
     },
     {
+      "id": "s_3f8c2d91a7e6",
+      "name": "[Vendedor] Sucesso liveness (retomar venda)",
+      "content": {
+        "id": "c_4e9a1f7b3c85",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_6b2d8e0a4f91",
+            "type": "rich_text",
+            "name": null,
+            "data": {
+              "html": "<p style=\"text-align: center;\"><span style=\"font-size: 16px;\">Está tudo certo, podemos continuar</span></p>"
+            }
+          },
+          {
+            "id": "c_9c1f5a3e7d24",
+            "type": "image",
+            "name": null,
+            "data": {
+              "asset": {
+                "id": "7a645c41-4de3-430b-afd4-6058d4df0033",
+                "url": "https://detransp-app-editor-assets.s3.amazonaws.com/17da1ca4-aecd-4545-ae3c-d0916a0c4e67.png"
+              }
+            }
+          }
+        ]
+      },
+      "footer": {
+        "id": "c_2a7e4c9b1f68",
+        "type": "group",
+        "children": [
+          {
+            "id": "c_8d3b6f2a5e09",
+            "type": "button",
+            "name": null,
+            "data": {
+              "label": "Continuar"
+            }
+          }
+        ]
+      },
+      "navbar": {
+        "id": "4d867ed6-57fc-4fd6-9234-c8bd3523ed78",
+        "data": {
+          "steps": 8,
+          "title": "Análise de requisitos",
+          "showReturn": true,
+          "currentStep": 3
+        },
+        "name": null,
+        "type": "nav_bar"
+      },
+      "data": {
+        "position": {
+          "x": 260,
+          "y": -20
+        }
+      }
+    },
+    {
       "id": "s_0d60f1885598",
       "name": "[Comprador] Sucesso liveness",
       "content": {
@@ -2924,11 +2984,11 @@
         "type": "group",
         "children": [
           {
-            "id": "c_ce7914edd4b4",
-            "type": "text_body",
+            "id": "c_9f8b2f773820",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "text": "Confirme as informações para a compra do veículo\n"
+              "html": "<p style=\"text-align: center;\"><span style=\"color: oklch(0.145 0 0); font-size: 16px;\">Confirme as informações para a compra do veículo</span></p>"
             }
           },
           {
@@ -3009,7 +3069,8 @@
                         "data": {
                           "icon": "edit",
                           "size": "md",
-                          "variant": "outline",
+                          "color": "neutral",
+                          "variant": "ghost",
                           "clickAction": "submit"
                         }
                       }
@@ -3314,27 +3375,26 @@
         "children": [
           {
             "id": "c_15d2d123ee4e",
-            "type": "text_body",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "text": "Confirme seu endereço para continuar a transferência do veículo\n"
+              "html": "<p style=\"text-align: center;\"><span style=\"color: rgb(38, 40, 40); font-size: 16px;\">Confirme seu endereço para continuar a transferência do veículo</span></p>"
             }
           },
           {
             "id": "c_b9c15617969e",
-            "type": "text_heading",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "text": "Dados de quem está comprando"
+              "html": "<p><span style=\"color: rgb(38, 40, 40); font-size: 16px;\"><strong>Dados de quem está comprando</strong></span></p>"
             }
           },
           {
             "id": "c_autodeclaracao_servidor",
-            "type": "text_body",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "text": "@{node:n_a1d5c7e93b60.autodeclaracaoResidencia}",
-              "align": "justify",
+              "html": "<p style=\"text-align:justify\"><span style=\"font-size:14px;color:#262828\">@{node:n_a1d5c7e93b60.autodeclaracaoResidencia}</span></p>",
               "visibilityCondition": {
                 "clauses": [
                   {
@@ -3349,11 +3409,10 @@
           },
           {
             "id": "c_61aa261b7bc9_edited",
-            "type": "text_body",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "text": "Eu, @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}, inscrito no CPF sob o nº @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.cpfComprador}, declaro para os devidos fins que resido em @{node:n_f5aacdb3ca97.result.tipoLogradouro} @{screen:s_7e2a1c9b4f08.comp:c_a8f3e21b9c40.value ?? node:n_f5aacdb3ca97.result.endereco}, @{screen:s_7e2a1c9b4f08.comp:c_b7d4e12a8f31.value}, @{screen:s_7e2a1c9b4f08.comp:c_d5f6a14c6b13.value ?? node:n_f5aacdb3ca97.result.bairro}, @{screen:s_7e2a1c9b4f08.comp:c_4a2614e0e9fb.value ?? node:n_f5aacdb3ca97.result.localidade} - @{node:n_f5aacdb3ca97.result.uf}, @{node:n_f5aacdb3ca97.result.cep ?? screen:s_85ba93c2e996.comp:c_6a5c088eac53.value}.",
-              "align": "justify",
+              "html": "<p style=\"text-align:justify\"><span style=\"font-size:14px;color:#262828\">Eu, @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}, inscrito no CPF sob o nº @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.cpfComprador}, declaro para os devidos fins que resido em @{node:n_f5aacdb3ca97.result.tipoLogradouro} @{screen:s_7e2a1c9b4f08.comp:c_a8f3e21b9c40.value ?? node:n_f5aacdb3ca97.result.endereco}, @{screen:s_7e2a1c9b4f08.comp:c_b7d4e12a8f31.value}, @{screen:s_7e2a1c9b4f08.comp:c_d5f6a14c6b13.value ?? node:n_f5aacdb3ca97.result.bairro}, @{screen:s_7e2a1c9b4f08.comp:c_4a2614e0e9fb.value ?? node:n_f5aacdb3ca97.result.localidade} - @{node:n_f5aacdb3ca97.result.uf}, @{node:n_f5aacdb3ca97.result.cep ?? screen:s_85ba93c2e996.comp:c_6a5c088eac53.value}.</span></p>",
               "visibilityCondition": {
                 "clauses": [
                   {
@@ -3378,11 +3437,10 @@
           },
           {
             "id": "c_61aa261b7bc9_edited_comp",
-            "type": "text_body",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "text": "Eu, @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}, inscrito no CPF sob o nº @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.cpfComprador}, declaro para os devidos fins que resido em @{node:n_f5aacdb3ca97.result.tipoLogradouro} @{screen:s_7e2a1c9b4f08.comp:c_a8f3e21b9c40.value ?? node:n_f5aacdb3ca97.result.endereco}, @{screen:s_7e2a1c9b4f08.comp:c_b7d4e12a8f31.value}, @{screen:s_7e2a1c9b4f08.comp:c_c6e5f03b7a22.value}, @{screen:s_7e2a1c9b4f08.comp:c_d5f6a14c6b13.value ?? node:n_f5aacdb3ca97.result.bairro}, @{screen:s_7e2a1c9b4f08.comp:c_4a2614e0e9fb.value ?? node:n_f5aacdb3ca97.result.localidade} - @{node:n_f5aacdb3ca97.result.uf}, @{node:n_f5aacdb3ca97.result.cep ?? screen:s_85ba93c2e996.comp:c_6a5c088eac53.value}.",
-              "align": "justify",
+              "html": "<p style=\"text-align:justify\"><span style=\"font-size:14px;color:#262828\">Eu, @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}, inscrito no CPF sob o nº @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.cpfComprador}, declaro para os devidos fins que resido em @{node:n_f5aacdb3ca97.result.tipoLogradouro} @{screen:s_7e2a1c9b4f08.comp:c_a8f3e21b9c40.value ?? node:n_f5aacdb3ca97.result.endereco}, @{screen:s_7e2a1c9b4f08.comp:c_b7d4e12a8f31.value}, @{screen:s_7e2a1c9b4f08.comp:c_c6e5f03b7a22.value}, @{screen:s_7e2a1c9b4f08.comp:c_d5f6a14c6b13.value ?? node:n_f5aacdb3ca97.result.bairro}, @{screen:s_7e2a1c9b4f08.comp:c_4a2614e0e9fb.value ?? node:n_f5aacdb3ca97.result.localidade} - @{node:n_f5aacdb3ca97.result.uf}, @{node:n_f5aacdb3ca97.result.cep ?? screen:s_85ba93c2e996.comp:c_6a5c088eac53.value}.</span></p>",
               "visibilityCondition": {
                 "clauses": [
                   {
@@ -3407,11 +3465,10 @@
           },
           {
             "id": "c_61aa261b7bc9_stub",
-            "type": "text_body",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "text": "Eu, @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}, inscrito no CPF sob o nº @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.cpfComprador}, declaro para os devidos fins que resido em @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.enderecoComprador}.",
-              "align": "justify",
+              "html": "<p style=\"text-align:justify\"><span style=\"font-size:14px;color:#262828\">Eu, @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}, inscrito no CPF sob o nº @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.cpfComprador}, declaro para os devidos fins que resido em @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.enderecoComprador}.</span></p>",
               "visibilityCondition": {
                 "clauses": [
                   {
@@ -3431,11 +3488,10 @@
           },
           {
             "id": "c_6ad356a5b447",
-            "type": "text_body",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "text": "Sob pena da lei, estou ciente de que a falsidade destas informações implicará em penalidades.\n",
-              "align": "justify"
+              "html": "<p style=\"text-align:justify\"><span style=\"font-size:14px;color:#262828\">Sob pena da lei, estou ciente de que a falsidade destas informações implicará em penalidades.</span></p>"
             }
           },
           {
@@ -3448,7 +3504,7 @@
                 {
                   "id": "1",
                   "key": "opcao_1",
-                  "text": "Eu confirmo que as informações acima são verdadeiras",
+                  "text": "<p><span style=\"font-size: 14px;\">Eu confirmo que as informações acima são verdadeiras</span></p>",
                   "required": false
                 }
               ],
@@ -3512,27 +3568,26 @@
             "type": "icon_text",
             "name": null,
             "data": {
-              "icon": "check_circle",
-              "text": "Pagamento confirmado",
+              "icon": "check",
+              "text": "<p style=\"text-align: center;\"><span style=\"font-size: 16px;\"><strong>Pagamento confirmado</strong></span></p>",
               "color": "success",
               "variant": "vertical"
             }
           },
           {
             "id": "c_f35dd3087ab7",
-            "type": "text_body",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "text": "Olá, @{node:n_2d9e4b6a8c17.nomeComprador ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}. \n\nFoi confirmado o pagamento da taxa de transferência do veículo @{node:n_2d9e4b6a8c17.vehicle.brandModel ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.brandModel}, placa @{node:n_2d9e4b6a8c17.vehicle.plate ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.plate}.\n\nAguarde enquanto validamos o processo e registramos o veículo em seu nome.\n",
-              "align": "left"
+              "html": "<p style=\"text-align: center;\"><span style=\"color: rgb(38, 40, 40); font-size: 16px;\">Olá, @{node:n_2d9e4b6a8c17.nomeComprador ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}.<br><br>Foi confirmado o pagamento da taxa de transferência do veículo <strong>@{node:n_2d9e4b6a8c17.vehicle.brandModel ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.brandModel}, placa @{node:n_2d9e4b6a8c17.vehicle.plate ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.plate}.</strong><br><br>Aguarde enquanto validamos o processo e <strong>registramos o veículo em seu nome.</strong></span></p>"
             }
           },
           {
             "id": "c_6dec9c73677b",
-            "type": "text_body",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "text": "Acesse o aplicativo da CNH do Brasil para consultar os veículos em seu nome.\n"
+              "html": "<p style=\"text-align: center;\"><span style=\"color: rgb(38, 40, 40); font-size: 16px;\">Acesse o aplicativo da CNH do Brasil para consultar os veículos em seu nome.</span></p>"
             }
           }
         ]
@@ -3546,7 +3601,7 @@
             "type": "button",
             "name": null,
             "data": {
-              "icon": "chevron_left",
+              "icon": "arrow_back_ios",
               "label": "Retornar para a tela inicial"
             }
           }
@@ -3580,19 +3635,18 @@
             "type": "icon_text",
             "name": null,
             "data": {
-              "icon": "check_circle",
-              "text": "Transferência realizada com sucesso",
+              "icon": "check",
+              "text": "<p style=\"text-align: center;\"><span style=\"font-size: 16px;\"><strong>Transferência realizada com sucesso</strong></span></p>",
               "color": "success",
               "variant": "vertical"
             }
           },
           {
             "id": "c_c02c500b34c1",
-            "type": "text_body",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "text": "Olá, @{node:n_2d9e4b6a8c17.nomeComprador ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}. \nA transferência do veículo @{node:n_2d9e4b6a8c17.vehicle.brandModel ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.brandModel}, placa @{node:n_2d9e4b6a8c17.vehicle.plate ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.plate} foi realizada com sucesso e o veículo encontra-se em seu nome.\n\nAcesse o aplicativo da CNH do Brasil para baixar o documento do veículo.\n",
-              "align": "left"
+              "html": "<p style=\"text-align: center;\"><span style=\"color: rgb(38, 40, 40); font-size: 16px;\">Olá, @{node:n_2d9e4b6a8c17.nomeComprador ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}.<br><br>A transferência do veículo <strong>@{node:n_2d9e4b6a8c17.vehicle.brandModel ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.brandModel}, placa @{node:n_2d9e4b6a8c17.vehicle.plate ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.plate}</strong> foi realizada com sucesso e o veículo encontra-se em seu nome.<br><br>Acesse o aplicativo da CNH do Brasil para baixar o documento do veículo.</span></p>"
             }
           },
           {
@@ -3614,7 +3668,7 @@
             "type": "button",
             "name": null,
             "data": {
-              "icon": "chevron_left",
+              "icon": "arrow_back_ios",
               "label": "Retornar para a tela inicial"
             }
           }
@@ -3841,17 +3895,17 @@
             "name": null,
             "data": {
               "icon": "error",
-              "text": "Veículo sem laudo de vistoria",
+              "text": "<p style=\"text-align: center;\"><strong>Veículo sem laudo de vistoria</strong></p>",
               "color": "danger",
               "variant": "vertical"
             }
           },
           {
-            "id": "c_e63ee3e4ab1b",
-            "type": "text_body",
+            "id": "c_7571024a1358",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "text": "A vistoria do veículo ainda não foi feita.\n\nAgende ou verifique a situação da vistoria para continuar a transferência."
+              "html": "<p style=\"text-align: center;\"><span style=\"color: oklch(0.145 0 0); font-size: 16px;\">A vistoria do veículo ainda não foi feita.<br><br>Agende ou verifique a situação da vistoria para continuar a transferência.</span></p>"
             }
           }
         ]
@@ -3902,17 +3956,17 @@
             "name": null,
             "data": {
               "icon": "error",
-              "text": "Veículo com restrição Renajud",
+              "text": "<p style=\"text-align: center;\"><span style=\"font-size: 16px;\"><strong>Veículo com restrição Renajud</strong></span></p>",
               "color": "danger",
               "variant": "vertical"
             }
           },
           {
-            "id": "c_20d0ebb622cf",
-            "type": "text_body",
+            "id": "c_c1bdcd49c38e",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "text": "O veículo tem pendências judiciais.\n\nRegularize a situação do veículo para continuar a transferência."
+              "html": "<p style=\"text-align: center;\"><span style=\"color: oklch(0.145 0 0); font-size: 16px;\">O veículo tem pendências judiciais.<br><br>Regularize a situação do veículo para continuar a transferência.</span></p>"
             }
           }
         ]
@@ -3963,17 +4017,17 @@
             "name": null,
             "data": {
               "icon": "error",
-              "text": "Veículo com baixa permanente",
+              "text": "<p style=\"text-align: center;\"><strong>Veículo com baixa permanente</strong></p>",
               "color": "danger",
               "variant": "vertical"
             }
           },
           {
-            "id": "c_c1e670600ae2",
-            "type": "text_body",
+            "id": "c_b97d5c31058a",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "text": "O veículo tem pendências administrativas.\n\nRegularize a situação do veículo para continuar a transferência."
+              "html": "<p style=\"text-align: center;\"><span style=\"color: oklch(0.145 0 0); font-size: 16px;\">O veículo tem pendências administrativas.<br><br>Regularize a situação do veículo para continuar a transferência.</span></p>"
             }
           }
         ]
@@ -4024,17 +4078,17 @@
             "name": null,
             "data": {
               "icon": "error",
-              "text": "Veículo com baixa permanente e restrição Renajud",
+              "text": "<p style=\"text-align: center;\"><strong>Veículo com baixa permanente e restrição Renajud</strong></p>",
               "color": "danger",
               "variant": "vertical"
             }
           },
           {
-            "id": "c_a6d40e3dd498",
-            "type": "text_body",
+            "id": "c_a28072fc0af3",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "text": "O veículo tem pendências administrativas e judiciais.\n\nRegularize a situação do veículo para continuar a transferência."
+              "html": "<p style=\"text-align: center;\"><span style=\"color: oklch(0.145 0 0); font-size: 16px;\">O veículo tem pendências administrativas e judiciais.<br><br>Regularize a situação do veículo para continuar a transferência.</span></p>"
             }
           }
         ]
@@ -4216,7 +4270,7 @@
             "name": null,
             "data": {
               "icon": "error",
-              "text": "Veículo com restrição financeira",
+              "text": "<p style=\"text-align: center;\"><strong>Veículo com restrição financeira</strong></p>",
               "color": "danger",
               "variant": "vertical"
             }
@@ -4346,8 +4400,8 @@
             "type": "icon_text",
             "name": null,
             "data": {
-              "icon": "check_circle",
-              "text": "Seu pagamento foi confirmado",
+              "icon": "check",
+              "text": "<p style=\"text-align: center;\"><span style=\"font-size: 16px;\"><strong>Seu pagamento foi confirmado</strong></span></p>",
               "color": "success",
               "variant": "vertical"
             }
@@ -4440,11 +4494,10 @@
         "children": [
           {
             "id": "c_cec04565cebd",
-            "type": "text_body",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "text": "Olá, @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}.\n\nA transferência do veículo será finalizada após o pagamento da taxa.\n",
-              "align": "left"
+              "html": "<p><span style=\"color: rgb(38, 40, 40); font-size: 16px;\">Olá, @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}.<br><br>A transferência do veículo será <strong>finalizada após o pagamento da taxa</strong>.</span></p>"
             }
           },
           {
@@ -4452,45 +4505,120 @@
             "type": "alert",
             "name": null,
             "data": {
-              "body": "Você tem 30 dias para pagar a taxa de transferência à contar da data de assinatura do vendedor.\n",
-              "title": "Importante",
+              "body": "<p><span style=\"color: rgb(87, 89, 90); font-size: 12px;\">Você tem 30 dias para pagar a taxa de transferência à contar da data de assinatura do vendedor.</span></p>",
+              "title": "<p><span style=\"font-size:12px;color:#111414\"><strong>Importante</strong></span></p>",
               "variant": "warning"
             }
           },
           {
             "id": "c_49b28a59b50b",
-            "type": "vehicle_info",
+            "type": "card",
             "name": null,
-            "data": {
-              "source": "@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle}",
-              "vehicle": {
-                "id": "1",
-                "plate": "EXC1A22",
-                "title": "Veículo 1",
-                "status": "REGULAR",
-                "brandModel": "VOLKS/GOL GTI 1.0",
-                "licensingExpirationDate": "2024-12-31"
+            "children": [
+              {
+                "id": "c_7f2a91c3d508",
+                "type": "vehicle_plate",
+                "name": null,
+                "data": {
+                  "size": "sm",
+                  "align": "left",
+                  "plate": "@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.plate}",
+                  "variant": "default"
+                }
+              },
+              {
+                "id": "c_b3e8d4a7f621",
+                "type": "rich_text",
+                "name": null,
+                "data": {
+                  "html": "<p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>Veículo</strong></span></p><p><span style=\"color: rgb(17, 20, 20); font-size: 14px;\">@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.brandModel}</span></p>"
+                }
+              },
+              {
+                "id": "c_2c9d5f1e8a34",
+                "type": "divider",
+                "name": null,
+                "data": {}
+              },
+              {
+                "id": "c_8a4b6e0d3f97",
+                "type": "rich_text",
+                "name": null,
+                "data": {
+                  "html": "<p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>Cor</strong></span></p><p><span style=\"color: rgb(17, 20, 20); font-size: 14px;\">@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.descricaoCorVeiculo}</span></p>"
+                }
+              },
+              {
+                "id": "c_5e1c7b2a9d46",
+                "type": "divider",
+                "name": null,
+                "data": {}
+              },
+              {
+                "id": "c_d94f3c81b5e2",
+                "type": "rich_text",
+                "name": null,
+                "data": {
+                  "html": "<p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>Pessoa que assinou a venda</strong></span></p><p><span style=\"color: rgb(17, 20, 20); font-size: 14px;\">@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeVendedor}</span></p>"
+                }
               }
+            ],
+            "data": {}
+          },
+          {
+            "id": "c_684a79391fbb",
+            "type": "split_row",
+            "name": null,
+            "children": [
+              {
+                "id": "c_0d650f150cd8",
+                "type": "group",
+                "name": null,
+                "children": [
+                  {
+                    "id": "c_92ace8d9c585",
+                    "type": "icon_button",
+                    "name": null,
+                    "data": {
+                      "icon": "info",
+                      "size": "sm",
+                      "color": "neutral",
+                      "variant": "ghost",
+                      "clickAction": "submit"
+                    }
+                  }
+                ],
+                "data": {}
+              },
+              {
+                "id": "c_d3b73b78584d",
+                "type": "group",
+                "name": null,
+                "children": [
+                  {
+                    "id": "c_49cc0a5d1d17",
+                    "type": "rich_text",
+                    "name": null,
+                    "data": {
+                      "html": "<p><span style=\"font-size: 14px;\"><strong>Informação</strong></span></p>"
+                    }
+                  }
+                ],
+                "data": {}
+              }
+            ],
+            "data": {
+              "gap": 8,
+              "align": "center",
+              "distribution": "grow-end"
             }
           },
           {
-            "id": "c_6fb199daa4bc",
-            "type": "icon_text",
+            "id": "c_ac4436f8f318",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "icon": "info",
-              "text": "Informação",
-              "color": "neutral",
-              "variant": "horizontal"
-            }
-          },
-          {
-            "id": "c_886b23ce8dc9",
-            "type": "text_body",
-            "name": null,
-            "data": {
-              "text": "Saiba que, se o pagamento não for feito no prazo, você receberá uma multa de trânsito por infração média e possível remoção do veículo a um pátio, segundo Código Brasileiro de Trânsito.\n",
-              "align": "left"
+              "html": "<p><span style=\"color: rgb(38, 40, 40); font-size: 12px;\">Saiba que, se o pagamento não for feito no prazo, você receberá uma multa de trânsito por infração média e possível remoção do veículo a um pátio, segundo Código Brasileiro de Trânsito.</span></p>"
             }
           }
         ]
@@ -4540,19 +4668,18 @@
             "children": [
               {
                 "id": "c_2d076cffa569",
-                "type": "text_heading",
+                "type": "rich_text",
                 "name": null,
                 "data": {
-                  "text": "Transferência de veículo\n"
+                  "html": "<p><span style=\"color: rgb(38, 40, 40); font-size: 16px;\"><strong>Transferência de veículo</strong></span></p>"
                 }
               },
               {
                 "id": "c_1f2593c4e9ad",
-                "type": "label_text",
+                "type": "rich_text",
                 "name": null,
                 "data": {
-                  "text": "@{node:n_b8e4d02f3c15.nomeComprador}",
-                  "label": "Pessoa que assinou a compra"
+                  "html": "<p><span style=\"font-size:12px;color:#7A7F83\"><strong>Pessoa que assinou a compra</strong></span></p><p><span style=\"font-size:14px;color:#111414\">@{node:n_b8e4d02f3c15.nomeComprador}</span></p>"
                 }
               },
               {
@@ -4568,11 +4695,10 @@
                 "children": [
                   {
                     "id": "c_f2e61beea753",
-                    "type": "label_text",
+                    "type": "rich_text",
                     "name": null,
                     "data": {
-                      "text": "@{item.valorFormatado}",
-                      "label": "@{item.descricao}"
+                      "html": "<p><span style=\"font-size:12px;color:#7A7F83\"><strong>@{item.descricao}</strong></span></p><p><span style=\"font-size:14px;color:#111414\">@{item.valorFormatado}</span></p>"
                     }
                   },
                   {
@@ -4588,11 +4714,10 @@
               },
               {
                 "id": "c_7414e47a684b",
-                "type": "label_text",
+                "type": "rich_text",
                 "name": null,
                 "data": {
-                  "text": "@{node:n_b8e4d02f3c15.totalDebitos}",
-                  "label": "Valor total"
+                  "html": "<p><span style=\"color: rgb(0, 88, 175); font-size: 12px;\"><strong>Valor total</strong></span></p><p><span style=\"color: rgb(0, 88, 175); font-size: 14px;\">@{node:n_b8e4d02f3c15.totalDebitos}</span></p>"
                 }
               }
             ],
@@ -4606,11 +4731,46 @@
         "children": [
           {
             "id": "c_bb9ec0192b63",
-            "type": "label_text",
+            "type": "split_row",
             "name": null,
+            "children": [
+              {
+                "id": "c_1a4c6fe6c0d1",
+                "type": "group",
+                "name": null,
+                "children": [
+                  {
+                    "id": "c_3d9b7ea2f851",
+                    "type": "rich_text",
+                    "name": null,
+                    "data": {
+                      "html": "<p><span style=\"color: rgb(38, 40, 40); font-size: 16px;\"><strong>Total de débitos</strong></span></p>"
+                    }
+                  }
+                ],
+                "data": {}
+              },
+              {
+                "id": "c_6b8f2a7d0c94",
+                "type": "group",
+                "name": null,
+                "children": [
+                  {
+                    "id": "c_e5f0a9c2b716",
+                    "type": "rich_text",
+                    "name": null,
+                    "data": {
+                      "html": "<p><span style=\"color: rgb(0, 88, 175); font-size: 16px;\"><strong>@{node:n_b8e4d02f3c15.totalDebitos}</strong></span></p>"
+                    }
+                  }
+                ],
+                "data": {}
+              }
+            ],
             "data": {
-              "text": "@{node:n_b8e4d02f3c15.totalDebitos}",
-              "label": "Total de débitos"
+              "gap": 8,
+              "align": "center",
+              "distribution": "space-between"
             }
           },
           {
@@ -4653,8 +4813,8 @@
             "type": "icon_text",
             "name": null,
             "data": {
-              "icon": "check_circle",
-              "text": "Seu pagamento foi confirmado",
+              "icon": "check",
+              "text": "<p style=\"text-align: center;\"><span style=\"font-size: 16px;\"><strong>Seu pagamento foi confirmado</strong></span></p>",
               "color": "success",
               "variant": "vertical"
             }
@@ -4751,7 +4911,7 @@
             "type": "rich_text",
             "name": null,
             "data": {
-              "html": "<p><span style=\"font-size:14px;color:#262828\">Confirme as informações para a venda do veículo<br></span></p>"
+              "html": "<p style=\"text-align: center;\"><span style=\"color: rgb(38, 40, 40); font-size: 16px;\">Confirme as informações para a venda do veículo</span></p>"
             }
           },
           {
@@ -4764,7 +4924,7 @@
                 "type": "rich_text",
                 "name": null,
                 "data": {
-                  "html": "<p><span><strong>Dados da empresa que está comprando</strong></span></p>"
+                  "html": "<p><span style=\"font-size: 16px;\"><strong>Dados da empresa que está comprando</strong></span></p>"
                 }
               },
               {
@@ -4818,15 +4978,57 @@
                 }
               },
               {
-                "id": "c_032d38802b4c",
-                "type": "icon_text",
+                "id": "c_217649f9273d",
+                "type": "divider",
                 "name": null,
+                "data": {}
+              },
+              {
+                "id": "c_c780511c1a48",
+                "type": "split_row",
+                "name": null,
+                "children": [
+                  {
+                    "id": "c_a93e396e0e90",
+                    "type": "group",
+                    "name": null,
+                    "children": [
+                      {
+                        "id": "c_8c7814184d4c",
+                        "type": "icon",
+                        "name": null,
+                        "data": {
+                          "icon": "info",
+                          "size": 24,
+                          "color": "neutral",
+                          "background": false,
+                          "backgroundSize": 40
+                        }
+                      }
+                    ],
+                    "data": {}
+                  },
+                  {
+                    "id": "c_ad9a6416ecc9",
+                    "type": "group",
+                    "name": null,
+                    "children": [
+                      {
+                        "id": "c_10c44d7010c1",
+                        "type": "rich_text",
+                        "name": null,
+                        "data": {
+                          "html": "<p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>Se os dados estiverem incorretos, cancele a solicitação e ajuste as informações antes de prosseguir.</strong></span></p>"
+                        }
+                      }
+                    ],
+                    "data": {}
+                  }
+                ],
                 "data": {
-                  "icon": "info",
-                  "text": "<div data-space-between-row=\"\" style=\"display: flex; flex-direction: row; align-items: flex-start; gap: 16px; width: 100%; min-width: 0px;\"><div data-space-between-cell=\"\" style=\"flex: 100 100 0%; min-width: 0px; overflow-wrap: break-word;\"><p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>Se os dados estiverem incorretos, cancele a solicitação e ajuste as informações antes de prosseguir.</strong></span></p></div><div data-space-between-cell=\"\" style=\"flex: 0 0 0%; min-width: 0px; overflow-wrap: break-word;\"><p></p></div></div><p></p>",
-                  "color": "neutral",
-                  "variant": "horizontal",
-                  "alignment": "start"
+                  "gap": 8,
+                  "align": "center",
+                  "distribution": "space-between"
                 }
               }
             ],
@@ -4935,15 +5137,57 @@
                 }
               },
               {
-                "id": "c_8470f04cad1b",
-                "type": "icon_text",
+                "id": "c_9dbaf940effb",
+                "type": "divider",
                 "name": null,
+                "data": {}
+              },
+              {
+                "id": "c_9e6f921faa86",
+                "type": "split_row",
+                "name": null,
+                "children": [
+                  {
+                    "id": "c_6dfbaf27aae0",
+                    "type": "group",
+                    "name": null,
+                    "children": [
+                      {
+                        "id": "c_9ebce7d0c275",
+                        "type": "icon",
+                        "name": null,
+                        "data": {
+                          "icon": "info",
+                          "size": 24,
+                          "color": "neutral",
+                          "background": false,
+                          "backgroundSize": 40
+                        }
+                      }
+                    ],
+                    "data": {}
+                  },
+                  {
+                    "id": "c_828f71ccd5c1",
+                    "type": "group",
+                    "name": null,
+                    "children": [
+                      {
+                        "id": "c_2b8cbefbbf6e",
+                        "type": "rich_text",
+                        "name": null,
+                        "data": {
+                          "html": "<p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>Se os dados estiverem incorretos, cancele a solicitação e ajuste as informações antes de prosseguir.</strong></span></p>"
+                        }
+                      }
+                    ],
+                    "data": {}
+                  }
+                ],
                 "data": {
-                  "icon": "info",
-                  "text": "<div data-space-between-row=\"\" style=\"display: flex; flex-direction: row; align-items: flex-start; gap: 16px; width: 100%; min-width: 0px;\"><div data-space-between-cell=\"\" style=\"flex: 100 100 0%; min-width: 0px; overflow-wrap: break-word;\"><p><span style=\"color: rgb(122, 127, 131); font-size: 12px;\"><strong>Se os dados estiverem incorretos, cancele a solicitação e ajuste as informações antes de prosseguir.</strong></span></p></div><div data-space-between-cell=\"\" style=\"flex: 0 0 0%; min-width: 0px; overflow-wrap: break-word;\"><p></p></div></div><p></p>",
-                  "color": "neutral",
-                  "variant": "horizontal",
-                  "alignment": "start"
+                  "gap": 8,
+                  "align": "center",
+                  "distribution": "space-between"
                 }
               }
             ],
@@ -5004,7 +5248,7 @@
             "type": "rich_text",
             "name": null,
             "data": {
-              "html": "<p><span style=\"font-size:14px;color:#262828\">Leia atentamente e aceite os termos da venda</span></p>"
+              "html": "<p style=\"text-align: center;\"><span style=\"color: rgb(38, 40, 40); font-size: 16px;\">Leia atentamente e aceite os termos da venda</span></p>"
             }
           },
           {
@@ -5139,7 +5383,7 @@
             "type": "rich_text",
             "name": null,
             "data": {
-              "html": "<p><span style=\"font-size:14px;color:#262828\">Precisamos que <strong>confirme a transferência do veículo com sua assinatura eletrônica.</strong></span></p>"
+              "html": "<p style=\"text-align: center;\"><span style=\"color: rgb(38, 40, 40); font-size: 14px;\">Precisamos que <strong>confirme a transferência do veículo com sua assinatura eletrônica.</strong></span></p>"
             }
           }
         ]
@@ -5224,6 +5468,7 @@
             "type": "button",
             "name": null,
             "data": {
+              "icon": "arrow_back_ios",
               "label": "Retornar para a tela inicial"
             }
           }
@@ -6458,8 +6703,8 @@
       "name": "Liveness (retomar venda)",
       "data": {
         "position": {
-          "x": 256,
-          "y": 60
+          "x": -48,
+          "y": 48
         }
       }
     },
@@ -6469,8 +6714,8 @@
       "name": "Origem 5 (retomar venda para loja)?",
       "data": {
         "position": {
-          "x": 372,
-          "y": 60
+          "x": 732,
+          "y": 356
         },
         "condition": {
           "clauses": [
@@ -6491,8 +6736,8 @@
       "name": "Retomar: dados da venda já informados?",
       "data": {
         "position": {
-          "x": 488,
-          "y": 60
+          "x": 992,
+          "y": 176
         },
         "condition": {
           "clauses": [
@@ -6522,6 +6767,12 @@
               "id": "41a7f382-5b1f-41fa-958c-c1d3c3db2e67",
               "left": "@{node:n_b685a31ed52c.estado}",
               "right": "2",
+              "operator": "equals"
+            },
+            {
+              "id": "pago-estado-tdv-8-b685a31ed52c",
+              "left": "@{node:n_b685a31ed52c.estadoTdv}",
+              "right": "8",
               "operator": "equals"
             }
           ],
@@ -7090,8 +7341,8 @@
           "x": 12716,
           "y": 6156
         },
-        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/consulta-debitos?codigoTransferencia=@{node:n_2d9e4b6a8c17.codigoTransferencia}&gerarQrCode=true",
-        "method": "GET"
+        "method": "GET",
+        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/consulta-debitos?codigoTransferencia=@{node:n_2d9e4b6a8c17.codigoTransferencia}&gerarQrCode=true"
       }
     },
     {
@@ -7140,6 +7391,12 @@
               "left": "@{node:n_b8e4d02f3c15.estado}",
               "right": "2",
               "operator": "equals"
+            },
+            {
+              "id": "pago-estado-tdv-8-b8e4d02f3c15",
+              "left": "@{node:n_b8e4d02f3c15.estadoTdv}",
+              "right": "8",
+              "operator": "equals"
             }
           ],
           "combinator": "or"
@@ -7155,8 +7412,8 @@
           "x": 12072,
           "y": 4336
         },
-        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/consulta-debitos?codigoTransferencia=@{node:n_2d9e4b6a8c17.codigoTransferencia ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoTransferencia}&gerarQrCode=true",
-        "method": "GET"
+        "method": "GET",
+        "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/consulta-debitos?codigoTransferencia=@{node:n_2d9e4b6a8c17.codigoTransferencia ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoTransferencia}&gerarQrCode=true"
       }
     },
     {
@@ -7366,6 +7623,28 @@
           }
         ],
         "showSnackbar": true
+      }
+    },
+    {
+      "id": "n_7be575a002eb",
+      "type": "end_node",
+      "name": "End",
+      "data": {
+        "position": {
+          "x": 11104,
+          "y": 8868
+        }
+      }
+    },
+    {
+      "id": "n_3484eee346e4",
+      "type": "end_node",
+      "name": "End",
+      "data": {
+        "position": {
+          "x": 11304,
+          "y": 4244
+        }
       }
     }
   ],
@@ -7774,8 +8053,14 @@
     },
     {
       "sourceId": "n_c4e8f2a71d05",
-      "targetId": "n_9b4d6e8a1c20",
+      "targetId": "s_3f8c2d91a7e6",
       "sourceHandle": "output",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_3f8c2d91a7e6",
+      "targetId": "n_9b4d6e8a1c20",
+      "sourceHandle": "c_8d3b6f2a5e09",
       "targetHandle": "input"
     },
     {
@@ -8502,6 +8787,18 @@
       "sourceId": "n_a1d5c7e93b60",
       "targetId": "s_b650bf1fea21",
       "sourceHandle": "output",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_1abd59a0d122",
+      "targetId": "n_7be575a002eb",
+      "sourceHandle": "c_7654fbcc674b",
+      "targetHandle": "input"
+    },
+    {
+      "sourceId": "s_92a9313c0809",
+      "targetId": "n_3484eee346e4",
+      "sourceHandle": "c_2440dfec6fb5",
       "targetHandle": "input"
     }
   ]

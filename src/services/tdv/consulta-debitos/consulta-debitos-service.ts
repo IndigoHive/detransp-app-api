@@ -35,6 +35,7 @@ export type ConsultaDebitosResult = {
   qrCode?: string | undefined
   expiresAt?: string | undefined
   estado?: number | undefined
+  estadoTdv?: string | undefined
   comprovante?: string | undefined
   confirmedDate?: string | undefined
 }
@@ -171,6 +172,7 @@ export class ConsultaDebitosService {
         ? normalizeUtcDateTime(pixResult.result.dataExpiracaoQRCode)
         : undefined,
       estado: estadoQRCode !== undefined ? Number(estadoQRCode) : undefined,
+      estadoTdv: tdvResult?.result?.estado ?? undefined,
       comprovante: pixResult?.result?.idPagamentoQRCode || undefined,
       confirmedDate: pixResult?.result?.dataPagamentoQRCode
         ? formatDateTimeBr(pixResult.result.dataPagamentoQRCode)
