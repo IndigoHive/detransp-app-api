@@ -2231,7 +2231,7 @@
             "type": "rich_text",
             "name": null,
             "data": {
-              "html": "<p><span style=\"color: rgb(38, 40, 40); font-size: 12px;\">Saiba que, se o pagamento não for feito no prazo, você receberá uma multa de trânsito por infração média e possível remoção do veículo a um pátio, segundo Código Brasileiro de Trânsito.<br></span></p>"
+              "html": "<p><span style=\"color: rgb(38, 40, 40); font-size: 12px;\">Saiba que, se o pagamento não for feito no prazo, você receberá uma multa de trânsito por infração média e possível remoção do veículo a um pátio, segundo Código Brasileiro de Trânsito.</span></p>"
             }
           }
         ]
@@ -4434,10 +4434,11 @@
         "children": [
           {
             "id": "c_cec04565cebd",
-            "type": "rich_text",
+            "type": "text_body",
             "name": null,
             "data": {
-              "html": "<p><span style=\"color: rgb(38, 40, 40); font-size: 16px;\">Olá, @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}.<br><br>A transferência do veículo será <strong>finalizada após o pagamento da taxa</strong>.</span></p>"
+              "text": "Olá, @{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}.\n\nA transferência do veículo será finalizada após o pagamento da taxa.\n",
+              "align": "left"
             }
           },
           {
@@ -4467,18 +4468,55 @@
             }
           },
           {
-            "id": "c_6fb199daa4bc",
-            "type": "icon_text",
+            "id": "c_684a79391fbb",
+            "type": "split_row",
             "name": null,
+            "children": [
+              {
+                "id": "c_0d650f150cd8",
+                "type": "group",
+                "name": null,
+                "children": [
+                  {
+                    "id": "c_92ace8d9c585",
+                    "type": "icon_button",
+                    "name": null,
+                    "data": {
+                      "icon": "info",
+                      "size": "sm",
+                      "color": "neutral",
+                      "variant": "ghost",
+                      "clickAction": "submit"
+                    }
+                  }
+                ],
+                "data": {}
+              },
+              {
+                "id": "c_d3b73b78584d",
+                "type": "group",
+                "name": null,
+                "children": [
+                  {
+                    "id": "c_49cc0a5d1d17",
+                    "type": "rich_text",
+                    "name": null,
+                    "data": {
+                      "html": "<p><span style=\"font-size: 14px;\"><strong>Informação</strong></span></p>"
+                    }
+                  }
+                ],
+                "data": {}
+              }
+            ],
             "data": {
-              "icon": "info",
-              "text": "Informação",
-              "color": "neutral",
-              "variant": "horizontal"
+              "gap": 8,
+              "align": "center",
+              "distribution": "grow-end"
             }
           },
           {
-            "id": "c_886b23ce8dc9",
+            "id": "c_ac4436f8f318",
             "type": "rich_text",
             "name": null,
             "data": {
