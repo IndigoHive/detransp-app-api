@@ -3512,7 +3512,7 @@
             "type": "icon_text",
             "name": null,
             "data": {
-              "icon": "check_circle",
+              "icon": "check",
               "text": "<p style=\"text-align: center;\"><span style=\"font-size: 16px;\"><strong>Pagamento confirmado</strong></span></p>",
               "color": "success",
               "variant": "vertical"
@@ -3579,19 +3579,18 @@
             "type": "icon_text",
             "name": null,
             "data": {
-              "icon": "check_circle",
-              "text": "Transferência realizada com sucesso",
+              "icon": "check",
+              "text": "<p style=\"text-align: center;\"><span style=\"font-size: 16px;\"><strong>Transferência realizada com sucesso</strong></span></p>",
               "color": "success",
               "variant": "vertical"
             }
           },
           {
             "id": "c_c02c500b34c1",
-            "type": "text_body",
+            "type": "rich_text",
             "name": null,
             "data": {
-              "text": "Olá, @{node:n_2d9e4b6a8c17.nomeComprador ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}. \nA transferência do veículo @{node:n_2d9e4b6a8c17.vehicle.brandModel ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.brandModel}, placa @{node:n_2d9e4b6a8c17.vehicle.plate ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.plate} foi realizada com sucesso e o veículo encontra-se em seu nome.\n\nAcesse o aplicativo da CNH do Brasil para baixar o documento do veículo.\n",
-              "align": "left"
+              "html": "<p style=\"text-align: center;\"><span style=\"color: rgb(38, 40, 40); font-size: 16px;\">Olá, @{node:n_2d9e4b6a8c17.nomeComprador ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}.<br><br>A transferência do veículo <strong>@{node:n_2d9e4b6a8c17.vehicle.brandModel ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.brandModel}, placa @{node:n_2d9e4b6a8c17.vehicle.plate ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.plate}</strong> foi realizada com sucesso e o veículo encontra-se em seu nome.<br><br>Acesse o aplicativo da CNH do Brasil para baixar o documento do veículo.</span></p>"
             }
           },
           {
@@ -3846,11 +3845,10 @@
             }
           },
           {
-            "id": "c_e63ee3e4ab1b",
-            "type": "text_body",
-            "name": null,
+            "id": "c_7571024a1358",
+            "type": "rich_text",
             "data": {
-              "text": "A vistoria do veículo ainda não foi feita.\n\nAgende ou verifique a situação da vistoria para continuar a transferência."
+              "html": "<p style=\"text-align: center;\"><span style=\"color: oklch(0.145 0 0); font-size: 16px;\">A vistoria do veículo ainda não foi feita.<br><br>Agende ou verifique a situação da vistoria para continuar a transferência.</span></p>"
             }
           }
         ]
@@ -3907,11 +3905,10 @@
             }
           },
           {
-            "id": "c_20d0ebb622cf",
-            "type": "text_body",
-            "name": null,
+            "id": "c_c1bdcd49c38e",
+            "type": "rich_text",
             "data": {
-              "text": "O veículo tem pendências judiciais.\n\nRegularize a situação do veículo para continuar a transferência."
+              "html": "<p style=\"text-align: center;\"><span style=\"color: oklch(0.145 0 0); font-size: 16px;\">O veículo tem pendências judiciais.<br><br>Regularize a situação do veículo para continuar a transferência.</span></p>"
             }
           }
         ]
@@ -3968,11 +3965,10 @@
             }
           },
           {
-            "id": "c_c1e670600ae2",
-            "type": "text_body",
-            "name": null,
+            "id": "c_b97d5c31058a",
+            "type": "rich_text",
             "data": {
-              "text": "O veículo tem pendências administrativas.\n\nRegularize a situação do veículo para continuar a transferência."
+              "html": "<p style=\"text-align: center;\"><span style=\"color: oklch(0.145 0 0); font-size: 16px;\">O veículo tem pendências administrativas.<br><br>Regularize a situação do veículo para continuar a transferência.</span></p>"
             }
           }
         ]
@@ -4029,11 +4025,10 @@
             }
           },
           {
-            "id": "c_a6d40e3dd498",
-            "type": "text_body",
-            "name": null,
+            "id": "c_a28072fc0af3",
+            "type": "rich_text",
             "data": {
-              "text": "O veículo tem pendências administrativas e judiciais.\n\nRegularize a situação do veículo para continuar a transferência."
+              "html": "<p style=\"text-align: center;\"><span style=\"color: oklch(0.145 0 0); font-size: 16px;\">O veículo tem pendências administrativas e judiciais.<br><br>Regularize a situação do veículo para continuar a transferência.</span></p>"
             }
           }
         ]
@@ -4345,7 +4340,7 @@
             "type": "icon_text",
             "name": null,
             "data": {
-              "icon": "check_circle",
+              "icon": "check",
               "text": "<p style=\"text-align: center;\"><span style=\"font-size: 16px;\"><strong>Seu pagamento foi confirmado</strong></span></p>",
               "color": "success",
               "variant": "vertical"
@@ -4652,8 +4647,8 @@
             "type": "icon_text",
             "name": null,
             "data": {
-              "icon": "check_circle",
-              "text": "Seu pagamento foi confirmado",
+              "icon": "check",
+              "text": "<p style=\"text-align: center;\"><span style=\"font-size: 16px;\"><strong>Seu pagamento foi confirmado</strong></span></p>",
               "color": "success",
               "variant": "vertical"
             }
