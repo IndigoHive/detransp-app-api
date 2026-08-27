@@ -6755,6 +6755,12 @@
               "left": "@{node:n_b685a31ed52c.estado}",
               "right": "2",
               "operator": "equals"
+            },
+            {
+              "id": "pago-estado-tdv-8-b685a31ed52c",
+              "left": "@{node:n_b685a31ed52c.estadoTdv}",
+              "right": "8",
+              "operator": "equals"
             }
           ],
           "combinator": "or"
@@ -7371,6 +7377,12 @@
               "id": "41a7f382-5b1f-41fa-958c-c1d3c3db2e67",
               "left": "@{node:n_b8e4d02f3c15.estado}",
               "right": "2",
+              "operator": "equals"
+            },
+            {
+              "id": "pago-estado-tdv-8-b8e4d02f3c15",
+              "left": "@{node:n_b8e4d02f3c15.estadoTdv}",
+              "right": "8",
               "operator": "equals"
             }
           ],

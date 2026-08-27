@@ -34,7 +34,13 @@ export type ConsultaDebitosResult = {
   totalDebitos: string
   qrCode?: string | undefined
   expiresAt?: string | undefined
+  // Estado do QR code (CodigoEstadoQRCode), não o da TDV — só existe quando há cobrança PIX.
   estado?: number | undefined
+  // Estado da própria TDV (CodigoEstadoTDV). Uma TDV pode chegar em TAXA_SERVICO_PAGA sem
+  // nenhum QR code registrado (paga por outro meio, cobrança expirada/limpa, cron do DETRAN),
+  // e nesse caso `estado` acima vem indefinido — então o fluxo precisa deste campo para
+  // detectar pagamento já confirmado.
+  estadoTdv?: string | undefined
   comprovante?: string | undefined
   confirmedDate?: string | undefined
 }
@@ -171,6 +177,7 @@ export class ConsultaDebitosService {
         ? normalizeUtcDateTime(pixResult.result.dataExpiracaoQRCode)
         : undefined,
       estado: estadoQRCode !== undefined ? Number(estadoQRCode) : undefined,
+      estadoTdv: tdvResult?.result?.estado ?? undefined,
       comprovante: pixResult?.result?.idPagamentoQRCode || undefined,
       confirmedDate: pixResult?.result?.dataPagamentoQRCode
         ? formatDateTimeBr(pixResult.result.dataPagamentoQRCode)
