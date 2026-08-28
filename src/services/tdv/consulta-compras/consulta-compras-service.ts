@@ -5,6 +5,7 @@ import {
   type CodigoOrigemComunicacaoVendaVeiculo
 } from '../../../clients/detran-sp-service-now/tdv/types'
 import { formatCurrency } from '../../../utils/currency'
+import { firstName } from '../../../utils/first-name'
 import { formatCep, formatCpfCnpj } from '../../../utils/format-document'
 import { extractBearerToken, extractCpfFromToken } from '../../../utils/token'
 import {
@@ -106,14 +107,6 @@ function isComunicacaoVendaExterna (origem: CodigoOrigemTDV | null | undefined):
   return origem != null && ORIGENS_COMUNICACAO_VENDA_EXTERNA.includes(origem)
 }
 
-// "MARIA COMPRADORA TESTE" -> "Maria" — greeting screens only use the first
-// name; the full nomeComprador value is still used as-is elsewhere
-// (declarations, seller-facing identity confirmation).
-function firstName (fullName: string): string {
-  const [first] = fullName.trim().split(/\s+/)
-  if (!first) return ''
-  return first.charAt(0).toUpperCase() + first.slice(1).toLowerCase()
-}
 
 function trimField (value: string | null | undefined): string | undefined {
   const trimmed = value?.trim()
@@ -173,7 +166,7 @@ export class ConsultaComprasService {
         formatNumericDisplay(kmVeiculo, n => n.toLocaleString('pt-BR'))
       )
       const descricaoMarcaVeiculo = trimField(tdv.descricaoMarcaVeiculo)
-      const descricaoCorVeiculo = trimField(tdv.descricaoCorVeiculo) ?? ''
+      const descricaoCorVeiculo = displayOrNaoInformado(trimField(tdv.descricaoCorVeiculo))
       const codigoComprador = trimField(tdv.codigoComprador)
       const cpfComprador = displayOrNaoInformado(
         codigoComprador ? formatCpfCnpj(codigoComprador) : undefined

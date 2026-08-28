@@ -1872,7 +1872,8 @@
             "type": "button",
             "name": null,
             "data": {
-              "label": "Assinar"
+              "label": "Assinar",
+              "secondaryIcon": "check"
             }
           }
         ]
@@ -6053,12 +6054,12 @@
         },
         "method": "POST",
         "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/validacao-comprador",
-        "body": "{\n  \"cpfComprador\": \"@{screen:s_2909315de67e.comp:c_676202e6fd57.cpf}\",\n  \"cepComprador\": \"@{screen:s_2909315de67e.comp:c_24e94a494019.cep}\"\n}",
+        "body": "{\n  \"cpfComprador\": \"@{screen:s_2909315de67e.comp:c_676202e6fd57.cpf}\",\n  \"cepComprador\": \"@{screen:s_2909315de67e.comp:c_24e94a494019.cep}\",\n  \"numeroComprador\": \"@{screen:s_2909315de67e.comp:c_1e15a3ceef7b.value}\",\n  \"complementoComprador\": \"@{screen:s_2909315de67e.comp:c_90a932a96b1f.value}\"\n}",
         "responseExamples": [
           {
             "id": "e2ef8121-9ccd-477c-8d4a-0c2a82684031",
             "name": "Comprador válido",
-            "value": "{\n  \"nomeComprador\": \"Carlos da Silva\",\n  \"cpfComprador\": \"721.169.550-17\",\n  \"enderecoComprador\": \"Rua Aulide Carini, 345, Vila Jacuí, São Paulo - SP\"\n}"
+            "value": "{\n  \"nomeComprador\": \"Carlos da Silva\",\n  \"cpfComprador\": \"721.169.550-17\",\n  \"enderecoComprador\": \"Rua Aulide Carini, 345, Casa 2, Vila Jacuí, 08021-000, São Paulo, SP\"\n}"
           },
           {
             "id": "457b9ed8-71de-49cf-8f2d-50acaab7b2ef",
@@ -6306,7 +6307,7 @@
           "x": 3884,
           "y": -1168
         },
-        "url": "https://www.poupatempo.sp.gov.br/carta/50AAC7E2-1FA2-4B9D-9558-62DC1401971F"
+        "url": "https://www.detran.sp.gov.br/detransp/pb/servico/veiculos/atualizar_placa_do_veiculo_para_o_padrao_mercosul?id=carta_de_servico_atualizar_placa_do_veiculo_para_o_padrao_mercosul"
       }
     },
     {
@@ -7178,22 +7179,22 @@
         },
         "method": "POST",
         "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/criar-compra",
-        "body": "{\n  \"placaVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.plate}\",\n  \"renavamVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.renavam}\",\n  \"origem\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.origem}\",\n  \"nomeVendedor\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeVendedor}\",\n  \"codigoVendedor\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoVendedor}\",\n  \"emailVendedor\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.emailVendedor}\",\n  \"cepComprador\": \"@{node:n_f5aacdb3ca97.result.cep ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.cepComprador}\",\n  \"logradouroComprador\": \"@{node:n_f5aacdb3ca97.result.endereco ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.logradouroComprador}\",\n  \"numeroComprador\": \"@{screen:s_7e2a1c9b4f08.comp:c_b7d4e12a8f31.value ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.numeroComprador}\",\n  \"complementoComprador\": \"@{screen:s_7e2a1c9b4f08.comp:c_c6e5f03b7a22.value ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.complementoComprador}\",\n  \"bairroComprador\": \"@{node:n_f5aacdb3ca97.result.bairro ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.bairroComprador}\",\n  \"ativa\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.ativa}\",\n  \"estado\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.estado}\",\n  \"origemComunicacaoVendaVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.origemComunicacaoVendaVeiculo}\",\n  \"codigoTransferenciaVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoTransferencia}\",\n  \"descricaoMarcaVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.descricaoMarcaVeiculo}\",\n  \"codigoComprador\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoComprador}\",\n  \"nomeComprador\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}\",\n  \"nomeMunicipioVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeMunicipioVeiculo}\",\n  \"nomeMunicipioComprador\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeMunicipioComprador}\",\n  \"chassiVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.chassiVeiculo}\",\n  \"kmVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.kmVeiculo}\",\n  \"kmVistoriadaVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.kmVistoriadaVeiculo}\"\n}",
+        "body": "{\n  \"placaVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.plate}\",\n  \"renavamVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.renavam}\",\n  \"origem\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.origem}\",\n  \"nomeVendedor\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeVendedor}\",\n  \"codigoVendedor\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoVendedor}\",\n  \"emailVendedor\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.emailVendedor}\",\n  \"cepComprador\": \"@{node:n_f5aacdb3ca97.result.cep ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.cepComprador}\",\n  \"logradouroComprador\": \"@{screen:s_7e2a1c9b4f08.comp:c_a8f3e21b9c40.value ?? node:n_f5aacdb3ca97.result.endereco ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.logradouroComprador}\",\n  \"numeroComprador\": \"@{screen:s_7e2a1c9b4f08.comp:c_b7d4e12a8f31.value ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.numeroComprador}\",\n  \"complementoComprador\": \"@{screen:s_7e2a1c9b4f08.comp:c_c6e5f03b7a22.value ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.complementoComprador}\",\n  \"bairroComprador\": \"@{screen:s_7e2a1c9b4f08.comp:c_d5f6a14c6b13.value ?? node:n_f5aacdb3ca97.result.bairro ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.bairroComprador}\",\n  \"ativa\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.ativa}\",\n  \"estado\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.estado}\",\n  \"origemComunicacaoVendaVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.origemComunicacaoVendaVeiculo}\",\n  \"codigoTransferenciaVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoTransferencia}\",\n  \"descricaoMarcaVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.descricaoMarcaVeiculo}\",\n  \"codigoComprador\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.codigoComprador}\",\n  \"nomeComprador\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeComprador}\",\n  \"nomeMunicipioVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeMunicipioVeiculo}\",\n  \"nomeMunicipioComprador\": \"@{screen:s_7e2a1c9b4f08.comp:c_4a2614e0e9fb.value ?? node:n_f5aacdb3ca97.result.localidade ?? screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.nomeMunicipioComprador}\",\n  \"chassiVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.chassiVeiculo}\",\n  \"kmVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.kmVeiculo}\",\n  \"kmVistoriadaVeiculo\": \"@{screen:s_52363926e91c.comp:c_15bff69dea7e.selectedVehicle.kmVistoriadaVeiculo}\"\n}",
         "responseExamples": [
           {
             "id": "ex-criar-compra-7",
             "name": "Estado 7 — aviso pagamento",
-            "value": "{\n  \"proximaAcao\": \"aviso_pagamento\",\n  \"estado\": \"7\",\n  \"codigoTransferencia\": \"TDV-MOCK-NEW\",\n  \"vehicle\": {\n    \"id\": \"1\",\n    \"plate\": \"GHI8J90\",\n    \"title\": \"VW/GOL 1.0\",\n    \"licensingStatus\": \"REGULAR\",\n    \"brandModel\": \"VW/GOL 1.0\",\n    \"licensingExpirationDate\": \"\",\n    \"renavam\": \"00010020031\",\n    \"lastLicensing\": \"\",\n    \"yearFab\": \"\",\n    \"yearMod\": \"\"\n  },\n  \"nomeComprador\": \"Maria Compradora\"\n}"
+            "value": "{\n  \"proximaAcao\": \"aviso_pagamento\",\n  \"estado\": \"7\",\n  \"codigoTransferencia\": \"TDV-MOCK-NEW\",\n  \"vehicle\": {\n    \"id\": \"1\",\n    \"plate\": \"GHI8J90\",\n    \"title\": \"VW/GOL 1.0\",\n    \"licensingStatus\": \"REGULAR\",\n    \"brandModel\": \"VW/GOL 1.0\",\n    \"licensingExpirationDate\": \"\",\n    \"renavam\": \"00010020031\",\n    \"lastLicensing\": \"\",\n    \"yearFab\": \"\",\n    \"yearMod\": \"\"\n  },\n  \"nomeComprador\": \"Maria\"\n}"
           },
           {
             "id": "ex-criar-compra-8",
             "name": "Estado 8 — pagamento confirmado",
-            "value": "{\n  \"proximaAcao\": \"pagamento_confirmado\",\n  \"estado\": \"8\",\n  \"codigoTransferencia\": \"TDV-MOCK-NEW\",\n  \"vehicle\": {\n    \"id\": \"1\",\n    \"plate\": \"GHI8J90\",\n    \"title\": \"VW/GOL 1.0\",\n    \"licensingStatus\": \"REGULAR\",\n    \"brandModel\": \"VW/GOL 1.0\",\n    \"licensingExpirationDate\": \"\",\n    \"renavam\": \"00010020031\",\n    \"lastLicensing\": \"\",\n    \"yearFab\": \"\",\n    \"yearMod\": \"\"\n  },\n  \"nomeComprador\": \"Maria Compradora\"\n}"
+            "value": "{\n  \"proximaAcao\": \"pagamento_confirmado\",\n  \"estado\": \"8\",\n  \"codigoTransferencia\": \"TDV-MOCK-NEW\",\n  \"vehicle\": {\n    \"id\": \"1\",\n    \"plate\": \"GHI8J90\",\n    \"title\": \"VW/GOL 1.0\",\n    \"licensingStatus\": \"REGULAR\",\n    \"brandModel\": \"VW/GOL 1.0\",\n    \"licensingExpirationDate\": \"\",\n    \"renavam\": \"00010020031\",\n    \"lastLicensing\": \"\",\n    \"yearFab\": \"\",\n    \"yearMod\": \"\"\n  },\n  \"nomeComprador\": \"Maria\"\n}"
           },
           {
             "id": "ex-criar-compra-9",
             "name": "Estado 9 — concluído",
-            "value": "{\n  \"proximaAcao\": \"concluido\",\n  \"estado\": \"9\",\n  \"codigoTransferencia\": \"TDV-MOCK-NEW\",\n  \"vehicle\": {\n    \"id\": \"1\",\n    \"plate\": \"GHI8J90\",\n    \"title\": \"VW/GOL 1.0\",\n    \"licensingStatus\": \"REGULAR\",\n    \"brandModel\": \"VW/GOL 1.0\",\n    \"licensingExpirationDate\": \"\",\n    \"renavam\": \"00010020031\",\n    \"lastLicensing\": \"\",\n    \"yearFab\": \"\",\n    \"yearMod\": \"\"\n  },\n  \"nomeComprador\": \"Maria Compradora\"\n}"
+            "value": "{\n  \"proximaAcao\": \"concluido\",\n  \"estado\": \"9\",\n  \"codigoTransferencia\": \"TDV-MOCK-NEW\",\n  \"vehicle\": {\n    \"id\": \"1\",\n    \"plate\": \"GHI8J90\",\n    \"title\": \"VW/GOL 1.0\",\n    \"licensingStatus\": \"REGULAR\",\n    \"brandModel\": \"VW/GOL 1.0\",\n    \"licensingExpirationDate\": \"\",\n    \"renavam\": \"00010020031\",\n    \"lastLicensing\": \"\",\n    \"yearFab\": \"\",\n    \"yearMod\": \"\"\n  },\n  \"nomeComprador\": \"Maria\"\n}"
           },
           {
             "id": "ex-criar-compra-err",
@@ -7203,32 +7204,32 @@
           {
             "id": "ex-criar-compra-pag-pend",
             "name": "Pagamento pendente",
-            "value": "{\n  \"proximaAcao\": \"pagamento_pendente\",\n  \"detail\": \"Pagamento de taxa não localizado\",\n  \"codigoTransferencia\": \"TDV-MOCK-NEW\",\n  \"vehicle\": {\n    \"id\": \"1\",\n    \"plate\": \"GHI8J90\",\n    \"title\": \"VW/GOL 1.0\",\n    \"licensingStatus\": \"REGULAR\",\n    \"brandModel\": \"VW/GOL 1.0\",\n    \"licensingExpirationDate\": \"\",\n    \"renavam\": \"00010020031\",\n    \"lastLicensing\": \"\",\n    \"yearFab\": \"\",\n    \"yearMod\": \"\"\n  },\n  \"nomeComprador\": \"Maria Compradora\"\n}"
+            "value": "{\n  \"proximaAcao\": \"pagamento_pendente\",\n  \"detail\": \"Pagamento de taxa não localizado\",\n  \"codigoTransferencia\": \"TDV-MOCK-NEW\",\n  \"vehicle\": {\n    \"id\": \"1\",\n    \"plate\": \"GHI8J90\",\n    \"title\": \"VW/GOL 1.0\",\n    \"licensingStatus\": \"REGULAR\",\n    \"brandModel\": \"VW/GOL 1.0\",\n    \"licensingExpirationDate\": \"\",\n    \"renavam\": \"00010020031\",\n    \"lastLicensing\": \"\",\n    \"yearFab\": \"\",\n    \"yearMod\": \"\"\n  },\n  \"nomeComprador\": \"Maria\"\n}"
           },
           {
             "id": "ex-criar-compra-vistoria",
             "name": "Vistoria pendente",
-            "value": "{\n  \"proximaAcao\": \"vistoria_pendente\",\n  \"detail\": \"Laudo de vistoria não localizado\",\n  \"codigoTransferencia\": \"TDV-MOCK-NEW\",\n  \"vehicle\": {\n    \"id\": \"1\",\n    \"plate\": \"GHI8J90\",\n    \"title\": \"VW/GOL 1.0\",\n    \"licensingStatus\": \"REGULAR\",\n    \"brandModel\": \"VW/GOL 1.0\",\n    \"licensingExpirationDate\": \"\",\n    \"renavam\": \"00010020031\",\n    \"lastLicensing\": \"\",\n    \"yearFab\": \"\",\n    \"yearMod\": \"\"\n  },\n  \"nomeComprador\": \"Maria Compradora\"\n}"
+            "value": "{\n  \"proximaAcao\": \"vistoria_pendente\",\n  \"detail\": \"Laudo de vistoria não localizado\",\n  \"codigoTransferencia\": \"TDV-MOCK-NEW\",\n  \"vehicle\": {\n    \"id\": \"1\",\n    \"plate\": \"GHI8J90\",\n    \"title\": \"VW/GOL 1.0\",\n    \"licensingStatus\": \"REGULAR\",\n    \"brandModel\": \"VW/GOL 1.0\",\n    \"licensingExpirationDate\": \"\",\n    \"renavam\": \"00010020031\",\n    \"lastLicensing\": \"\",\n    \"yearFab\": \"\",\n    \"yearMod\": \"\"\n  },\n  \"nomeComprador\": \"Maria\"\n}"
           },
           {
             "id": "ex-criar-compra-vist-pag",
             "name": "Vistoria e pagamento pendentes",
-            "value": "{\n  \"proximaAcao\": \"vistoria_pagamento_pendentes\",\n  \"detail\": \"Pagamento de taxa não localizado,Laudo de vistoria não localizado\",\n  \"codigoTransferencia\": \"TDV-MOCK-NEW\",\n  \"vehicle\": {\n    \"id\": \"1\",\n    \"plate\": \"GHI8J90\",\n    \"title\": \"VW/GOL 1.0\",\n    \"licensingStatus\": \"REGULAR\",\n    \"brandModel\": \"VW/GOL 1.0\",\n    \"licensingExpirationDate\": \"\",\n    \"renavam\": \"00010020031\",\n    \"lastLicensing\": \"\",\n    \"yearFab\": \"\",\n    \"yearMod\": \"\"\n  },\n  \"nomeComprador\": \"Maria Compradora\"\n}"
+            "value": "{\n  \"proximaAcao\": \"vistoria_pagamento_pendentes\",\n  \"detail\": \"Pagamento de taxa não localizado,Laudo de vistoria não localizado\",\n  \"codigoTransferencia\": \"TDV-MOCK-NEW\",\n  \"vehicle\": {\n    \"id\": \"1\",\n    \"plate\": \"GHI8J90\",\n    \"title\": \"VW/GOL 1.0\",\n    \"licensingStatus\": \"REGULAR\",\n    \"brandModel\": \"VW/GOL 1.0\",\n    \"licensingExpirationDate\": \"\",\n    \"renavam\": \"00010020031\",\n    \"lastLicensing\": \"\",\n    \"yearFab\": \"\",\n    \"yearMod\": \"\"\n  },\n  \"nomeComprador\": \"Maria\"\n}"
           },
           {
             "id": "ex-criar-compra-adm",
             "name": "Situação administrativa pendente",
-            "value": "{\n  \"proximaAcao\": \"administrativa_pendente\",\n  \"detail\": \"Veículo com bloqueio - Baixa permanente\",\n  \"codigoTransferencia\": \"TDV-MOCK-NEW\",\n  \"vehicle\": {\n    \"id\": \"1\",\n    \"plate\": \"GHI8J90\",\n    \"title\": \"VW/GOL 1.0\",\n    \"licensingStatus\": \"REGULAR\",\n    \"brandModel\": \"VW/GOL 1.0\",\n    \"licensingExpirationDate\": \"\",\n    \"renavam\": \"00010020031\",\n    \"lastLicensing\": \"\",\n    \"yearFab\": \"\",\n    \"yearMod\": \"\"\n  },\n  \"nomeComprador\": \"Maria Compradora\"\n}"
+            "value": "{\n  \"proximaAcao\": \"administrativa_pendente\",\n  \"detail\": \"Veículo com bloqueio - Baixa permanente\",\n  \"codigoTransferencia\": \"TDV-MOCK-NEW\",\n  \"vehicle\": {\n    \"id\": \"1\",\n    \"plate\": \"GHI8J90\",\n    \"title\": \"VW/GOL 1.0\",\n    \"licensingStatus\": \"REGULAR\",\n    \"brandModel\": \"VW/GOL 1.0\",\n    \"licensingExpirationDate\": \"\",\n    \"renavam\": \"00010020031\",\n    \"lastLicensing\": \"\",\n    \"yearFab\": \"\",\n    \"yearMod\": \"\"\n  },\n  \"nomeComprador\": \"Maria\"\n}"
           },
           {
             "id": "ex-criar-compra-jud",
             "name": "Situação judicial pendente",
-            "value": "{\n  \"proximaAcao\": \"judicial_pendente\",\n  \"detail\": \"Veículo com Restrição Judicial\",\n  \"codigoTransferencia\": \"TDV-MOCK-NEW\",\n  \"vehicle\": {\n    \"id\": \"1\",\n    \"plate\": \"GHI8J90\",\n    \"title\": \"VW/GOL 1.0\",\n    \"licensingStatus\": \"REGULAR\",\n    \"brandModel\": \"VW/GOL 1.0\",\n    \"licensingExpirationDate\": \"\",\n    \"renavam\": \"00010020031\",\n    \"lastLicensing\": \"\",\n    \"yearFab\": \"\",\n    \"yearMod\": \"\"\n  },\n  \"nomeComprador\": \"Maria Compradora\"\n}"
+            "value": "{\n  \"proximaAcao\": \"judicial_pendente\",\n  \"detail\": \"Veículo com Restrição Judicial\",\n  \"codigoTransferencia\": \"TDV-MOCK-NEW\",\n  \"vehicle\": {\n    \"id\": \"1\",\n    \"plate\": \"GHI8J90\",\n    \"title\": \"VW/GOL 1.0\",\n    \"licensingStatus\": \"REGULAR\",\n    \"brandModel\": \"VW/GOL 1.0\",\n    \"licensingExpirationDate\": \"\",\n    \"renavam\": \"00010020031\",\n    \"lastLicensing\": \"\",\n    \"yearFab\": \"\",\n    \"yearMod\": \"\"\n  },\n  \"nomeComprador\": \"Maria\"\n}"
           },
           {
             "id": "ex-criar-compra-adm-jud",
             "name": "Administrativa e judicial pendentes",
-            "value": "{\n  \"proximaAcao\": \"administrativa_judicial_pendentes\",\n  \"detail\": \"Veículo com bloqueio - Baixa permanente,Veículo com Restrição Judicial\",\n  \"codigoTransferencia\": \"TDV-MOCK-NEW\",\n  \"vehicle\": {\n    \"id\": \"1\",\n    \"plate\": \"GHI8J90\",\n    \"title\": \"VW/GOL 1.0\",\n    \"licensingStatus\": \"REGULAR\",\n    \"brandModel\": \"VW/GOL 1.0\",\n    \"licensingExpirationDate\": \"\",\n    \"renavam\": \"00010020031\",\n    \"lastLicensing\": \"\",\n    \"yearFab\": \"\",\n    \"yearMod\": \"\"\n  },\n  \"nomeComprador\": \"Maria Compradora\"\n}"
+            "value": "{\n  \"proximaAcao\": \"administrativa_judicial_pendentes\",\n  \"detail\": \"Veículo com bloqueio - Baixa permanente,Veículo com Restrição Judicial\",\n  \"codigoTransferencia\": \"TDV-MOCK-NEW\",\n  \"vehicle\": {\n    \"id\": \"1\",\n    \"plate\": \"GHI8J90\",\n    \"title\": \"VW/GOL 1.0\",\n    \"licensingStatus\": \"REGULAR\",\n    \"brandModel\": \"VW/GOL 1.0\",\n    \"licensingExpirationDate\": \"\",\n    \"renavam\": \"00010020031\",\n    \"lastLicensing\": \"\",\n    \"yearFab\": \"\",\n    \"yearMod\": \"\"\n  },\n  \"nomeComprador\": \"Maria\"\n}"
           }
         ],
         "showSnackbar": true
@@ -7589,7 +7590,7 @@
           "x": 4112,
           "y": 5880
         },
-        "url": "https://www.detran.sp.gov.br/detransp"
+        "url": "https://www.detran.sp.gov.br/detransp/pb/servico/veiculos/transferir_proriedade_de_veiculo_registrado_em_sao_paulo?id=carta_de_servico_transferir_proriedade_de_veiculo_registrado_em_sao_paulo"
       }
     },
     {

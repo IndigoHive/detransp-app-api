@@ -1,4 +1,6 @@
 import type { DetranSpServiceNowTdvClient } from '../../../clients/detran-sp-service-now/tdv'
+import { formatCep } from '../../../utils/format-document'
+import { sanitizeEnderecoComplemento } from '../../../utils/sanitize-endereco-complemento'
 import { extractBearerToken, extractCpfFromToken } from '../../../utils/token'
 
 type Dependencies = {
@@ -8,6 +10,8 @@ type Dependencies = {
 export type ValidacaoCompradorInput = {
   cpfComprador: string
   cepComprador: string
+  numeroComprador?: string
+  complementoComprador?: string
 }
 
 export type ValidacaoCompradorResult = {
@@ -20,6 +24,30 @@ export type ValidacaoCompradorResult = {
     title: string
     description: string
   }
+}
+
+// Formato pedido pelo Detran para a tela de confirmação do vendedor (s_3a0b04432a52):
+// "RUA BOA VISTA, 209, CASA 2, CENTRO, 01014-001, SAO PAULO, SP". É a mesma sequência do
+// formatEnderecoComprador() — usado nas telas que leem o endereço já gravado na TDV — só que
+// com o CEP antes do município em vez de no fim, e a UF como item próprio.
+function formatEnderecoConfirmacao (partes: {
+  logradouro: string
+  numero: string | undefined
+  complemento: string | undefined
+  bairro: string
+  cep: string
+  municipio: string
+  uf: string
+}): string {
+  return [
+    partes.logradouro,
+    partes.numero,
+    partes.complemento,
+    partes.bairro,
+    partes.cep.trim() ? formatCep(partes.cep) : undefined,
+    partes.municipio,
+    partes.uf
+  ].map(valor => valor?.trim()).filter(Boolean).join(', ')
 }
 
 export class ValidacaoCompradorService {
@@ -62,17 +90,25 @@ export class ValidacaoCompradorService {
     const cidadao = cidadaoResult.result
     const endereco = enderecoResult.result
 
-    const enderecoFormatado = [
-      cidadao.logradouro ? `${cidadao.tipoLogradouro ?? ''} ${cidadao.logradouro}`.trim() : endereco.logradouro,
-      cidadao.numeroLogradouro,
-      cidadao.bairro || endereco.bairro,
-      `${endereco.municipio} - ${endereco.uf}`
-    ].filter(Boolean).join(', ')
+    // O endereço sai só da busca por CEP — o BCadastro fica de fora, mesmo trazendo logradouro
+    // e número do comprador. É o endereço que a tela do CEP acabou de mostrar ao vendedor
+    // (CompradorCepService lê os mesmos campos) e é o que InformarDadosVendaService grava na
+    // TDV; misturar o endereço cadastral aqui faria a confirmação exibir uma rua diferente da
+    // que o vendedor viu e da que fica registrada.
+    const enderecoComprador = formatEnderecoConfirmacao({
+      logradouro: endereco.logradouro ?? endereco.endereco,
+      numero: input.numeroComprador,
+      complemento: sanitizeEnderecoComplemento(input.complementoComprador ?? ''),
+      bairro: endereco.bairro,
+      cep: endereco.cep,
+      municipio: endereco.municipio || endereco.localidade,
+      uf: endereco.uf
+    })
 
     return {
       nomeComprador: cidadao.nome,
       cpfComprador: cidadao.cpf,
-      enderecoComprador: enderecoFormatado
+      enderecoComprador
     }
   }
 }

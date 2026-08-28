@@ -640,7 +640,9 @@ app.post('/api/services/solicitar-vistoria-em-transito', (req, res) => {
 const MOCK_TDV_COMPRA_ENDERECO = {
   codigoComprador: '00012345678900',
   cpfComprador: '123.456.789-00',
-  nomeComprador: 'João da Silva Santos',
+  // Primeiro nome: é assim que ConsultaComprasService devolve, para a saudação
+  // das telas de conclusão ("Olá, João").
+  nomeComprador: 'João',
   logradouroComprador: 'RUA BOA VISTA',
   numeroComprador: '10',
   complementoComprador: '',
@@ -812,7 +814,7 @@ app.post('/api/tdv/validacao-comprador', (req, res) => {
   res.json({
     nomeComprador: 'Maria Oliveira Souza',
     cpfComprador: '987.654.321-00',
-    enderecoComprador: 'Rua das Flores, 123, Jardim Paulista, São Paulo - SP',
+    enderecoComprador: 'Rua das Flores, 123, Jardim Paulista, 01014-001, São Paulo, SP',
   })
 })
 
@@ -942,12 +944,12 @@ app.post('/api/tdv/criar-compra', (req, res) => {
         ...mapped,
         codigoTransferencia: 'TDV-MOCK-NEW',
         vehicle,
-        nomeComprador: body.nomeComprador || 'Maria Compradora',
+        nomeComprador: body.nomeComprador || 'Maria',
       })
     }
   }
 
-  const nomeComprador = body.nomeComprador || 'Maria Compradora'
+  const nomeComprador = body.nomeComprador || 'Maria'
   const codigoTransferencia = 'TDV-MOCK-NEW'
 
   // Uncomment one return to test each pós-endereço path:
