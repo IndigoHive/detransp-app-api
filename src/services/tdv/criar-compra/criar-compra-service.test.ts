@@ -400,7 +400,7 @@ describe('CriarCompraService', () => {
     })
   })
 
-  it('echoes the listed comunicação de venda back whole, keeping the address it already had', async () => {
+  it('ecoa a comunicação de venda inteira, mas com o endereço que o comprador editou por cima', async () => {
     const registro = {
       codigoTransferenciaVeiculo: null,
       numeroTransferenciaVeiculo: 'TDV1470832',
@@ -448,22 +448,81 @@ describe('CriarCompraService', () => {
 
     await service.run(authHeader, {
       ...baseInput,
-      // What the buyer typed on the address screen only regenerates the declaration text — the
-      // record keeps the address the comunicação de venda was registered with.
+      // Endereço editado na tela de endereço: é o que o comprador assinou na autodeclaração,
+      // então é o que tem de ser gravado — não o que a comunicação de venda trazia.
       cepComprador: '01310100',
       logradouroComprador: 'Av. Paulista',
       bairroComprador: 'Bela Vista',
-      numeroComprador: '1000'
+      numeroComprador: '1000',
+      complementoComprador: 'Apto 42',
+      nomeMunicipioComprador: 'SAO PAULO'
     })
 
     const payload = criaTdv.mock.calls[0]?.[1] as Record<string, unknown>
     expect(payload).toEqual({
       ...Object.fromEntries(Object.entries(registro).filter(([, v]) => v !== null)),
+      // Todo o resto do registro segue intacto; só o endereço é sobreposto.
+      cepComprador: '01310100',
+      logradouroComprador: 'Av. Paulista',
+      bairroComprador: 'Bela Vista',
+      numeroComprador: '1000',
+      complementoComprador: 'Apto 42',
+      nomeMunicipioComprador: 'SAO PAULO',
       confirmacaoAutodeclaracaoResidenciaComprador: 'true'
     })
     expect(payload).not.toHaveProperty('numeroCrvVeiculo')
     expect(payload).not.toHaveProperty('codigoTransferenciaVeiculo')
     expect(payload.dataInicialPagamento).toBe('')
+  })
+
+  // Quando o comprador não edita nada, o flow devolve os próprios valores da CV
+  // (`?? selectedVehicle.…`), então a sobreposição não pode alterar o registro. E um campo que
+  // o flow não mandar não pode apagar o que a CV já tinha.
+  it('não altera o endereço do registro quando o comprador não editou nada', async () => {
+    const registro = {
+      ativa: '1',
+      estado: CodigoEstadoTDV.ATPVE_ASSINADA_VENDEDOR_COMUNICACAO_VENDA_GERADA,
+      placaVeiculo: 'GHI8J90',
+      codigoRenavamVeiculo: '00010020031',
+      cepComprador: '11010900',
+      logradouroComprador: 'PRACA VISCONDE DE MAUA',
+      numeroComprador: '209',
+      complementoComprador: 'CASA 2',
+      bairroComprador: 'CENTRO',
+      nomeMunicipioComprador: 'SANTOS'
+    }
+    const criaTdv = vi.fn().mockResolvedValue({
+      result: { codigoTransferenciaVeiculo: 'TDV-NEW' }
+    })
+    const service = new CriarCompraService({ logger,
+      detranSpServiceNowTdv: asClient({
+        listaTdvs: vi.fn().mockResolvedValue({ result: [registro] }),
+        criaTdv,
+        buscaTdv: vi.fn().mockResolvedValue({
+          result: {
+            estado: CodigoEstadoTDV.ATPVE_ASSINADA_VENDEDOR_COMUNICACAO_VENDA_GERADA,
+            placaVeiculo: 'GHI8J90',
+            codigoRenavamVeiculo: '00010020031'
+          }
+        })
+      })
+    })
+
+    await service.run(authHeader, {
+      ...baseInput,
+      cepComprador: '11010900',
+      logradouroComprador: 'PRACA VISCONDE DE MAUA',
+      bairroComprador: 'CENTRO',
+      numeroComprador: '209',
+      complementoComprador: 'CASA 2'
+      // nomeMunicipioComprador ausente de propósito
+    })
+
+    expect(criaTdv.mock.calls[0]?.[1]).toEqual({
+      ...registro,
+      nomeMunicipioComprador: 'SANTOS',
+      confirmacaoAutodeclaracaoResidenciaComprador: 'true'
+    })
   })
 
   it('keeps the leading zeros the listing sends in codigoComprador', async () => {

@@ -11,6 +11,7 @@ import {
   type ListaTdvsResultData
 } from '../../../clients/detran-sp-service-now/tdv/types'
 import { firstName } from '../../../utils/first-name'
+import { sanitizeEnderecoComplemento } from '../../../utils/sanitize-endereco-complemento'
 import { extractBearerToken, extractCpfFromToken } from '../../../utils/token'
 import { NAO_INFORMADO } from '../comprador-display-fields'
 import { mapPendenciaError, type PendenciaResult } from '../map-pendencia-error'
@@ -191,6 +192,33 @@ function pickAddressFields (input: CriarCompraInput) {
   }
 }
 
+// O Detran confirmou que o app nativo erra neste ponto: quando o comprador edita o endereço,
+// é o endereço editado que tem de ser gravado na TDV — não o que veio na comunicação de venda.
+// Por isso os campos de endereço enviados pelo flow são sobrepostos ao registro ecoado em vez
+// de descartados. É também o endereço que ele acabou de assinar na autodeclaração de
+// residência, então gravar o da CV deixaria declaração e registro divergentes.
+//
+// Só sobrescreve o que chega preenchido. Quando o comprador não edita nada, o flow manda de
+// volta os próprios valores da CV (`?? selectedVehicle.…`) e a sobreposição é inócua; e um
+// campo ausente nunca apaga o que o registro já trazia.
+function enderecoEditado (input: CriarCompraInput): Partial<ListaTdvsResultData> {
+  const cepComprador = normalizeCep(input.cepComprador)
+  const bairroComprador = input.bairroComprador?.trim()
+  const logradouroComprador = input.logradouroComprador?.trim()
+  const numeroComprador = input.numeroComprador?.trim()
+  const complementoComprador = sanitizeEnderecoComplemento(input.complementoComprador ?? '')
+  const nomeMunicipioComprador = input.nomeMunicipioComprador?.trim()
+
+  return {
+    ...(cepComprador ? { cepComprador } : {}),
+    ...(bairroComprador ? { bairroComprador } : {}),
+    ...(logradouroComprador ? { logradouroComprador } : {}),
+    ...(numeroComprador ? { numeroComprador } : {}),
+    ...(complementoComprador ? { complementoComprador } : {}),
+    ...(nomeMunicipioComprador ? { nomeMunicipioComprador } : {})
+  }
+}
+
 function resolveKmVistoriada (input: {
   kmVistoriadaVeiculo?: string | null
   kmVeiculo?: string | null
@@ -339,6 +367,7 @@ export class CriarCompraService {
     const criaTdvPayload: CriaTdvCommand = registro
       ? {
           ...semCamposNulos(registro),
+          ...enderecoEditado(prepared),
           confirmacaoAutodeclaracaoResidenciaComprador: 'true' as const
         }
       : {
