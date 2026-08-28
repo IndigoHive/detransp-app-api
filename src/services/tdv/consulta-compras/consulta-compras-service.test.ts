@@ -169,7 +169,8 @@ describe('ConsultaComprasService', () => {
       nomeComprador: NAO_INFORMADO,
       enderecoComprador: NAO_INFORMADO,
       valorVenda: NAO_INFORMADO,
-      quilometragem: NAO_INFORMADO
+      quilometragem: NAO_INFORMADO,
+      descricaoCorVeiculo: NAO_INFORMADO
     })
     expect(result.vehicles[0]).not.toHaveProperty('codigoComprador')
   })

@@ -166,7 +166,7 @@ export class ConsultaComprasService {
         formatNumericDisplay(kmVeiculo, n => n.toLocaleString('pt-BR'))
       )
       const descricaoMarcaVeiculo = trimField(tdv.descricaoMarcaVeiculo)
-      const descricaoCorVeiculo = trimField(tdv.descricaoCorVeiculo) ?? ''
+      const descricaoCorVeiculo = displayOrNaoInformado(trimField(tdv.descricaoCorVeiculo))
       const codigoComprador = trimField(tdv.codigoComprador)
       const cpfComprador = displayOrNaoInformado(
         codigoComprador ? formatCpfCnpj(codigoComprador) : undefined
