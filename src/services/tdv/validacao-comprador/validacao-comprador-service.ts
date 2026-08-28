@@ -1,5 +1,7 @@
 import type { DetranSpServiceNowTdvClient } from '../../../clients/detran-sp-service-now/tdv'
+import { sanitizeEnderecoComplemento } from '../../../utils/sanitize-endereco-complemento'
 import { extractBearerToken, extractCpfFromToken } from '../../../utils/token'
+import { formatEnderecoComprador } from '../comprador-display-fields'
 
 type Dependencies = {
   detranSpServiceNowTdv: DetranSpServiceNowTdvClient
@@ -8,6 +10,8 @@ type Dependencies = {
 export type ValidacaoCompradorInput = {
   cpfComprador: string
   cepComprador: string
+  numeroComprador?: string
+  complementoComprador?: string
 }
 
 export type ValidacaoCompradorResult = {
@@ -62,17 +66,26 @@ export class ValidacaoCompradorService {
     const cidadao = cidadaoResult.result
     const endereco = enderecoResult.result
 
-    const enderecoFormatado = [
-      cidadao.logradouro ? `${cidadao.tipoLogradouro ?? ''} ${cidadao.logradouro}`.trim() : endereco.logradouro,
-      cidadao.numeroLogradouro,
-      cidadao.bairro || endereco.bairro,
-      `${endereco.municipio} - ${endereco.uf}`
-    ].filter(Boolean).join(', ')
+    // O endereço sai só da busca por CEP — o BCadastro fica de fora, mesmo trazendo logradouro
+    // e número do comprador. É o endereço que a tela do CEP acabou de mostrar ao vendedor
+    // (CompradorCepService lê os mesmos campos) e é o que InformarDadosVendaService grava na
+    // TDV; misturar o endereço cadastral aqui faria a confirmação exibir uma rua diferente da
+    // que o vendedor viu e da que fica registrada. Mesmo formatador das telas seguintes, que
+    // leem o endereço já gravado — assim as três não têm como divergir.
+    const enderecoComprador = formatEnderecoComprador({
+      logradouroComprador: endereco.logradouro ?? endereco.endereco,
+      numeroComprador: input.numeroComprador ?? null,
+      complementoComprador: sanitizeEnderecoComplemento(input.complementoComprador ?? ''),
+      bairroComprador: endereco.bairro,
+      nomeMunicipioComprador: endereco.municipio || endereco.localidade,
+      ufComprador: endereco.uf,
+      cepComprador: endereco.cep
+    })
 
     return {
       nomeComprador: cidadao.nome,
       cpfComprador: cidadao.cpf,
-      enderecoComprador: enderecoFormatado
+      enderecoComprador: enderecoComprador ?? ''
     }
   }
 }
