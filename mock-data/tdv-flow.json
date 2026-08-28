@@ -1872,7 +1872,8 @@
             "type": "button",
             "name": null,
             "data": {
-              "label": "Assinar"
+              "label": "Assinar",
+              "secondaryIcon": "check"
             }
           }
         ]
