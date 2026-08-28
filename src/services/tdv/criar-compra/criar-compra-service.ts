@@ -10,6 +10,7 @@ import {
   type CriaTdvCommand,
   type ListaTdvsResultData
 } from '../../../clients/detran-sp-service-now/tdv/types'
+import { firstName } from '../../../utils/first-name'
 import { extractBearerToken, extractCpfFromToken } from '../../../utils/token'
 import { NAO_INFORMADO } from '../comprador-display-fields'
 import { mapPendenciaError, type PendenciaResult } from '../map-pendencia-error'
@@ -83,6 +84,17 @@ export type CriarCompraResult = CriarCompraSuccessResult | CriarCompraPendenciaR
 
 const TDV_ATIVA_EXISTENTE = 'TDVAtivaExistenteError'
 
+// As telas de conclusão ([Comprador] Concluído e Pagamento confirmado) saúdam pelo primeiro
+// nome — "Olá, Maria", não "Olá, MARIA DA SILVA". Elas leem este campo com fallback para o
+// nomeComprador de /api/tdv/compras, que ConsultaComprasService já reduz do mesmo jeito; as
+// duas pontas da mesma saudação precisam bater. "Não informado" passa intacto: é placeholder,
+// não nome de gente.
+function nomeParaSaudacao (valor: string | undefined): string | undefined {
+  const nome = valor?.trim()
+  if (!nome || nome === NAO_INFORMADO) return nome || undefined
+  return firstName(nome) || undefined
+}
+
 
 
 function mapProximaAcao (
@@ -92,7 +104,9 @@ function mapProximaAcao (
   fallback: CriarCompraInput
 ): CriarCompraSuccessResult | Extract<CriarCompraResult, { showSnackbar: unknown }> {
   const vehicle = buildVehicle(data, fallback)
-  const nomeComprador = data?.nomeComprador?.trim() || fallback.nomeComprador?.trim() || undefined
+  const nomeComprador = nomeParaSaudacao(
+    data?.nomeComprador?.trim() || fallback.nomeComprador?.trim()
+  )
 
   if (estado === CodigoEstadoTDV.ATPVE_ASSINADA_VENDEDOR_COMUNICACAO_VENDA_GERADA) {
     return {
@@ -415,11 +429,13 @@ export class CriarCompraService {
       }
     }
 
+    const nomeComprador = nomeParaSaudacao(input.nomeComprador)
+
     return {
       ...pendencia,
       ...(codigoTransferencia ? { codigoTransferencia } : {}),
       vehicle: buildVehicle(undefined, input),
-      ...(input.nomeComprador?.trim() ? { nomeComprador: input.nomeComprador.trim() } : {})
+      ...(nomeComprador ? { nomeComprador } : {})
     }
   }
 

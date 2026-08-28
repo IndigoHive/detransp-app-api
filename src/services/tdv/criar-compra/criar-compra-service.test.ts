@@ -71,7 +71,8 @@ describe('CriarCompraService', () => {
       estado: CodigoEstadoTDV.ATPVE_ASSINADA_VENDEDOR_COMUNICACAO_VENDA_GERADA,
       codigoTransferencia: 'TDV-NEW',
       vehicle: vehicleSummary,
-      nomeComprador: 'Maria Compradora'
+      // A saudação das telas de conclusão usa só o primeiro nome.
+      nomeComprador: 'Maria'
     })
 
     expect(criaTdv).toHaveBeenCalledWith(clientAuth, {
@@ -176,6 +177,53 @@ describe('CriarCompraService', () => {
       codigoComprador: '12345678901'
     }))
     expect(criaTdv.mock.calls[0]?.[1]).not.toHaveProperty('nomeComprador')
+  })
+
+  // As telas de conclusão [Comprador] Concluído (s_92a9313c0809) e Pagamento confirmado
+  // (s_1abd59a0d122) saúdam com "Olá, @{node:n_2d9e4b6a8c17.nomeComprador ?? …}". O ServiceNow
+  // devolve o nome completo em caixa alta, e a saudação tem que sair igual à do outro lado do
+  // `??`, que vem de /api/tdv/compras já reduzido.
+  it('devolve só o primeiro nome, para a saudação das telas de conclusão', async () => {
+    const buscaTdv = vi.fn().mockResolvedValue({
+      result: {
+        estado: CodigoEstadoTDV.TRANSFERENCIA_CONCLUIDA,
+        placaVeiculo: 'GHI8J90',
+        descricaoMarcaVeiculo: 'VW/GOL 1.0',
+        codigoRenavamVeiculo: '00010020031',
+        nomeComprador: 'MARIA DA SILVA'
+      }
+    })
+    const service = new CriarCompraService({ logger,
+      detranSpServiceNowTdv: asClient({
+        criaTdv: vi.fn().mockResolvedValue({ result: { codigoTransferenciaVeiculo: 'TDV-NEW' } }),
+        buscaTdv
+      })
+    })
+
+    await expect(service.run(authHeader, baseInput)).resolves.toMatchObject({
+      nomeComprador: 'Maria'
+    })
+  })
+
+  it('não recorta "Não informado" — é placeholder, não nome', async () => {
+    const buscaTdv = vi.fn().mockResolvedValue({
+      result: {
+        estado: CodigoEstadoTDV.TRANSFERENCIA_CONCLUIDA,
+        placaVeiculo: 'GHI8J90',
+        descricaoMarcaVeiculo: 'VW/GOL 1.0',
+        codigoRenavamVeiculo: '00010020031'
+      }
+    })
+    const service = new CriarCompraService({ logger,
+      detranSpServiceNowTdv: asClient({
+        criaTdv: vi.fn().mockResolvedValue({ result: { codigoTransferenciaVeiculo: 'TDV-NEW' } }),
+        buscaTdv
+      })
+    })
+
+    await expect(
+      service.run(authHeader, { ...baseInput, nomeComprador: 'Não informado' })
+    ).resolves.toMatchObject({ nomeComprador: 'Não informado' })
   })
 
   it('picks the right row out of the buyer\'s whole list', async () => {
@@ -606,7 +654,8 @@ describe('CriarCompraService', () => {
       estado: CodigoEstadoTDV.TRANSFERENCIA_CONCLUIDA,
       codigoTransferencia: 'TDV-EXISTING',
       vehicle: vehicleSummary,
-      nomeComprador: 'Maria Compradora'
+      // A saudação das telas de conclusão usa só o primeiro nome.
+      nomeComprador: 'Maria'
     })
 
     // No plate filter and no `campos`: the same query /api/tdv/compras uses, so the row is
