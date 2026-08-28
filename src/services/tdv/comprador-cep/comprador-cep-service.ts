@@ -1,4 +1,5 @@
 import type { DetranSpServiceNowTdvClient } from '../../../clients/detran-sp-service-now/tdv'
+import { composeLogradouro } from '../../../utils/compose-logradouro'
 import { extractBearerToken, extractCpfFromToken } from '../../../utils/token'
 
 type Dependencies = {
@@ -44,7 +45,7 @@ export class CompradorCepService {
     return {
       cidade: endereco.municipio || endereco.localidade,
       bairro: endereco.bairro,
-      logradouro: endereco.logradouro ?? endereco.endereco,
+      logradouro: composeLogradouro(endereco) || null,
       errorText: null
     }
   }

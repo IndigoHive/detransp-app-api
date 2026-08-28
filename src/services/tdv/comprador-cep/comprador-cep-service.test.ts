@@ -50,14 +50,16 @@ describe('CompradorCepService', () => {
     })
   })
 
-  it('falls back to the endereco field when logradouro is empty', async () => {
+  // O CEP de homologação devolve `logradouro: null` e as partes separadas. O campo do
+  // formulário tem de nascer com o tipo, igual ao app em produção ("Rua Aulide Carini").
+  it('compõe tipoLogradouro + endereco quando o logradouro composto vem nulo', async () => {
     const buscaEndereco = vi.fn().mockResolvedValue({ result: endereco })
     const service = new CompradorCepService({ detranSpServiceNowTdv: asClient({ buscaEndereco }) })
 
     await expect(service.run(authorizationHeader, { cep: '08060-283' })).resolves.toEqual({
       cidade: 'São Paulo',
       bairro: 'Vila Jacuí',
-      logradouro: 'Aulide Carini',
+      logradouro: 'Rua Aulide Carini',
       errorText: null
     })
     expect(buscaEndereco).toHaveBeenCalledWith({ token: expect.any(String), cpf: sellerCpf }, '08060283')
