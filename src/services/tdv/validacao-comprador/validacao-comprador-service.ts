@@ -1,6 +1,7 @@
 import type { DetranSpServiceNowTdvClient } from '../../../clients/detran-sp-service-now/tdv'
 import { formatCep } from '../../../utils/format-document'
 import { sanitizeEnderecoComplemento } from '../../../utils/sanitize-endereco-complemento'
+import { composeLogradouro } from '../../../utils/compose-logradouro'
 import { extractBearerToken, extractCpfFromToken } from '../../../utils/token'
 
 type Dependencies = {
@@ -96,7 +97,7 @@ export class ValidacaoCompradorService {
     // TDV; misturar o endereço cadastral aqui faria a confirmação exibir uma rua diferente da
     // que o vendedor viu e da que fica registrada.
     const enderecoComprador = formatEnderecoConfirmacao({
-      logradouro: endereco.logradouro ?? endereco.endereco,
+      logradouro: composeLogradouro(endereco),
       numero: input.numeroComprador,
       complemento: sanitizeEnderecoComplemento(input.complementoComprador ?? ''),
       bairro: endereco.bairro,

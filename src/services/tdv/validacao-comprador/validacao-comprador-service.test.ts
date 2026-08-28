@@ -61,11 +61,11 @@ describe('ValidacaoCompradorService', () => {
     })
   })
 
-  it('cai para endereco quando o CEP não devolve logradouro', async () => {
+  it('compõe tipoLogradouro + endereco quando o CEP não devolve o logradouro composto', async () => {
     const service = build({ ...ENDERECO_DO_CEP, logradouro: null })
 
     await expect(service.run(authHeader, input)).resolves.toMatchObject({
-      enderecoComprador: 'BOA VISTA, 209, CASA 2, CENTRO, 01014-001, SAO PAULO, SP'
+      enderecoComprador: 'RUA BOA VISTA, 209, CASA 2, CENTRO, 01014-001, SAO PAULO, SP'
     })
   })
 

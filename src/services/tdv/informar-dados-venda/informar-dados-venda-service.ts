@@ -2,6 +2,7 @@ import type { DetranSpServiceNowTdvClient } from '../../../clients/detran-sp-ser
 import { CodigoEstadoTDV } from '../../../clients/detran-sp-service-now/tdv/types'
 import { centsToReais } from '../../../utils/cents-to-reais'
 import { sanitizeEnderecoComplemento } from '../../../utils/sanitize-endereco-complemento'
+import { composeLogradouro } from '../../../utils/compose-logradouro'
 import { extractBearerToken, extractCpfFromToken } from '../../../utils/token'
 import { assertKmValida } from '../valida-km'
 
@@ -60,7 +61,7 @@ export class InformarDadosVendaService {
         emailComprador: input.emailComprador,
         cepComprador: input.cepComprador,
         bairroComprador: endereco?.bairro ?? '',
-        logradouroComprador: endereco?.logradouro ?? endereco?.endereco ?? '',
+        logradouroComprador: composeLogradouro(endereco),
         numeroComprador: input.numeroComprador,
         complementoComprador: sanitizeEnderecoComplemento(input.complementoComprador ?? ''),
         valorVendaVeiculo: valorVendaReais,
