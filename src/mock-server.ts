@@ -812,7 +812,7 @@ app.post('/api/tdv/validacao-comprador', (req, res) => {
   res.json({
     nomeComprador: 'Maria Oliveira Souza',
     cpfComprador: '987.654.321-00',
-    enderecoComprador: 'Rua das Flores, 123, Jardim Paulista, São Paulo - SP',
+    enderecoComprador: 'Rua das Flores, 123, Jardim Paulista, 01014-001, São Paulo, SP',
   })
 })
 

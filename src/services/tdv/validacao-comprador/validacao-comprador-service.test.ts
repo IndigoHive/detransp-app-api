@@ -50,12 +50,14 @@ const input = {
   complementoComprador: 'CASA 2'
 }
 
+// Sequência pedida pelo Detran para a tela [Vendedor] Confirmação dados (s_3a0b04432a52):
+// rua, número, complemento, bairro, CEP, município, estado.
 describe('ValidacaoCompradorService', () => {
   it('monta o endereço só com o que veio do CEP, nunca com o do BCadastro', async () => {
     await expect(build().run(authHeader, input)).resolves.toEqual({
       nomeComprador: CIDADAO.nome,
       cpfComprador: CIDADAO.cpf,
-      enderecoComprador: 'RUA BOA VISTA, 209, CASA 2, CENTRO, SAO PAULO - SP, 01014-001'
+      enderecoComprador: 'RUA BOA VISTA, 209, CASA 2, CENTRO, 01014-001, SAO PAULO, SP'
     })
   })
 
@@ -63,7 +65,7 @@ describe('ValidacaoCompradorService', () => {
     const service = build({ ...ENDERECO_DO_CEP, logradouro: null })
 
     await expect(service.run(authHeader, input)).resolves.toMatchObject({
-      enderecoComprador: 'BOA VISTA, 209, CASA 2, CENTRO, SAO PAULO - SP, 01014-001'
+      enderecoComprador: 'BOA VISTA, 209, CASA 2, CENTRO, 01014-001, SAO PAULO, SP'
     })
   })
 
@@ -74,7 +76,7 @@ describe('ValidacaoCompradorService', () => {
       cpfComprador: input.cpfComprador,
       cepComprador: input.cepComprador
     })).resolves.toMatchObject({
-      enderecoComprador: 'RUA BOA VISTA, CENTRO, SAO PAULO - SP, 01014-001'
+      enderecoComprador: 'RUA BOA VISTA, CENTRO, 01014-001, SAO PAULO, SP'
     })
   })
 
@@ -85,7 +87,7 @@ describe('ValidacaoCompradorService', () => {
       ...input,
       complementoComprador: 'Casa  2 - fundos!'
     })).resolves.toMatchObject({
-      enderecoComprador: 'RUA BOA VISTA, 209, Casa 2 fundos, CENTRO, SAO PAULO - SP, 01014-001'
+      enderecoComprador: 'RUA BOA VISTA, 209, Casa 2 fundos, CENTRO, 01014-001, SAO PAULO, SP'
     })
   })
 

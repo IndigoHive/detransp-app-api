@@ -6054,12 +6054,12 @@
         },
         "method": "POST",
         "url": "https://detransp-app-api-1990fe11bc9a.herokuapp.com/api/tdv/validacao-comprador",
-        "body": "{\n  \"cpfComprador\": \"@{screen:s_2909315de67e.comp:c_676202e6fd57.cpf}\",\n  \"cepComprador\": \"@{screen:s_2909315de67e.comp:c_24e94a494019.cep}\"\n}",
+        "body": "{\n  \"cpfComprador\": \"@{screen:s_2909315de67e.comp:c_676202e6fd57.cpf}\",\n  \"cepComprador\": \"@{screen:s_2909315de67e.comp:c_24e94a494019.cep}\",\n  \"numeroComprador\": \"@{screen:s_2909315de67e.comp:c_1e15a3ceef7b.value}\",\n  \"complementoComprador\": \"@{screen:s_2909315de67e.comp:c_90a932a96b1f.value}\"\n}",
         "responseExamples": [
           {
             "id": "e2ef8121-9ccd-477c-8d4a-0c2a82684031",
             "name": "Comprador válido",
-            "value": "{\n  \"nomeComprador\": \"Carlos da Silva\",\n  \"cpfComprador\": \"721.169.550-17\",\n  \"enderecoComprador\": \"Rua Aulide Carini, 345, Vila Jacuí, São Paulo - SP\"\n}"
+            "value": "{\n  \"nomeComprador\": \"Carlos da Silva\",\n  \"cpfComprador\": \"721.169.550-17\",\n  \"enderecoComprador\": \"Rua Aulide Carini, 345, Casa 2, Vila Jacuí, 08021-000, São Paulo, SP\"\n}"
           },
           {
             "id": "457b9ed8-71de-49cf-8f2d-50acaab7b2ef",
