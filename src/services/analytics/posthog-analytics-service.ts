@@ -12,6 +12,7 @@ type LicenciamentoEvent =
   | 'licenciamento:crlve_failure'
 
 type DebitosEvent =
+  | 'debitos:vehicle_query'
   | 'debitos:pix_generate'
   | 'debitos:pix_pay'
   | 'debitos:certidao_pix_generate'
