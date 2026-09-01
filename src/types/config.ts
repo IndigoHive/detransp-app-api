@@ -61,6 +61,9 @@ export type Config = {
   }
   security: {
     encryptionKey: string
+    // Pepper só de servidor usado para derivar o distinct_id pseudônimo do analytics
+    // a partir do CPF. Nunca sai do backend; trocá-lo desassocia o histórico no PostHog.
+    pseudonymousIdPepper: string
   }
   rotaVida: {
     vidaBaseUrl: string
@@ -111,5 +114,9 @@ export type Config = {
   }
   logging: {
     level: string
+  }
+  posthog: {
+    apiKey: string
+    host: string
   }
 }

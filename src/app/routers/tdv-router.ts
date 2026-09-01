@@ -158,8 +158,9 @@ export function tdvRouter (): Router {
   })
 
   router.get('/link-assinatura-iti', async (req, res) => {
+    const { accessToken } = req.session!
     const service = req.scope.resolve('gerarLinkAssinaturaItiService')
-    const result = service.run()
+    const result = service.run(accessToken)
     res.status(200).json(result)
   })
 

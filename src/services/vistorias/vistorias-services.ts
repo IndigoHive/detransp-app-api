@@ -30,28 +30,28 @@ export function getVistoriasRegistrations (): Required<NameAndRegistrationPair<V
         new BuscaDocumentoVistoriaService(detranSpServiceNowVistoriasClient)
     ).scoped(),
     criaQRCodeVistoriaService: asFunction(
-      ({ detranSpServiceNowVistoriasClient }) =>
-        new CriaQRCodeVistoriaService(detranSpServiceNowVistoriasClient)
+      ({ detranSpServiceNowVistoriasClient, analyticsService }) =>
+        new CriaQRCodeVistoriaService(detranSpServiceNowVistoriasClient, analyticsService)
     ).scoped(),
     geraAutorizacaoVistoriaService: asFunction(
-      ({ detranSpServiceNowVistoriasClient }) =>
-        new GeraAutorizacaoVistoriaService(detranSpServiceNowVistoriasClient)
+      ({ detranSpServiceNowVistoriasClient, analyticsService }) =>
+        new GeraAutorizacaoVistoriaService(detranSpServiceNowVistoriasClient, analyticsService)
     ).scoped(),
     listaPagamentosVistoriaService: asFunction(
       ({ detranSpServiceNowVistoriasClient }) =>
         new ListaPagamentosVistoriaService(detranSpServiceNowVistoriasClient)
     ).scoped(),
     solicitaRestituicaoVistoriaService: asFunction(
-      ({ detranSpServiceNowVistoriasClient }) =>
-        new SolicitaRestituicaoVistoriaService(detranSpServiceNowVistoriasClient)
+      ({ detranSpServiceNowVistoriasClient, analyticsService }) =>
+        new SolicitaRestituicaoVistoriaService(detranSpServiceNowVistoriasClient, analyticsService)
     ).scoped(),
     verificaQRCodeVistoriaService: asFunction(
-      ({ detranSpServiceNowVistoriasClient }) =>
-        new VerificaQRCodeVistoriaService(detranSpServiceNowVistoriasClient)
+      ({ detranSpServiceNowVistoriasClient, analyticsService }) =>
+        new VerificaQRCodeVistoriaService(detranSpServiceNowVistoriasClient, analyticsService)
     ).scoped(),
     verificaVeiculoVistoriaService: asFunction(
-      ({ detranSpServiceNowVistoriasClient }) =>
-        new VerificaVeiculoVistoriaService(detranSpServiceNowVistoriasClient)
+      ({ detranSpServiceNowVistoriasClient, analyticsService }) =>
+        new VerificaVeiculoVistoriaService(detranSpServiceNowVistoriasClient, analyticsService)
     ).scoped()
   }
 }

@@ -3,6 +3,11 @@ import type { DetranSpServiceNowTdvClient } from '../../../clients/detran-sp-ser
 import { CodigoEstadoTDV, CodigoOrigemTDV } from '../../../clients/detran-sp-service-now/tdv/types'
 import { formatCurrency } from '../../../utils/currency'
 import { ConfirmarCompraService } from './confirmar-compra-service'
+import type { IAnalyticsService } from '../../../services/analytics'
+
+function buildAnalytics (): IAnalyticsService {
+  return { capture: vi.fn(), createInsertId: vi.fn(() => 'insert-id') }
+}
 
 const cpf = '12345678901'
 const authHeader = `Bearer header.${Buffer.from(JSON.stringify({ preferred_username: cpf })).toString('base64url')}.sig`
@@ -42,7 +47,8 @@ describe('ConfirmarCompraService', () => {
       })
 
     const service = new ConfirmarCompraService({
-      detranSpServiceNowTdv: asClient({ atualizaTdv, buscaTdv })
+      detranSpServiceNowTdv: asClient({ atualizaTdv, buscaTdv }),
+      analyticsService: buildAnalytics()
     })
 
     await expect(service.run(authHeader, {
@@ -90,7 +96,8 @@ describe('ConfirmarCompraService', () => {
     const buscaTdv = vi.fn().mockResolvedValue({ result: tdvData })
 
     const service = new ConfirmarCompraService({
-      detranSpServiceNowTdv: asClient({ atualizaTdv, buscaTdv })
+      detranSpServiceNowTdv: asClient({ atualizaTdv, buscaTdv }),
+      analyticsService: buildAnalytics()
     })
 
     await expect(service.run(authHeader, {
@@ -108,7 +115,8 @@ describe('ConfirmarCompraService', () => {
     const buscaTdv = vi.fn()
 
     const service = new ConfirmarCompraService({
-      detranSpServiceNowTdv: asClient({ atualizaTdv, buscaTdv })
+      detranSpServiceNowTdv: asClient({ atualizaTdv, buscaTdv }),
+      analyticsService: buildAnalytics()
     })
 
     await expect(service.run(authHeader, {
@@ -133,7 +141,8 @@ describe('ConfirmarCompraService', () => {
     })
 
     const service = new ConfirmarCompraService({
-      detranSpServiceNowTdv: asClient({ atualizaTdv, buscaTdv })
+      detranSpServiceNowTdv: asClient({ atualizaTdv, buscaTdv }),
+      analyticsService: buildAnalytics()
     })
 
     await expect(service.run(authHeader, {
@@ -146,5 +155,44 @@ describe('ConfirmarCompraService', () => {
 
     expect(buscaTdv).toHaveBeenCalledTimes(1)
     expect(atualizaTdv).not.toHaveBeenCalled()
+  })
+  // O segundo `if` roda porque o primeiro reatribui estadoAtual — uma única chamada partindo
+  // de ATPVE_CRIADA atravessa as duas transições, então deve emitir os dois eventos. É o
+  // ponto mais fácil de quebrar num refactor que "simplifique" esses ifs.
+  it('emite intent_confirm e residence_declaration_confirm numa só chamada a partir de ATPVE_CRIADA', async () => {
+    const atualizaTdv = vi.fn().mockResolvedValue({ result: {} })
+    const buscaTdv = vi.fn().mockResolvedValue({ result: tdvData })
+    const analyticsService = buildAnalytics()
+
+    const service = new ConfirmarCompraService({
+      detranSpServiceNowTdv: asClient({ atualizaTdv, buscaTdv }),
+      analyticsService
+    })
+
+    await service.run(authHeader, { codigoTransferencia: 'TDV-1', codigoProvaVidaComprador: 'pv-1' })
+
+    const chamadas = vi.mocked(analyticsService.capture).mock.calls
+    expect(chamadas.map(([, evento]) => evento))
+      .toEqual(['tdv:intent_confirm', 'tdv:residence_declaration_confirm'])
+    // sempre o CPF cru: a pseudonimização acontece dentro do PostHogAnalyticsService
+    expect(chamadas.map(([cpfArg]) => cpfArg)).toEqual([cpf, cpf])
+  })
+
+  it('não emite evento quando a TDV já passou das duas transições', async () => {
+    const atualizaTdv = vi.fn()
+    const buscaTdv = vi.fn().mockResolvedValue({
+      result: { ...tdvData, estado: CodigoEstadoTDV.AUTODECLARACAO_RESIDENCIA_CONFIRMADA }
+    })
+    const analyticsService = buildAnalytics()
+
+    const service = new ConfirmarCompraService({
+      detranSpServiceNowTdv: asClient({ atualizaTdv, buscaTdv }),
+      analyticsService
+    })
+
+    await service.run(authHeader, { codigoTransferencia: 'TDV-1', codigoProvaVidaComprador: 'pv-1' })
+
+    expect(atualizaTdv).not.toHaveBeenCalled()
+    expect(analyticsService.capture).not.toHaveBeenCalled()
   })
 })

@@ -1,9 +1,11 @@
 import type { DetranSpServiceNowTdvClient } from '../../../clients/detran-sp-service-now/tdv'
 import { CodigoEstadoTDV } from '../../../clients/detran-sp-service-now/tdv/types'
 import { extractBearerToken, extractCpfFromToken } from '../../../utils/token'
+import type { IAnalyticsService } from '../../analytics'
 
 type Dependencies = {
   detranSpServiceNowTdv: DetranSpServiceNowTdvClient
+  analyticsService: IAnalyticsService
 }
 
 export type CancelarTdvInput = {
@@ -16,9 +18,11 @@ export type CancelarTdvResult = {
 
 export class CancelarTdvService {
   private readonly client: DetranSpServiceNowTdvClient
+  private readonly analyticsService: IAnalyticsService
 
-  constructor ({ detranSpServiceNowTdv }: Dependencies) {
+  constructor ({ detranSpServiceNowTdv, analyticsService }: Dependencies) {
     this.client = detranSpServiceNowTdv
+    this.analyticsService = analyticsService
   }
 
   async run (authorizationHeader: string | undefined, input: CancelarTdvInput): Promise<CancelarTdvResult> {
@@ -45,6 +49,10 @@ export class CancelarTdvService {
     await this.client.atualizaTdv(auth, codigoTransferencia, {
       estado: CodigoEstadoTDV.TRANSFERENCIA_CANCELADA,
       ativa: 'false'
+    })
+
+    this.analyticsService.capture(cpf, 'tdv:cancel', {
+      $insert_id: this.analyticsService.createInsertId(`tdv:cancel:${codigoTransferencia}`)
     })
 
     return { success: true }

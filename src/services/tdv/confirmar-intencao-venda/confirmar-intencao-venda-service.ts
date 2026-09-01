@@ -1,9 +1,11 @@
 import type { DetranSpServiceNowTdvClient } from '../../../clients/detran-sp-service-now/tdv'
 import { CodigoEstadoTDV } from '../../../clients/detran-sp-service-now/tdv/types'
 import { extractBearerToken, extractCpfFromToken } from '../../../utils/token'
+import type { IAnalyticsService } from '../../analytics'
 
 type Dependencies = {
   detranSpServiceNowTdv: DetranSpServiceNowTdvClient
+  analyticsService: IAnalyticsService
 }
 
 export type ConfirmarIntencaoVendaInput = {
@@ -17,9 +19,11 @@ export type ConfirmarIntencaoVendaResult = Record<string, never>
 // taps the final confirmation button, matching what that screen tells them will happen.
 export class ConfirmarIntencaoVendaService {
   private readonly client: DetranSpServiceNowTdvClient
+  private readonly analyticsService: IAnalyticsService
 
-  constructor ({ detranSpServiceNowTdv }: Dependencies) {
+  constructor ({ detranSpServiceNowTdv, analyticsService }: Dependencies) {
     this.client = detranSpServiceNowTdv
+    this.analyticsService = analyticsService
   }
 
   async run (authorizationHeader: string | undefined, input: ConfirmarIntencaoVendaInput): Promise<ConfirmarIntencaoVendaResult> {
@@ -37,6 +41,10 @@ export class ConfirmarIntencaoVendaService {
         estado: CodigoEstadoTDV.ATPVE_CRIADA,
         codigoProvaVidaVendedor: input.codigoProvaVidaVendedor,
         tipoProvaVidaVendedor: '2' // LIVENESS
+      })
+
+      this.analyticsService.capture(cpf, 'tdv:atpve_create', {
+        $insert_id: this.analyticsService.createInsertId(`tdv:atpve_create:${input.codigoTransferencia}`)
       })
     }
 

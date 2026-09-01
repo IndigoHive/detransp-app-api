@@ -1,5 +1,6 @@
 import type { DetranSpServiceNowVistoriasClient } from '../../../clients/detran-sp-service-now-vistorias'
 import type { VistoriasAuth } from '../types'
+import type { IAnalyticsService } from '../../analytics'
 
 export type SolicitaRestituicaoVistoriaOutput =
   | { success: true, status: 'completed' | 'processing', idRestituicao: string }
@@ -27,6 +28,8 @@ export class SolicitaRestituicaoVistoriaService {
 
   constructor(
     private readonly client: DetranSpServiceNowVistoriasClient,
+    // Antes de `options`, não depois: um parâmetro obrigatório não pode seguir um opcional.
+    private readonly analyticsService: IAnalyticsService,
     options: SolicitaRestituicaoVistoriaServiceOptions = {}
   ) {
     this.maxAttempts = options.maxAttempts ?? DEFAULT_MAX_ATTEMPTS
@@ -45,6 +48,12 @@ export class SolicitaRestituicaoVistoriaService {
       if (!response?.success) {
         return this.failure(response?.message)
       }
+
+      // Antes do waitForReceipt: a solicitação já foi aceita: 'completed' e 'processing'
+      // são os dois desfechos de sucesso do poll, e só `failure()` não deve contar.
+      this.analyticsService.capture(auth.cpf, 'vistorias:refund_request', {
+        $insert_id: this.analyticsService.createInsertId(`vistorias:refund_request:${token}`)
+      })
 
       return await this.waitForReceipt(auth, response.data.id)
     } catch (error) {

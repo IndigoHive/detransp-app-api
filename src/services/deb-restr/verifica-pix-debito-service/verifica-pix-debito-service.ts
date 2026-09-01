@@ -3,6 +3,7 @@ import type { DetranSpServiceNowPgtoClient } from '../../../clients/detran-sp-se
 import { DetranSpServiceNowPgtoError, normalizeEstadoQRCode } from '../../../clients/detran-sp-service-now-pgto'
 import type { DebRestrVeiculoAuth, VerificaPixDebitoResult } from '../types'
 import { formatDateTimeBr } from '../utils'
+import type { IAnalyticsService } from '../../analytics'
 
 export type VerificaPixDebitoParams = DebRestrVeiculoAuth & {
   idSolServico: string
@@ -10,9 +11,11 @@ export type VerificaPixDebitoParams = DebRestrVeiculoAuth & {
 
 export class VerificaPixDebitoService {
   private readonly client: DetranSpServiceNowPgtoClient
+  private readonly analyticsService: IAnalyticsService
 
-  constructor (client: DetranSpServiceNowPgtoClient) {
+  constructor (client: DetranSpServiceNowPgtoClient, analyticsService: IAnalyticsService) {
     this.client = client
+    this.analyticsService = analyticsService
   }
 
   async run (params: VerificaPixDebitoParams): Promise<VerificaPixDebitoResult> {
@@ -33,6 +36,15 @@ export class VerificaPixDebitoService {
     const confirmedDate = dataPagamento
       ? formatDateTimeBr(dataPagamento)
       : estado === 2 ? formatDateTimeBr(new Date().toISOString()) : null
+
+    // O app repole este endpoint a cada ~5s (ver comentário acima), e não há transição de
+    // estado local pra guardar. O $insert_id por idSolServico é o que impede um pagamento
+    // virar dezenas de eventos — pagamento é terminal, uma chave por cobrança está certa.
+    if (estado === 2) {
+      this.analyticsService.capture(auth.userCpf, 'debitos:pix_pay', {
+        $insert_id: this.analyticsService.createInsertId(`debitos:pix_pay:${idSolServico}`)
+      })
+    }
 
     return {
       estado,

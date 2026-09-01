@@ -2,6 +2,7 @@ import { Router } from 'express'
 import { BadRequest, Unauthorized } from 'http-errors'
 import type { Platform } from '../../types'
 import { extractCpfFromToken } from '../../utils/token'
+import { derivePseudonymousId } from '../../utils/pseudonymous-id'
 import { sessionAuth } from '../middlewares/session-auth'
 
 const VALID_PLATFORMS: Platform[] = ['android', 'ios']
@@ -83,7 +84,15 @@ export function authRouter (): Router {
     if (!req.session) {
       throw Unauthorized('Sessão não encontrada.')
     }
-    res.status(200).json({ data: req.session.userInfo })
+
+    const config = req.scope.resolve('config')
+
+    // Id pseudônimo derivado do CPF: é ele que o app usa como distinct_id no analytics,
+    // para que eventos de client e de servidor caiam na mesma pessoa sem o CPF sair daqui.
+    res.status(200).json({
+      data: req.session.userInfo,
+      pseudonymousId: derivePseudonymousId(req.session.cpf, config.security.pseudonymousIdPepper)
+    })
   })
 
   router.get('/govbr/flow-user-info', sessionAuth(), async (req, res) => {

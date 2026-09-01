@@ -9,12 +9,13 @@ import {
 import { config as defaultConfig } from '../config'
 import { Config } from '../../types'
 import { Pool } from 'pg'
+import { PostHog } from 'posthog-node'
 import { RepositoryServices } from '../types/repository-services'
 import { ContainerServices } from '../types/container-services'
 import { Database } from '../../db/pool'
 import { PgFlowRepository } from '../../repositories/pg-flow-repository'
 import { PgSessionRepository } from '../../repositories/pg-session-repository'
-import { getAuthRegistrations, getFlowsRegistrations, getProtocolsRegistrations, getDashboardRegistrations, getLicenciamentoRegistrations, getDebRestrRegistrations, getTdvRegistrations, getPecasRegistrations, getVistoriasRegistrations } from '../../services'
+import { getAnalyticsRegistrations, getAuthRegistrations, getFlowsRegistrations, getProtocolsRegistrations, getDashboardRegistrations, getLicenciamentoRegistrations, getDebRestrRegistrations, getTdvRegistrations, getPecasRegistrations, getVistoriasRegistrations } from '../../services'
 import { getClientRegistrations, DetranSpServiceNowLicenciamentoClient, DetranSpServiceNowVistoriasClient } from '../../clients'
 import { DetranSpServiceNowDebRestrClient } from '../../clients/detran-sp-service-now-deb-restr'
 import { DetranSpServiceNowPgtoClient } from '../../clients/detran-sp-service-now-pgto'
@@ -100,8 +101,21 @@ export function createContainer (
         }
       })
     ).singleton(),
+    posthog: asFunction(({ config: cfg, logger }: { config: Config; logger: Logger }) => {
+      const posthog = new PostHog(cfg.posthog.apiKey, {
+        flushAt: 10,
+        flushInterval: 3_000,
+        host: cfg.posthog.host
+      })
+
+      // Analytics nunca pode derrubar um request: falha de entrega vira log, não exceção.
+      posthog.on('error', (error) => logger.error({ error }, 'PostHog event delivery failed'))
+
+      return posthog
+    }).singleton(),
   })
   container.register(getClientRegistrations())
+  container.register(getAnalyticsRegistrations())
   container.register(getFlowsRegistrations())
   container.register(getAuthRegistrations())
   container.register(getProtocolsRegistrations())

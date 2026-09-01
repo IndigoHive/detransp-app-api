@@ -10,6 +10,7 @@ import type { CriaPixDebitoResult, DebRestrVeiculoAuth, PixDebitoTipo } from '..
 import type { TiposServicoResolverService } from '../tipos-servico-resolver-service'
 import { normalizeUtcDateTime } from '../../../utils/normalize-utc-datetime'
 import { buildVeiculoPixId } from '../utils'
+import type { IAnalyticsService } from '../../analytics'
 
 const CODIGO_SEFAZ_BY_TIPO: Record<PixDebitoTipo, string> = {
   ipva: CodigoSefaz.IPVA,
@@ -31,11 +32,13 @@ export class CriaPixDebitoService {
   private readonly client: DetranSpServiceNowPgtoClient
   private readonly tiposServicoResolver: TiposServicoResolverService
   private readonly logger: Logger
+  private readonly analyticsService: IAnalyticsService
 
-  constructor (client: DetranSpServiceNowPgtoClient, tiposServicoResolver: TiposServicoResolverService, logger: Logger) {
+  constructor (client: DetranSpServiceNowPgtoClient, tiposServicoResolver: TiposServicoResolverService, logger: Logger, analyticsService: IAnalyticsService) {
     this.client = client
     this.tiposServicoResolver = tiposServicoResolver
     this.logger = logger
+    this.analyticsService = analyticsService
   }
 
   async run (params: CriaPixDebitoParams): Promise<CriaPixDebitoResult> {
@@ -90,12 +93,24 @@ export class CriaPixDebitoService {
       'PIX débito criado — txid para pagamento mock em homolog'
     )
 
+    const idSolServico = qrCode?.attributes?.idSolServico ?? null
+
+    // O `tipo` é a dimensão que separa os funis (ipva / multas / licenciamento / total).
+    if (qrCode?.attributes?.qrCode) {
+      this.analyticsService.capture(auth.userCpf, 'debitos:pix_generate', {
+        tipo,
+        $insert_id: this.analyticsService.createInsertId(
+          `debitos:pix_generate:${idSolServico ?? `${auth.renavam}:${tipo}`}`
+        )
+      })
+    }
+
     return {
       qrCode: qrCode?.attributes?.qrCode ?? null,
       expiresAt: qrCode?.attributes?.dataExpiracaoQRCode
         ? normalizeUtcDateTime(qrCode.attributes.dataExpiracaoQRCode)
         : null,
-      idSolServico: qrCode?.attributes?.idSolServico ?? null,
+      idSolServico,
     }
   }
 

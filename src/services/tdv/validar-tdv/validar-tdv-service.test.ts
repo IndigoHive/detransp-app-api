@@ -4,6 +4,12 @@ import { DetranSpServiceNowError } from '../../../clients/detran-sp-service-now'
 import type { DetranSpServiceNowTdvClient } from '../../../clients/detran-sp-service-now/tdv'
 import { CodigoEstadoTDV, CodigoOrigemTDV } from '../../../clients/detran-sp-service-now/tdv/types'
 import { ValidarTdvService } from './validar-tdv-service'
+import type { IAnalyticsService } from '../../../services/analytics'
+
+function buildAnalytics (): IAnalyticsService {
+  return { capture: vi.fn(), createInsertId: vi.fn(() => 'insert-id') }
+}
+
 
 const cpf = '12345678901'
 const authHeader = `Bearer header.${Buffer.from(JSON.stringify({ preferred_username: cpf })).toString('base64url')}.sig`
@@ -27,7 +33,8 @@ describe('ValidarTdvService', () => {
   it('returns enotariado when ServiceNow validates the transfer', async () => {
     const validarTdv = vi.fn().mockResolvedValue({ result: {} })
     const service = new ValidarTdvService({
-      detranSpServiceNowTdv: asClient({ validarTdv })
+      detranSpServiceNowTdv: asClient({ validarTdv }),
+      analyticsService: buildAnalytics()
     })
 
     await expect(service.run(authHeader, baseInput)).resolves.toEqual({ proximaAcao: 'enotariado' })
@@ -45,7 +52,8 @@ describe('ValidarTdvService', () => {
   it('accepts listing aliases for codigo and renavam', async () => {
     const validarTdv = vi.fn().mockResolvedValue(undefined)
     const service = new ValidarTdvService({
-      detranSpServiceNowTdv: asClient({ validarTdv })
+      detranSpServiceNowTdv: asClient({ validarTdv }),
+      analyticsService: buildAnalytics()
     })
 
     await expect(service.run(authHeader, {
@@ -67,7 +75,8 @@ describe('ValidarTdvService', () => {
   it('keeps the leading zeros the listing sends in codigoComprador', async () => {
     const validarTdv = vi.fn().mockResolvedValue({ result: {} })
     const service = new ValidarTdvService({
-      detranSpServiceNowTdv: asClient({ validarTdv })
+      detranSpServiceNowTdv: asClient({ validarTdv }),
+      analyticsService: buildAnalytics()
     })
 
     await service.run(authHeader, { ...baseInput, codigoComprador: '00034324084807' })
@@ -86,7 +95,8 @@ describe('ValidarTdvService', () => {
     const service = new ValidarTdvService({
       detranSpServiceNowTdv: asClient({
         validarTdv: vi.fn().mockRejectedValue(error)
-      })
+      }),
+      analyticsService: buildAnalytics()
     })
 
     await expect(service.run(authHeader, baseInput)).resolves.toEqual({
@@ -103,7 +113,8 @@ describe('ValidarTdvService', () => {
     const service = new ValidarTdvService({
       detranSpServiceNowTdv: asClient({
         validarTdv: vi.fn().mockRejectedValue(error)
-      })
+      }),
+      analyticsService: buildAnalytics()
     })
 
     await expect(service.run(authHeader, baseInput)).resolves.toEqual({
@@ -120,7 +131,8 @@ describe('ValidarTdvService', () => {
     const service = new ValidarTdvService({
       detranSpServiceNowTdv: asClient({
         validarTdv: vi.fn().mockRejectedValue(error)
-      })
+      }),
+      analyticsService: buildAnalytics()
     })
 
     await expect(service.run(authHeader, baseInput)).rejects.toBe(error)
@@ -128,7 +140,8 @@ describe('ValidarTdvService', () => {
 
   it('rejects missing required fields', async () => {
     const service = new ValidarTdvService({
-      detranSpServiceNowTdv: asClient({})
+      detranSpServiceNowTdv: asClient({}),
+      analyticsService: buildAnalytics()
     })
 
     await expect(service.run(authHeader, {
@@ -142,7 +155,7 @@ describe('ValidarTdvService', () => {
 
   it('validates a comunicação de venda that has no estado yet', async () => {
     const validarTdv = vi.fn().mockResolvedValue({ result: {} })
-    const service = new ValidarTdvService({ detranSpServiceNowTdv: asClient({ validarTdv }) })
+    const service = new ValidarTdvService({ detranSpServiceNowTdv: asClient({ validarTdv }), analyticsService: buildAnalytics() })
 
     await expect(service.run(authHeader, {
       placaVeiculo: 'GHI8J90',

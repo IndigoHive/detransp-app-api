@@ -46,16 +46,16 @@ export function getDebRestrRegistrations (): Required<NameAndRegistrationPair<De
         new ConsultaTaxaCertidaoService(detranSpServiceNowDebRestrClient)
     ).scoped(),
     criaQRCodeCertidaoService: asFunction(
-      ({ detranSpServiceNowDebRestrClient, logger }) =>
-        new CriaQRCodeCertidaoService(detranSpServiceNowDebRestrClient, logger)
+      ({ detranSpServiceNowDebRestrClient, logger, analyticsService }) =>
+        new CriaQRCodeCertidaoService(detranSpServiceNowDebRestrClient, logger, analyticsService)
     ).scoped(),
     verificaQRCodeCertidaoService: asFunction(
       ({ detranSpServiceNowDebRestrClient }) =>
         new VerificaQRCodeCertidaoService(detranSpServiceNowDebRestrClient)
     ).scoped(),
     emiteCertidaoService: asFunction(
-      ({ detranSpServiceNowDebRestrClient }) =>
-        new EmiteCertidaoService(detranSpServiceNowDebRestrClient)
+      ({ detranSpServiceNowDebRestrClient, analyticsService }) =>
+        new EmiteCertidaoService(detranSpServiceNowDebRestrClient, analyticsService)
     ).scoped(),
     buscaDocumentoCertidaoService: asFunction(
       ({ detranSpServiceNowDebRestrClient }) =>
@@ -86,12 +86,12 @@ export function getDebRestrRegistrations (): Required<NameAndRegistrationPair<De
         new TiposServicoResolverService(detranSpServiceNowPgtoClient, logger)
     ).scoped(),
     criaPixDebitoService: asFunction(
-      ({ detranSpServiceNowPgtoClient, tiposServicoResolverService, logger }) =>
-        new CriaPixDebitoService(detranSpServiceNowPgtoClient, tiposServicoResolverService, logger)
+      ({ detranSpServiceNowPgtoClient, tiposServicoResolverService, logger, analyticsService }) =>
+        new CriaPixDebitoService(detranSpServiceNowPgtoClient, tiposServicoResolverService, logger, analyticsService)
     ).scoped(),
     verificaPixDebitoService: asFunction(
-      ({ detranSpServiceNowPgtoClient }) =>
-        new VerificaPixDebitoService(detranSpServiceNowPgtoClient)
+      ({ detranSpServiceNowPgtoClient, analyticsService }) =>
+        new VerificaPixDebitoService(detranSpServiceNowPgtoClient, analyticsService)
     ).scoped(),
     buscaCertidaoVigenteService: asFunction(
       ({ detranSpServiceNowDebRestrClient }) =>

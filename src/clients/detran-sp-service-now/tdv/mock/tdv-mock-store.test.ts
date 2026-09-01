@@ -1,5 +1,5 @@
 import pino from 'pino'
-import { beforeEach, describe, expect, it } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import type { Config, TdvMockVersao } from '../../../../types'
 import { AnaliseRequisitosService } from '../../../../services/tdv/analise-requisitos'
 import { ConsultaComprasService } from '../../../../services/tdv/consulta-compras'
@@ -10,6 +10,12 @@ import { ValidarTdvService } from '../../../../services/tdv/validar-tdv'
 import { AutodeclaracaoResidenciaService } from '../../../../services/tdv/autodeclaracao-residencia'
 import { MockDetranSpServiceNowTdvClient } from './mock-detran-sp-service-now-tdv-client'
 import { tdvMockStore } from './tdv-mock-store'
+import type { IAnalyticsService } from '../../../../services/analytics'
+
+function buildAnalytics (): IAnalyticsService {
+  return { capture: vi.fn(), createInsertId: vi.fn(() => 'insert-id') }
+}
+
 
 const logger = pino({ level: 'silent' })
 const SELLER = '22231049830'
@@ -50,7 +56,7 @@ function bootstrap (versao: TdvMockVersao, extra: Partial<Config['tdvMock']> = {
   const config = makeConfig(versao, extra)
   const client = new MockDetranSpServiceNowTdvClient({ config, logger })
   const seeded = tdvMockStore.ensureSeeded(config.tdvMock)
-  const deps = { detranSpServiceNowTdv: client }
+  const deps = { detranSpServiceNowTdv: client, analyticsService: buildAnalytics() }
 
   return {
     config,

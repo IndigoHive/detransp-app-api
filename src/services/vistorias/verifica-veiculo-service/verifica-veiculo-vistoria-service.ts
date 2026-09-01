@@ -10,6 +10,7 @@ import type {
 import { DetranSpServiceNowVistoriasError } from '../../../clients/detran-sp-service-now-vistorias'
 import { isHttpError } from 'http-errors'
 import type { VerificaVistoriaInput } from '../types'
+import type { IAnalyticsService } from '../../analytics'
 import { stripHtml } from '../../../utils/strip-html'
 
 type ProcessDefinition = {
@@ -108,7 +109,10 @@ export function isOtherProcessLabel(value: string): boolean {
 }
 
 export class VerificaVeiculoVistoriaService {
-  constructor (private readonly client: DetranSpServiceNowVistoriasClient) {}
+  constructor (
+    private readonly client: DetranSpServiceNowVistoriasClient,
+    private readonly analyticsService: IAnalyticsService
+  ) {}
 
   async run (input: VerificaVistoriaInput): Promise<VerificaVeiculoVistoriaOutput> {
     const definition = this.getProcessDefinition(input)
@@ -139,6 +143,9 @@ export class VerificaVeiculoVistoriaService {
     if (!response.data.body.elegibilidade.podeVistoriar) {
       return this.failure(response.data.body.elegibilidade.motivo || response.message, correlationId)
     }
+
+    // Só aqui: os três `this.failure(...)` acima são veículo inelegível ou erro, não entrada no funil.
+    this.analyticsService.capture(input.cpf, 'vistorias:vehicle_check')
 
     return this.mapResponse(
       response.data.body,

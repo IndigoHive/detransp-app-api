@@ -3,6 +3,7 @@ import type { DetranSpServiceNowLicenciamentoClient } from '../../../clients/det
 import { DetranSpServiceNowLicenciamentoError } from '../../../clients/detran-sp-service-now-licenciamento/errors/detran-sp-service-now-licenciamento-error'
 import { normalizeUtcDateTime } from '../../../utils/normalize-utc-datetime'
 import type { LicenciamentoVeiculoAuth } from '../types'
+import type { IAnalyticsService } from '../../analytics'
 
 
 // Temporary (do not ship): EMV TLV walk to extract tag 54 (transaction amount)
@@ -21,10 +22,12 @@ function emvAmount (emv: string | null | undefined): string | null {
 export class CriaQRCodeLicenciamentoService {
   private readonly client: DetranSpServiceNowLicenciamentoClient
   private readonly logger: Logger
+  private readonly analyticsService: IAnalyticsService
 
-  constructor(client: DetranSpServiceNowLicenciamentoClient, logger: Logger) {
+  constructor(client: DetranSpServiceNowLicenciamentoClient, logger: Logger, analyticsService: IAnalyticsService) {
     this.client = client
     this.logger = logger
+    this.analyticsService = analyticsService
   }
 
   async run(auth: LicenciamentoVeiculoAuth): Promise<{ qrCode: string | null; expiresAt: string | null }> {
@@ -38,6 +41,8 @@ export class CriaQRCodeLicenciamentoService {
         { action: 'mock-pay-txid', renavam: auth.renavam, valor: emvAmount(data?.qrCode), qrRawResponse: result },
         'QR licenciamento criado — resposta ServiceNow completa'
       )
+      this.captureQRCodeCreate(auth)
+
       return {
         qrCode: data?.qrCode ?? null,
         expiresAt: data?.dataExpiracaoQRCode ? normalizeUtcDateTime(data.dataExpiracaoQRCode) : null
@@ -49,6 +54,8 @@ export class CriaQRCodeLicenciamentoService {
         const existing = await this.client.verificaQRCode(auth, auth.renavam)
         const existingData = existing?.result
         if (existingData && existingData.estadoQRCode === 1) {
+          this.captureQRCodeCreate(auth)
+
           return {
             qrCode: existingData.qrCode ?? null,
             expiresAt: existingData.dataExpiracaoQRCode ? normalizeUtcDateTime(existingData.dataExpiracaoQRCode) : null
@@ -58,5 +65,13 @@ export class CriaQRCodeLicenciamentoService {
 
       throw createErr
     }
+  }
+
+  // O $insert_id fixo por renavam colapsa criação e recuperação-do-existente num único
+  // evento no PostHog: um retry sobre o mesmo veículo não vira duas gerações de QR.
+  private captureQRCodeCreate (auth: LicenciamentoVeiculoAuth): void {
+    this.analyticsService.capture(auth.userCpf, 'licenciamento:qr_code_create', {
+      $insert_id: this.analyticsService.createInsertId(`licenciamento:qr_code_create:${auth.renavam}`)
+    })
   }
 }

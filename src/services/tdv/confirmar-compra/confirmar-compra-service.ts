@@ -3,9 +3,11 @@ import type { DetranSpServiceNowTdvClient } from '../../../clients/detran-sp-ser
 import { CodigoEstadoTDV, type CodigoOrigemTDV } from '../../../clients/detran-sp-service-now/tdv/types'
 import { formatCurrency } from '../../../utils/currency'
 import { extractBearerToken, extractCpfFromToken } from '../../../utils/token'
+import type { IAnalyticsService } from '../../analytics'
 
 type Dependencies = {
   detranSpServiceNowTdv: DetranSpServiceNowTdvClient
+  analyticsService: IAnalyticsService
 }
 
 export type ConfirmarCompraInput = {
@@ -44,9 +46,11 @@ function formatNumericDisplay (value: string | undefined, format: (n: number) =>
 
 export class ConfirmarCompraService {
   private readonly client: DetranSpServiceNowTdvClient
+  private readonly analyticsService: IAnalyticsService
 
-  constructor ({ detranSpServiceNowTdv }: Dependencies) {
+  constructor ({ detranSpServiceNowTdv, analyticsService }: Dependencies) {
     this.client = detranSpServiceNowTdv
+    this.analyticsService = analyticsService
   }
 
   async run (authorizationHeader: string | undefined, input: ConfirmarCompraInput): Promise<ConfirmarCompraResult> {
@@ -78,6 +82,10 @@ export class ConfirmarCompraService {
           tipoProvaVidaComprador: '2' // LIVENESS
         })
         estadoAtual = CodigoEstadoTDV.INTENCAO_COMPRA_CONFIRMADA
+
+        this.analyticsService.capture(cpf, 'tdv:intent_confirm', {
+          $insert_id: this.analyticsService.createInsertId(`tdv:intent_confirm:${codigoTransferencia}`)
+        })
       }
 
       if (estadoAtual === CodigoEstadoTDV.INTENCAO_COMPRA_CONFIRMADA) {
@@ -86,6 +94,10 @@ export class ConfirmarCompraService {
           codigoProvaVidaComprador,
           tipoProvaVidaComprador: '2',
           confirmacaoAutodeclaracaoResidenciaComprador: 'true'
+        })
+
+        this.analyticsService.capture(cpf, 'tdv:residence_declaration_confirm', {
+          $insert_id: this.analyticsService.createInsertId(`tdv:residence_declaration_confirm:${codigoTransferencia}`)
         })
       }
     }

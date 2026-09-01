@@ -12,6 +12,7 @@ import { env } from './env'
 
 const DEFAULT_PORT = 3500
 const DEFAULT_LOG_LEVEL = 'info'
+const DEFAULT_POSTHOG_HOST = 'https://us.i.posthog.com'
 const DEFAULT_GOVBR_AUTHORIZE_URL = 'https://sso.acesso.gov.br/authorize'
 const DEFAULT_GOVBR_TOKEN_URL = 'https://sso.acesso.gov.br/token'
 const DEFAULT_GOVBR_USERINFO_URL = 'https://sso.acesso.gov.br/userinfo'
@@ -135,6 +136,7 @@ export const config: Config = {
   },
   security: {
     encryptionKey: env.SESSION_ENCRYPTION_KEY || '',
+    pseudonymousIdPepper: env.PSEUDONYMOUS_ID_PEPPER || '',
   },
   rotaVida: {
     vidaBaseUrl: env.ROTA_VIDA_BASE_URL || '',
@@ -159,6 +161,10 @@ export const config: Config = {
   },
   logging: {
     level: env.LOG_LEVEL || DEFAULT_LOG_LEVEL
+  },
+  posthog: {
+    apiKey: env.POSTHOG_API_KEY || 'api-key',
+    host: env.POSTHOG_HOST || DEFAULT_POSTHOG_HOST
   },
   tdvMock: {
     enabled: tdvMockEnabled,

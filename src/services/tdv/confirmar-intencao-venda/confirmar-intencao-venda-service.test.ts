@@ -1,6 +1,12 @@
 import { describe, expect, it, vi } from 'vitest'
 import type { DetranSpServiceNowTdvClient } from '../../../clients/detran-sp-service-now/tdv'
 import { ConfirmarIntencaoVendaService } from './confirmar-intencao-venda-service'
+import type { IAnalyticsService } from '../../../services/analytics'
+
+function buildAnalytics (): IAnalyticsService {
+  return { capture: vi.fn(), createInsertId: vi.fn(() => 'insert-id') }
+}
+
 
 const authorizationHeader = 'Bearer eyJhbGciOiJub25lIn0.eyJwcmVmZXJyZWRfdXNlcm5hbWUiOiIwNTI0NjQ4NzYwMSJ9.'
 
@@ -12,7 +18,7 @@ describe('ConfirmarIntencaoVendaService', () => {
   it('advances the TDV to state 3 (ATPVE_CRIADA) when it is currently at state 2', async () => {
     const buscaTdv = vi.fn().mockResolvedValue({ result: { estado: '2' } })
     const atualizaTdv = vi.fn().mockResolvedValue({ result: {} })
-    const service = new ConfirmarIntencaoVendaService({ detranSpServiceNowTdv: asClient({ buscaTdv, atualizaTdv }) })
+    const service = new ConfirmarIntencaoVendaService({ detranSpServiceNowTdv: asClient({ buscaTdv, atualizaTdv }), analyticsService: buildAnalytics() })
 
     await expect(service.run(authorizationHeader, {
       codigoTransferencia: 'TDV-1',
@@ -29,7 +35,7 @@ describe('ConfirmarIntencaoVendaService', () => {
   it('is idempotent — skips the mutation when the TDV already moved past DADOS_VENDA_INFORMADOS', async () => {
     const buscaTdv = vi.fn().mockResolvedValue({ result: { estado: '3' } })
     const atualizaTdv = vi.fn()
-    const service = new ConfirmarIntencaoVendaService({ detranSpServiceNowTdv: asClient({ buscaTdv, atualizaTdv }) })
+    const service = new ConfirmarIntencaoVendaService({ detranSpServiceNowTdv: asClient({ buscaTdv, atualizaTdv }), analyticsService: buildAnalytics() })
 
     await expect(service.run(authorizationHeader, {
       codigoTransferencia: 'TDV-1',
@@ -42,7 +48,7 @@ describe('ConfirmarIntencaoVendaService', () => {
   it('is idempotent — skips the mutation when the TDV is still at state 1 (out of order call)', async () => {
     const buscaTdv = vi.fn().mockResolvedValue({ result: { estado: '1' } })
     const atualizaTdv = vi.fn()
-    const service = new ConfirmarIntencaoVendaService({ detranSpServiceNowTdv: asClient({ buscaTdv, atualizaTdv }) })
+    const service = new ConfirmarIntencaoVendaService({ detranSpServiceNowTdv: asClient({ buscaTdv, atualizaTdv }), analyticsService: buildAnalytics() })
 
     await expect(service.run(authorizationHeader, {
       codigoTransferencia: 'TDV-1',

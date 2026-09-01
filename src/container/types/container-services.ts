@@ -1,9 +1,11 @@
 import type { Logger } from 'pino'
 import type { Pool } from 'pg'
+import type { PostHog } from 'posthog-node'
 import type { RepositoryServices } from './repository-services'
 import type { FlowServices } from '../../services/flows/flows-services'
 import type { ProtocolsServices } from '../../services/csm-protocols/csm-protocols-services'
 import type { AuthServices } from '../../services/auth/auth-services'
+import type { AnalyticsServices } from '../../services/analytics/analytics-services'
 import type { DashboardServices } from '../../services/dashboard/dashboard-services'
 import type { LicenciamentoServices } from '../../services/licenciamento/licenciamento-services'
 import type { DebRestrServices } from '../../services/deb-restr/deb-restr-services'
@@ -19,10 +21,11 @@ import type { RotaVistoriasClient } from '../../clients/rota-vistorias'
 import type { TdvServices } from '../../services/tdv/tdv-services'
 import type { Config } from '../../types'
 
-export type ContainerServices = RepositoryServices & FlowServices & ProtocolsServices & AuthServices & DashboardServices & LicenciamentoServices & DebRestrServices & TdvServices & PecasServices & VistoriasServices & Clients & {
+export type ContainerServices = RepositoryServices & FlowServices & ProtocolsServices & AuthServices & AnalyticsServices & DashboardServices & LicenciamentoServices & DebRestrServices & TdvServices & PecasServices & VistoriasServices & Clients & {
   config: Config
   pool: Pool
   logger: Logger
+  posthog: PostHog
   detranSpServiceNowLicenciamentoClient: DetranSpServiceNowLicenciamentoClient
   detranSpServiceNowVistoriasClient: DetranSpServiceNowVistoriasClient
   detranSpServiceNowDebRestrClient: DetranSpServiceNowDebRestrClient

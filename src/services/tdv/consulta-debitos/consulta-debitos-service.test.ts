@@ -2,6 +2,12 @@ import type { Logger } from 'pino'
 import { describe, expect, it, vi } from 'vitest'
 import type { DetranSpServiceNowTdvClient } from '../../../clients/detran-sp-service-now/tdv'
 import { ConsultaDebitosService } from './consulta-debitos-service'
+import type { IAnalyticsService } from '../../../services/analytics'
+
+function buildAnalytics (): IAnalyticsService {
+  return { capture: vi.fn(), createInsertId: vi.fn(() => 'insert-id') }
+}
+
 
 const authorizationHeader = 'Bearer eyJhbGciOiJub25lIn0.eyJwcmVmZXJyZWRfdXNlcm5hbWUiOiIwNTI0NjQ4NzYwMSIsIm5hbWUiOiJKb8OjbyBEZXRyYW4iLCJlbWFpbCI6ImpvYW9AZXhhbXBsZS5jb20ifQ.'
 
@@ -37,7 +43,7 @@ const loggerInfo = vi.fn()
 const logger = { info: loggerInfo, warn: vi.fn() } as unknown as Logger
 
 function buildService (client: Partial<DetranSpServiceNowTdvClient>) {
-  return new ConsultaDebitosService({ detranSpServiceNowTdv: asClient(client), logger })
+  return new ConsultaDebitosService({ detranSpServiceNowTdv: asClient(client), logger, analyticsService: buildAnalytics() })
 }
 
 describe('ConsultaDebitosService', () => {

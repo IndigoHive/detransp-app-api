@@ -6,9 +6,11 @@ import {
 } from '../../../clients/detran-sp-service-now/tdv/types'
 import { extractBearerToken, extractCpfFromToken, extractNameFromToken, extractEmailFromToken } from '../../../utils/token'
 import { compradorDisplayFieldsFromTdv, chassiVeiculoFrom, type CompradorDisplayFields } from '../comprador-display-fields'
+import type { IAnalyticsService } from '../../analytics'
 
 type Dependencies = {
   detranSpServiceNowTdv: DetranSpServiceNowTdvClient
+  analyticsService: IAnalyticsService
 }
 
 type Auth = { token: string, cpf: string }
@@ -31,9 +33,11 @@ export type CriarTdvResult = {
 // app finds the TDV already created and resumes from there.
 export class CriarTdvService {
   private readonly client: DetranSpServiceNowTdvClient
+  private readonly analyticsService: IAnalyticsService
 
-  constructor ({ detranSpServiceNowTdv }: Dependencies) {
+  constructor ({ detranSpServiceNowTdv, analyticsService }: Dependencies) {
     this.client = detranSpServiceNowTdv
+    this.analyticsService = analyticsService
   }
 
   async run (authorizationHeader: string | undefined, input: CriarTdvInput): Promise<CriarTdvResult> {
@@ -69,6 +73,10 @@ export class CriarTdvService {
     if (!codigo) {
       throw new Error('Falha ao criar transferência')
     }
+
+    this.analyticsService.capture(cpfVendedor, 'tdv:create', {
+      $insert_id: this.analyticsService.createInsertId(`tdv:create:${codigo}`)
+    })
 
     const created = await this.findCreatedTdv(auth, cpfVendedor, input)
     return this.toResult(codigo, created, input)

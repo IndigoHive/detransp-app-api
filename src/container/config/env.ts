@@ -40,5 +40,8 @@ export const env = {
   TDV_MOCK_PENDENCIA: process.env.TDV_MOCK_PENDENCIA,
   TDV_MOCK_VALIDAR_TDV: process.env.TDV_MOCK_VALIDAR_TDV,
   NODE_ENV: process.env.NODE_ENV,
-  PORT: process.env.PORT
+  PORT: process.env.PORT,
+  POSTHOG_API_KEY: process.env.POSTHOG_API_KEY,
+  POSTHOG_HOST: process.env.POSTHOG_HOST,
+  PSEUDONYMOUS_ID_PEPPER: process.env.PSEUDONYMOUS_ID_PEPPER
 }
