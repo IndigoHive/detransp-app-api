@@ -5,9 +5,11 @@ import { sanitizeEnderecoComplemento } from '../../../utils/sanitize-endereco-co
 import { composeLogradouro } from '../../../utils/compose-logradouro'
 import { extractBearerToken, extractCpfFromToken } from '../../../utils/token'
 import { assertKmValida } from '../valida-km'
+import type { IAnalyticsService } from '../../analytics'
 
 type Dependencies = {
   detranSpServiceNowTdv: DetranSpServiceNowTdvClient
+  analyticsService: IAnalyticsService
 }
 
 export type InformarDadosVendaInput = {
@@ -31,9 +33,11 @@ export type InformarDadosVendaResult = {
 // sale screen (value + mileage) — not batched with TDV creation or ATPV-e generation.
 export class InformarDadosVendaService {
   private readonly client: DetranSpServiceNowTdvClient
+  private readonly analyticsService: IAnalyticsService
 
-  constructor ({ detranSpServiceNowTdv }: Dependencies) {
+  constructor ({ detranSpServiceNowTdv, analyticsService }: Dependencies) {
     this.client = detranSpServiceNowTdv
+    this.analyticsService = analyticsService
   }
 
   async run (authorizationHeader: string | undefined, input: InformarDadosVendaInput): Promise<InformarDadosVendaResult> {
@@ -68,6 +72,10 @@ export class InformarDadosVendaService {
         kmVeiculo: input.quilometragem,
         codigoProvaVidaVendedor: input.codigoProvaVidaVendedor,
         tipoProvaVidaVendedor: '2' // LIVENESS
+      })
+
+      this.analyticsService.capture(cpf, 'tdv:sale_data_submit', {
+        $insert_id: this.analyticsService.createInsertId(`tdv:sale_data_submit:${input.codigoTransferencia}`)
       })
     }
 

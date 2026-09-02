@@ -1,6 +1,12 @@
 import { describe, expect, it, vi } from 'vitest'
 import type { DetranSpServiceNowTdvClient } from '../../../clients/detran-sp-service-now/tdv'
 import { CriarTdvService } from './criar-tdv-service'
+import type { IAnalyticsService } from '../../../services/analytics'
+
+function buildAnalytics (): IAnalyticsService {
+  return { capture: vi.fn(), createInsertId: vi.fn(() => 'insert-id') }
+}
+
 
 const authorizationHeader = 'Bearer eyJhbGciOiJub25lIn0.eyJwcmVmZXJyZWRfdXNlcm5hbWUiOiIwNTI0NjQ4NzYwMSIsIm5hbWUiOiJKb8OjbyBEZXRyYW4iLCJlbWFpbCI6ImpvYW9AZXhhbXBsZS5jb20ifQ.'
 
@@ -24,7 +30,7 @@ describe('CriarTdvService', () => {
       .mockResolvedValueOnce({ result: [] })
       .mockResolvedValueOnce({ result: [createdTdv] })
     const criaTdv = vi.fn().mockResolvedValue({ result: { codigoTransferenciaVeiculo: 'TDV-NEW' } })
-    const service = new CriarTdvService({ detranSpServiceNowTdv: asClient({ listaTdvs, criaTdv }) })
+    const service = new CriarTdvService({ detranSpServiceNowTdv: asClient({ listaTdvs, criaTdv }), analyticsService: buildAnalytics() })
 
     await expect(service.run(authorizationHeader, input)).resolves.toEqual({ codigo: 'TDV-NEW', origem: '5' })
     expect(criaTdv).toHaveBeenCalledWith(
@@ -46,7 +52,7 @@ describe('CriarTdvService', () => {
         }]
       })
     const criaTdv = vi.fn().mockResolvedValue({ result: { codigoTransferenciaVeiculo: 'TDV-NEW' } })
-    const service = new CriarTdvService({ detranSpServiceNowTdv: asClient({ listaTdvs, criaTdv }) })
+    const service = new CriarTdvService({ detranSpServiceNowTdv: asClient({ listaTdvs, criaTdv }), analyticsService: buildAnalytics() })
 
     await expect(service.run(authorizationHeader, input)).resolves.toEqual({ codigo: 'TDV-NEW', origem: '1' })
   })
@@ -56,7 +62,7 @@ describe('CriarTdvService', () => {
       result: [{ estado: '2', codigoTransferenciaVeiculo: 'TDV-EXISTING', origem: '5' }]
     })
     const criaTdv = vi.fn()
-    const service = new CriarTdvService({ detranSpServiceNowTdv: asClient({ listaTdvs, criaTdv }) })
+    const service = new CriarTdvService({ detranSpServiceNowTdv: asClient({ listaTdvs, criaTdv }), analyticsService: buildAnalytics() })
 
     await expect(service.run(authorizationHeader, input)).resolves.toEqual({ codigo: 'TDV-EXISTING', origem: '5' })
     expect(criaTdv).not.toHaveBeenCalled()
@@ -82,7 +88,7 @@ describe('CriarTdvService', () => {
         chassiVeiculo: '9BWZZZ377VT004251'
       }]
     })
-    const service = new CriarTdvService({ detranSpServiceNowTdv: asClient({ listaTdvs, criaTdv: vi.fn() }) })
+    const service = new CriarTdvService({ detranSpServiceNowTdv: asClient({ listaTdvs, criaTdv: vi.fn() }), analyticsService: buildAnalytics() })
 
     await expect(service.run(authorizationHeader, input)).resolves.toEqual({
       codigo: 'TDV0508623',
@@ -101,7 +107,8 @@ describe('CriarTdvService', () => {
       result: [{ estado: '2', codigoTransferenciaVeiculo: 'TDV-EXISTING', origem: '5' }]
     })
     const service = new CriarTdvService({
-      detranSpServiceNowTdv: asClient({ listaTdvs, criaTdv: vi.fn() })
+      detranSpServiceNowTdv: asClient({ listaTdvs, criaTdv: vi.fn() }),
+      analyticsService: buildAnalytics()
     })
 
     await expect(service.run(authorizationHeader, {
@@ -120,7 +127,7 @@ describe('CriarTdvService', () => {
       })
       .mockResolvedValueOnce({ result: [createdTdv] })
     const criaTdv = vi.fn().mockResolvedValue({ result: { codigoTransferenciaVeiculo: 'TDV-NEW' } })
-    const service = new CriarTdvService({ detranSpServiceNowTdv: asClient({ listaTdvs, criaTdv }) })
+    const service = new CriarTdvService({ detranSpServiceNowTdv: asClient({ listaTdvs, criaTdv }), analyticsService: buildAnalytics() })
 
     await expect(service.run(authorizationHeader, input)).resolves.toEqual({ codigo: 'TDV-NEW', origem: '5' })
     expect(criaTdv).toHaveBeenCalled()
@@ -131,7 +138,7 @@ describe('CriarTdvService', () => {
       .mockResolvedValueOnce({ result: [] })
       .mockRejectedValueOnce(new Error('listaTdvs unavailable'))
     const criaTdv = vi.fn().mockResolvedValue({ result: { codigoTransferenciaVeiculo: 'TDV-NEW' } })
-    const service = new CriarTdvService({ detranSpServiceNowTdv: asClient({ listaTdvs, criaTdv }) })
+    const service = new CriarTdvService({ detranSpServiceNowTdv: asClient({ listaTdvs, criaTdv }), analyticsService: buildAnalytics() })
 
     await expect(service.run(authorizationHeader, input)).resolves.toEqual({ codigo: 'TDV-NEW' })
   })

@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from 'vitest'
 import type { DetranSpServiceNowTdvClient } from '../../../clients/detran-sp-service-now/tdv'
+import type { IAnalyticsService } from '../../analytics'
 import { ValidaAssinaturaService } from './valida-assinatura-service'
 
 const authorizationHeader = 'Bearer eyJhbGciOiJub25lIn0.eyJwcmVmZXJyZWRfdXNlcm5hbWUiOiIwNTI0NjQ4NzYwMSJ9.'
@@ -11,13 +12,17 @@ function asClient (client: Partial<DetranSpServiceNowTdvClient>): DetranSpServic
   return client as DetranSpServiceNowTdvClient
 }
 
+function buildAnalytics (): IAnalyticsService {
+  return { capture: vi.fn(), createInsertId: vi.fn() }
+}
+
 describe('ValidaAssinaturaService', () => {
   it('advances the TDV 1.0 seller from estado 6 to 7 with the ITI code', async () => {
     const buscaTdv = vi.fn().mockResolvedValue({
       result: { estado: '6', origem: '1', codigoVendedor: sellerCpf }
     })
     const atualizaTdv = vi.fn().mockResolvedValue({ result: {} })
-    const service = new ValidaAssinaturaService({ detranSpServiceNowTdv: asClient({ buscaTdv, atualizaTdv }) })
+    const service = new ValidaAssinaturaService({ detranSpServiceNowTdv: asClient({ buscaTdv, atualizaTdv }), analyticsService: buildAnalytics() })
 
     await expect(service.run(authorizationHeader, {
       codigoTransferencia: 'TDV-1',
@@ -35,7 +40,7 @@ describe('ValidaAssinaturaService', () => {
       result: { estado: '2', origem: '5', codigoVendedor: sellerCpf }
     })
     const atualizaTdv = vi.fn().mockResolvedValue({ result: {} })
-    const service = new ValidaAssinaturaService({ detranSpServiceNowTdv: asClient({ buscaTdv, atualizaTdv }) })
+    const service = new ValidaAssinaturaService({ detranSpServiceNowTdv: asClient({ buscaTdv, atualizaTdv }), analyticsService: buildAnalytics() })
 
     await expect(service.run(authorizationHeader, {
       codigoTransferencia: 'TDV-LOJA',
@@ -54,7 +59,7 @@ describe('ValidaAssinaturaService', () => {
       result: { estado: '1', origem: '5', codigoVendedor: sellerCpf }
     })
     const atualizaTdv = vi.fn().mockResolvedValue({ result: {} })
-    const service = new ValidaAssinaturaService({ detranSpServiceNowTdv: asClient({ buscaTdv, atualizaTdv }) })
+    const service = new ValidaAssinaturaService({ detranSpServiceNowTdv: asClient({ buscaTdv, atualizaTdv }), analyticsService: buildAnalytics() })
 
     await expect(service.run(authorizationHeader, {
       codigoTransferencia: 'TDV-LOJA',
@@ -72,7 +77,7 @@ describe('ValidaAssinaturaService', () => {
       result: { estado: '6', origem: '5', codigoVendedor: sellerCpf }
     })
     const atualizaTdv = vi.fn().mockResolvedValue({ result: {} })
-    const service = new ValidaAssinaturaService({ detranSpServiceNowTdv: asClient({ buscaTdv, atualizaTdv }) })
+    const service = new ValidaAssinaturaService({ detranSpServiceNowTdv: asClient({ buscaTdv, atualizaTdv }), analyticsService: buildAnalytics() })
 
     await expect(service.run(authorizationHeader, {
       codigoTransferencia: 'TDV-LOJA',
@@ -91,7 +96,7 @@ describe('ValidaAssinaturaService', () => {
       result: { estado: '2', origem: '1', codigoVendedor: sellerCpf }
     })
     const atualizaTdv = vi.fn()
-    const service = new ValidaAssinaturaService({ detranSpServiceNowTdv: asClient({ buscaTdv, atualizaTdv }) })
+    const service = new ValidaAssinaturaService({ detranSpServiceNowTdv: asClient({ buscaTdv, atualizaTdv }), analyticsService: buildAnalytics() })
 
     await expect(service.run(authorizationHeader, {
       codigoTransferencia: 'TDV-1',
@@ -106,7 +111,7 @@ describe('ValidaAssinaturaService', () => {
       result: { estado: '7', origem: '5', codigoVendedor: sellerCpf }
     })
     const atualizaTdv = vi.fn()
-    const service = new ValidaAssinaturaService({ detranSpServiceNowTdv: asClient({ buscaTdv, atualizaTdv }) })
+    const service = new ValidaAssinaturaService({ detranSpServiceNowTdv: asClient({ buscaTdv, atualizaTdv }), analyticsService: buildAnalytics() })
 
     await expect(service.run(authorizationHeader, {
       codigoTransferencia: 'TDV-LOJA',
@@ -121,7 +126,7 @@ describe('ValidaAssinaturaService', () => {
       result: { estado: '5', origem: '1', codigoVendedor: '11111111111' }
     })
     const atualizaTdv = vi.fn().mockResolvedValue({ result: {} })
-    const service = new ValidaAssinaturaService({ detranSpServiceNowTdv: asClient({ buscaTdv, atualizaTdv }) })
+    const service = new ValidaAssinaturaService({ detranSpServiceNowTdv: asClient({ buscaTdv, atualizaTdv }), analyticsService: buildAnalytics() })
 
     await expect(service.run(authorizationHeader, {
       codigoTransferencia: 'TDV-1',

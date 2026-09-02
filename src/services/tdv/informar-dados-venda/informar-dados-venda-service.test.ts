@@ -1,6 +1,12 @@
 import { describe, expect, it, vi } from 'vitest'
 import type { DetranSpServiceNowTdvClient } from '../../../clients/detran-sp-service-now/tdv'
 import { InformarDadosVendaService } from './informar-dados-venda-service'
+import type { IAnalyticsService } from '../../../services/analytics'
+
+function buildAnalytics (): IAnalyticsService {
+  return { capture: vi.fn(), createInsertId: vi.fn(() => 'insert-id') }
+}
+
 
 const authorizationHeader = 'Bearer eyJhbGciOiJub25lIn0.eyJwcmVmZXJyZWRfdXNlcm5hbWUiOiIwNTI0NjQ4NzYwMSJ9.'
 
@@ -26,7 +32,7 @@ describe('InformarDadosVendaService', () => {
     const buscaTdv = vi.fn().mockResolvedValue({ result: { estado: '1', kmVistoriadaVeiculo: '40000' } })
     const buscaEndereco = vi.fn().mockResolvedValue({ result: { bairro: 'Centro', logradouro: 'Rua A' } })
     const atualizaTdv = vi.fn().mockResolvedValue({ result: {} })
-    const service = new InformarDadosVendaService({ detranSpServiceNowTdv: asClient({ buscaTdv, buscaEndereco, atualizaTdv }) })
+    const service = new InformarDadosVendaService({ detranSpServiceNowTdv: asClient({ buscaTdv, buscaEndereco, atualizaTdv }), analyticsService: buildAnalytics() })
 
     await expect(service.run(authorizationHeader, input)).resolves.toEqual({ valorVenda: '30000' })
 
@@ -48,7 +54,7 @@ describe('InformarDadosVendaService', () => {
     const buscaTdv = vi.fn().mockResolvedValue({ result: { estado: '2', kmVistoriadaVeiculo: '40000' } })
     const buscaEndereco = vi.fn()
     const atualizaTdv = vi.fn()
-    const service = new InformarDadosVendaService({ detranSpServiceNowTdv: asClient({ buscaTdv, buscaEndereco, atualizaTdv }) })
+    const service = new InformarDadosVendaService({ detranSpServiceNowTdv: asClient({ buscaTdv, buscaEndereco, atualizaTdv }), analyticsService: buildAnalytics() })
 
     await expect(service.run(authorizationHeader, input)).resolves.toEqual({ valorVenda: '30000' })
 
@@ -59,7 +65,7 @@ describe('InformarDadosVendaService', () => {
   it('rejects when the vehicle has never been vistoriado', async () => {
     const buscaTdv = vi.fn().mockResolvedValue({ result: {} })
     const atualizaTdv = vi.fn()
-    const service = new InformarDadosVendaService({ detranSpServiceNowTdv: asClient({ buscaTdv, atualizaTdv }) })
+    const service = new InformarDadosVendaService({ detranSpServiceNowTdv: asClient({ buscaTdv, atualizaTdv }), analyticsService: buildAnalytics() })
 
     await expect(service.run(authorizationHeader, input)).rejects.toThrow('vistoriado')
     expect(atualizaTdv).not.toHaveBeenCalled()
@@ -68,7 +74,7 @@ describe('InformarDadosVendaService', () => {
   it('rejects when the submitted mileage is lower than the vistoria mileage', async () => {
     const buscaTdv = vi.fn().mockResolvedValue({ result: { kmVistoriadaVeiculo: '90000' } })
     const atualizaTdv = vi.fn()
-    const service = new InformarDadosVendaService({ detranSpServiceNowTdv: asClient({ buscaTdv, atualizaTdv }) })
+    const service = new InformarDadosVendaService({ detranSpServiceNowTdv: asClient({ buscaTdv, atualizaTdv }), analyticsService: buildAnalytics() })
 
     await expect(service.run(authorizationHeader, input)).rejects.toThrow('Revise e informe a km correta.')
     expect(atualizaTdv).not.toHaveBeenCalled()

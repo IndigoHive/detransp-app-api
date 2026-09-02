@@ -3,9 +3,11 @@ import { DetranSpServiceNowError } from '../../../clients/detran-sp-service-now'
 import type { DetranSpServiceNowTdvClient } from '../../../clients/detran-sp-service-now/tdv'
 import type { ListaTdvsResultData } from '../../../clients/detran-sp-service-now/tdv/types'
 import { extractBearerToken, extractCpfFromToken } from '../../../utils/token'
+import type { IAnalyticsService } from '../../analytics'
 
 type Dependencies = {
   detranSpServiceNowTdv: DetranSpServiceNowTdvClient
+  analyticsService: IAnalyticsService
 }
 
 export type ValidarTdvInput = ListaTdvsResultData & {
@@ -79,9 +81,11 @@ function toCommand (input: ValidarTdvInput): ListaTdvsResultData {
 
 export class ValidarTdvService {
   private readonly client: DetranSpServiceNowTdvClient
+  private readonly analyticsService: IAnalyticsService
 
-  constructor ({ detranSpServiceNowTdv }: Dependencies) {
+  constructor ({ detranSpServiceNowTdv, analyticsService }: Dependencies) {
     this.client = detranSpServiceNowTdv
+    this.analyticsService = analyticsService
   }
 
   async run (
@@ -115,11 +119,18 @@ export class ValidarTdvService {
         origem,
         ...(estado ? { estado } : {})
       })
-      return { proximaAcao: 'enotariado' }
+      return this.captureResult(cpf, { proximaAcao: 'enotariado' })
     } catch (error) {
       const mapped = mapValidarTdvError(error)
       if (!mapped) throw error
-      return mapped
+      return this.captureResult(cpf, mapped)
     }
+  }
+
+  // Consulta, não mutação: repetição é sinal legítimo, então sem $insert_id. A proximaAcao
+  // é o valor do evento — mostra a frequência de cada ramo de validação.
+  private captureResult (cpf: string, result: ValidarTdvResult): ValidarTdvResult {
+    this.analyticsService.capture(cpf, 'tdv:validate', { proxima_acao: result.proximaAcao })
+    return result
   }
 }

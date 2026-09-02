@@ -1,6 +1,7 @@
 import { randomBytes } from 'node:crypto'
 import type { Platform } from '../../../types'
 import type { ISessionRepository } from '../../../repositories/types/session-repository'
+import type { IAnalyticsService } from '../../analytics'
 
 export type CreateSessionInput = {
   platform: Platform
@@ -17,13 +18,16 @@ export type CreateSessionResult = {
 
 type Dependencies = {
   sessionRepository: ISessionRepository
+  analyticsService: IAnalyticsService
 }
 
 export class CreateSessionService {
   private readonly sessionRepository: ISessionRepository
+  private readonly analyticsService: IAnalyticsService
 
-  constructor({ sessionRepository }: Dependencies) {
+  constructor({ sessionRepository, analyticsService }: Dependencies) {
     this.sessionRepository = sessionRepository
+    this.analyticsService = analyticsService
   }
 
   async run(input: CreateSessionInput): Promise<CreateSessionResult> {
@@ -39,6 +43,8 @@ export class CreateSessionService {
       userInfo: input.userInfo,
       expiresAt,
     })
+
+    this.analyticsService.capture(input.cpf, 'govbr:sign_in_success')
 
     return { sessionId }
   }

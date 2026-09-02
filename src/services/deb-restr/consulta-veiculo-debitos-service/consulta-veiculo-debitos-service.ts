@@ -12,6 +12,7 @@ import type {
   VehicleDebtsPayload
 } from '../types'
 import { deriveIpvaSectionStatus, deriveSectionStatus, formatCurrencyBr, sumValores } from '../utils'
+import type { IAnalyticsService } from '../../analytics'
 
 const LICENCIAMENTO_BLOQUEADO_TEXT = 'Para liberar o pagamento do licenciamento, é preciso que todos os débitos do veículo tenham sido pagos.'
 
@@ -27,11 +28,18 @@ export class ConsultaVeiculoDebitosService {
   private readonly debRestrClient: DetranSpServiceNowDebRestrClient
   private readonly pgtoClient: DetranSpServiceNowPgtoClient
   private readonly logger: Logger
+  private readonly analyticsService: IAnalyticsService
 
-  constructor (debRestrClient: DetranSpServiceNowDebRestrClient, pgtoClient: DetranSpServiceNowPgtoClient, logger: Logger) {
+  constructor (
+    debRestrClient: DetranSpServiceNowDebRestrClient,
+    pgtoClient: DetranSpServiceNowPgtoClient,
+    logger: Logger,
+    analyticsService: IAnalyticsService
+  ) {
     this.debRestrClient = debRestrClient
     this.pgtoClient = pgtoClient
     this.logger = logger
+    this.analyticsService = analyticsService
   }
 
   async run (params: ConsultaVeiculoDebitosParams): Promise<ConsultaVeiculoDebitosResult> {
@@ -91,6 +99,11 @@ export class ConsultaVeiculoDebitosService {
     // Step 4 (pgto) is best-effort: on failure we still render the vehicle
     // using the deb-restr data, just without the bloqueio signal.
     const debitos = debitosSettled.status === 'fulfilled' ? debitosSettled.value : null
+
+    // Só aqui: os dois `emptyResult(...)` acima são limite atingido ou veículo não encontrado,
+    // não "a pessoa viu os débitos". Sem $insert_id — não é endpoint polado, e uma segunda
+    // consulta real (outro renavam, ou retry do usuário) é sinal legítimo, não ruído.
+    this.analyticsService.capture(auth.userCpf, 'debitos:vehicle_query')
 
     return this.buildResult(veiculo, debitos)
   }

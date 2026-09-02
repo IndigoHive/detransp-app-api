@@ -30,16 +30,16 @@ export function getLicenciamentoRegistrations(): Required<NameAndRegistrationPai
         new VerificaVeiculoLicenciamentoService(detranSpServiceNowLicenciamentoClient)
     ).scoped(),
     criaQRCodeLicenciamentoService: asFunction(
-      ({ detranSpServiceNowLicenciamentoClient, logger }) =>
-        new CriaQRCodeLicenciamentoService(detranSpServiceNowLicenciamentoClient, logger)
+      ({ detranSpServiceNowLicenciamentoClient, logger, analyticsService }) =>
+        new CriaQRCodeLicenciamentoService(detranSpServiceNowLicenciamentoClient, logger, analyticsService)
     ).scoped(),
     verificaQRCodeLicenciamentoService: asFunction(
-      ({ detranSpServiceNowLicenciamentoClient }) =>
-        new VerificaQRCodeLicenciamentoService(detranSpServiceNowLicenciamentoClient)
+      ({ detranSpServiceNowLicenciamentoClient, analyticsService }) =>
+        new VerificaQRCodeLicenciamentoService(detranSpServiceNowLicenciamentoClient, analyticsService)
     ).scoped(),
     buscaCrlveLicenciamentoService: asFunction(
-      ({ detranSpServiceNowLicenciamentoClient }) =>
-        new BuscaCrlveLicenciamentoService(detranSpServiceNowLicenciamentoClient)
+      ({ detranSpServiceNowLicenciamentoClient, analyticsService }) =>
+        new BuscaCrlveLicenciamentoService(detranSpServiceNowLicenciamentoClient, analyticsService)
     ).scoped(),
   }
 }

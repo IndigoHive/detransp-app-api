@@ -1,9 +1,11 @@
 import type { DetranSpServiceNowTdvClient } from '../../../clients/detran-sp-service-now/tdv'
 import { CodigoEstadoTDV, CodigoOrigemTDV } from '../../../clients/detran-sp-service-now/tdv/types'
 import { extractBearerToken, extractCpfFromToken } from '../../../utils/token'
+import type { IAnalyticsService } from '../../analytics'
 
 type Dependencies = {
   detranSpServiceNowTdv: DetranSpServiceNowTdvClient
+  analyticsService: IAnalyticsService
 }
 
 export type ValidaAssinaturaInput = {
@@ -30,9 +32,11 @@ const SELLER_SIGNED_STATES: string[] = [
 
 export class ValidaAssinaturaService {
   private readonly client: DetranSpServiceNowTdvClient
+  private readonly analyticsService: IAnalyticsService
 
-  constructor ({ detranSpServiceNowTdv }: Dependencies) {
+  constructor ({ detranSpServiceNowTdv, analyticsService }: Dependencies) {
     this.client = detranSpServiceNowTdv
+    this.analyticsService = analyticsService
   }
 
   async run (authorizationHeader: string | undefined, input: ValidaAssinaturaInput): Promise<ValidaAssinaturaResult> {
@@ -65,6 +69,7 @@ export class ValidaAssinaturaService {
           itiCode: input.itiCode
         })
         effectiveEstado = CodigoEstadoTDV.ATPVE_ASSINADA_COMPRADOR
+        this.analyticsService.capture(cpf, 'tdv:buyer_sign')
       } else if (
         isSeller
         && isOrigem5
@@ -75,12 +80,14 @@ export class ValidaAssinaturaService {
           itiCode: input.itiCode
         })
         effectiveEstado = CodigoEstadoTDV.ATPVE_ASSINADA_VENDEDOR_COMUNICACAO_VENDA_GERADA
+        this.analyticsService.capture(cpf, 'tdv:seller_sign')
       } else if (isSeller && estado === CodigoEstadoTDV.ATPVE_ASSINADA_COMPRADOR) {
         await this.client.atualizaTdv(auth, input.codigoTransferencia, {
           estado: CodigoEstadoTDV.ATPVE_ASSINADA_VENDEDOR_COMUNICACAO_VENDA_GERADA,
           itiCode: input.itiCode
         })
         effectiveEstado = CodigoEstadoTDV.ATPVE_ASSINADA_VENDEDOR_COMUNICACAO_VENDA_GERADA
+        this.analyticsService.capture(cpf, 'tdv:seller_sign')
       }
       // If the state doesn't match the expected precondition (e.g. a retried call after the
       // transition already happened), fall through and just report the current signed status.

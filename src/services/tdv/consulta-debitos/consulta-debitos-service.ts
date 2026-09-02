@@ -4,10 +4,12 @@ import { CodigoEstadoQRCode, CodigoEstadoTDV } from '../../../clients/detran-sp-
 import { extractBearerToken, extractCpfFromToken } from '../../../utils/token'
 import { normalizeUtcDateTime } from '../../../utils/normalize-utc-datetime'
 import { formatDateTimeBr } from '../../deb-restr/utils'
+import type { IAnalyticsService } from '../../analytics'
 
 type Dependencies = {
   detranSpServiceNowTdv: DetranSpServiceNowTdvClient
   logger: Logger
+  analyticsService: IAnalyticsService
 }
 
 export type ConsultaDebitosInput = {
@@ -54,10 +56,12 @@ const POLL_INTERVAL_MS = 1000
 export class ConsultaDebitosService {
   private readonly client: DetranSpServiceNowTdvClient
   private readonly logger: Logger
+  private readonly analyticsService: IAnalyticsService
 
-  constructor ({ detranSpServiceNowTdv, logger }: Dependencies) {
+  constructor ({ detranSpServiceNowTdv, logger, analyticsService }: Dependencies) {
     this.client = detranSpServiceNowTdv
     this.logger = logger
+    this.analyticsService = analyticsService
   }
 
   async run (authorizationHeader: string | undefined, input: ConsultaDebitosInput): Promise<ConsultaDebitosResult> {
@@ -125,6 +129,17 @@ export class ConsultaDebitosService {
     const valorTotal = debitosResult?.result?.valorTotal ?? 0
     const estadoQRCode = pixResult?.result?.estadoQRCode
 
+    // Só a tela de PIX gera cobrança (gerarQrCode); a lista de débitos apenas lê. O $insert_id
+    // combina a TDV com a expiração da cobrança: polls da mesma cobrança colapsam num evento,
+    // mas uma renovação genuína (expiração nova) conta como nova geração.
+    if (input.gerarQrCode && pixResult?.result?.qrCode) {
+      this.analyticsService.capture(cpf, 'tdv:pix_generate', {
+        $insert_id: this.analyticsService.createInsertId(
+          `tdv:pix_generate:${input.codigoTransferencia}:${pixResult.result.dataExpiracaoQRCode ?? ''}`
+        )
+      })
+    }
+
     // Temporary (do not ship): txid for mock-paying via the SEFAZ homolog
     // webhook — warn level on purpose, just to stand out in the log list. Only
     // logged when a charge actually exists — with gerarQrCode false (débitos-list
@@ -152,6 +167,13 @@ export class ConsultaDebitosService {
           { codigoTransferencia: input.codigoTransferencia },
           'TDV acelerada para o estado TAXA_SERVICO_PAGA'
         )
+
+        // Dentro do guard de estado 7: polls repetidos não reentram aqui. Fica depois do
+        // atualizaTdv porque, se ele falhar, o estado não avança e o próximo poll reentra —
+        // o $insert_id por TDV cobre esse caso (pagamento é terminal, acontece uma vez).
+        this.analyticsService.capture(cpf, 'tdv:pix_pay', {
+          $insert_id: this.analyticsService.createInsertId(`tdv:pix_pay:${input.codigoTransferencia}`)
+        })
       } catch (error) {
         this.logger.warn(
           { err: error, codigoTransferencia: input.codigoTransferencia },

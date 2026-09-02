@@ -10,6 +10,12 @@ import { ListaPagamentosVistoriaService } from './lista-pagamentos-service'
 import { SolicitaRestituicaoVistoriaService } from './solicita-restituicao-service'
 import { VerificaQRCodeVistoriaService } from './verifica-qr-code-service'
 import { VerificaVeiculoVistoriaService } from './verifica-veiculo-service'
+import type { IAnalyticsService } from '../analytics'
+
+function buildAnalytics (): IAnalyticsService {
+  return { capture: vi.fn(), createInsertId: vi.fn(() => 'insert-id') }
+}
+
 
 const clientAuth = {
   token: 'govbr-access-token',
@@ -134,7 +140,7 @@ describe('vistorias services', () => {
         data: { process: 'validar-veiculo-vistoria', body }
       }
     })
-    const service = new VerificaVeiculoVistoriaService(asClient({ verificaVeiculo }))
+    const service = new VerificaVeiculoVistoriaService(asClient({ verificaVeiculo }), buildAnalytics())
 
     await expect(service.run({
       ...auth,
@@ -171,7 +177,7 @@ describe('vistorias services', () => {
   it('returns snackbar feedback when no vehicle is found', async () => {
     const service = new VerificaVeiculoVistoriaService(asClient({
       verificaVeiculo: vi.fn().mockResolvedValue(null)
-    }))
+    }), buildAnalytics())
 
     await expect(service.run({ ...auth, tipoProcesso: 'Compra e Venda de Veículo' })).resolves.toEqual({
       vehicle: null,
@@ -188,7 +194,7 @@ describe('vistorias services', () => {
 
   it('forwards the inspection without plate and RENAVAM as SEGURANCA_9', async () => {
     const verificaVeiculo = vi.fn().mockResolvedValue(null)
-    const service = new VerificaVeiculoVistoriaService(asClient({ verificaVeiculo }))
+    const service = new VerificaVeiculoVistoriaService(asClient({ verificaVeiculo }), buildAnalytics())
 
     await service.run({
       ...clientAuth,
@@ -222,7 +228,7 @@ describe('vistorias services', () => {
           }
         }
       })
-    }))
+    }), buildAnalytics())
 
     await expect(service.run({ ...auth, tipoProcesso: 'Compra e Venda de Veículo' })).resolves.toEqual({
       vehicle: null,
@@ -246,7 +252,7 @@ describe('vistorias services', () => {
     )
     const service = new VerificaVeiculoVistoriaService(asClient({
       verificaVeiculo: vi.fn().mockRejectedValue(serviceNowError)
-    }))
+    }), buildAnalytics())
 
     await expect(service.run({ ...auth, tipoProcesso: 'Classificação de Monta' })).resolves.toEqual({
       vehicle: null,
@@ -269,7 +275,7 @@ describe('vistorias services', () => {
     )
     const service = new VerificaVeiculoVistoriaService(asClient({
       verificaVeiculo: vi.fn().mockRejectedValue(serviceNowError)
-    }))
+    }), buildAnalytics())
 
     await expect(service.run({ ...auth, tipoProcesso: 'Classificação de Monta' })).rejects.toBe(serviceNowError)
   })
@@ -316,13 +322,13 @@ describe('vistorias services', () => {
       })
     })
 
-    await expect(new CriaQRCodeVistoriaService(client).run(clientAuth, 'correlation-id')).resolves.toEqual({
+    await expect(new CriaQRCodeVistoriaService(client, buildAnalytics()).run(clientAuth, 'correlation-id')).resolves.toEqual({
       idSolServico: 'qr-code-id',
       qrCode: 'pix-code',
       expiresAt: '2026-07-24T18:00:00.000Z'
     })
     expect(criaQRCode).toHaveBeenCalledWith(clientAuth, { correlationID: 'correlation-id' })
-    await expect(new VerificaQRCodeVistoriaService(client).run(clientAuth, 'qr-code-id')).resolves.toEqual({
+    await expect(new VerificaQRCodeVistoriaService(client, buildAnalytics()).run(clientAuth, 'qr-code-id')).resolves.toEqual({
       estado: 2,
       comprovante: 'qr-code-id',
       confirmedDate: expect.any(String),
@@ -343,7 +349,7 @@ describe('vistorias services', () => {
         attachment_id: 'attachment-id'
       }
     })
-    const service = new GeraAutorizacaoVistoriaService(asClient({ geraDocumento }))
+    const service = new GeraAutorizacaoVistoriaService(asClient({ geraDocumento }), buildAnalytics())
 
     await expect(service.run({
       ...clientAuth,
@@ -367,7 +373,7 @@ describe('vistorias services', () => {
           message: 'Documento não encontrado'
         }
       })
-    }))
+    }), buildAnalytics())
 
     await expect(service.run({
       ...clientAuth,
@@ -482,7 +488,7 @@ describe('vistorias services', () => {
         }
       })
     const service = new SolicitaRestituicaoVistoriaService(
-      asClient({ solicitaRestituicao, consultaComprovanteRestituicao }),
+      asClient({ solicitaRestituicao, consultaComprovanteRestituicao }), buildAnalytics(),
       { maxAttempts: 2, pollingIntervalMs: 0 }
     )
 
@@ -507,7 +513,7 @@ describe('vistorias services', () => {
           message: 'Pagamento não elegível para restituição'
         }
       })
-    }))
+    }), buildAnalytics())
 
     await expect(service.run(
       clientAuth,
@@ -535,7 +541,7 @@ describe('vistorias services', () => {
       result: { success: false, message: 'Comprovante em processamento' }
     })
     const service = new SolicitaRestituicaoVistoriaService(
-      asClient({ solicitaRestituicao, consultaComprovanteRestituicao }),
+      asClient({ solicitaRestituicao, consultaComprovanteRestituicao }), buildAnalytics(),
       { maxAttempts: 2, pollingIntervalMs: 0 }
     )
 
@@ -551,4 +557,43 @@ describe('vistorias services', () => {
     expect(consultaComprovanteRestituicao).toHaveBeenCalledTimes(2)
   })
 
+  // GET /veiculos/:renavam/qr-code é polado pelo app enquanto o pagamento não confirma.
+  // Sem o guard de estado, cada poll viraria um evento e vistorias:payment_confirm
+  // dominaria o volume do projeto — igual ao caso já provado em verifica-pix-debito-service.
+  it('não emite vistorias:payment_confirm enquanto o QR não foi liquidado', async () => {
+    const client = asClient({
+      verificaQRCode: vi.fn().mockResolvedValue({
+        result: {
+          success: true,
+          data: { body: { id: 'qr-code-id', status: 'PENDENTE', dtExpiracao: '2026-07-24 18:00:00' } }
+        }
+      })
+    })
+    const analyticsService = buildAnalytics()
+
+    const result = await new VerificaQRCodeVistoriaService(client, analyticsService).run(clientAuth, 'qr-code-id')
+
+    expect(result.estado).toBe(1)
+    expect(analyticsService.capture).not.toHaveBeenCalled()
+  })
+
+  it('emite vistorias:payment_confirm uma vez quando liquidado, com $insert_id derivado do paymentId', async () => {
+    const client = asClient({
+      verificaQRCode: vi.fn().mockResolvedValue({
+        result: {
+          success: true,
+          data: { body: { id: 'qr-code-id', status: 'LIQUIDADO', dtExpiracao: '2026-07-24 18:00:00' } }
+        }
+      })
+    })
+    const analyticsService = buildAnalytics()
+
+    await new VerificaQRCodeVistoriaService(client, analyticsService).run(clientAuth, 'qr-code-id')
+
+    expect(analyticsService.capture).toHaveBeenCalledTimes(1)
+    expect(analyticsService.capture).toHaveBeenCalledWith(
+      clientAuth.cpf, 'vistorias:payment_confirm', { $insert_id: 'insert-id' }
+    )
+    expect(analyticsService.createInsertId).toHaveBeenCalledWith('vistorias:payment_confirm:qr-code-id')
+  })
 })
