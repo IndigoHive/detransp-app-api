@@ -52,6 +52,7 @@ export type AnalyticsEventProperties = {
   proxima_acao?: string
   /** Só em `debitos:pix_generate`: ipva | multas | licenciamento | total. */
   tipo?: string
+  channel: string
 }
 
 export interface IAnalyticsService {
@@ -93,7 +94,7 @@ export class PostHogAnalyticsService implements IAnalyticsService {
     this.posthog.capture({
       distinctId: cpf ? derivePseudonymousId(cpf, this.pepper) : 'Anonymous',
       event,
-      properties: { ...properties }
+      properties: { ...properties, channel: 'app-api' }
     })
   }
 }
