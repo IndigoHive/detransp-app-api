@@ -52,7 +52,6 @@ export type AnalyticsEventProperties = {
   proxima_acao?: string
   /** Só em `debitos:pix_generate`: ipva | multas | licenciamento | total. */
   tipo?: string
-  channel: string
 }
 
 export interface IAnalyticsService {
