@@ -3,6 +3,7 @@ import type { ArquivoPecaRaw, PecaRaw, RotaCrvPecasClient } from '../../../clien
 import type { RotaVistoriasClient } from '../../../clients/rota-vistorias'
 import { ensureSpPrefix, extractNumeroFromQrUrl } from '../utils'
 import type { ConsultaPecaResult } from '../types'
+import type { IAnalyticsService } from '../../analytics'
 
 // Fotos do veículo às vezes chegam do upstream embrulhadas em PDF em vez de
 // imagem direta — descartadas do carrossel de imagens (aparecem em
@@ -20,13 +21,15 @@ type ArquivoComBinario = ArquivoPecaRaw & { binario: string }
 export class ConsultaPecaService {
   private readonly rotaCrvPecasClient: RotaCrvPecasClient
   private readonly rotaVistoriasClient: RotaVistoriasClient
+  private readonly analyticsService: IAnalyticsService
 
-  constructor(rotaCrvPecasClient: RotaCrvPecasClient, rotaVistoriasClient: RotaVistoriasClient) {
+  constructor(rotaCrvPecasClient: RotaCrvPecasClient, rotaVistoriasClient: RotaVistoriasClient, analyticsService: IAnalyticsService) {
     this.rotaCrvPecasClient = rotaCrvPecasClient
     this.rotaVistoriasClient = rotaVistoriasClient
+    this.analyticsService = analyticsService
   }
 
-  async run(accessToken: string, numero: string): Promise<ConsultaPecaResult | undefined> {
+  async run(accessToken: string, numero: string, cpf?: string | null): Promise<ConsultaPecaResult | undefined> {
     if (!numero?.trim()) throw BadRequest('Número da etiqueta é obrigatório.')
     numero = ensureSpPrefix(numero.trim())
 
@@ -45,6 +48,11 @@ export class ConsultaPecaService {
 
     const peca = pecas?.[0]
     if (!peca) return
+
+    // Só aqui: o early return acima é "peça não encontrada", não "a pessoa viu o resultado".
+    // Sem $insert_id — não é endpoint polado, e uma segunda consulta real (outra etiqueta,
+    // retry do usuário) é sinal legítimo, não ruído.
+    this.analyticsService.capture(cpf, 'pecas:peca_query')
 
     const needsMotor = peca.tipoPeca?.trim().toLowerCase() === 'bloco do motor'
 
@@ -71,9 +79,9 @@ export class ConsultaPecaService {
     return this.buildResult(peca, arquivosComBinario, numeroMotor)
   }
 
-  async runFromQrCode(accessToken: string, scannedUrl: string): Promise<ConsultaPecaResult | undefined> {
+  async runFromQrCode(accessToken: string, scannedUrl: string, cpf?: string | null): Promise<ConsultaPecaResult | undefined> {
     const numero = extractNumeroFromQrUrl(scannedUrl)
-    return this.run(accessToken, numero)
+    return this.run(accessToken, numero, cpf)
   }
 
   private async baixaArquivos(accessToken: string, arquivos: ArquivoPecaRaw[]): Promise<ArquivoComBinario[]> {

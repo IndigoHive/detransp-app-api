@@ -8,8 +8,8 @@ export type PecasServices = {
 export function getPecasRegistrations(): Required<NameAndRegistrationPair<PecasServices>> {
   return {
     consultaPecaService: asFunction(
-      ({ rotaCrvPecasClient, rotaVistoriasClient }) =>
-        new ConsultaPecaService(rotaCrvPecasClient, rotaVistoriasClient)
+      ({ rotaCrvPecasClient, rotaVistoriasClient, analyticsService }) =>
+        new ConsultaPecaService(rotaCrvPecasClient, rotaVistoriasClient, analyticsService)
     ).scoped(),
   }
 }
