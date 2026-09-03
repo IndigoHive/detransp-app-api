@@ -2,6 +2,8 @@ import axios, { type AxiosError, type AxiosInstance, type AxiosRequestConfig } f
 import createError from 'http-errors'
 import type { Logger } from 'pino'
 import { DetranSpServiceNowError } from './errors/detran-sp-service-now-error'
+import { reportOutboundHttpError } from '../report-outbound-http-error'
+import { installHttpMetrics } from '../install-http-metrics'
 
 const SERVICE_NAME = 'detran-sp-servicenow'
 const DEFAULT_ERROR_DETAIL = 'Tivemos um problema ao processar sua solicitação.'
@@ -71,6 +73,7 @@ export class DetranSpServiceNowHttp {
       ...(params.withCredentials === undefined ? {} : { withCredentials: params.withCredentials })
     })
 
+    installHttpMetrics(this.axios, this.serviceName)
     this.setupInterceptors()
   }
 
@@ -177,6 +180,7 @@ export class DetranSpServiceNowHttp {
           },
           'ServiceNow HTTP error'
         )
+        reportOutboundHttpError(error, this.serviceName)
 
         throw this.createResponseError(error)
       }

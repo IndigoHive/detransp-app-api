@@ -2,6 +2,8 @@ import { randomUUID } from 'crypto'
 import axios, { type AxiosError, type AxiosInstance, type AxiosRequestConfig } from 'axios'
 import createError from 'http-errors'
 import type { Logger } from 'pino'
+import { reportOutboundHttpError } from '../report-outbound-http-error'
+import { installHttpMetrics } from '../install-http-metrics'
 
 const SERVICE_NAME = 'rota-vida'
 
@@ -84,6 +86,8 @@ export class RotaVidaClient {
       baseURL: arquivosBaseUrl
     })
 
+    installHttpMetrics(this.vidaAxios, SERVICE_NAME)
+    installHttpMetrics(this.arquivosAxios, SERVICE_NAME)
     this.setupInterceptors(this.vidaAxios)
     this.setupInterceptors(this.arquivosAxios)
   }
@@ -118,6 +122,7 @@ export class RotaVidaClient {
           },
           'Rota Vida HTTP error'
         )
+        reportOutboundHttpError(error, SERVICE_NAME)
 
         const message = error.response?.status === 401 || error.response?.status === 403
           ? 'Sessão expirada. Faça login novamente.'

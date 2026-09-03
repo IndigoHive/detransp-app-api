@@ -2,6 +2,8 @@ import axios, { type AxiosError, type AxiosInstance, type AxiosRequestConfig } f
 import createError from 'http-errors'
 import type { Logger } from 'pino'
 import { DetranSpServiceNowDebRestrError } from './errors/detran-sp-service-now-deb-restr-error'
+import { reportOutboundHttpError } from '../report-outbound-http-error'
+import { installHttpMetrics } from '../install-http-metrics'
 
 const SERVICE_NAME = 'detran-sp-servicenow-deb-restr'
 const MAX_TIMEOUT_MS = 28000
@@ -40,6 +42,7 @@ export class DetranSpServiceNowDebRestrHttp {
       withCredentials: true
     })
 
+    installHttpMetrics(this.axios, SERVICE_NAME)
     this.setupInterceptors()
   }
 
@@ -97,6 +100,7 @@ export class DetranSpServiceNowDebRestrHttp {
           },
           'ServiceNow deb-restr response error'
         )
+        reportOutboundHttpError(error, SERVICE_NAME)
 
         // Generic on purpose: ServiceNow's raw status/detail must never reach
         // the app directly — a status like 401 gets misread by the app as

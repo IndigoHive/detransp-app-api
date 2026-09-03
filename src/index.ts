@@ -1,3 +1,5 @@
+import './instrument'
+import * as Sentry from '@sentry/node'
 import { createApp } from './app'
 import { createContainer } from './container'
 import { config } from './container/config'
@@ -17,11 +19,12 @@ async function main () {
       logger.info('App API is running on http://localhost:%s', config.application.port)
     }
   })
-
+  
   process.on('SIGINT', () => {
     logger.info('Shutting down App API...')
 
-    container.dispose()
+    Sentry.close(2000)
+      .then(() => container.dispose())
       .then(() => {
         logger.info('Container disposed')
       })

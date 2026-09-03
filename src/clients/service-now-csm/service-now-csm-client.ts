@@ -2,6 +2,8 @@ import axios, { type AxiosInstance, type AxiosRequestConfig } from 'axios'
 import createError from 'http-errors'
 import type { Logger } from 'pino'
 import type { Config } from '../../types'
+import { reportOutboundHttpError } from '../report-outbound-http-error'
+import { installHttpMetrics } from '../install-http-metrics'
 
 export type UploadAttachmentParams = {
   tableName: string
@@ -54,6 +56,7 @@ export class ServiceNowCsmClient {
       }
     })
 
+    installHttpMetrics(this.axios, SERVICE_NAME)
     this.setupInterceptors()
   }
 
@@ -101,6 +104,7 @@ export class ServiceNowCsmClient {
           { ...meta, responseData: data, service: SERVICE_NAME, status: error.response?.status },
           'ServiceNow CSM HTTP error'
         )
+        reportOutboundHttpError(error, SERVICE_NAME)
 
         return Promise.reject(error)
       }

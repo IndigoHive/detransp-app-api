@@ -1,6 +1,8 @@
 import axios, { type AxiosError, type AxiosInstance, type AxiosRequestConfig } from 'axios'
 import createError from 'http-errors'
 import type { Logger } from 'pino'
+import { reportOutboundHttpError } from '../report-outbound-http-error'
+import { installHttpMetrics } from '../install-http-metrics'
 
 const SERVICE_NAME = 'rota-crv-pecas'
 
@@ -70,6 +72,8 @@ export class RotaCrvPecasClient {
       baseURL: arquivosBaseUrl,
     })
 
+    installHttpMetrics(this.axios, SERVICE_NAME)
+    installHttpMetrics(this.arquivosAxios, SERVICE_NAME)
     this.setupInterceptors(this.axios)
     this.setupInterceptors(this.arquivosAxios)
   }
@@ -100,6 +104,7 @@ export class RotaCrvPecasClient {
           { ...meta, responseData: data, service: SERVICE_NAME, status },
           'Rota CRV Peças HTTP error',
         )
+        reportOutboundHttpError(error, SERVICE_NAME)
 
         if (status === 403) {
           throw createError(403, 'Serviço indisponível no momento.', { expose: true })
