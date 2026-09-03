@@ -4,7 +4,7 @@ import type { Logger } from 'pino'
 import { DetranSpServiceNowLicenciamentoError } from './errors/detran-sp-service-now-licenciamento-error'
 
 const SERVICE_NAME = 'detran-sp-servicenow-licenciamento'
-const MAX_TIMEOUT_MS = 8000
+const MAX_TIMEOUT_MS = 28000
 
 export type DetranSpServiceNowLicenciamentoHttpParams = {
   baseURL: string
