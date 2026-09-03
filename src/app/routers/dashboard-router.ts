@@ -44,7 +44,8 @@ export function dashboardRouter(): Router {
   router.get('/lista-multas', async (req, res) => {
     const { accessToken, cpf } = req.session!
     const service = req.scope.resolve('getListaMultasService')
-    const result = await service.run(accessToken, cpf)
+    const { ultimosmeses } = req.query as Record<string, string | undefined>
+    const result = await service.run(accessToken, cpf, ultimosmeses !== 'false')
     res.status(200).json(result)
   })
 

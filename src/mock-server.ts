@@ -182,6 +182,22 @@ const MOCK_MULTAS = [
   },
 ]
 
+const MOCK_MULTAS_HISTORICO = [
+  ...MOCK_MULTAS,
+  {
+    auto: 'SP00011111',
+    placa: 'ABC1D23',
+    descricao: 'Avançar sinal vermelho do semáforo',
+    pontos: 7,
+  },
+  {
+    auto: 'SP00022222',
+    placa: 'QRS4F56',
+    descricao: 'Dirigir utilizando o telefone celular',
+    pontos: 5,
+  },
+]
+
 // Flow IDs — use the same UUIDs as production so cached app data still works
 const FLOW_ID_LICENCIAMENTO = 'c0c69366-6ca0-4af8-9662-216179e06ec3'
 const FLOW_ID_TDV = 'b05e6733-0668-48ec-9350-7150db088c47'
@@ -526,9 +542,50 @@ app.get('/api/dashboard/dados-condutor', (_req, res) => {
 })
 
 app.get('/api/dashboard/debitos-pendentes', (_req, res) => {
+  const perVehicleDebts = MOCK_VEHICLES.map((vehicle) => {
+    const isVencido = vehicle.licensingStatus === 'VENCIDO'
+    const debts = isVencido
+      ? [...MOCK_DEBTS_LICENCIAMENTO, ...MOCK_DEBTS_IPVA, ...MOCK_DEBTS_MULTA]
+      : vehicle.licensingStatus === 'A VENCER'
+        ? [...MOCK_DEBTS_LICENCIAMENTO]
+        : []
+    return { vehicle, debts }
+  })
+
+  const totalOf = (tipoServico: number) =>
+    perVehicleDebts
+      .flatMap(({ debts }) => debts)
+      .filter((d) => d.tipoServico === tipoServico)
+      .reduce((sum, d) => sum + d.valor, 0)
+
+  const totalIpva = totalOf(6)
+  const totalMultas = totalOf(7)
+  const totalLicenciamento = totalOf(5)
+
   res.json({
-    debitos: [...MOCK_DEBTS_LICENCIAMENTO, ...MOCK_DEBTS_IPVA, ...MOCK_DEBTS_MULTA],
-    total: 2242.38,
+    data: {
+      type: 'proprietario',
+      id: 'owner-1',
+      attributes: { nome: 'João da Silva Santos', cpf: '12345678900' },
+    },
+    included: perVehicleDebts.map(({ vehicle, debts }) => ({
+      type: 'veiculo',
+      id: vehicle.id,
+      attributes: {
+        modelo: vehicle.title,
+        placa: vehicle.plate,
+        marca: vehicle.brandModel.split('/')[0] ?? vehicle.brandModel,
+        renavam: vehicle.renavam,
+        Debitos: debts.length > 0 ? 'COM DÉBITOS' : 'SEM DÉBITOS',
+        total: debts.reduce((sum, d) => sum + d.valor, 0).toFixed(2),
+      },
+    })),
+    meta: {
+      totalDeDebitosVeiculos: (totalIpva + totalMultas + totalLicenciamento).toFixed(2),
+      totalDeDebitosVeiculosIPVA: totalIpva.toFixed(2),
+      totalDeDebitosVeiculosMultas: totalMultas.toFixed(2),
+      totalDeDebitosVeiculosLicenciamento: totalLicenciamento.toFixed(2),
+    },
   })
 })
 
@@ -557,8 +614,9 @@ app.get('/api/dashboard/detalhes-pontuacao-cnh', (_req, res) => {
   })
 })
 
-app.get('/api/dashboard/lista-multas', (_req, res) => {
-  res.json({ multas: MOCK_MULTAS })
+app.get('/api/dashboard/lista-multas', (req, res) => {
+  const ultimosmeses = req.query.ultimosmeses !== 'false'
+  res.json({ multas: ultimosmeses ? MOCK_MULTAS : MOCK_MULTAS_HISTORICO })
 })
 
 app.get('/api/dashboard/multas', (req, res) => {
