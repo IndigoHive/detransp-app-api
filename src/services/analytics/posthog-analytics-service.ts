@@ -39,12 +39,15 @@ type TdvEvent =
   | 'tdv:validate'
   | 'tdv:cancel'
 
+type PecasEvent = 'pecas:peca_query'
+
 export type AnalyticsEvent =
   | GovBrEvent
   | LicenciamentoEvent
   | DebitosEvent
   | VistoriasEvent
   | TdvEvent
+  | PecasEvent
 
 export type AnalyticsEventProperties = {
   $insert_id?: string
