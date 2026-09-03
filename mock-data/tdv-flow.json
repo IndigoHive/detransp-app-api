@@ -3488,14 +3488,6 @@
             }
           },
           {
-            "id": "c_6ad356a5b447",
-            "type": "rich_text",
-            "name": null,
-            "data": {
-              "html": "<p style=\"text-align:justify\"><span style=\"font-size:14px;color:#262828\">Sob pena da lei, estou ciente de que a falsidade destas informações implicará em penalidades.</span></p>"
-            }
-          },
-          {
             "id": "c_73929d52250f",
             "type": "opt_in",
             "name": null,
@@ -5284,7 +5276,7 @@
             "type": "rich_text",
             "name": null,
             "data": {
-              "html": "<p><span style=\"font-size:14px;color:#262828\">Eu, @{node:n_21da615e160d.full_name}, inscrito no CPF sob o nº @{node:n_21da615e160d.cpf}, declaro para os devidos fins que estou transferindo a propriedade do veículo de minha titularidade, de placa @{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.plate}, marca/modelo @{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.brandModel}, ano de fabricação @{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.yearFab}, Renavam @{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.renavam}, para a empresa @{node:n_d87067e61ebb.nomeComprador ?? node:n_b824c7dd9350.nomeComprador}, inscrita no CNPJ sob o nº @{node:n_d87067e61ebb.cpfComprador ?? node:n_b824c7dd9350.cpfComprador}, localizada em @{node:n_d87067e61ebb.enderecoComprador ?? node:n_b824c7dd9350.enderecoComprador}.</span></p><p><span style=\"font-size:14px;color:#262828\"><br>Estou ciente de que a veracidade das informações fornecidas é de minha total responsabilidade e que a falsidade destas informações poderá acarretar penalidades previstas em lei.</span></p>",
+              "html": "<p><span style=\"font-size:14px;color:#262828\">Eu, @{node:n_21da615e160d.full_name}, inscrito no CPF sob o nº @{node:n_21da615e160d.cpf | formatCpf}, declaro para os devidos fins que estou transferindo a propriedade do veículo de minha titularidade, de placa @{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.plate}, marca/modelo @{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.brandModel}, ano de fabricação @{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.yearFab}, Renavam @{screen:s_83bb5547ec06.comp:c_917cc0ef5a31.selectedVehicle.renavam}, para a empresa @{node:n_d87067e61ebb.nomeComprador ?? node:n_b824c7dd9350.nomeComprador}, inscrita no CNPJ sob o nº @{node:n_d87067e61ebb.cpfComprador ?? node:n_b824c7dd9350.cpfComprador}, localizada em @{node:n_d87067e61ebb.enderecoComprador ?? node:n_b824c7dd9350.enderecoComprador}.</span></p><p><span style=\"font-size:14px;color:#262828\"><br>Estou ciente de que a veracidade das informações fornecidas é de minha total responsabilidade e que a falsidade destas informações poderá acarretar penalidades previstas em lei.</span></p>",
               "visibilityCondition": {
                 "clauses": [
                   {
