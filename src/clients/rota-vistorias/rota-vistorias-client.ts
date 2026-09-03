@@ -2,6 +2,8 @@ import axios, { type AxiosError, type AxiosInstance, type AxiosRequestConfig } f
 import createError from 'http-errors'
 import type { Logger } from 'pino'
 import type { VeiculoVistoriaRaw } from './types'
+import { reportOutboundHttpError } from '../report-outbound-http-error'
+import { installHttpMetrics } from '../install-http-metrics'
 
 const SERVICE_NAME = 'rota-vistorias'
 
@@ -22,6 +24,7 @@ export class RotaVistoriasClient {
       headers: { 'Content-Type': 'application/json' },
     })
 
+    installHttpMetrics(this.axios, SERVICE_NAME)
     this.setupInterceptors()
   }
 
@@ -49,6 +52,7 @@ export class RotaVistoriasClient {
           { ...meta, responseData: error.response?.data, service: SERVICE_NAME, status: error.response?.status },
           'Rota Vistorias HTTP error',
         )
+        reportOutboundHttpError(error, SERVICE_NAME)
 
         const message = error.response?.status === 401 || error.response?.status === 403
           ? 'Sessão expirada. Faça login novamente.'

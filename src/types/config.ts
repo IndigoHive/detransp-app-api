@@ -119,4 +119,7 @@ export type Config = {
     apiKey: string
     host: string
   }
+  sentry: {
+    dsn: string
+  }
 }

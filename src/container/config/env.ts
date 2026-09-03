@@ -43,5 +43,6 @@ export const env = {
   PORT: process.env.PORT,
   POSTHOG_API_KEY: process.env.POSTHOG_API_KEY,
   POSTHOG_HOST: process.env.POSTHOG_HOST,
-  PSEUDONYMOUS_ID_PEPPER: process.env.PSEUDONYMOUS_ID_PEPPER
+  PSEUDONYMOUS_ID_PEPPER: process.env.PSEUDONYMOUS_ID_PEPPER,
+  SENTRY_DSN: process.env.SENTRY_DSN
 }

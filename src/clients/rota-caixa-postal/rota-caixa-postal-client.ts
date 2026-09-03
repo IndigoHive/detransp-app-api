@@ -1,6 +1,8 @@
 import axios, { type AxiosError, type AxiosInstance, type AxiosRequestConfig } from 'axios'
 import createError from 'http-errors'
 import type { Logger } from 'pino'
+import { reportOutboundHttpError } from '../report-outbound-http-error'
+import { installHttpMetrics } from '../install-http-metrics'
 
 const SERVICE_NAME = 'rota-caixa-postal'
 
@@ -63,6 +65,7 @@ export class RotaCaixaPostalClient {
       },
     })
 
+    installHttpMetrics(this.axios, SERVICE_NAME)
     this.setupInterceptors()
   }
 
@@ -99,6 +102,7 @@ export class RotaCaixaPostalClient {
           { ...meta, responseData: error.response?.data, service: SERVICE_NAME, status: error.response?.status },
           'Rota Caixa Postal HTTP error',
         )
+        reportOutboundHttpError(error, SERVICE_NAME)
 
         const message = error.response?.status === 401 || error.response?.status === 403
           ? 'Sessão expirada. Faça login novamente.'

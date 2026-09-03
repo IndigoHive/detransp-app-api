@@ -166,6 +166,9 @@ export const config: Config = {
     apiKey: env.POSTHOG_API_KEY || 'api-key',
     host: env.POSTHOG_HOST || DEFAULT_POSTHOG_HOST
   },
+  sentry: {
+    dsn: env.SENTRY_DSN || ''
+  },
   tdvMock: {
     enabled: tdvMockEnabled,
     versao: pickFromEnum<TdvMockVersao>('TDV_MOCK_VERSAO', env.TDV_MOCK_VERSAO, TDV_MOCK_VERSOES, '1.0'),

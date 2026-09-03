@@ -3,6 +3,8 @@ import createError from 'http-errors'
 import type { Logger } from 'pino'
 import type { Config } from '../../types'
 import type { GetUserInfoResult } from './types'
+import { reportOutboundHttpError } from '../report-outbound-http-error'
+import { installHttpMetrics } from '../install-http-metrics'
 
 const SERVICE_NAME = 'govbr-service-idp'
 
@@ -27,6 +29,7 @@ export class IdpSpGovBrServiceClient {
       }
     })
 
+    installHttpMetrics(this.axios, SERVICE_NAME)
     this.setupInterceptors()
   }
 
@@ -74,6 +77,7 @@ export class IdpSpGovBrServiceClient {
           { ...meta, responseData: data, service: SERVICE_NAME, status: error.response?.status },
           'GovBr Service IDP HTTP error'
         )
+        reportOutboundHttpError(error, SERVICE_NAME)
 
         return Promise.reject(createError(
           error.response?.status ?? 502,

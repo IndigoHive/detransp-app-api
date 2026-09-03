@@ -3,6 +3,8 @@ import createError from 'http-errors'
 import type { Logger } from 'pino'
 import type { Config } from '../../../types'
 import { sanitizeResponseData } from '../../../utils/token'
+import { reportOutboundHttpError } from '../../report-outbound-http-error'
+import { installHttpMetrics } from '../../install-http-metrics'
 
 const SERVICE_NAME = 'detran-sp-servicenow-dashboard'
 
@@ -29,6 +31,7 @@ export class DetranSpServiceNowDashboardClient {
       },
     })
 
+    installHttpMetrics(this.axios, SERVICE_NAME)
     this.setupInterceptors()
   }
 
@@ -59,6 +62,7 @@ export class DetranSpServiceNowDashboardClient {
           },
           'ServiceNow dashboard error',
         )
+        reportOutboundHttpError(error, SERVICE_NAME)
         const status = error.response?.status ?? 500
         const message = status === 401
           ? 'Sessão expirada. Faça login novamente.'

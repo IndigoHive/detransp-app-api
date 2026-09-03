@@ -2,6 +2,8 @@ import axios, { type AxiosError, type AxiosInstance, type AxiosRequestConfig } f
 import createError from 'http-errors'
 import type { Logger } from 'pino'
 import { DetranSpServiceNowLicenciamentoError } from './errors/detran-sp-service-now-licenciamento-error'
+import { reportOutboundHttpError } from '../report-outbound-http-error'
+import { installHttpMetrics } from '../install-http-metrics'
 
 const SERVICE_NAME = 'detran-sp-servicenow-licenciamento'
 const MAX_TIMEOUT_MS = 28000
@@ -40,6 +42,7 @@ export class DetranSpServiceNowLicenciamentoHttp {
       withCredentials: true
     })
 
+    installHttpMetrics(this.axios, SERVICE_NAME)
     this.setupInterceptors()
   }
 
@@ -75,6 +78,7 @@ export class DetranSpServiceNowLicenciamentoHttp {
           { service: SERVICE_NAME, status: error.response?.status, url: error.config?.url, errorMessage: message, errorDetail: detail },
           'ServiceNow licenciamento response error'
         )
+        reportOutboundHttpError(error, SERVICE_NAME)
 
         const userMessage = detail ?? 'Tivemos um problema ao processar sua solicitação.'
         const status = error.response?.status ?? 422
