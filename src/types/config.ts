@@ -54,11 +54,6 @@ export type Config = {
       baseUrl: string,
       dashboardUrl: string
     }
-    // Instância ServiceNow separada (host próprio) que expõe o app escopado
-    // x_mdpdd_idpsp_spok usado pela troca do token de atestação do device.
-    attestation: {
-      baseUrl: string
-    }
   }
   rotaCaixaPostal: {
     baseUrl: string
@@ -66,8 +61,6 @@ export type Config = {
   }
   security: {
     encryptionKey: string
-    // Pepper só de servidor usado para derivar o distinct_id pseudônimo do analytics
-    // a partir do CPF. Nunca sai do backend; trocá-lo desassocia o histórico no PostHog.
     pseudonymousIdPepper: string
   }
   rotaVida: {

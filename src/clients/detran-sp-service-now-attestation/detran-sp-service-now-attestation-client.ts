@@ -70,7 +70,7 @@ export class DetranSpServiceNowAttestationClient {
     this.logger = logger
 
     this.axios = axios.create({
-      baseURL: new URL('/api/x_mdpdd_idpsp_spok', config.serviceNow.attestation.baseUrl).toString(),
+      baseURL: new URL('/api/x_mdpdd_idpsp_spok', config.serviceNow.api.baseUrl).toString(),
       headers: { 'Content-Type': 'application/json' },
       timeout: MAX_TIMEOUT_MS
     })

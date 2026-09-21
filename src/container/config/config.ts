@@ -128,10 +128,7 @@ export const config: Config = {
     api: {
       baseUrl: env.SERVICENOW_API_BASE_URL || '',
       dashboardUrl
-    },
-    attestation: {
-      baseUrl: env.SERVICENOW_ATTESTATION_BASE_URL || '',
-    },
+    }
   },
   rotaCaixaPostal: {
     baseUrl: env.ROTA_CAIXA_POSTAL_BASE_URL || '',
