@@ -1,4 +1,5 @@
 export * from './analytics'
+export * from './attestation'
 export * from './auth'
 export * from './dashboard'
 export * from './deb-restr'

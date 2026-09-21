@@ -1,6 +1,7 @@
 import { SELECT } from 'pg-chain'
 
 import {
+  FlowAudience,
   GetPublishedFlowVersionByFlowIdResultData,
   IFlowRepository,
   ListFlowResultData
@@ -51,30 +52,56 @@ export class PgFlowRepository implements IFlowRepository {
     this.db = options.database
   }
 
-  async list (): Promise<ListFlowResultData[]> {
+  // A audiência agora é uma flag na própria flow_version (published_for_logged /
+  // published_for_sessionless), não mais um segundo ponteiro em flow — daí o JOIN.
+  // pg-chain binda todo `${}` como parâmetro, então o nome da coluna de flag não
+  // pode ser interpolado dinamicamente — daí a query duplicada por audiência.
+  async list (audience: FlowAudience = 'logged'): Promise<ListFlowResultData[]> {
     const { rows } = await this.db
       .query<FlowRow>(
-        SELECT`id, slug, name, description, category, icon_name`
-          .FROM`flow`
-          .WHERE`status = 'published'`
-          .ORDER_BY`created_at DESC`
+        audience === 'sessionless'
+          ? SELECT`flow.id, flow.slug, flow.name, flow.description, flow.category, flow.icon_name`
+              .FROM`flow`
+              .JOIN`flow_version ON flow_version.id = flow.published_version_id`
+              .WHERE`flow.status = 'published'`
+              .AND`flow.published_version_id IS NOT NULL`
+              .AND`flow_version.published_for_sessionless = true`
+              .ORDER_BY`flow.created_at DESC`
+          : SELECT`flow.id, flow.slug, flow.name, flow.description, flow.category, flow.icon_name`
+              .FROM`flow`
+              .JOIN`flow_version ON flow_version.id = flow.published_version_id`
+              .WHERE`flow.status = 'published'`
+              .AND`flow.published_version_id IS NOT NULL`
+              .AND`flow_version.published_for_logged = true`
+              .ORDER_BY`flow.created_at DESC`
       )
 
     return rows.map(mapRowToFlow)
   }
 
   async getPublishedFlowVersionByFlowId (
-    flowId: string
+    flowId: string,
+    audience: FlowAudience = 'logged'
   ): Promise<GetPublishedFlowVersionByFlowIdResultData | null> {
     const { rows } = await this.db
       .query<PublishedFlowVersionByFlowIdRow>(
-        SELECT`flow.published_version_id AS "flowVersionId", flow_version.flow_json AS "flowJson"`
-          .FROM`flow`
-          .LEFT_JOIN`flow_version ON flow_version.id = flow.published_version_id`
-          .WHERE`flow.id = ${flowId}`
-          .AND`flow.status = 'published'`
-          .AND`flow.published_version_id IS NOT NULL`
-          .LIMIT`1`
+        audience === 'sessionless'
+          ? SELECT`flow.published_version_id AS "flowVersionId", flow_version.flow_json AS "flowJson"`
+              .FROM`flow`
+              .JOIN`flow_version ON flow_version.id = flow.published_version_id`
+              .WHERE`flow.id = ${flowId}`
+              .AND`flow.status = 'published'`
+              .AND`flow.published_version_id IS NOT NULL`
+              .AND`flow_version.published_for_sessionless = true`
+              .LIMIT`1`
+          : SELECT`flow.published_version_id AS "flowVersionId", flow_version.flow_json AS "flowJson"`
+              .FROM`flow`
+              .JOIN`flow_version ON flow_version.id = flow.published_version_id`
+              .WHERE`flow.id = ${flowId}`
+              .AND`flow.status = 'published'`
+              .AND`flow.published_version_id IS NOT NULL`
+              .AND`flow_version.published_for_logged = true`
+              .LIMIT`1`
       )
 
     const [row] = rows

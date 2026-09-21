@@ -2,7 +2,7 @@ import * as Sentry from '@sentry/node'
 import type { AwilixContainer } from 'awilix'
 import express from 'express'
 import type { Logger } from 'pino'
-import { authRouter, dashboardRouter, debRestrRouter, flowsRouter, healthRouter, licenciamentoRouter, notificacoesRouter, pecasRouter, csmProtocolsRouter, tdvRouter, vistoriasRouter } from './routers'
+import { attestationRouter, authRouter, dashboardRouter, debRestrRouter, flowsRouter, healthRouter, licenciamentoRouter, notificacoesRouter, pecasRouter, csmProtocolsRouter, tdvRouter, vistoriasRouter } from './routers'
 import { ContainerServices, createContainer } from '../container'
 import { fallbackErrorHandler, httpErrorHandler, multerErrorHandler, scopePerRequest, sessionAuth } from './middlewares'
 
@@ -61,14 +61,24 @@ export function createApp (options: CreateAppOptions = {}) {
   // session middleware; protected endpoints (userinfo, logout) apply sessionAuth() inline
   app.use('/api/auth', authRouter())
 
+  // Attestation — público (sem sessão gov.br): troca o token de atestação do
+  // dispositivo por um accessToken. Mesma exceção de authRouter() acima.
+  app.use('/api/attestation', attestationRouter())
+
   // All other routes require a valid session
   const protect = sessionAuth()
   app.use('/api/dashboard', protect, dashboardRouter())
   app.use('/api/deb-restr', protect, debRestrRouter())
-  app.use('/api/flows', protect, flowsRouter())
+  // flowsRouter() mixes public/protected routes internally (sessionAuth() inline
+  // per-route, same shape as authRouter()/pecasRouter() above) — the sessionless
+  // listing route needs to stay reachable without a session.
+  app.use('/api/flows', flowsRouter())
   app.use('/api/licenciamento', protect, licenciamentoRouter())
   app.use('/api/notificacoes', protect, notificacoesRouter())
-  app.use('/api/pecas', protect, pecasRouter())
+  // pecasRouter() resolves its own auth per-request (sessão gov.br OU token de
+  // atestação via header) — cada rota atende as duas audiências, então não
+  // recebe o `protect` de grupo.
+  app.use('/api/pecas', pecasRouter())
   app.use('/api/services', protect, csmProtocolsRouter())
   app.use('/api/tdv', protect, tdvRouter())
   app.use('/api/vistorias', protect, vistoriasRouter())

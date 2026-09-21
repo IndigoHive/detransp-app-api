@@ -1,5 +1,7 @@
 export type FlowStatus = 'draft' | 'published' | 'archived'
 
+export type FlowAudience = 'logged' | 'sessionless'
+
 type Flow = {
   id: string
   slug: string
@@ -22,6 +24,6 @@ export type GetPublishedFlowVersionByFlowIdResultData = {
 }
 
 export interface IFlowRepository {
-  list (): Promise<ListFlowResultData[]>
-  getPublishedFlowVersionByFlowId (flowId: string): Promise<GetPublishedFlowVersionByFlowIdResultData | null>
+  list (audience?: FlowAudience): Promise<ListFlowResultData[]>
+  getPublishedFlowVersionByFlowId (flowId: string, audience?: FlowAudience): Promise<GetPublishedFlowVersionByFlowIdResultData | null>
 }

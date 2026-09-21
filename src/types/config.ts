@@ -54,6 +54,11 @@ export type Config = {
       baseUrl: string,
       dashboardUrl: string
     }
+    // Instância ServiceNow separada (host próprio) que expõe o app escopado
+    // x_mdpdd_idpsp_spok usado pela troca do token de atestação do device.
+    attestation: {
+      baseUrl: string
+    }
   }
   rotaCaixaPostal: {
     baseUrl: string
