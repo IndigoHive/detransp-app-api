@@ -15,8 +15,9 @@ import { ContainerServices } from '../types/container-services'
 import { Database } from '../../db/pool'
 import { PgFlowRepository } from '../../repositories/pg-flow-repository'
 import { PgSessionRepository } from '../../repositories/pg-session-repository'
-import { getAnalyticsRegistrations, getAuthRegistrations, getFlowsRegistrations, getProtocolsRegistrations, getDashboardRegistrations, getLicenciamentoRegistrations, getDebRestrRegistrations, getTdvRegistrations, getPecasRegistrations, getVistoriasRegistrations } from '../../services'
+import { getAnalyticsRegistrations, getAttestationRegistrations, getAuthRegistrations, getFlowsRegistrations, getProtocolsRegistrations, getDashboardRegistrations, getLicenciamentoRegistrations, getDebRestrRegistrations, getTdvRegistrations, getPecasRegistrations, getVistoriasRegistrations } from '../../services'
 import { getClientRegistrations, DetranSpServiceNowLicenciamentoClient, DetranSpServiceNowVistoriasClient } from '../../clients'
+import { DetranSpServiceNowAttestationClient } from '../../clients/detran-sp-service-now-attestation'
 import { DetranSpServiceNowDebRestrClient } from '../../clients/detran-sp-service-now-deb-restr'
 import { DetranSpServiceNowPgtoClient } from '../../clients/detran-sp-service-now-pgto'
 import { RotaCaixaPostalClient } from '../../clients/rota-caixa-postal'
@@ -42,6 +43,7 @@ export function createContainer (
     detranSpServiceNowVistoriasClient: asClass(DetranSpServiceNowVistoriasClient).scoped(),
     detranSpServiceNowDebRestrClient: asClass(DetranSpServiceNowDebRestrClient).scoped(),
     detranSpServiceNowPgtoClient: asClass(DetranSpServiceNowPgtoClient).scoped(),
+    detranSpServiceNowAttestationClient: asClass(DetranSpServiceNowAttestationClient).scoped(),
     rotaCaixaPostalClient: asFunction(({ config: cfg, logger }: { config: Config; logger: Logger }) =>
       new RotaCaixaPostalClient({
         baseUrl: cfg.rotaCaixaPostal.baseUrl,
@@ -115,6 +117,7 @@ export function createContainer (
     }).singleton(),
   })
   container.register(getClientRegistrations())
+  container.register(getAttestationRegistrations())
   container.register(getAnalyticsRegistrations())
   container.register(getFlowsRegistrations())
   container.register(getAuthRegistrations())
