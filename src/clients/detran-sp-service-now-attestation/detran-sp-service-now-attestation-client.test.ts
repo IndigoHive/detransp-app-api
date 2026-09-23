@@ -4,7 +4,7 @@ import { buildAttestationError, DetranSpServiceNowAttestationClient } from './de
 
 function build () {
   const config = {
-    serviceNow: { attestation: { baseUrl: 'https://example.invalid' } }
+    serviceNow: { api: { baseUrl: 'https://example.invalid' } }
   } as unknown as Config
   const logger = { debug () {}, info () {}, warn () {}, error () {} } as never
   const client = new DetranSpServiceNowAttestationClient({ config, logger })

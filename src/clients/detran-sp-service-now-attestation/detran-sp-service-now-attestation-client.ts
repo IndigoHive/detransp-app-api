@@ -105,7 +105,6 @@ export class DetranSpServiceNowAttestationClient {
   // Confirmado em teste manual contra o endpoint real: o campo é "agent" (inglês),
   // não "agente" como a documentação/exemplo de request mostrava.
   async validateAttestationToken (token: string, agent: AttestationAgent): Promise<ValidateAttestationTokenResult> {
-    this.logger.info({ service: SERVICE_NAME, agent, token }, 'Validating attestation token');
     const response = await this.axios.post<AttestationApiResponse>('/attestation', {
       agent,
       origemApp: ORIGEM_APP,
