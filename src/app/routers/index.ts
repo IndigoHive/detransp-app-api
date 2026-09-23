@@ -1,3 +1,4 @@
+export * from './attestation-router'
 export * from './auth-router'
 export * from './dashboard-router'
 export * from './deb-restr-router'
