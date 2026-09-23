@@ -1,4 +1,4 @@
-import { IFlowRepository } from '../../../repositories/types/flow-repository'
+import { FlowAudience, IFlowRepository } from '../../../repositories/types/flow-repository'
 
 export type GetPublishedFlowVersionByFlowIdResult = {
   data: {
@@ -33,8 +33,8 @@ export class GetPublishedFlowVersionByFlowIdService {
     this.flowRepository = options.flowRepository
   }
 
-  async run (flowId: string): Promise<GetPublishedFlowVersionByFlowIdResult> {
-    const publishedFlowJson = await this.flowRepository.getPublishedFlowVersionByFlowId(flowId)
+  async run (flowId: string, audience: FlowAudience = 'logged'): Promise<GetPublishedFlowVersionByFlowIdResult> {
+    const publishedFlowJson = await this.flowRepository.getPublishedFlowVersionByFlowId(flowId, audience)
 
     if (!publishedFlowJson) {
       return { data: null }

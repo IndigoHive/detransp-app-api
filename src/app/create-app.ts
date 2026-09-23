@@ -67,9 +67,9 @@ export function createApp (options: CreateAppOptions = {}) {
 
   // All other routes require a valid session
   const protect = sessionAuth()
+  app.use('/api/flows', flowsRouter())
   app.use('/api/dashboard', protect, dashboardRouter())
   app.use('/api/deb-restr', protect, debRestrRouter())
-  app.use('/api/flows', protect, flowsRouter())
   app.use('/api/licenciamento', protect, licenciamentoRouter())
   app.use('/api/notificacoes', protect, notificacoesRouter())
   // pecasRouter() resolves its own auth per-request (sessão gov.br OU token de

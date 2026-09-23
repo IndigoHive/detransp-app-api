@@ -1,4 +1,4 @@
-import { IFlowRepository } from '../../../repositories/types/flow-repository'
+import { FlowAudience, IFlowRepository } from '../../../repositories/types/flow-repository'
 import { ListFlowsResult } from '../../../types/list-flows'
 import { createCategoryId, getCategoryIconName } from '../service-category'
 
@@ -12,8 +12,8 @@ export class ListFlowsService {
     this.flowRepository = options.flowRepository
   }
 
-  async run (): Promise<ListFlowsResult> {
-    const flows = await this.flowRepository.list()
+  async run (audience: FlowAudience = 'logged'): Promise<ListFlowsResult> {
+    const flows = await this.flowRepository.list(audience)
     const categories = new Map<string, string>()
 
     for (const flow of flows) {

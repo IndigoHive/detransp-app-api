@@ -1,5 +1,5 @@
 import { Unauthorized } from 'http-errors'
-import type { RequestHandler } from 'express'
+import type { RequestHandler, ParamsDictionary } from 'express-serve-static-core'
 
 function getBearerToken(authorizationHeader: string | undefined): string | undefined {
   if (!authorizationHeader) return undefined
@@ -7,7 +7,7 @@ function getBearerToken(authorizationHeader: string | undefined): string | undef
   return scheme?.toLowerCase() === 'bearer' && token ? token : undefined
 }
 
-export function sessionAuth(): RequestHandler {
+export function sessionAuth<P = ParamsDictionary, ResBody = any, ReqBody = any, ReqQuery = any>(): RequestHandler<P, ResBody, ReqBody, ReqQuery> {
   return async (req, res, next) => {
     const sessionId = getBearerToken(req.headers.authorization)
 
