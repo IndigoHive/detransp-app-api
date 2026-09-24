@@ -20,7 +20,7 @@ export class GetPontuacaoCnhService {
       data: {
         attributes: {
           totalPontos: raw.meta.totalPontuacao,
-          situacao: raw.data.attributes.status === 'ativa' ? 'ATIVO' : 'INATIVO',
+          situacao: raw.data.attributes.status === 'ativo' ? 'ATIVO' : 'INATIVO',
         },
       },
     }
