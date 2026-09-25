@@ -165,8 +165,7 @@ npm run build
 - `GET /api/health/health`
 - `GET /api/flows`
 - `GET /api/flows/sessionless`
-- `GET /api/flows/:flowId/published-flow-version`
-- `GET /api/flows/:flowId/flow-json`
+- `GET /api/flows/:flowId`
 
 ## Referências
 
