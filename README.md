@@ -113,7 +113,7 @@ Confirme em http://localhost:3500/api/health (responde `{"status":"ok","mode":"m
    cp .env.example .env.development
    ```
 
-   O `npm run dev` carrega `.env.production.local` e `.env.development`, não o `.env`. Se `.env.production.local` existir, ele tem precedência: remova-o para rodar 100% local.
+   O `npm run dev` carrega `.env.development.local` e `.env.development`, não o `.env`. Se `.env.development.local` existir, ele tem precedência: remova-o para rodar 100% local.
 
 3. Preencha, no mínimo:
 
