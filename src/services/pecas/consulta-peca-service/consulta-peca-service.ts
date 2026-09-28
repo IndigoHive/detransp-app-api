@@ -36,52 +36,58 @@ export class ConsultaPecaService {
     // Chamada principal — não é best-effort. Erros nos 4 status já tratados pelo interceptor do
     // client (403/500/400/404) são normalizados em `isError` (ver ERROR_STATUS_CODES acima);
     // qualquer outro erro propaga direto, sem try/catch (padrão do projeto).
-    let pecas: PecaRaw[]
     try {
-      ;({ peca: pecas } = await this.rotaCrvPecasClient.buscaPeca(accessToken, numero))
+      const { peca: pecas } = await this.rotaCrvPecasClient.buscaPeca(accessToken, numero)
+      const peca = pecas?.[0]
+      if (!peca) return { isError: true, errorCode: 404, message: 'Peça não encontrada.' }
+
+      // Só aqui: o early return acima é "peça não encontrada", não "a pessoa viu o resultado".
+      // Sem $insert_id — não é endpoint polado, e uma segunda consulta real (outra etiqueta,
+      // retry do usuário) é sinal legítimo, não ruído.
+      this.analyticsService.capture(cpf, 'pecas:peca_query')
+
+      const needsMotor = peca.tipoPeca?.trim().toLowerCase() === 'bloco do motor'
+
+      // Best-effort, não bloqueante — mesmo padrão de
+      // consulta-veiculo-debitos-service: o resultado principal aparece mesmo
+      // que arquivos ou a busca de motor falhem, só sem essa parte.
+      const [arquivosSettled, motorSettled] = await Promise.allSettled([
+        this.rotaCrvPecasClient.buscaArquivos(accessToken, numero),
+        needsMotor && peca.chassi
+          ? this.rotaVistoriasClient.buscaVeiculoPorChassi(accessToken, peca.chassi)
+          : Promise.resolve(null),
+      ])
+
+      const arquivos = arquivosSettled.status === 'fulfilled' ? arquivosSettled.value.resultado : []
+      const numeroMotor =
+        motorSettled.status === 'fulfilled' ? motorSettled.value?.[0]?.numeroMotor ?? null : null
+
+      // Cada URL de arquivo é autenticada com o token real do Detran, que o app
+      // nunca possui — baixamos o conteúdo aqui, uma única vez, e embutimos como
+      // base64 na resposta. Best-effort por arquivo: se um download falhar, ele
+      // simplesmente não aparece.
+      const arquivosComBinario = await this.baixaArquivos(accessToken, arquivos)
+
+      return this.buildResult(peca, arquivosComBinario, numeroMotor)
     } catch (err) {
-      if (isHttpError(err) && ERROR_STATUS_CODES.includes(err.status)) {
-        return { isError: true, errorCode: err.status, message: err.message }
-      }
-      throw err
+      return this.toKnownErrorResult(err)
     }
-
-    const peca = pecas?.[0]
-    if (!peca) return
-
-    // Só aqui: o early return acima é "peça não encontrada", não "a pessoa viu o resultado".
-    // Sem $insert_id — não é endpoint polado, e uma segunda consulta real (outra etiqueta,
-    // retry do usuário) é sinal legítimo, não ruído.
-    this.analyticsService.capture(cpf, 'pecas:peca_query')
-
-    const needsMotor = peca.tipoPeca?.trim().toLowerCase() === 'bloco do motor'
-
-    // Best-effort, não bloqueante — mesmo padrão de
-    // consulta-veiculo-debitos-service: o resultado principal aparece mesmo
-    // que arquivos ou a busca de motor falhem, só sem essa parte.
-    const [arquivosSettled, motorSettled] = await Promise.allSettled([
-      this.rotaCrvPecasClient.buscaArquivos(accessToken, numero),
-      needsMotor && peca.chassi
-        ? this.rotaVistoriasClient.buscaVeiculoPorChassi(accessToken, peca.chassi)
-        : Promise.resolve(null),
-    ])
-
-    const arquivos = arquivosSettled.status === 'fulfilled' ? arquivosSettled.value.resultado : []
-    const numeroMotor =
-      motorSettled.status === 'fulfilled' ? motorSettled.value?.[0]?.numeroMotor ?? null : null
-
-    // Cada URL de arquivo é autenticada com o token real do Detran, que o app
-    // nunca possui — baixamos o conteúdo aqui, uma única vez, e embutimos como
-    // base64 na resposta. Best-effort por arquivo: se um download falhar, ele
-    // simplesmente não aparece.
-    const arquivosComBinario = await this.baixaArquivos(accessToken, arquivos)
-
-    return this.buildResult(peca, arquivosComBinario, numeroMotor)
   }
 
   async runFromQrCode(accessToken: string, scannedUrl: string, cpf?: string | null): Promise<ConsultaPecaResult | undefined> {
-    const numero = extractNumeroFromQrUrl(scannedUrl)
-    return this.run(accessToken, numero, cpf)
+    try {
+      const numero = extractNumeroFromQrUrl(scannedUrl)
+      return this.run(accessToken, numero, cpf)
+    } catch (err) {
+      return this.toKnownErrorResult(err)
+    }
+  }
+
+  private toKnownErrorResult(err: unknown): ConsultaPecaResult {
+    if (isHttpError(err) && ERROR_STATUS_CODES.includes(err.status)) {
+      return { isError: true, errorCode: err.status, message: err.message }
+    }
+    throw err
   }
 
   private async baixaArquivos(accessToken: string, arquivos: ArquivoPecaRaw[]): Promise<ArquivoComBinario[]> {
