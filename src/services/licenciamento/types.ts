@@ -23,6 +23,7 @@ export type VehicleItem = {
   plate: string
   licensingStatus: VehicleStatus
   licensingExpirationDate: string
+  lastIssuance: string
   brandModel: string
   renavam: string
   lastLicensing?: string

@@ -1,5 +1,6 @@
 export * from './attestation-router'
 export * from './auth-router'
+export * from './baixar-licenciamento-router'
 export * from './dashboard-router'
 export * from './deb-restr-router'
 export * from './flows-router'

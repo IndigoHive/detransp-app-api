@@ -11,6 +11,7 @@ export type ListaVeiculosVeiculoData = {
   debitos: HrefLink
   qrCode: HrefLink
   crlve: HrefLink
+  dataUltimoExercicio: string
 }
 
 export type ListaVeiculosResult =
