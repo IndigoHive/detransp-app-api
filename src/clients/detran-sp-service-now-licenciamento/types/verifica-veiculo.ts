@@ -4,6 +4,7 @@ export type VerificaVeiculoData = {
   self: HrefLink
   codigoRenavamVeiculo: Renavam
   dataVencimentoLicenciamento: DateString
+  dataUltimoExercicio: string
   marcaVeiculo: string
   placaVeiculo: Placa
   situacaoLicenciamento: SituacaoLicenciamento

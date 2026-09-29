@@ -9,9 +9,10 @@ export class ListaVeiculosLicenciamentoService {
     this.client = client
   }
 
-  async run(auth: LicenciamentoAuth): Promise<{ vehicles: VehicleItem[] }> {
+  async run(auth: LicenciamentoAuth): Promise<{ vehicles: VehicleItem[]; totalVehicles: number }> {
     const result = await this.client.listaVeiculos(auth)
     const vehicles = (result?.result ?? []).map(toVehicleItemFromLista)
-    return { vehicles }
+    const totalVehicles = vehicles.length
+    return { vehicles, totalVehicles }
   }
 }

@@ -472,6 +472,21 @@ app.get('/api/licenciamento/veiculos/:renavam/crlv-e', (_req, res) => {
 })
 
 // ---------------------------------------------------------------------------
+// Baixar licenciamento
+// ---------------------------------------------------------------------------
+app.get('/api/baixar-licenciamento/veiculos', (_req, res) => {
+  res.json({ vehicles: MOCK_VEHICLES })
+})
+
+app.get('/api/baixar-licenciamento/veiculos/:renavam/crlv-e', (_req, res) => {
+  const minimalPdfBase64 = Buffer.from(
+    '%PDF-1.0\n1 0 obj<</Type/Catalog/Pages 2 0 R>>endobj 2 0 obj<</Type/Pages/Kids[3 0 R]/Count 1>>endobj 3 0 obj<</Type/Page/MediaBox[0 0 595 842]/Parent 2 0 R/Resources<<>>>>endobj\nxref\n0 4\n0000000000 65535 f \n0000000009 00000 n \n0000000058 00000 n \n0000000115 00000 n \ntrailer<</Size 4/Root 1 0 R>>\nstartxref\n224\n%%EOF',
+  ).toString('base64')
+
+  res.json({ base64: minimalPdfBase64 })
+})
+
+// ---------------------------------------------------------------------------
 // Dashboard
 // ---------------------------------------------------------------------------
 app.get('/api/dashboard/meus-veiculos', (_req, res) => {
@@ -1158,6 +1173,9 @@ app.listen(PORT, () => {
   console.log('    POST /api/licenciamento/veiculos/:renavam/qr-code')
   console.log('    GET  /api/licenciamento/veiculos/:renavam/qr-code')
   console.log('    GET  /api/licenciamento/veiculos/:renavam/crlv-e')
+  console.log('  Baixar licenciamento:')
+  console.log('    GET  /api/baixar-licenciamento/veiculos')
+  console.log('    GET  /api/baixar-licenciamento/veiculos/:renavam/crlv-e')
   console.log('  Dashboard:')
   console.log('    GET  /api/dashboard/meus-veiculos')
   console.log('    GET  /api/dashboard/pontuacao-cnh')

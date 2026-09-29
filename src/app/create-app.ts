@@ -2,7 +2,7 @@ import * as Sentry from '@sentry/node'
 import type { AwilixContainer } from 'awilix'
 import express from 'express'
 import type { Logger } from 'pino'
-import { attestationRouter, authRouter, dashboardRouter, debRestrRouter, flowsRouter, healthRouter, licenciamentoRouter, notificacoesRouter, pecasRouter, csmProtocolsRouter, tdvRouter, vistoriasRouter } from './routers'
+import { attestationRouter, authRouter, baixarLicenciamentoRouter, dashboardRouter, debRestrRouter, flowsRouter, healthRouter, licenciamentoRouter, notificacoesRouter, pecasRouter, csmProtocolsRouter, tdvRouter, vistoriasRouter } from './routers'
 import { ContainerServices, createContainer } from '../container'
 import { fallbackErrorHandler, httpErrorHandler, multerErrorHandler, scopePerRequest, sessionAuth } from './middlewares'
 
@@ -68,6 +68,7 @@ export function createApp (options: CreateAppOptions = {}) {
   // All other routes require a valid session
   const protect = sessionAuth()
   app.use('/api/flows', flowsRouter())
+  app.use('/api/baixar-licenciamento', protect, baixarLicenciamentoRouter())
   app.use('/api/dashboard', protect, dashboardRouter())
   app.use('/api/deb-restr', protect, debRestrRouter())
   app.use('/api/licenciamento', protect, licenciamentoRouter())
