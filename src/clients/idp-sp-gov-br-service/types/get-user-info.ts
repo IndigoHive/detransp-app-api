@@ -1,3 +1,5 @@
+import { Confiabilidade } from "./get-confiabilidades"
+
 export type GetUserInfoResult = {
   sub: string
   name?: string
@@ -7,4 +9,5 @@ export type GetUserInfoResult = {
   phone_number_verified?: boolean
   picture?: string
   [key: string]: unknown
+  confiabilidades?: Confiabilidade[]
 }

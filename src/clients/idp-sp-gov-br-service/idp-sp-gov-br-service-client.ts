@@ -2,7 +2,7 @@ import axios, { type AxiosInstance, type AxiosRequestConfig } from 'axios'
 import createError from 'http-errors'
 import type { Logger } from 'pino'
 import type { Config } from '../../types'
-import type { GetUserInfoResult } from './types'
+import type { GetUserInfoResult, ListConfiabilidadesResult } from './types'
 import { reportOutboundHttpError } from '../report-outbound-http-error'
 import { installHttpMetrics } from '../install-http-metrics'
 
@@ -23,7 +23,7 @@ export class IdpSpGovBrServiceClient {
     this.logger = logger
 
     this.axios = axios.create({
-      baseURL: config.idsp.userInfoUrl.replace(/\/userinfo$/, ''),
+      baseURL: config.idsp.servicesBaseUrl,
       headers: {
         Accept: 'application/json'
       }
@@ -99,6 +99,15 @@ export class IdpSpGovBrServiceClient {
   async getUserInfo (accessToken: string): Promise<GetUserInfoResult> {
     const response = await this.axios.get<GetUserInfoResult>(
       this.config.idsp.userInfoUrl,
+      this.withAuth(accessToken)
+    )
+
+    return response.data
+  }
+
+  async listConfiabilidades (accessToken: string): Promise<ListConfiabilidadesResult> {
+    const response = await this.axios.get<ListConfiabilidadesResult>(
+      '/userinfo/confiabilidades/detalhe',
       this.withAuth(accessToken)
     )
 

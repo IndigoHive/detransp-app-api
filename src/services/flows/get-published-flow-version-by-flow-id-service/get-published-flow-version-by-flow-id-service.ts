@@ -1,11 +1,12 @@
+import type { Selo } from '../../../clients'
 import { FlowAudience, IFlowRepository } from '../../../repositories/types/flow-repository'
+import type { GetConfiabilidadesService } from '../../auth/get-confiabilidades-service'
+import { isSeloAtLeast } from '../../auth/selo-levels'
 
-export type GetPublishedFlowVersionByFlowIdResult = {
-  data: {
-    flowVersionId: string
-    flowJson: unknown
-  } | null
-}
+export type GetPublishedFlowVersionByFlowIdResult =
+  | { data: { flowVersionId: string; flowJson: unknown } }
+  | { data: null }
+  | { data: null; requiresHigherTrustLevel: true; requiredSelo: Selo; currentSelo: Selo | null }
 
 // Absolute URLs stored in the database point to the production API. Stripping
 // the prefix turns them into relative paths so the flow engine resolves them
@@ -26,23 +27,45 @@ function rewriteFlowJsonUrls (flowJson: unknown): unknown {
 
 export class GetPublishedFlowVersionByFlowIdService {
   private readonly flowRepository: IFlowRepository
+  private readonly getConfiabilidadesService: GetConfiabilidadesService
 
   constructor (options: {
     flowRepository: IFlowRepository
+    getConfiabilidadesService: GetConfiabilidadesService
   }) {
     this.flowRepository = options.flowRepository
+    this.getConfiabilidadesService = options.getConfiabilidadesService
   }
 
-  async run (flowId: string, audience: FlowAudience = 'logged'): Promise<GetPublishedFlowVersionByFlowIdResult> {
+  async run (
+    flowId: string,
+    audience: FlowAudience = 'logged',
+    accessToken?: string
+  ): Promise<GetPublishedFlowVersionByFlowIdResult> {
     const publishedFlowJson = await this.flowRepository.getPublishedFlowVersionByFlowId(flowId, audience)
 
     if (!publishedFlowJson) {
       return { data: null }
     }
 
+    if (publishedFlowJson.requiredSelo) {
+      const highestSelo = accessToken
+        ? (await this.getConfiabilidadesService.run({ accessToken })).highestSelo
+        : null
+
+      if (!isSeloAtLeast(highestSelo, publishedFlowJson.requiredSelo)) {
+        return {
+          data: null,
+          requiresHigherTrustLevel: true,
+          requiredSelo: publishedFlowJson.requiredSelo,
+          currentSelo: highestSelo
+        }
+      }
+    }
+
     return {
       data: {
-        ...publishedFlowJson,
+        flowVersionId: publishedFlowJson.flowVersionId,
         flowJson: rewriteFlowJsonUrls(publishedFlowJson.flowJson),
       }
     }

@@ -1,3 +1,5 @@
+import type { Selo } from '../../clients'
+
 export type FlowStatus = 'draft' | 'published' | 'archived'
 
 export type FlowAudience = 'logged' | 'sessionless'
@@ -21,6 +23,7 @@ export type ListFlowResultData = Pick<Flow, 'id' | 'slug' | 'name' | 'descriptio
 export type GetPublishedFlowVersionByFlowIdResultData = {
   flowVersionId: string
   flowJson: unknown
+  requiredSelo: Selo | null
 }
 
 export interface IFlowRepository {

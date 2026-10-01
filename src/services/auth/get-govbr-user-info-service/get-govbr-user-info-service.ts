@@ -20,7 +20,9 @@ export class GetGovBrUserInfoService {
   }
 
   async run (input: GetGovBrUserInfoInput): Promise<GetGovBrUserInfoResult> {
-    const data = await this.idpSpGovBrService.getUserInfo(input.accessToken)
+    const userInfo = await this.idpSpGovBrService.getUserInfo(input.accessToken)
+    const confiabilidades = await this.idpSpGovBrService.listConfiabilidades(input.accessToken)
+    const data = { ...userInfo, ...(confiabilidades && { confiabilidades }) }
 
     return { data }
   }
