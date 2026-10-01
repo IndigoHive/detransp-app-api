@@ -24,6 +24,7 @@ type FlowRow = {
 type PublishedFlowVersionByFlowIdRow = {
   flowVersionId: string
   flowJson: unknown
+  requiredSelo: GetPublishedFlowVersionByFlowIdResultData['requiredSelo']
 }
 
 function mapRowToFlow (row: FlowRow): ListFlowResultData {
@@ -42,7 +43,8 @@ function mapRowToPublishedFlowVersionByFlowId (
 ): GetPublishedFlowVersionByFlowIdResultData {
   return {
     flowVersionId: row.flowVersionId,
-    flowJson: row.flowJson
+    flowJson: row.flowJson,
+    requiredSelo: row.requiredSelo
   }
 }
 export class PgFlowRepository implements IFlowRepository {
@@ -82,7 +84,7 @@ export class PgFlowRepository implements IFlowRepository {
     const { rows } = await this.db
       .query<PublishedFlowVersionByFlowIdRow>(
         audience === 'sessionless'
-          ? SELECT`flow.published_version_id AS "flowVersionId", flow_version.flow_json AS "flowJson"`
+          ? SELECT`flow.published_version_id AS "flowVersionId", flow_version.flow_json AS "flowJson", flow.required_selo AS "requiredSelo"`
               .FROM`flow`
               .JOIN`flow_version ON flow_version.id = flow.published_version_id`
               .WHERE`flow.id = ${flowId}`
@@ -90,7 +92,7 @@ export class PgFlowRepository implements IFlowRepository {
               .AND`flow.published_version_id IS NOT NULL`
               .AND`flow_version.published_for_sessionless = true`
               .LIMIT`1`
-          : SELECT`flow.published_version_id AS "flowVersionId", flow_version.flow_json AS "flowJson"`
+          : SELECT`flow.published_version_id AS "flowVersionId", flow_version.flow_json AS "flowJson", flow.required_selo AS "requiredSelo"`
               .FROM`flow`
               .JOIN`flow_version ON flow_version.id = flow.published_version_id`
               .WHERE`flow.id = ${flowId}`

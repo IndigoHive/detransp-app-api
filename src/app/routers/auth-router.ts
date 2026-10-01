@@ -66,7 +66,6 @@ export function authRouter (): Router {
     const { data: userInfo } = await userInfoService.run({ accessToken: tokenResult.accessToken })
 
     const cpf = extractCpfFromToken(tokenResult.accessToken)
-
     const createSessionService = req.scope.resolve('createSessionService')
     const { sessionId } = await createSessionService.run({
       platform,
@@ -108,6 +107,7 @@ export function authRouter (): Router {
       full_name: `${data.given_name as string} ${data.family_name as string}`,
       email: data.email,
       phone_number: data.phone_number,
+      confiabilidades: data.confiabilidades,
     })
   })
 

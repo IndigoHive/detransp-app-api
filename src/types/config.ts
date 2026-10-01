@@ -39,6 +39,7 @@ export type Config = {
     userInfoUrl: string
     scope: string
     android: IdspPlatformConfig
+    servicesBaseUrl: string
     ios: IdspPlatformConfig
   }
   database: {

@@ -53,7 +53,13 @@ export function flowsRouter (): Router {
 
     const service = req.scope.resolve('getPublishedFlowVersionByFlowIdService')
 
-    const result = await service.run(flowId, parseAudience(req.query.audience))
+    const result = await service.run(flowId, parseAudience(req.query.audience), req.session?.accessToken)
+
+    if ('requiresHigherTrustLevel' in result) {
+      res.json(result)
+
+      return
+    }
 
     if (!result.data) {
       res.status(404).json({

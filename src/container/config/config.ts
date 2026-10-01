@@ -191,6 +191,7 @@ function getIdspConfig (): Config['idsp'] {
     tokenUrl: env.GOVBR_IDSP_TOKEN_URL || DEFAULT_GOVBR_TOKEN_URL,
     userInfoUrl: env.GOVBR_IDSP_USERINFO_URL || DEFAULT_GOVBR_USERINFO_URL,
     scope: [...new Set([...GOVBR_SCOPES, ...envScopes])].join(' '),
+    servicesBaseUrl: env.GOVBR_IDSP_SERVICES_BASE_URL || '',
     android: {
       clientId: env.GOVBR_IDSP_ANDROID_CLIENT_ID || '',
       ...(env.GOVBR_IDSP_ANDROID_CLIENT_SECRET
