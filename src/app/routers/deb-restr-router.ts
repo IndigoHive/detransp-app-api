@@ -262,5 +262,18 @@ export function debRestrRouter (): Router {
     res.status(200).json(result)
   })
 
+  router.get('/veiculos/:renavam/certidao/documento/atual', async (req, res) => {
+    const { accessToken, cpf: userCpf } = req.session!
+    const renavam = asNonEmptyString(req.params.renavam)
+    const placa = asNonEmptyString(req.query.placa)
+    if (!userCpf || !renavam || !placa) {
+      throw BadRequest('Requisição inválida.')
+    }
+    logRequest(req, 'certidao-documento-atual', { renavam, placa })
+    const service = req.scope.resolve('buscaDocumentoCertidaoAtualService')
+    const result = await service.run({ accessToken, userCpf, renavam, placa })
+    res.status(200).json(result)
+  })
+
   return router
 }

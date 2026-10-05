@@ -19,8 +19,6 @@ export class EmiteCertidaoService {
     const attrs = result?.data?.attributes
     const emitida = Boolean(attrs)
 
-    // The flow renders the PDF right after emitting, so fetch the document in
-    // the same call instead of requiring a second round-trip
     let base64: string | null = null
     if (emitida) {
       const documento = await this.client.buscaDocumentoCertidao(auth, auth.renavam)

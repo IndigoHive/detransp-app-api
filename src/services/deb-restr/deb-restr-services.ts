@@ -5,6 +5,7 @@ import { CriaQRCodeCertidaoService } from './cria-qr-code-certidao-service'
 import { VerificaQRCodeCertidaoService } from './verifica-qr-code-certidao-service'
 import { EmiteCertidaoService } from './emite-certidao-service'
 import { BuscaDocumentoCertidaoService } from './busca-documento-certidao-service'
+import { BuscaDocumentoCertidaoAtualService } from './busca-documento-certidao-atual-service'
 import { ListaVeiculosDebRestrService } from './lista-veiculos-deb-restr-service'
 import { ConsultaVeiculoDebitosService } from './consulta-veiculo-debitos-service'
 import { ConsultaVeiculoImpressaoService } from './consulta-veiculo-impressao-service'
@@ -23,6 +24,7 @@ export type DebRestrServices = {
   verificaQRCodeCertidaoService: VerificaQRCodeCertidaoService
   emiteCertidaoService: EmiteCertidaoService
   buscaDocumentoCertidaoService: BuscaDocumentoCertidaoService
+  buscaDocumentoCertidaoAtualService: BuscaDocumentoCertidaoAtualService
   listaVeiculosDebRestrService: ListaVeiculosDebRestrService
   consultaVeiculoDebitosService: ConsultaVeiculoDebitosService
   consultaVeiculoImpressaoService: ConsultaVeiculoImpressaoService
@@ -60,6 +62,10 @@ export function getDebRestrRegistrations (): Required<NameAndRegistrationPair<De
     buscaDocumentoCertidaoService: asFunction(
       ({ detranSpServiceNowDebRestrClient }) =>
         new BuscaDocumentoCertidaoService(detranSpServiceNowDebRestrClient)
+    ).scoped(),
+    buscaDocumentoCertidaoAtualService: asFunction(
+      ({ detranSpServiceNowDebRestrClient }) =>
+        new BuscaDocumentoCertidaoAtualService(detranSpServiceNowDebRestrClient)
     ).scoped(),
     listaVeiculosDebRestrService: asFunction(
       ({ detranSpServiceNowDebRestrClient }) =>
