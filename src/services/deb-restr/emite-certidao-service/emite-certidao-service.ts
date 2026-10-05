@@ -19,7 +19,11 @@ export class EmiteCertidaoService {
     const attrs = result?.data?.attributes
     const emitida = Boolean(attrs)
 
+    let base64: string | null = null
     if (emitida) {
+      const documento = await this.client.buscaDocumentoCertidao(auth, auth.renavam)
+      base64 = documento?.data?.attributes?.conteudo ?? null
+
       // Só dentro do guard: emitida === false não é emissão. A data de emissão entra no
       // $insert_id porque o DETRAN permite reemitir — cada emissão real conta uma vez.
       this.analyticsService.capture(auth.userCpf, 'debitos:certidao_emit', {
@@ -33,6 +37,7 @@ export class EmiteCertidaoService {
       emitida,
       dataHoraEmissao: attrs?.dataHoraEmissao ? formatDateTimeBr(attrs.dataHoraEmissao) : null,
       validade: attrs?.validade ? formatDateBr(attrs.validade) : null,
+      base64,
     }
   }
 }

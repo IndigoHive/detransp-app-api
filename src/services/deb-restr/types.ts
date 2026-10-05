@@ -52,6 +52,7 @@ export type EmiteCertidaoResult = {
   emitida: boolean
   dataHoraEmissao: string | null
   validade: string | null
+  base64: string | null
 }
 
 export type BuscaDocumentoCertidaoResult = {
