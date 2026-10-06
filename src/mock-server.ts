@@ -182,6 +182,29 @@ const MOCK_MULTAS = [
   },
 ]
 
+const MOCK_MULTAS_HISTORICO = [
+  ...MOCK_MULTAS,
+  {
+    auto: 'SP00011111',
+    placa: 'ABC1D23',
+    descricao: 'Avançar o sinal vermelho do semáforo',
+    pontos: 7,
+  },
+  {
+    auto: 'SP00022222',
+    placa: 'QRS4F56',
+    descricao: 'Dirigir utilizando o telefone celular',
+    pontos: 5,
+  },
+]
+
+const MOCK_MULTAS_DETALHES: Record<string, { data: string; hora: string; municipio: string; orgaoAutuador: string }> = {
+  SP00012345: { data: '2025-11-15', hora: '14:30', municipio: 'SAO PAULO', orgaoAutuador: 'DER/SP' },
+  SP00067890: { data: '2025-10-02', hora: '09:15', municipio: 'SAO PAULO', orgaoAutuador: 'CET' },
+  SP00011111: { data: '2025-06-20', hora: '18:45', municipio: 'CAMPINAS', orgaoAutuador: 'PM/SP' },
+  SP00022222: { data: '2025-03-08', hora: '11:05', municipio: 'SANTOS', orgaoAutuador: 'DER/SP' },
+}
+
 // Flow IDs — use the same UUIDs as production so cached app data still works
 const FLOW_ID_LICENCIAMENTO = 'c0c69366-6ca0-4af8-9662-216179e06ec3'
 const FLOW_ID_TDV = 'b05e6733-0668-48ec-9350-7150db088c47'
@@ -572,13 +595,15 @@ app.get('/api/dashboard/detalhes-pontuacao-cnh', (_req, res) => {
   })
 })
 
-app.get('/api/dashboard/lista-multas', (_req, res) => {
-  res.json({ multas: MOCK_MULTAS })
+app.get('/api/dashboard/lista-multas', (req, res) => {
+  const ultimosmeses = req.query.ultimosmeses !== 'false'
+  res.json({ multas: ultimosmeses ? MOCK_MULTAS : MOCK_MULTAS_HISTORICO })
 })
 
 app.get('/api/dashboard/multas', (req, res) => {
   const auto = (req.query.auto as string) || ''
-  const multa = MOCK_MULTAS.find(m => m.auto === auto)
+  const multa = MOCK_MULTAS_HISTORICO.find(m => m.auto === auto)
+  const detalhes = MOCK_MULTAS_DETALHES[auto]
 
   res.json({
     data: {
@@ -587,10 +612,10 @@ app.get('/api/dashboard/multas', (req, res) => {
         infracao: multa?.descricao ?? 'Infração não especificada',
         pontuacaoAtribuida: String(multa?.pontos ?? 0),
         autoinfracao: auto,
-        data: '2025-11-15',
-        hora: '14:30',
-        municipio: 'SAO PAULO',
-        orgaoAutuador: 'DER/SP',
+        data: detalhes?.data ?? '2025-11-15',
+        hora: detalhes?.hora ?? '14:30',
+        municipio: detalhes?.municipio ?? 'SAO PAULO',
+        orgaoAutuador: detalhes?.orgaoAutuador ?? 'DER/SP',
       },
     },
   })
