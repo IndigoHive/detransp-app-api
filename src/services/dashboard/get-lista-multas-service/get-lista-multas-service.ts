@@ -15,8 +15,11 @@ type ServiceNowListaMultasResponse = {
 export class GetListaMultasService {
   constructor(private dashboardClient: DetranSpServiceNowDashboardClient) {}
 
-  async run(accessToken: string, cpf: string) {
-    const raw = await this.dashboardClient.get<ServiceNowListaMultasResponse>('listaMultas', accessToken, cpf, { cpf, ultimosmeses: true })
+  async run(accessToken: string, cpf: string, ultimosMeses = true) {
+    const raw = await this.dashboardClient.get<ServiceNowListaMultasResponse>('listaMultas', accessToken, cpf, {
+      cpf,
+      ultimosmeses: ultimosMeses,
+    })
     const multas = (raw.included ?? []).map((item) => ({
       auto: item.id,
       placa: item.attributes.placa,
