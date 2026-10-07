@@ -20,8 +20,11 @@ async function main () {
     }
   })
   
-  process.on('SIGINT', () => {
-    logger.info('Shutting down App API...')
+  // SIGTERM é o sinal que o Kubernetes manda ao encerrar um pod (SIGINT é só
+  // Ctrl+C local) — sem tratá-lo, o rolling update com maxUnavailable: 0 (fase 8.3
+  // do guia de implantação) não drena nada antes do processo morrer.
+  const shutdown = (signal: string) => {
+    logger.info('Shutting down App API (%s)...', signal)
 
     Sentry.close(2000)
       .then(() => container.dispose())
@@ -34,7 +37,10 @@ async function main () {
       .finally(() => {
         process.exit(0)
       })
-  })
+  }
+
+  process.on('SIGINT', () => shutdown('SIGINT'))
+  process.on('SIGTERM', () => shutdown('SIGTERM'))
 }
 
 void main()

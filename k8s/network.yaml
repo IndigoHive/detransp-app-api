@@ -1,0 +1,89 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: app-api
+  namespace: app-detran
+  annotations:
+    alb.ingress.kubernetes.io/load-balancer-name: detran-app-dev-alb-api
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    # dev: detran-app-dev-pub-az1 + az2 (vpc-02b0313c2a48bda67, consultado em 06/10)
+    alb.ingress.kubernetes.io/subnets: "subnet-0030be3a02db7cccd,subnet-06d4880ce7139b0f0"
+    # dev: detran-app-dev-sg-alb-app
+    alb.ingress.kubernetes.io/security-groups: "sg-0969d79b73314fbc7"
+    alb.ingress.kubernetes.io/manage-backend-security-group-rules: "true"
+    # Precisa do listener HTTP para o ssl-redirect abaixo ter o que redirecionar
+    # (sem isso o controller não cria regra de redirect nenhuma).
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80},{"HTTPS":443}]'
+    alb.ingress.kubernetes.io/ssl-redirect: "443"
+    alb.ingress.kubernetes.io/ssl-policy: ELBSecurityPolicy-TLS13-1-2-2021-06
+    # INVERTIDO DELIBERADAMENTE em 07/10: o DNS externo (Prodesp) criou os
+    # CNAMEs trocados — dev-editor-app aponta pro ALB físico deste recurso
+    # (detran-app-dev-alb-api). Como o Name do ALB é imutável (não dá pra
+    # "reivindicar" o outro ALB), ajustamos host/cert/WAF/backend pra este
+    # Ingress servir o EDITOR, já que é esse ALB que recebe o tráfego de
+    # dev-editor-app. Reverter tudo (host, cert, waf, backend) pro valor
+    # original assim que a Prodesp corrigir os CNAMEs.
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:sa-east-1:782221581386:certificate/d19aec56-cbe1-4e85-ad6a-6b4ffd63f48a
+    alb.ingress.kubernetes.io/wafv2-acl-arn: arn:aws:wafv2:sa-east-1:782221581386:regional/webacl/detran-app-dev-waf-editor/b915fbff-4af8-4feb-aa33-5b6b12f78744
+    # BLOQUEADO: aws shield describe-subscription --region us-east-1 voltou
+    # ResourceNotFoundException em 06/10 — a conta não tem Shield Advanced
+    # contratado. Com a annotation presente e sem assinatura, o controller
+    # falha ao reconciliar o Ingress. Reativar só depois que a assinatura
+    # existir (confirmar com o terceiro — é custo recorrente por conta).
+    # alb.ingress.kubernetes.io/shield-advanced-protection: "true"
+    alb.ingress.kubernetes.io/healthcheck-protocol: HTTP
+    alb.ingress.kubernetes.io/healthcheck-port: traffic-port
+    alb.ingress.kubernetes.io/healthcheck-path: /health/ready
+    alb.ingress.kubernetes.io/healthcheck-interval-seconds: "15"
+    alb.ingress.kubernetes.io/healthy-threshold-count: "2"
+    alb.ingress.kubernetes.io/unhealthy-threshold-count: "3"
+    alb.ingress.kubernetes.io/success-codes: "200"
+    alb.ingress.kubernetes.io/tags: "Ambiente=dev,Projeto=app-detran"
+    alb.ingress.kubernetes.io/load-balancer-attributes: >-
+      deletion_protection.enabled=false,
+      routing.http.drop_invalid_header_fields.enabled=true
+spec:
+  ingressClassName: alb
+  rules:
+    - host: "dev-editor-app.detran.sp.gov.br" # INVERTIDO 07/10 — ver nota acima
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend: { service: { name: editor, port: { number: 80 } } }
+---
+# Nega tudo por padrão no namespace. Se a infra já aplicou isso (fase 8.6 do
+# guia é dela, não sua), pular este bloco — reaplicar não tem efeito.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata: { name: default-deny, namespace: app-detran }
+spec:
+  podSelector: {}
+  policyTypes: [Ingress, Egress]
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata: { name: app-api-permitido, namespace: app-detran }
+spec:
+  podSelector: { matchLabels: { app: app-api } }
+  policyTypes: [Ingress, Egress]
+  ingress:
+    # dev: detran-app-dev-pub-az1 (sa-east-1a) + pub-az2 (sa-east-1b)
+    - from:
+        - ipBlock: { cidr: "10.150.48.0/27" }
+        - ipBlock: { cidr: "10.150.48.32/27" }
+      ports: [{ protocol: TCP, port: 3500 }]
+  egress:
+    # dev: detran-app-dev-dados-az1 + az2 (RDS Proxy)
+    - to:
+        - ipBlock: { cidr: "10.150.48.144/28" }
+        - ipBlock: { cidr: "10.150.48.160/28" }
+      ports: [{ protocol: TCP, port: 5432 }]
+    - to: [{ namespaceSelector: { matchLabels: { kubernetes.io/metadata.name: kube-system } } }]
+      ports: [{ protocol: UDP, port: 53 }, { protocol: TCP, port: 53 }]
+    # dev: detran-app-dev-infra-az1 + az2 (VPC endpoints: secretsmanager, kms, logs, sts, ecr)
+    - to:
+        - ipBlock: { cidr: "10.150.48.192/28" }
+        - ipBlock: { cidr: "10.150.48.208/28" }
+      ports: [{ protocol: TCP, port: 443 }]
