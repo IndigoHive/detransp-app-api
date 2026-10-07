@@ -56,6 +56,9 @@ export function createApp (options: CreateAppOptions = {}) {
 
   // Health check (public)
   app.use('/api/health', healthRouter())
+  // Mesmo router também na raiz: é /health/ready que o target group do ALB
+  // consulta (fase 8.5 do guia de implantação), não /api/health/ready.
+  app.use('/health', healthRouter())
 
   // Auth routes — public endpoints (authorization-url, token, dev-callback) are handled without
   // session middleware; protected endpoints (userinfo, logout) apply sessionAuth() inline

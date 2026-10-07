@@ -1,0 +1,13 @@
+node_modules
+dist
+docs
+mock-data
+*.md
+.git
+.github
+.agents
+.env
+.env.*
+!.env.example
+.vscode
+.cursor

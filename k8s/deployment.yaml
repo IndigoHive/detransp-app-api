@@ -1,0 +1,109 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-api
+  namespace: app-detran
+spec:
+  replicas: 2 # dev: 2 (1 AZ, D22). prd: 3 (1 por AZ) — fase 8.4 do guia.
+  strategy:
+    rollingUpdate: { maxUnavailable: 0, maxSurge: 1 }
+  selector:
+    matchLabels: { app: app-api }
+  template:
+    metadata:
+      labels: { app: app-api }
+    spec:
+      serviceAccountName: app-api
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001 # mesmo uid criado no Dockerfile (stash "Infra")
+        fsGroup: 10001
+        seccompProfile: { type: RuntimeDefault }
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: topology.kubernetes.io/zone
+          # dev: ScheduleAnyway — o node group só tem nó na nos-az1 (confirmado
+          # via describe-nodegroup em 06/10). prd (3 AZ): voltar pra DoNotSchedule.
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector: { matchLabels: { app: app-api } }
+      containers:
+        - name: app-api
+          # Imagem publicada em 06/10 via build local (git sha 71a2e84).
+          # Troque pelo digest mais recente quando reconstruir.
+          image: "782221581386.dkr.ecr.sa-east-1.amazonaws.com/detran-app/app-api:71a2e84"
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities: { drop: ["ALL"] }
+          ports: [{ containerPort: 3500 }]
+          envFrom:
+            - secretRef: { name: app-api-env }
+          env:
+            - { name: PORT, value: "3500" }
+            - { name: NODE_ENV, value: "production" }
+            # "staging" libera os escape hatches de dev/QA do .env.example
+            # (TDV_MOCK_*, LIVENESS_BYPASS_MATCH) — nenhum está setado no
+            # secret, então não tem efeito prático agora, mas é o valor
+            # correto pro ambiente de dev. prd: "production".
+            - { name: APP_ENV, value: "staging" }
+            - { name: LOG_LEVEL, value: "info" }
+          resources:
+            requests: { cpu: "500m", memory: "1Gi" }
+            limits: { memory: "2Gi" }
+          readinessProbe:
+            httpGet: { path: /health/ready, port: 3500 }
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            failureThreshold: 3
+          livenessProbe:
+            httpGet: { path: /health/live, port: 3500 }
+            initialDelaySeconds: 30
+            periodSeconds: 15
+            failureThreshold: 3
+          startupProbe:
+            httpGet: { path: /health/live, port: 3500 }
+            failureThreshold: 30
+            periodSeconds: 5
+          volumeMounts:
+            - { name: tmp, mountPath: /tmp }
+            - { name: secrets, mountPath: /mnt/secrets-store, readOnly: true }
+      volumes:
+        - { name: tmp, emptyDir: {} }
+        # O mount em si não é lido pela app (ela usa envFrom), mas é ele que
+        # DISPARA a sincronização do SecretProviderClass pro Secret nativo
+        # "app-api-env" referenciado em envFrom. Sem este volume, o driver
+        # nunca roda e o Secret nunca é criado — era o bug do primeiro apply.
+        - name: secrets
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes: { secretProviderClass: app-api-env }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-api
+  namespace: app-detran
+spec:
+  selector: { app: app-api }
+  ports: [{ port: 80, targetPort: 3500 }]
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata: { name: app-api, namespace: app-detran }
+spec:
+  minAvailable: 1 # dev: 1 (2 réplicas). prd: 2 (3 réplicas) — fase 8.4.
+  selector: { matchLabels: { app: app-api } }
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata: { name: app-api, namespace: app-detran }
+spec:
+  scaleTargetRef: { apiVersion: apps/v1, kind: Deployment, name: app-api }
+  minReplicas: 2 # dev: 2/4. prd: 3/12 — fase 8.4.
+  maxReplicas: 4
+  metrics:
+    - type: Resource
+      resource: { name: cpu, target: { type: Utilization, averageUtilization: 65 } }
